@@ -1,0 +1,29 @@
+package pt.tecnico.bubbledocs.dml;
+
+class User{
+	String userName;
+	String name;
+	String password;
+}
+
+class CalcSheet;
+
+class Cell {
+  Integer line;
+  Integer column;
+  String content;
+}
+
+relation UserCreatesCalcSheet {
+  CalcSheet playsRole created;
+  User playsRole creator {
+    multiplicity *;
+  }
+}
+
+relation CalcSheetOwnsCells {
+  CalcSheet playsRole owner;
+  Cell playsRole owned {
+    multiplicity *;
+  }
+}
