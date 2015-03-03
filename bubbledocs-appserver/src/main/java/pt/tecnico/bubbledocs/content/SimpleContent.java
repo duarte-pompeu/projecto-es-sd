@@ -1,5 +1,5 @@
 package pt.tecnico.bubbledocs.content;
 
-public class SimpleContent extends Content{
-
+public abstract class SimpleContent extends Content{
+	
 }
