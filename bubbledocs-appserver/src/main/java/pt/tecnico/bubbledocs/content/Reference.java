@@ -7,7 +7,7 @@ public class Reference extends SimpleContent {
 		this.cell = cell;
 	}
 	
-	public double getValue(){
+	public int getValue(){
 		return cell.getContent().getValue();
 	}
 }
