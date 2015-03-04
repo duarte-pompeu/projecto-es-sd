@@ -11,7 +11,7 @@ class CalcSheet;
 class Cell {
   Integer line;
   Integer column;
-  String content;
+  String contentRepresentation;
 }
 
 relation UserCreatesCalcSheet {
