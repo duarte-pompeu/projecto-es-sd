@@ -3,9 +3,12 @@ package pt.tecnico.bubbledocs.dml;
 import pt.tecnico.bubbledocs.content.Content;
 
 public class Cell extends Cell_Base {
-    
-    public Cell() {
-        super();
+    private final int column, line;
+   
+    public Cell(int column, int line) {
+    	super();
+    	this.line = line;
+        this.column = column;
     }
     
     public Content getContent(){
@@ -13,5 +16,15 @@ public class Cell extends Cell_Base {
 		
 		return null;
 	}
+    
+    @Override
+    public Integer getLine(){
+    	return line;
+    }
+    
+    @Override
+    public Integer getColumn(){
+    	return column;
+    }
     
 }
