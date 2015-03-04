@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.dml;
 
+class BubbleDocs;
+
 class User{
 	String userName;
 	String name;
@@ -14,11 +16,35 @@ class Cell {
   String contentRepresentation;
 }
 
-relation UserCreatesCalcSheet {
-  CalcSheet playsRole created;
-  User playsRole creator {
+
+relation DomainRootHasBubbleDocsApplication {
+  .pt.ist.fenixframework.DomainRoot playsRole root {
+    multiplicity 0..1;
+  }
+  BubbleDocs playsRole bubbledocs {
+    multiplicity 0..1;
+  }
+}
+
+relation BubbleDocsHasUsers {
+  Bubbledocs playsRole owner;
+  User playsRole owned {
     multiplicity *;
   }
+}
+
+relation BubbleDocsHasCalcSheets {
+  Bubbledocs playsRole owner;
+  CalcSheet playsRole owned {
+    multiplicity *;
+  }
+}
+
+relation UserCreatesCalcSheet {
+  CalcSheet playsRole created{
+    multiplicity *;
+  }
+  User playsRole creator;
 }
 
 relation CalcSheetOwnsCells {
