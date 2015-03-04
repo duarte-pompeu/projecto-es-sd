@@ -22,4 +22,10 @@ public class Reference extends SimpleContent {
 			return content.getValue();
 		}
 	}
+	
+	@Override
+	public String toString(){
+		return "=" + cell.getColumn()
+				+ ";" + cell.getLine();
+	}
 }
