@@ -27,15 +27,15 @@ relation DomainRootHasBubbleDocsApplication {
 }
 
 relation BubbleDocsHasUsers {
-  Bubbledocs playsRole owner;
-  User playsRole owned {
+  BubbleDocs playsRole ownsUsers;
+  User playsRole userOwnedByBubble {
     multiplicity *;
   }
 }
 
 relation BubbleDocsHasCalcSheets {
-  Bubbledocs playsRole owner;
-  CalcSheet playsRole owned {
+  BubbleDocs playsRole ownsSheets;
+  CalcSheet playsRole calcSheetOwnedByBubble {
     multiplicity *;
   }
 }
@@ -48,8 +48,8 @@ relation UserCreatesCalcSheet {
 }
 
 relation CalcSheetOwnsCells {
-  CalcSheet playsRole owner;
-  Cell playsRole owned {
+  CalcSheet playsRole ownsCells;
+  Cell playsRole ownedByCalcSheet {
     multiplicity *;
   }
 }
