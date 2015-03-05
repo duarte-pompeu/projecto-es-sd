@@ -8,7 +8,9 @@ class User{
 	String password;
 }
 
-class CalcSheet;
+class CalcSheet{
+	Integer id;
+}
 
 class Cell {
   Integer line;
@@ -45,6 +47,20 @@ relation UserCreatesCalcSheet {
     multiplicity *;
   }
   User playsRole creator;
+}
+
+relation CalcSheetHasReadPermitionsAboutUsers {
+  CalcSheet playsRole hasReadPermitions;
+  User playsRole permittedReading{
+    multiplicity *;
+  }
+}
+
+relation CalcSheetHasWritePermitionsAboutUsers {
+  CalcSheet playsRole hasWritePermitions;
+  User playsRole permittedWritting{
+    multiplicity *;
+  }
 }
 
 relation CalcSheetOwnsCells {
