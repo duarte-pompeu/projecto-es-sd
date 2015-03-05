@@ -2,8 +2,11 @@ package pt.tecnico.bubbledocs.dml;
 
 public class User extends User_Base {
     
-    public User() {
+    public User(String userName, String name, String password) {
         super();
+        this.setUserName(userName);
+        this.setName(name);
+        this.setPassword(password);
     }
     
     /*
@@ -60,13 +63,13 @@ public class User extends User_Base {
     }
     
     
-    //This returns an iterator for the files that the user created
+    //This returns an iterator for the files id's that the user created
     public Iterable<Integer> getFilesOwned() {
     	//TODO
     	return null;
     }
     
-    //This returns an iterator for the files this user is associated
+    //This returns an iterator for the files id's this user is associated
     public Iterable<Integer> getFilesAssociated() {
     	//TODO
     	return null;
