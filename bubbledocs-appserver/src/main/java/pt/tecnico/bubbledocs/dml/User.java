@@ -59,4 +59,17 @@ public class User extends User_Base {
     	//TODO
     }
     
+    
+    //This returns an iterator for the files that the user created
+    public Iterable<Integer> getFilesOwned() {
+    	//TODO
+    	return null;
+    }
+    
+    //This returns an iterator for the files this user is associated
+    public Iterable<Integer> getFilesAssociated() {
+    	//TODO
+    	return null;
+    }
+    
 }
