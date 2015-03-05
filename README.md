@@ -2,6 +2,9 @@
 
 This is the main README file for the Bubble Docs project.
 
+## [Wiki](https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project/wiki/)
+
+
 The initial version of the repository contains the following structure:
 
     .
