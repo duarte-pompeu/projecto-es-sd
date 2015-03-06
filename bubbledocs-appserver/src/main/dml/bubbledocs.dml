@@ -13,6 +13,7 @@ class CalcSheet{
 }
 
 class Cell {
+  Integer id;
   Integer line;
   Integer column;
   String contentRepresentation;
