@@ -54,14 +54,18 @@ relation UserCreatesCalcSheet {
 }
 
 relation CalcSheetHasReadPermitionsAboutUsers {
-  CalcSheet playsRole readableCalcSheet;
+  CalcSheet playsRole readableCalcSheet {
+    multiplicity *;
+  }	  
   User playsRole readingUser{
     multiplicity *;
   }
 }
 
 relation CalcSheetHasWritePermitionsAboutUsers {
-  CalcSheet playsRole writableCalcSheet;
+  CalcSheet playsRole writableCalcSheet {
+    multiplicity *;
+  }
   User playsRole writingUser{
     multiplicity *;
   }
