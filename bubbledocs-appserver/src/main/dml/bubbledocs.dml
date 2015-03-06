@@ -63,7 +63,7 @@ relation CalcSheetHasReadPermitionsAboutUsers {
 }
 
 relation CalcSheetHasWritePermitionsAboutUsers {
-  CalcSheet playsRole writableCalcSheet {
+  CalcSheet playsRole writeableCalcSheet {
     multiplicity *;
   }
   User playsRole writingUser{
