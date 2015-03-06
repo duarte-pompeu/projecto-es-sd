@@ -1,4 +1,7 @@
 package pt.tecnico.bubbledocs.dml;
+import org.jdom2.Element;
+
+
 
 public class User extends User_Base {
     
@@ -12,6 +15,7 @@ public class User extends User_Base {
         this.setUserName(userName);
         this.setName(name);
         this.setPassword(password);
+      
     }
     
     /*
@@ -55,5 +59,24 @@ public class User extends User_Base {
     	//TODO
     	return null;
     }
+    
+
+
+    public void importFromXML(Element userElement) {
+    	this.setName(userElement.getAttribute("name").getValue());
+    	this.setUserName(userElement.getAttribute("userName").getValue());
+    	this.setPassword(userElement.getAttribute("password").getValue());
+    }
+
+    public Element exportToXML() {
+    	Element element = new Element("user");
+    	element.setAttribute("name", this.getName());
+    	element.setAttribute("userName", this.getUserName());
+    	element.setAttribute("password", this.getPassword());
+	
+	return element;
+    }
+
+  
     
 }
