@@ -10,6 +10,9 @@ class User{
 
 class CalcSheet{
 	Integer id;
+	String name;
+	Integer lines;
+	Integer columns;
 }
 
 class Cell {
