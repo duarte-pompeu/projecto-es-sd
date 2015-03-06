@@ -29,43 +29,43 @@ relation DomainRootHasBubbleDocsApplication {
 }
 
 relation BubbleDocsHasUsers {
-  BubbleDocs playsRole ownsUsers;
-  User playsRole userOwnedByBubble {
+  BubbleDocs playsRole bubbleDocs;
+  User playsRole user {
     multiplicity *;
   }
 }
 
 relation BubbleDocsHasCalcSheets {
-  BubbleDocs playsRole ownsSheets;
-  CalcSheet playsRole calcSheetOwnedByBubble {
+  BubbleDocs playsRole bubbleDocs;
+  CalcSheet playsRole calcSheet {
     multiplicity *;
   }
 }
 
 relation UserCreatesCalcSheet {
-  CalcSheet playsRole created{
+  CalcSheet playsRole createdCalcSheet{
     multiplicity *;
   }
   User playsRole creator;
 }
 
 relation CalcSheetHasReadPermitionsAboutUsers {
-  CalcSheet playsRole hasReadPermitions;
-  User playsRole permittedReading{
+  CalcSheet playsRole readableCalcSheet;
+  User playsRole readingUser{
     multiplicity *;
   }
 }
 
 relation CalcSheetHasWritePermitionsAboutUsers {
-  CalcSheet playsRole hasWritePermitions;
-  User playsRole permittedWritting{
+  CalcSheet playsRole writableCalcSheet;
+  User playsRole writingUser{
     multiplicity *;
   }
 }
 
 relation CalcSheetOwnsCells {
-  CalcSheet playsRole ownsCells;
-  Cell playsRole ownedByCalcSheet {
+  CalcSheet playsRole calcSheet;
+  Cell playsRole cell {
     multiplicity *;
   }
 }
