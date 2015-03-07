@@ -6,6 +6,8 @@ package pt.tecnico.bubbledocs.exceptions;
 
 public class PermissionException extends RuntimeException {
 
+	private static final long serialVersionUID = 476115369516210901L;
+
 	public PermissionException() {
 	}
 

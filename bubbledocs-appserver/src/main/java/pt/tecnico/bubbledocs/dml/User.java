@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.dml;
 import org.jdom2.Element;
-
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import java.util.*;
 
 public class User extends User_Base {
@@ -31,42 +31,7 @@ public class User extends User_Base {
     	this.addWriteableCalcSheet(sheet);
     	return sheet.getId();
     }
-    
-    
-    /*
-     * Gets the CalcSheet with given id. CalcSheet is readonly if this user
-     * only has readonly permission. This throws a PermissionException if the
-     * user can't read id.
-     */
-    CalcSheet getCalcSheet(int id) /*throws CalcSheetException*/ {
-    	//TODO
-    	/*
-    	//Throw CalcSheetNotFoundException
-    	CalcSheet sheet = BubbleDocs.getInstance().getCalcSheet(id);
-    	
-    	if (!this.getReadableCalcSheetSet().contains(sheet) {
-    	  throw new PermissionException();
-    	}
-    	
-    	if (!this.getWriteableCalcSheetSet().contains(sheet)) {
-    	  sheet.setReadOnly();
-    	}
-    	
-    	return sheet;
-    	
-    	*/    	
-    	return null;
-    }
-        
-    /*
-     * Deletes the calcsheet with the given id, if it's owned by
-     * this user.
-     */
-    //Este método deve ser incluído?
-    public void deleteCalcSheet(int id) {
-    	//PRECOND: this owns id
-    	//TODO
-    }    
+  
     
     //For now I'm simplifying, this method could have splited versions
     //This returns an iterator for the files id's that the user created, the user can read 
@@ -95,6 +60,18 @@ public class User extends User_Base {
     	};
     }
 
+    
+    public User createUser(String userName, String name, String password) {
+    	throw new PermissionException("You don't have permission to do this action");
+    }
+    
+    public void deleteUser(String userName) {
+    	throw new PermissionException("You don't have permission to do this action");
+    }
+    
+    public Set<User> getUserSet() {
+    	throw new PermissionException("You don't have permission to do this action");
+    }
 
 
     public void importFromXML(Element userElement) {
