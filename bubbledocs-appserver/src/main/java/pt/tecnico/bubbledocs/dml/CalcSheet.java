@@ -1,13 +1,14 @@
 package pt.tecnico.bubbledocs.dml;
 
 import pt.tecnico.bubbledocs.content.Content;
-
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import java.util.*;
 
 public class CalcSheet extends CalcSheet_Base {
 	
 	//When a user requests a file by calling user.getCalcSheet(id) and only has readonly access	
-	private boolean readonly = false;
+	private transient boolean readonly = false;
+	private transient User actualUser;
 	
 	private List<Cell> cells;
 	
@@ -40,6 +41,14 @@ public class CalcSheet extends CalcSheet_Base {
     	return readonly;
     }
     
+    protected void setActualUser(User user) {
+    	this.actualUser = user;
+    }
+    
+    protected User getActualUser(User user) {
+    	return this.actualUser;
+    }
+    
     public Content getContent(int line, int column) {
     	//TODO
     	if (outsideBounds(line, column)) {
@@ -57,7 +66,7 @@ public class CalcSheet extends CalcSheet_Base {
     		throw new IllegalArgumentException("Invalid coordinate");
     	}
     	if (readonly) {
-    		throw new /*Permission*/RuntimeException();
+    		throw new PermissionException();
     	}
     	//something something
     }
@@ -67,13 +76,13 @@ public class CalcSheet extends CalcSheet_Base {
      * This adds another user to the list of users that can use this file.
      * The file permission can be read-only or read-write
      */
-    public void addUserToReadCalcSheet(User author, User username) {
+    public void addReader(User username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username is not already in this list
     	//TODO
     }
     
-    public void addUserToReadWriteCalcSheet(User author, User username) {
+    public void addWriter(User username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username must be able to read this file
     }
@@ -82,9 +91,13 @@ public class CalcSheet extends CalcSheet_Base {
      * This removes a user that is in the list of users that can use 
      * a calcsheet.
      */
-    public void removeUserToCalcSheet(User author, String username) {
+    public void removeReader(String username) {
     	//PRECOND: username can use this file
     	//PRECOND: this user owns id or can write id
+    	//TODO
+    }
+    
+    public void removeWriter(String username) {
     	//TODO
     }
     
