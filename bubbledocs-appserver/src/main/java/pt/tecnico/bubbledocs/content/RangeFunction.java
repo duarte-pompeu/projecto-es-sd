@@ -1,6 +1,5 @@
 package pt.tecnico.bubbledocs.content;
 
-import java.util.Iterator;
 
 public abstract class RangeFunction extends Function {
 	private Range range;
@@ -17,7 +16,7 @@ public abstract class RangeFunction extends Function {
 		this.range = range;
 	}
 	
-	public Iterator<Content> getRangeValues(){
-		return range.getIterator();
+	public Iterable<Content> getRangeValues(){
+		return range.getIterable();
 	}
 }

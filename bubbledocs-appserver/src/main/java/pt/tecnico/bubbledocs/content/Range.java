@@ -1,7 +1,6 @@
 package pt.tecnico.bubbledocs.content;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 
@@ -25,12 +24,12 @@ public class Range {
 	/*
 	Duarte: if _all_ we want is to iterate, we can abstract from the
 	specific implementation (array? arraylist? etc.)
-	and return a generic iterator
+	and return a generic iterable
 	*/
-	public Iterator<Content> getIterator(){
+	public Iterable<Content> getIterable(){
 		
 		// FIXME
 		// complete stub method
-		return new ArrayList<Content>().iterator();
+		return new ArrayList<Content>();
 	}
 }
