@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.content;
 
+import pt.tecnico.bubbledocs.dml.Cell;
+
 
 public abstract class RangeFunction extends Function {
 	private Range range;
@@ -16,7 +18,7 @@ public abstract class RangeFunction extends Function {
 		this.range = range;
 	}
 	
-	public Iterable<Content> getRangeValues(){
+	public Iterable<Cell> getRangeCells(){
 		return range.getIterable();
 	}
 }

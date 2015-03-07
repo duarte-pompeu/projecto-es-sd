@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.content;
 
 import org.jdom2.Element;
 
+import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Avg extends RangeFunction {
@@ -11,8 +12,8 @@ public class Avg extends RangeFunction {
 		int total = 0;
 		int n = 0;
 		
-		for(Content c: this.getRangeValues()){
-			total += c.getValue();
+		for(Cell cell: this.getRangeCells()){
+			total += cell.getContent().getValue();
 			n += 1;
 		}
 		

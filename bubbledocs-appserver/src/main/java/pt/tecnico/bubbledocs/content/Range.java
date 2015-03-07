@@ -3,8 +3,10 @@ package pt.tecnico.bubbledocs.content;
 import java.util.ArrayList;
 
 import pt.tecnico.bubbledocs.dml.CalcSheet;
+import pt.tecnico.bubbledocs.dml.Cell;
 
 public class Range {
+	private ArrayList<Cell> cells;
 	public Range(){
 		
 	}
@@ -18,6 +20,17 @@ public class Range {
 	public void init(int firstLine, int firstColumn, int lastLine,
 			int lastColumn, CalcSheet sheet){
 		
+		int i;
+		int j;
+		
+		cells = new ArrayList<Cell>();
+		
+		for(i = firstColumn; i < lastColumn; i++){
+			for(j = firstLine; j < lastLine; j++){
+				
+			}
+		}
+		
 		//FIXME: need additional getters on CalcSheet
 	}
 	
@@ -26,10 +39,10 @@ public class Range {
 	specific implementation (array? arraylist? etc.)
 	and return a generic iterable
 	*/
-	public Iterable<Content> getIterable(){
+	public Iterable<Cell> getIterable(){
 		
 		// FIXME
 		// complete stub method
-		return new ArrayList<Content>();
+		return cells;
 	}
 }
