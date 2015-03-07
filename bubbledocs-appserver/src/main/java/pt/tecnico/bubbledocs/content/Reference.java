@@ -24,9 +24,9 @@ public class Reference extends SimpleContent {
 		Content content = cell.getContent();
 		
 		if(content == null){
-			int x = cell.getColumn();
-			int y = cell.getLine();
-			throw new NullContentException(x,y);
+			int line = cell.getLine();
+			int column = cell.getColumn();
+			throw new NullContentException(line,column);
 		}
 		else{
 			return content.getValue();
