@@ -6,7 +6,15 @@ import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Avg extends RangeFunction {
-
+	
+	public Avg(){
+		
+	}
+	
+	public Avg(Range range){
+		super(range);
+	}
+	
 	@Override
 	public int getValue() throws NullContentException {
 		int total = 0;
