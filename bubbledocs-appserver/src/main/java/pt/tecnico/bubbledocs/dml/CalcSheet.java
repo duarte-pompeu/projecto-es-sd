@@ -48,7 +48,12 @@ public class CalcSheet extends CalcSheet_Base {
     protected User getActualUser(User user) {
     	return this.actualUser;
     }
-    
+ 
+    public Cell getCell(int line, int column) {
+      //TODO
+      return null;
+    }
+   
     public Content getContent(int line, int column) {
     	//TODO
     	if (outsideBounds(line, column)) {
@@ -104,7 +109,6 @@ public class CalcSheet extends CalcSheet_Base {
     private boolean outsideBounds(int line, int column) {
     	//return line < 1 || column < 1 || line > lines || column > columns;
     	return true;
-    }
-    
+    }    
     
 }
