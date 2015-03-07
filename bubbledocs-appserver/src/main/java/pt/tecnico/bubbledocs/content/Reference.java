@@ -8,7 +8,15 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
 public class Reference extends SimpleContent {
 	private Cell cell;
 	
+	public Reference(){
+		
+	}
+	
 	public Reference(Cell cell){
+		setCell(cell);
+	}
+	
+	public void setCell(Cell cell){
 		this.cell = cell;
 	}
 	
