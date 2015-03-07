@@ -5,7 +5,15 @@ import org.jdom2.Element;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Add extends BinaryFunction {
-
+	
+	public Add(){
+		super();
+	}
+	
+	public Add(Content arg1, Content arg2){
+		super(arg1, arg2);
+	}
+	
 	@Override
 	public int getValue() throws NullContentException {
 		int val1 = this.getArg1().getValue();
