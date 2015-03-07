@@ -13,7 +13,7 @@ public class Literal extends SimpleContent {
 		init(value);
 	}
 	
-	public void init(int value){
+	private void init(int value){
 		this.value = value;
 	}
 	
