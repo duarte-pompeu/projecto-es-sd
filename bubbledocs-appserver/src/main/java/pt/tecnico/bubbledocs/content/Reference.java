@@ -13,10 +13,10 @@ public class Reference extends SimpleContent {
 	}
 	
 	public Reference(Cell cell){
-		setCell(cell);
+		init(cell);
 	}
 	
-	public void setCell(Cell cell){
+	public void init(Cell cell){
 		this.cell = cell;
 	}
 	
