@@ -8,7 +8,7 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
 public class Avg extends RangeFunction {
 	
 	public Avg(){
-		
+		super();
 	}
 	
 	public Avg(Range range){

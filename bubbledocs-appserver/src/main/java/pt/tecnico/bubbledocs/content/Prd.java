@@ -8,7 +8,7 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
 public class Prd extends RangeFunction {
 	
 	public Prd(){
-		
+		super();
 	}
 	
 	public Prd(Range range){
