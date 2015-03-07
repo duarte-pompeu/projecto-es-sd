@@ -8,7 +8,7 @@ public class NullContentException extends Exception{
 	
 	private final int column, line;
 	
-	public NullContentException(int column, int line){
+	public NullContentException(int line, int column){
 		this.column = column;
 		this.line = line;
 	}
@@ -16,6 +16,6 @@ public class NullContentException extends Exception{
 	@Override
 	public String getMessage(){	
 		return "NullContentException: Cell "
-			+ column + ";" + line + " is empty.";
+			+ line + ";" + column + " is empty.";
 	}
 }
