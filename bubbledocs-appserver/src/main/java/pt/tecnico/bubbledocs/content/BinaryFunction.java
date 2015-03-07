@@ -8,10 +8,10 @@ public abstract class BinaryFunction extends Function {
 	}
 	
 	public BinaryFunction(Content arg1, Content arg2){
-		setArgs(arg1, arg2);
+		init(arg1, arg2);
 	}
 	
-	public void setArgs(Content arg1, Content arg2){
+	public void init(Content arg1, Content arg2){
 		this.arg1 = arg1;
 		this.arg2 = arg2;
 	}
