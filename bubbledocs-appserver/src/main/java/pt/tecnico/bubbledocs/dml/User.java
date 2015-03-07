@@ -24,12 +24,12 @@ public class User extends User_Base {
      * as its creator. This returns the id number of the created
      * calcsheet. The creator is added to the list of read-write users
      */
-    public int createCalcSheet(String name, int lines, int columns) {
+    public CalcSheet createCalcSheet(String name, int lines, int columns) {
     	CalcSheet sheet = new CalcSheet(name, lines, columns);
     	this.addCreatedCalcSheet(sheet);
     	this.addReadableCalcSheet(sheet);
     	this.addWriteableCalcSheet(sheet);
-    	return sheet.getId();
+    	return sheet;
     }
   
     
