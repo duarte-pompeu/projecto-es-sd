@@ -8,6 +8,8 @@ class User{
 	String password;
 }
 
+class SuperUser extends User;
+
 class CalcSheet{
 	Boolean protection;
 	Integer id;

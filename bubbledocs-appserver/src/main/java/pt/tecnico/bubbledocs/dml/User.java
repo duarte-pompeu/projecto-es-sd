@@ -12,12 +12,16 @@ public class User extends User_Base {
 	
 	public User(String userName, String name, String password) {
         super();
-        this.setUserName(userName);
-        this.setName(name);
-        this.setPassword(password);
+        init(userName, name, password);
         //this.ownedFilenames = new HashSet<String>();
         //this.allFiles = new HashMap<Integer, Boolean>();
     }
+	
+	protected void init(String userName, String name, String password) {
+		this.setUserName(userName);
+        this.setName(name);
+        this.setPassword(password);
+	}
     
     /*
      * Creates a calcsheet that is associated with this user
