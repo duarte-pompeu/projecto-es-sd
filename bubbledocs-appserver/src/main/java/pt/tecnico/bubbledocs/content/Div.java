@@ -4,12 +4,12 @@ import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
-public class Mul extends BinaryFunction {
-	public Mul(){
+public class Div extends BinaryFunction {
+	public Div(){
 		super();
 	}
 	
-	public Mul(Content arg1, Content arg2){
+	public Div(Content arg1, Content arg2){
 		super(arg1, arg2);
 	}
 	
@@ -18,7 +18,7 @@ public class Mul extends BinaryFunction {
 		int val1 = getArg1().getValue();
 		int val2 = getArg2().getValue();
 		
-		return val1 * val2;
+		return val1 / val2;
 	}
 
 	@Override
