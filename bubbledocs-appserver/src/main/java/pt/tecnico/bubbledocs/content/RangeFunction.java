@@ -14,7 +14,7 @@ public abstract class RangeFunction extends Function {
 		init(range);
 	}
 	
-	public void init(Range range){
+	private void init(Range range){
 		this.range = range;
 	}
 	
