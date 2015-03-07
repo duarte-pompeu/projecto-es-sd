@@ -16,7 +16,7 @@ public class Reference extends SimpleContent {
 		init(cell);
 	}
 	
-	public void init(Cell cell){
+	private void init(Cell cell){
 		this.cell = cell;
 	}
 	
