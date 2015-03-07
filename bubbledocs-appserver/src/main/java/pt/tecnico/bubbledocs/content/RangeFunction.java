@@ -11,10 +11,10 @@ public abstract class RangeFunction extends Function {
 	}
 	
 	public RangeFunction(Range range){
-		setRange(range);
+		init(range);
 	}
 	
-	public void setRange(Range range){
+	public void init(Range range){
 		this.range = range;
 	}
 	
