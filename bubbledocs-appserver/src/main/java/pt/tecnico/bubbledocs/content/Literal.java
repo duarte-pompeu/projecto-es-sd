@@ -8,26 +8,22 @@ public class Literal extends SimpleContent {
 	
 	public Literal(){
 	}
+	
 	public Literal(int value){
+		init(value);
+	}
+	
+	public void init(int value){
 		this.value = value;
 	}
 	
 	public int getValue(){
 		return this.value;
 	}
-	
-	public void setValue(int value){
-		this.value=value;
-	}
-	
-	@Override
-	public String toString(){
-		return Integer.toString(value);
-	}
-	
 
     public void importFromXML(Element literalElement) {
-    	this.setValue(Integer.parseInt(literalElement.getAttribute("value").getValue()));
+    	int value = Integer.parseInt(literalElement.getAttribute("value").getValue());
+    	init(value);
     }
 
     public Element exportToXML() {
@@ -35,6 +31,9 @@ public class Literal extends SimpleContent {
     	element.setAttribute("value", ""+this.getValue());
 	return element;
     }
-
-
+    
+    @Override
+	public String toString(){
+		return Integer.toString(value);
+	}
 }
