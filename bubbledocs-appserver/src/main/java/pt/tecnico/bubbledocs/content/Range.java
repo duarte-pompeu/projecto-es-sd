@@ -20,29 +20,25 @@ public class Range {
 	public void init(int firstLine, int firstColumn, int lastLine,
 			int lastColumn, CalcSheet sheet){
 		
-		int i;
-		int j;
+		int column;
+		int line;
 		
 		cells = new ArrayList<Cell>();
 		
-		for(i = firstColumn; i < lastColumn; i++){
-			for(j = firstLine; j < lastLine; j++){
-				
+		//TODO: make sure logic is right
+		for(line = firstLine; line <= lastLine; line++){
+			for(column = firstColumn; column <= lastColumn; column++){
+				cells.add(sheet.getCell(line, column));
 			}
 		}
-		
-		//FIXME: need additional getters on CalcSheet
 	}
 	
 	/*
-	Duarte: if _all_ we want is to iterate, we can abstract from the
+	Duarte: if all we want is to iterate, we can abstract from the
 	specific implementation (array? arraylist? etc.)
 	and return a generic iterable
 	*/
 	public Iterable<Cell> getIterable(){
-		
-		// FIXME
-		// complete stub method
 		return cells;
 	}
 }
