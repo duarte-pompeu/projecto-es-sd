@@ -5,13 +5,6 @@ import pt.tecnico.bubbledocs.content.Content;
 import java.util.*;
 
 public class CalcSheet extends CalcSheet_Base {
-    //this should be in .dml
-	//int id
-	//String name
-	//uncommented to remove errors
-	int lines;
-	int columns;
-	//
 	
 	//When a user requests a file by calling user.getCalcSheet(id) and only has readonly access	
 	private boolean readonly = false;
@@ -24,9 +17,15 @@ public class CalcSheet extends CalcSheet_Base {
 		//put the existing cells in the list
 	}
 	
-    public CalcSheet(int lines, int columns) {
-        super();
+    public CalcSheet(String name, int lines, int columns) {
+        //TODO
+    	super();
         //get unique id
+    	//this.setId(something that generates a unique id)
+    	this.setName(name);
+    	this.setLines(lines);
+    	this.setColumns(columns);
+    
     }
     
     protected void setReadonly() {
@@ -63,17 +62,18 @@ public class CalcSheet extends CalcSheet_Base {
     	//something something
     }
     
+    //NOTE: should these 3 methods be moved to BubbleDocs?
     /*
      * This adds another user to the list of users that can use this file.
      * The file permission can be read-only or read-write
      */
-    public void addUserToReadCalcSheet(User author, String username) {
+    public void addUserToReadCalcSheet(User author, User username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username is not already in this list
     	//TODO
     }
     
-    public void addUserToReadWriteCalcSheet(User author, String username) {
+    public void addUserToReadWriteCalcSheet(User author, User username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username must be able to read this file
     }
@@ -89,7 +89,8 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     private boolean outsideBounds(int line, int column) {
-    	return line < 1 || column < 1 || line > lines || column > columns;
+    	//return line < 1 || column < 1 || line > lines || column > columns;
+    	return true;
     }
     
     

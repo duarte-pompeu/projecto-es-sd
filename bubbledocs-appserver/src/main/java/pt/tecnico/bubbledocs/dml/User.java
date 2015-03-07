@@ -6,22 +6,8 @@ import java.util.*;
 public class User extends User_Base {
     
 
-	//Question. Should all _Base classes have an empty constructor?
     public User() {
     	super();
-    /*	this.ownedFilenames = new HashSet<String>(2*this.getCreatedCalcSheetSet().size());
-    	this.allFiles = new HashMap<Integer, Boolean>();
-    	for (CalcSheet sheet : this.getCreatedCalcSheetSet()) {
-    		this.ownedFilenames.add(sheet.getName());
-    	}
-    	for (CalcSheet sheet : this.getWriteableCalcSheetSet()) {
-    		allFiles.put(sheet.getId(), false);
-    	}
-    	for (CalcSheet sheet : this.getReadableCalcSheetSet()) {
-    		if (!allFiles.containsKey(sheet.getId())) {
-    			allFiles.put(sheet.getId(), true);
-    		}
-    	}*/
     }
 	
 	public User(String userName, String name, String password) {
@@ -39,16 +25,10 @@ public class User extends User_Base {
      * calcsheet. The creator is added to the list of read-write users
      */
     public int createCalcSheet(String name, int lines, int columns) {
-    	//TODO
-    	if (this.ownedFilenames.contains(name)) {
-    		throw new /*Existing document*/RuntimeException();
-    	}
-    	//this.ownedFilenames.add(name);
     	CalcSheet sheet = new CalcSheet(name, lines, columns);
     	this.addCreatedCalcSheet(sheet);
     	this.addReadableCalcSheet(sheet);
     	this.addWriteableCalcSheet(sheet);
-    	//this.allFiles.put(sheet.getId(), false);
     	return sheet.getId();
     }
     
@@ -114,7 +94,7 @@ public class User extends User_Base {
     		};
     	};
     }
-    
+
 
 
     public void importFromXML(Element userElement) {
@@ -128,10 +108,10 @@ public class User extends User_Base {
     	element.setAttribute("name", this.getName());
     	element.setAttribute("userName", this.getUserName());
     	element.setAttribute("password", this.getPassword());
-	
-	return element;
+
+    	return element;
     }
 
-  
-    
+
+
 }
