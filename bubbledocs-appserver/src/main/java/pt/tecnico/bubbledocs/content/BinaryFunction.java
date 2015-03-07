@@ -15,4 +15,7 @@ public abstract class BinaryFunction extends Function {
 		this.arg1 = arg1;
 		this.arg2 = arg2;
 	}
+	
+	public Content getArg1(){	return this.arg1; }
+	public Content getArg2(){	return this.arg2; }
 }
