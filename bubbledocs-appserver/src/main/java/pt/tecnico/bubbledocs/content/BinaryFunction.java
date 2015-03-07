@@ -11,7 +11,7 @@ public abstract class BinaryFunction extends Function {
 		init(arg1, arg2);
 	}
 	
-	public void init(Content arg1, Content arg2){
+	private void init(Content arg1, Content arg2){
 		this.arg1 = arg1;
 		this.arg2 = arg2;
 	}
