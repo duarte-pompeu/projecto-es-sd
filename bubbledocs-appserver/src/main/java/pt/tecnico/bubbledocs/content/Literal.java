@@ -6,6 +6,8 @@ public class Literal extends SimpleContent {
 
 	private int value;
 	
+	public Literal(){
+	}
 	public Literal(int value){
 		this.value = value;
 	}
