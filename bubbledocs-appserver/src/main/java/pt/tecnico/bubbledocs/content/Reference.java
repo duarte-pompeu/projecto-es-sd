@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.content;
 
+import org.jdom2.Element;
+
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
@@ -28,4 +30,7 @@ public class Reference extends SimpleContent {
 		return "=" + cell.getColumn()
 				+ ";" + cell.getLine();
 	}
+	
+	public Element exportToXML(){return null;}
+	public void importFromXML(Element element){};
 }
