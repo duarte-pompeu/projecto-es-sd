@@ -3,20 +3,23 @@ package pt.tecnico.bubbledocs.dml;
 import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.content.Content;
+import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Cell extends Cell_Base {
     private Content content;
-   
+    
     public Cell(int column, int line) {
     	super();
     	this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
     }
     
-    public Content getContent(){
-		//FIXME: implement method properly
+    public Content getContent() throws NullContentException{
+		if(content == null){
+			throw new NullContentException(getLine(), getColumn());
+		}
 		
-		return null;
+		return this.content;
 	}
     
 
