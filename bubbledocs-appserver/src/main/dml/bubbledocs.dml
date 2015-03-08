@@ -25,6 +25,31 @@ class Cell {
   String contentRepresentation;
 }
 
+class Content;
+
+class SimpleContent extends Content;
+
+class Reference extends SimpleContent;
+
+class Literal extends SimpleContent{
+  Integer value;
+}
+
+class Function extends Content;
+
+class BinaryFunction extends Function;
+
+class RangeFunction extends Function;
+
+class Add extends BinaryFunction;
+class Sub extends BinaryFunction;
+class Mul extends BinaryFunction;
+class Div extends BinaryFunction;
+
+class Avg extends RangeFunction;
+class Prd extends RangeFunction;
+class Range;
+
 
 relation DomainRootHasBubbleDocsApplication {
   .pt.ist.fenixframework.DomainRoot playsRole root {
@@ -79,4 +104,33 @@ relation CalcSheetOwnsCells {
   Cell playsRole cell {
     multiplicity *;
   }
+}
+
+relation CellOwnsContent {
+	Cell playsRole cell;
+	Content playsRole content;
+}
+
+relation ReferencePointsToCell{
+	Reference playsRole reference;
+	Cell playsRole cell;
+}
+
+relation BinaryFunctionHasTwoArguments{
+	BinaryFunction playsRole binaryFunction;
+	SimpleContent playsRole arguments{
+	multiplicity 2;
+	}
+}
+
+relation RangeFunctionHasRange{
+	RangeFunction playsRole rangeFunction;
+	Range playsRole range;
+}
+
+relation RangeHasCells{
+	Range playsRole range;
+	Cell playsRole cells{
+		multiplicity *;
+	}
 }
