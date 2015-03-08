@@ -112,10 +112,8 @@ relation CellOwnsContent {
 }
 
 relation ReferencePointsToCell{
-	Reference playsRole reference {
-	  multiplicity *;
-	}
-	Cell playsRole pointedCell;
+	Reference playsRole reference;
+	Cell playsRole cell;
 }
 
 relation BinaryFunctionHasTwoArguments{
