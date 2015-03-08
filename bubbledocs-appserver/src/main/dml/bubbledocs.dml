@@ -16,6 +16,7 @@ class CalcSheet{
 	String name;
 	Integer lines;
 	Integer columns;
+	LocalDate date;
 }
 
 class Cell {

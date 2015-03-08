@@ -1,8 +1,14 @@
 package pt.tecnico.bubbledocs.dml;
+import org.jdom2.Element;
+import org.joda.time.LocalDate;
 
 import pt.tecnico.bubbledocs.content.Content;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+
+
 import java.util.*;
+
+
 
 public class CalcSheet extends CalcSheet_Base {
 	
@@ -109,6 +115,39 @@ public class CalcSheet extends CalcSheet_Base {
     private boolean outsideBounds(int line, int column) {
     	//return line < 1 || column < 1 || line > lines || column > columns;
     	return true;
-    }    
+    }
+    
+    public void importFromXML(Element calcSheetElement) {
+    	this.setDate(new LocalDate(calcSheetElement.getAttribute("date").getValue()));
+    	this.setId(new Integer(calcSheetElement.getAttribute("id").getValue()));
+    	this.setName(new String(calcSheetElement.getAttribute("name").getValue()));
+    	this.setLines(new Integer(calcSheetElement.getAttribute("lines").getValue()));
+    	this.setColumns(new Integer(calcSheetElement.getAttribute("columns").getValue()));
+    	this.setProtection(new Boolean(calcSheetElement.getAttribute("protection").getValue()));
+    	
+    	Element cells = calcSheetElement.getChild("cells");
+    	
+    	for (Element cell : cells.getChildren("cell")) {
+    	    Cell c = new Cell();
+    	    c.importFromXML(cell);
+    	    addCell(c);
+    	}
+    	//now what?
+    }
+
+    public Element exportToXML() {
+    	Element element = new Element("calcSheet");
+    	element.setAttribute("date", this.getDate().toString());
+    	element.setAttribute("id", this.getId().toString());
+    	element.setAttribute("name", this.getName().toString());
+    	element.setAttribute("lines", this.getLines().toString());
+    	element.setAttribute("columns", this.getColumns().toString());
+    	element.setAttribute("protection", this.getProtection().toString());
+    	
+    	for(Cell c: this.getCellSet())
+    		c.exportToXML();
+	
+    	return element;
+    	}
     
 }

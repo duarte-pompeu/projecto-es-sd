@@ -14,7 +14,11 @@ public class Cell extends Cell_Base {
         this.setColumn(new Integer(column));
     }
     
-    public Content getContent() throws NullContentException{
+    public Cell() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Content getContent() throws NullContentException{
 		if(content == null){
 			throw new NullContentException(getLine(), getColumn());
 		}
