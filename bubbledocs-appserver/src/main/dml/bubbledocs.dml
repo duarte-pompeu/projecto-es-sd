@@ -33,7 +33,7 @@ class SimpleContent extends Content;
 class Reference extends SimpleContent;
 
 class Literal extends SimpleContent{
-  Integer value;
+  Integer val;
 }
 
 class Function extends Content;

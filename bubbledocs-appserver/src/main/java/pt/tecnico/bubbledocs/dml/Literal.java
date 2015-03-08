@@ -13,21 +13,21 @@ public class Literal extends Literal_Base {
 	}
 	
 	private void init(int value){
-		this.setValue(value);
+		this.setVal(value);
 	}
 	
-	public int getIntValue(){
-		return this.getValue().intValue();
+	public int getValue(){
+		return this.getVal().intValue();
 	}
 
     public void importFromXML(Element literalElement) {
-    	int value = Integer.parseInt(literalElement.getAttribute("value").getValue());
+    	int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
     	init(value);
     }
 
     public Element exportToXML() {
     	Element element = new Element("literal");
-    	element.setAttribute("value", ""+this.getValue());
+    	element.setAttribute("val", ""+this.getValue());
 	return element;
     }
     
