@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.dml;
 import org.jdom2.Element;
 import org.joda.time.LocalDate;
 
-import pt.tecnico.bubbledocs.content.Content;
+
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 
