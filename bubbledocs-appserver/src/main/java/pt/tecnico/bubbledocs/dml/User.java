@@ -68,7 +68,7 @@ public class User extends User_Base {
     public User createUser(String userName, String name, String password) {
     	throw new PermissionException("You don't have permission to do this action");
     }
-    
+
     public void deleteUser(String userName) {
     	throw new PermissionException("You don't have permission to do this action");
     }
@@ -76,23 +76,5 @@ public class User extends User_Base {
     public Set<User> getUserSet() {
     	throw new PermissionException("You don't have permission to do this action");
     }
-
-
-    public void importFromXML(Element userElement) {
-    	this.setName(userElement.getAttribute("name").getValue());
-    	this.setUserName(userElement.getAttribute("userName").getValue());
-    	this.setPassword(userElement.getAttribute("password").getValue());
-    }
-
-    public Element exportToXML() {
-    	Element element = new Element("user");
-    	element.setAttribute("name", this.getName());
-    	element.setAttribute("userName", this.getUserName());
-    	element.setAttribute("password", this.getPassword());
-
-    	return element;
-    }
-
-
 
 }
