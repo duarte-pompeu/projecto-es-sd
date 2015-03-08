@@ -71,7 +71,7 @@ public class Cell extends Cell_Base {
     	case "div": return new Div();
     	case "avg": return new Avg();
     	case "prd": return new Prd();
+    	default: return null;
     	}	
-    	return null;
     }
 }

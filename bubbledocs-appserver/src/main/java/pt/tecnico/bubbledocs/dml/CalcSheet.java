@@ -133,7 +133,7 @@ public class CalcSheet extends CalcSheet_Base {
     	    c.importFromXML(cell);
     	    addCell(c);
     	}
-    	//now what?
+    	
     }
 
     public Element exportToXML() {
