@@ -10,7 +10,7 @@ public class RangeFunction extends RangeFunction_Base {
 		init(range);
 	}
 	
-	private void init(Range range){
+	protected void init(Range range){
 		this.setRange(range);
 	}
 	
