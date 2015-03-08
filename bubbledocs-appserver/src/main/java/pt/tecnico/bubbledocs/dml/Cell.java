@@ -1,12 +1,15 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.List;
+
 import org.jdom2.Element;
 
-import pt.tecnico.bubbledocs.content.Content;
+
+
+
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Cell extends Cell_Base {
-    private Content content;
     
     public Cell(int column, int line) {
     	super();
@@ -18,12 +21,14 @@ public class Cell extends Cell_Base {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Content getContent() throws NullContentException{
-		if(content == null){
+    
+	public Content _getContent() throws NullContentException{
+	
+		if(this.getContent() == null){
 			throw new NullContentException(getLine(), getColumn());
 		}
 		
-		return this.content;
+		return this.getContent();
 	}
     
 
@@ -32,15 +37,41 @@ public class Cell extends Cell_Base {
     	this.setLine(new Integer(cellElement.getAttribute("line").getValue()));
     	this.setColumn(new Integer(cellElement.getAttribute("column").getValue()));
     	
-    	//now what?
+    	List<Element> contentElement = cellElement.getChildren();
+    	
+    	//it should only contain one but this works
+    	for(Element c: contentElement){
+    		String name=c.getName();
+    		
+    		Content content=parseName(name);
+    		try{
+    			content.importFromXML(c);
+    		}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
+    	}
     }
 
     public Element exportToXML() {
     	Element element = new Element("cell");
     	element.setAttribute("line", this.getLine().toString());
     	element.setAttribute("column", this.getColumn().toString());
-    	this.content.exportToXML();
-	
+    	
+    		this.getContent().exportToXML();
+    	
 	return element;
+    }
+    
+    
+    private Content parseName(String name){
+    	switch(name){
+    	case "literal": return new Literal();
+    	case "reference": return new Reference();
+    	case "add": return new Add();
+    	case "sub": return new Sub();
+    	case "mul": return new Mul();
+    	case "div": return new Div();
+    	case "avg": return new Avg();
+    	case "prd": return new Prd();
+    	}	
+    	return null;
     }
 }

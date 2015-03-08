@@ -6,6 +6,7 @@ import pt.tecnico.bubbledocs.content.Content;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 
+
 import java.util.*;
 
 
@@ -125,9 +126,9 @@ public class CalcSheet extends CalcSheet_Base {
     	this.setColumns(new Integer(calcSheetElement.getAttribute("columns").getValue()));
     	this.setProtection(new Boolean(calcSheetElement.getAttribute("protection").getValue()));
     	
-    	Element cells = calcSheetElement.getChild("cells");
+    	List<Element> cells = calcSheetElement.getChildren();
     	
-    	for (Element cell : cells.getChildren("cell")) {
+    	for (Element cell : cells) {
     	    Cell c = new Cell();
     	    c.importFromXML(cell);
     	    addCell(c);
