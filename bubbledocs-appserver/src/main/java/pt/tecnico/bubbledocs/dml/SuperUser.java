@@ -15,19 +15,20 @@ public class SuperUser extends SuperUser_Base {
     
     @Override
     public User createUser(String userName, String name, String password) {
-    	//TODO
-    	return null;
+    	BubbleDocs bb = BubbleDocs.getInstance();
+    	return bb.addUser(userName, name, password);
     }
     
     @Override
     public void deleteUser(String userName) {
-    	//TODO
+    	BubbleDocs bb = BubbleDocs.getInstance();
+    	bb.deleteUser(userName);
     }
     
     @Override
     public Set<User> getUserSet() {
-    	//TODO
-    	return null;
+    	BubbleDocs bb = BubbleDocs.getInstance();
+    	return bb.getUserSet();
     }
 
     //please add the xml code
