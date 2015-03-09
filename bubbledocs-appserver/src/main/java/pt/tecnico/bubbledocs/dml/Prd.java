@@ -1,6 +1,9 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.List;
+
 import org.jdom2.Element;
+
 
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
@@ -37,8 +40,11 @@ public class Prd extends Prd_Base {
 
 	@Override
 	public void importFromXML(Element element) {
-		// TODO Auto-generated method stub
-
+		List<Element> rangeElement = element.getChildren();
+    	Element c=rangeElement.get(0);
+    	Range r=new Range();
+    	r.importFromXML(c);
+    	this.setRange(r);
 	}
 
     

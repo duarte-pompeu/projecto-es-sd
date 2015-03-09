@@ -53,8 +53,8 @@ public class Range extends Range_Base {
 	
 	public void importFromXML(Element element){
 		
-		Element rangeElement=new Element("range");
-		List<Element> cells = rangeElement.getChildren();
+		
+		List<Element> cells = element.getChildren();
     	
     	for (Element cell : cells) {
     	    Cell c = new Cell();

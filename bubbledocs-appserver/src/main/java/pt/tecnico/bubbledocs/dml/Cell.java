@@ -42,11 +42,12 @@ public class Cell extends Cell_Base {
     	Element c=contentElement.get(0);
     	String name=c.getName();
     		
-    	Content content=parseName(name);
+    	Content content=BubbleDocs.parseName(name);
     	try{
     		content.importFromXML(c);
     	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
     	
+    	this.setContent(content);
     }
 
     public Element exportToXML() {
@@ -60,17 +61,5 @@ public class Cell extends Cell_Base {
     }
     
     
-    private Content parseName(String name){
-    	switch(name){
-    	case "literal": return new Literal();
-    	case "reference": return new Reference();
-    	case "add": return new Add();
-    	case "sub": return new Sub();
-    	case "mul": return new Mul();
-    	case "div": return new Div();
-    	case "avg": return new Avg();
-    	case "prd": return new Prd();
-    	default: return null;
-    	}	
-    }
+   
 }
