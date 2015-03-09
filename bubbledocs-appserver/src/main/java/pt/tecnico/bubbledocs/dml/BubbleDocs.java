@@ -1,9 +1,19 @@
 package pt.tecnico.bubbledocs.dml;
 
+import pt.ist.fenixframework.FenixFramework;
+
 public class BubbleDocs extends BubbleDocs_Base {
-    
+	
+	public static BubbleDocs getInstance() {
+		BubbleDocs pb = FenixFramework.getDomainRoot().getBubbledocs();
+		if (pb == null)
+		    pb = new BubbleDocs();
+
+		return pb;
+	    }
+	
     public BubbleDocs() {
-        super();
+    	FenixFramework.getDomainRoot().setBubbledocs(this);
     }
     
     //for now only used for the xml import
