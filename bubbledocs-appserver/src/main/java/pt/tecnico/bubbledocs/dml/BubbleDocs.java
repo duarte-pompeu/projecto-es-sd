@@ -35,4 +35,15 @@ public class BubbleDocs extends BubbleDocs_Base {
     	default: return null;
     	}	
     }
+    
+    public User addUser(String userName, String name, String password) {
+    	//TODO
+    	//throw RepeatedIdentificationException case userName already exists
+    	return null;
+    }
+    
+    public void deleteUser(String userName) {
+    	//TODO
+    	//throw NotFoundException case userName doesn't exist
+    }
 }
