@@ -42,7 +42,7 @@ public class Reference extends Reference_Base {
 	
 	public Element exportToXML(){
 		Element referenceElement=new Element("reference");
-		this.getCell().exportToXML();
+		referenceElement.addContent(this.getCell().exportToXML());
 		return referenceElement;
 	}
 	public void importFromXML(Element element){

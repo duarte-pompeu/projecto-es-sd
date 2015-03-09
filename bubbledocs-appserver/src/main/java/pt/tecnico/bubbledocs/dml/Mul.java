@@ -24,8 +24,10 @@ public class Mul extends Mul_Base {
 
 	@Override
 	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
+		Element element = new Element("mul");
+    	element.addContent(this.getArg1().exportToXML());
+    	element.addContent(this.getArg2().exportToXML());
+	return element;
 	}
 
 	@Override

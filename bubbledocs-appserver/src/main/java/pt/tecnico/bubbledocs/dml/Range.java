@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.dml;
 
+import org.jdom2.Element;
+
 public class Range extends Range_Base {
     
     public Range() {
@@ -36,4 +38,15 @@ public class Range extends Range_Base {
 	public Iterable<Cell> getIterable(){
 		return this.getCellsSet();
 	}
+
+
+	public Element exportToXML() {
+		Element element = new Element("range");
+    
+    	for(Cell c: this.getCellsSet())
+    		element.addContent(c.exportToXML());
+    	
+    	return element;
+	}
+	
 }

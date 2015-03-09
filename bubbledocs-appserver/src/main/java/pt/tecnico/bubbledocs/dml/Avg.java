@@ -29,8 +29,9 @@ public class Avg extends Avg_Base {
 
 	@Override
 	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
+		Element element = new Element("avg");
+    	element.addContent(this.getRange().exportToXML());
+	return element;
 	}
 
 	@Override

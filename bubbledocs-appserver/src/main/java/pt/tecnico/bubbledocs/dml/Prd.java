@@ -30,8 +30,9 @@ public class Prd extends Prd_Base {
 
 	@Override
 	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
+		Element element = new Element("prd");
+    	element.addContent(this.getRange().exportToXML());
+	return element;
 	}
 
 	@Override

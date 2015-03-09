@@ -22,8 +22,10 @@ public class Div extends Div_Base {
 
 	@Override
 	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
+		Element element = new Element("div");
+    	element.addContent(this.getArg1().exportToXML());
+    	element.addContent(this.getArg2().exportToXML());
+	return element;
 	}
 
 	@Override

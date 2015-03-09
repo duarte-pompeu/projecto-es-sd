@@ -23,8 +23,10 @@ public class Add extends Add_Base {
 
 	@Override
 	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
+		Element element = new Element("add");
+    	element.addContent(this.getArg1().exportToXML());
+    	element.addContent(this.getArg2().exportToXML());
+	return element;
 	}
 
 	@Override

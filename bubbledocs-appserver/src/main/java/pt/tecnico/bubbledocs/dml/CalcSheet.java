@@ -164,7 +164,7 @@ public class CalcSheet extends CalcSheet_Base {
     	element.setAttribute("protection", this.getProtection().toString());
     	
     	for(Cell c: this.getCellSet())
-    		c.exportToXML();
+    		element.addContent(c.exportToXML());
 	
     	return element;
     	}
