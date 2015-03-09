@@ -51,7 +51,7 @@ public class Reference extends Reference_Base {
     	Element cellElement=cellsElement.get(0);
     	Cell cell;
     	int id= Integer.parseInt(cellElement.getAttributeValue("id"));
-    	if((cell=this.getSheet().getCell(id))!=null){
+    	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
     		this.setCell(cell);
     	}
     	

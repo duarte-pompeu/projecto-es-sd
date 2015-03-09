@@ -117,10 +117,6 @@ relation ReferencePointsToCell{
 	Cell playsRole pointedCell;
 }
 
-relation ReferencePointsToCalcSheet{
-	Reference playsRole reference;
-	CalcSheet playsRole sheet;
-}
 
 relation BinaryFunctionHasTwoArguments{
 	BinaryFunction playsRole binaryFunction;

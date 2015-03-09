@@ -144,6 +144,9 @@ public class CalcSheet extends CalcSheet_Base {
     	this.setColumns(new Integer(calcSheetElement.getAttribute("columns").getValue()));
     	this.setProtection(new Boolean(calcSheetElement.getAttribute("protection").getValue()));
     	
+    	//to add in the importation of references and ranges
+    	BubbleDocs.currentSheet=this;
+    	
     	List<Element> cells = calcSheetElement.getChildren();
     	
     	for (Element cell : cells) {
