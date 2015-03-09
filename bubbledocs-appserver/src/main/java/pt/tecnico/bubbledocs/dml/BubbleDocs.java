@@ -5,10 +5,12 @@ import pt.ist.fenixframework.FenixFramework;
 public class BubbleDocs extends BubbleDocs_Base {
 	
 	public static BubbleDocs getInstance() {
-		BubbleDocs pb = FenixFramework.getDomainRoot().getBubbledocs();
-		if (pb == null)
-		    pb = new BubbleDocs();
-
+		BubbleDocs pb;
+		
+		pb = FenixFramework.getDomainRoot().getBubbledocs();
+		if(pb==null)
+			pb = new BubbleDocs(); 
+		
 		return pb;
 	    }
 	
