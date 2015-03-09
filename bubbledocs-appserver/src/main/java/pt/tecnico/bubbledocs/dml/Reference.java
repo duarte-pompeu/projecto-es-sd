@@ -20,11 +20,11 @@ public class Reference extends Reference_Base {
 	}
 	
 	public int getValue() throws NullContentException{
-		Content content = this.getCell().getContent();
+		Content content = this.getPointedCell().getContent();
 		
 		if(content == null){
-			int line = this.getCell().getLine();
-			int column = this.getCell().getColumn();
+			int line = this.getPointedCell().getLine();
+			int column = this.getPointedCell().getColumn();
 			throw new NullContentException(line,column);
 		}
 		else{
@@ -34,8 +34,8 @@ public class Reference extends Reference_Base {
 	
 	@Override
 	public String toString(){
-		return "=" + this.getCell().getColumn()
-				+ ";" + this.getCell().getLine();
+		return "=" + this.getPointedCell().getColumn()
+				+ ";" + this.getPointedCell().getLine();
 	}
 	
 	public Element exportToXML(){
