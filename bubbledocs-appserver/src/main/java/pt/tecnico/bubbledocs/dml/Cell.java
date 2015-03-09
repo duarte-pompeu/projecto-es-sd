@@ -15,6 +15,7 @@ public class Cell extends Cell_Base {
     	super();
     	this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
+        this.setId(new Integer(line*column+line));
     }
     
     public Cell() {
@@ -38,16 +39,14 @@ public class Cell extends Cell_Base {
     	this.setColumn(new Integer(cellElement.getAttribute("column").getValue()));
     	
     	List<Element> contentElement = cellElement.getChildren();
-    	
-    	//it should only contain one but this works
-    	for(Element c: contentElement){
-    		String name=c.getName();
+    	Element c=contentElement.get(0);
+    	String name=c.getName();
     		
-    		Content content=parseName(name);
-    		try{
-    			content.importFromXML(c);
-    		}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
-    	}
+    	Content content=parseName(name);
+    	try{
+    		content.importFromXML(c);
+    	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
+    	
     }
 
     public Element exportToXML() {
@@ -55,7 +54,7 @@ public class Cell extends Cell_Base {
     	element.setAttribute("line", this.getLine().toString());
     	element.setAttribute("column", this.getColumn().toString());
     	
-    		this.getContent().exportToXML();
+    	this.getContent().exportToXML();
     	
 	return element;
     }

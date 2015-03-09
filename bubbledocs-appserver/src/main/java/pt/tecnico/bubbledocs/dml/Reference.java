@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.List;
+
 import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
@@ -44,9 +46,21 @@ public class Reference extends Reference_Base {
 		return referenceElement;
 	}
 	public void importFromXML(Element element){
-		//tricky. check if the cell has already been imported. 
-		//if not, import it first. Some mechanism will be needed, probably id checking, 
-		//in order not to double import a referenced cell.
+		
+		List<Element> cellsElement = element.getChildren();
+    	Element cellElement=cellsElement.get(0);
+    	Cell cell;
+    	int id= Integer.parseInt(cellElement.getAttributeValue("id"));
+    	if((cell=this.getSheet().getCell(id))!=null){
+    		this.setCell(cell);
+    	}
+    	
+    	else{
+    		cell=new Cell();
+    		cell.importFromXML(cellElement);
+    		this.setCell(cell);
+    	}
+		
 	}
 }
     

@@ -17,7 +17,7 @@ public class CalcSheet extends CalcSheet_Base {
 	private transient boolean readonly = false;
 	private transient User actualUser;
 	
-	private List<Cell> cells;
+	
 	
 	//Again, do you need an empty constructor in the Framework?
 	public CalcSheet() {
@@ -60,6 +60,24 @@ public class CalcSheet extends CalcSheet_Base {
       //TODO
       return null;
     }
+    
+    public Cell getCell(int id) {
+    	 Cell c=this.getCellSet().iterator().next();
+         for(;!this.getCellSet().isEmpty();c=this.getCellSet().iterator().next()){
+      	   if(c.getId().intValue()==id)
+      		   return c;
+         }
+            return null;
+      }
+    
+    public boolean hasCell(int id) {
+       Cell c=this.getCellSet().iterator().next();
+       for(;!this.getCellSet().isEmpty();c=this.getCellSet().iterator().next()){
+    	   if(c.getId().intValue()==id)
+    		   return true;
+       }
+          return false;
+      }
    
     public Content getContent(int line, int column) {
     	//TODO

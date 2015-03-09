@@ -117,6 +117,11 @@ relation ReferencePointsToCell{
 	Cell playsRole pointedCell;
 }
 
+relation ReferencePointsToCalcSheet{
+	Reference playsRole reference;
+	CalcSheet playsRole sheet;
+}
+
 relation BinaryFunctionHasTwoArguments{
 	BinaryFunction playsRole binaryFunction;
 	SimpleContent playsRole arguments{
@@ -134,4 +139,10 @@ relation RangeHasCells{
 	Cell playsRole cells{
 		multiplicity *;
 	}
+}	
+relation RangePointsToCalcSheet{
+	Range playsRole range;
+	CalcSheet playsRole calcSheet;
 }
+
+
