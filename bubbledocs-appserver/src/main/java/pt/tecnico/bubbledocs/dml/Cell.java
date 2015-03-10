@@ -3,25 +3,27 @@ package pt.tecnico.bubbledocs.dml;
 import java.util.List;
 
 import org.jdom2.Element;
-
-
-
-
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Cell extends Cell_Base {
     
-    public Cell(int line, int column) {
+	public Cell() {
+		super();
+	}
+	
+	public Cell(int line, int column, Content content) {
     	super();
-    	this.setLine(new Integer(line)); 
+    	init(line, column, content);
+    }
+	
+	public void init(int line, int column, Content content){
+		this.setContent(content);
+		this.setContentRepresentation(content.toString());
+		
+		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
         this.setId(new Integer(line*column+line));
-    }
-    
-    public Cell() {
-		// TODO Auto-generated constructor stub
 	}
-
     
 	public Content _getContent() throws NullContentException{
 	
@@ -31,8 +33,6 @@ public class Cell extends Cell_Base {
 		
 		return this.getContent();
 	}
-    
-
     
     public void importFromXML(Element cellElement) {
     	this.setLine(new Integer(cellElement.getAttribute("line").getValue()));
@@ -59,9 +59,6 @@ public class Cell extends Cell_Base {
     	
 	return element;
     }
-    
-    
-   
 }
 
 
