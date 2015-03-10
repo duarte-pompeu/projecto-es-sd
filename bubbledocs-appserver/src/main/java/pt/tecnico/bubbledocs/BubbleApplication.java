@@ -95,8 +95,8 @@ public class BubbleApplication {
 	  		BubbleDocs pb = BubbleDocs.getInstance();
 
 	  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-	//	System.out.println(pb);
-		//jdomDoc.setRootElement(pb.getCalcSheetSet().iterator().next().exportToXML());
+	
+		jdomDoc.setRootElement(pb.getCalcSheetSet().iterator().next().exportToXML());
 
 		return jdomDoc;
 	    }
