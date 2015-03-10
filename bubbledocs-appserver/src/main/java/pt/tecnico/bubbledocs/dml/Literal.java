@@ -9,7 +9,8 @@ public class Literal extends Literal_Base {
     }
 
     public Literal(int value){
-		init(value);
+		super();
+    	init(value);
 	}
 	
 	private void init(int value){
@@ -17,7 +18,7 @@ public class Literal extends Literal_Base {
 	}
 	
 	public int getValue(){
-		return this.getVal().intValue();
+		return this.getVal();
 	}
 
     public void importFromXML(Element literalElement) {
