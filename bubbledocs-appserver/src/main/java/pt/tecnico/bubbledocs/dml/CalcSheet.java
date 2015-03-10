@@ -1,80 +1,57 @@
 package pt.tecnico.bubbledocs.dml;
+
 import org.jdom2.Element;
 import org.joda.time.LocalDate;
-
-
-
-import pt.tecnico.bubbledocs.exceptions.PermissionException;
-
-
-
-
+import pt.tecnico.bubbledocs.exceptions.*;
 import java.util.*;
 
 
 
 public class CalcSheet extends CalcSheet_Base {
-	
-	//When a user requests a file by calling user.getCalcSheet(id) and only has readonly access	
-	private transient boolean readonly = false;
-	private transient User actualUser;
-	
-	
-	
+		
 	//Again, do you need an empty constructor in the Framework?
 	public CalcSheet() {
 		super();
-		//put the existing cells in the list
 	}
 	
-    public CalcSheet(String name, int lines, int columns) {
+    public CalcSheet(boolean protection, String name, int lines, int columns, LocalDate date) {
         //TODO
     	super();
-        //get unique id
+        this.setProtection(protection);
+    	//get unique id
     	//this.setId(something that generates a unique id)
     	this.setName(name);
     	this.setLines(lines);
     	this.setColumns(columns);
-    
+    	this.setDate(date);
+    	for (int i=0; i<lines; ++i) {
+    		for (int j=0; j<columns; ++j) {
+    			this.addCell(new Cell(i, j));
+    		}
+    	}    
     }
     
-    protected void setReadonly() {
-    	this.readonly = true;
-    }
-    
-    protected void setReadonly(boolean readonly) {
-    	this.readonly = readonly;
-    }
-    
-    protected boolean getReadonly() {
-    	return readonly;
-    }
-    
-    protected void setActualUser(User user) {
-    	this.actualUser = user;
-    }
-    
-    protected User getActualUser(User user) {
-    	return this.actualUser;
-    }
- 
     public Cell getCell(int line, int column) {
-      //TODO
-      return null;
+    	if (outsideBounds(line, column)) {
+    		throw new IllegalArgumentException("Out of bounds");
+    	}
+    	
+    	return this.getCellByIndex(line, column); 
     }
     
     public Cell getCell(int id) {
-    	 Cell c=this.getCellSet().iterator().next();
-         for(;!this.getCellSet().isEmpty();c=this.getCellSet().iterator().next()){
+    	 
+         for(Cell c : this.getCellSet()) {
       	   if(c.getId().intValue()==id)
       		   return c;
          }
-            return null;
+           return null;
+
       }
     
     public boolean hasCell(int id) {
-       Cell c=this.getCellSet().iterator().next();
-       for(;!this.getCellSet().isEmpty();c=this.getCellSet().iterator().next()){
+     
+       for(Cell c : this.getCellSet()) {
     	   if(c.getId().intValue()==id)
     		   return true;
        }
@@ -84,23 +61,20 @@ public class CalcSheet extends CalcSheet_Base {
     public Content getContent(int line, int column) {
     	//TODO
     	if (outsideBounds(line, column)) {
-    		throw new IllegalArgumentException("Invalid coordinate");
+    		throw new IllegalArgumentException("Out of bounds");
     	}
-    	//return cells.get((line-1)*columns+(column-1)).getContent();
-    	return null;
+    	
+    	return this.getCellByIndex(line, column).getContent();
     }
     
     //this may be changed to receive a string, and using a Content factory, create the Content
     // *whip* *whip* get that Parser working Tiago :P
     public void setContent(int line, int column, Content content) {
-    	//TODO
-    	/*if (outsideBounds(line, column)) {
-    		throw new IllegalArgumentException("Invalid coordinate");
-    	}*/ 
-    	if (readonly) {
-    		throw new PermissionException();
+    	if (outsideBounds(line, column)) {
+    		throw new IllegalArgumentException("Out of bounds");
     	}
-    	//something something
+    	
+    	this.getCellByIndex(line, column).setContent(content);
     }
     
     //NOTE: should these 3 methods be moved to BubbleDocs?
@@ -134,8 +108,16 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     private boolean outsideBounds(int line, int column) {
-    	//return line < 1 || column < 1 || line > lines || column > columns;
-    	return true;
+    	return line < 1 || column < 1 || line > this.getLines() || column > this.getColumns();
+    }
+    
+    private Cell getCellByIndex(int line, int column) {
+    	for (Cell cell : this.getCellSet()) {
+    		if (cell.getLine() == line && cell.getColumn() == column) {
+    			return cell;
+    		}
+    	}
+    	throw new NotFoundException();
     }
     
     public void importFromXML(Element calcSheetElement) {
