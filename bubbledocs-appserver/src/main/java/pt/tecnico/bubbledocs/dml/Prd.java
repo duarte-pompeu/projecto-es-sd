@@ -15,7 +15,8 @@ public class Prd extends Prd_Base {
     }
     
     public Prd(Range range){
-		super.init(range);
+		super();
+    	super.init(range);
 	}
 	
 	@Override

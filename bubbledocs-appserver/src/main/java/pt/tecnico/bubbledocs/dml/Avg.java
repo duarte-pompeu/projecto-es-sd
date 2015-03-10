@@ -13,7 +13,8 @@ public class Avg extends Avg_Base {
     }
     
     public Avg(Range range){
-		super.init(range);
+		super();
+    	super.init(range);
 	}
 	
 	@Override

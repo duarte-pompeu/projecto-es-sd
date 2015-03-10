@@ -12,6 +12,7 @@ public class Div extends Div_Base {
         super();
     }
 	public Div(SimpleContent arg1, SimpleContent arg2){
+		super();
 		super.init(arg1, arg2);
 	}
 	

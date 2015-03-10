@@ -13,7 +13,8 @@ public class Mul extends Mul_Base {
     }
     
     public Mul(SimpleContent arg1, SimpleContent arg2){
-		super.init(arg1, arg2);
+		super();
+    	super.init(arg1, arg2);
 	}
 	
 	@Override

@@ -12,7 +12,8 @@ public class Add extends Add_Base {
         super();
     }
     public Add(SimpleContent arg1, SimpleContent arg2){
-		super.init(arg1, arg2);
+		super();
+    	super.init(arg1, arg2);
 	}
 	
 	@Override
