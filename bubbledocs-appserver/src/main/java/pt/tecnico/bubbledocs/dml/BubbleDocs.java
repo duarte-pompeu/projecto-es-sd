@@ -14,8 +14,9 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return pb;
 	    }
 	
-    public BubbleDocs() {
+    private BubbleDocs() {
     	FenixFramework.getDomainRoot().setBubbledocs(this);
+    	this.setIdCounter(1);
     }
     
     //for now only used for the xml import
