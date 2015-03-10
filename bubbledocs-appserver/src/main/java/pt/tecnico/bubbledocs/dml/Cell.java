@@ -16,6 +16,11 @@ public class Cell extends Cell_Base {
     	init(line, column, content);
     }
 	
+	public Cell(int line, int column) {
+		super();
+		init(line, column, null);
+	}
+	
 	public void init(int line, int column, Content content){
 		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
