@@ -92,9 +92,9 @@ public class CalcSheet extends CalcSheet_Base {
     // *whip* *whip* get that Parser working Tiago :P
     public void setContent(int line, int column, Content content) {
     	//TODO
-    	if (outsideBounds(line, column)) {
+    	/*if (outsideBounds(line, column)) {
     		throw new IllegalArgumentException("Invalid coordinate");
-    	}
+    	}*/ 
     	if (readonly) {
     		throw new PermissionException();
     	}

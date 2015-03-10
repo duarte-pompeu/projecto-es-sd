@@ -11,7 +11,7 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Cell extends Cell_Base {
     
-    public Cell(int column, int line) {
+    public Cell(int line, int column) {
     	super();
     	this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
