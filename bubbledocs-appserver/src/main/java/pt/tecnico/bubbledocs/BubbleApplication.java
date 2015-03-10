@@ -58,7 +58,7 @@ public class BubbleApplication {
 		User user1 = new User("pf","Paul Door","sub");
 	 	pb.getUserSet().add(user1);
 	 	User user2 = new User("ra","Step Rabbit","cor");
-	 	CalcSheet cal = user1.createCalcSheet("Notas ES",300,20);
+	 	CalcSheet cal = user1.createCalcSheet("Notas ES",300,20, false);
 	 	Cell c = new Cell (3,4, new Literal(5));
 	 	//c.setContent(new Literal(5));
 	 	Cell c2 = new Cell (4,3, new Reference(c));

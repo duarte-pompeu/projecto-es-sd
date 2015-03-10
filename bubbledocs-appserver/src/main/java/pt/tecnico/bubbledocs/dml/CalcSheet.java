@@ -13,7 +13,7 @@ public class CalcSheet extends CalcSheet_Base {
 		super();
 	}
 	
-    public CalcSheet(boolean protection, String name, int lines, int columns, LocalDate date) {
+    public CalcSheet(String name, int lines, int columns, boolean protection, LocalDate date) {
         //TODO
     	super();
         this.setProtection(protection);
