@@ -43,27 +43,9 @@ public class User extends User_Base {
     //This returns an iterator for the files id's that the user created, the user can read 
     //and the user can read-write
     public Iterable<CalcSheet> getAllFiles() {    	
-    	//OMG java lambdas!!!!!!11
-    	return () -> {
-    		return new Iterator<CalcSheet>() {
-    			Iterator<CalcSheet> readables = 
-    					User.this.getReadableCalcSheetSet().iterator();
-    			@Override
-    			public boolean hasNext() {
-    				return readables.hasNext();
-    			}
-
-    			@Override
-    			public CalcSheet next() {
-    				CalcSheet next = readables.next();
-    				if (!User.this.getWriteableCalcSheetSet().contains(next)) {
-    					next.setReadonly();
-    				}
-    				return next;
-    			}
-
-    		};
-    	};
+    	Set<CalcSheet> set = new HashSet<CalcSheet>(this.getReadableCalcSheetSet());
+    	set.addAll(this.getCreatedCalcSheetSet());
+    	return set;
     }
 
     
