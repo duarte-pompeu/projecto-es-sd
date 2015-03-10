@@ -24,7 +24,7 @@ class Cell {
   Integer id;
   Integer line;
   Integer column;
-  Boolean protected;
+  Boolean protect;
   String contentRepresentation;
 }
 
