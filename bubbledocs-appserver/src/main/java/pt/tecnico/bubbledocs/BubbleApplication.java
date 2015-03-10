@@ -9,8 +9,14 @@ import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
+
 import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.Reference;
+
+
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 
 public class BubbleApplication {
@@ -38,8 +44,9 @@ public class BubbleApplication {
     	    
     	    
     	}
-   
+
     	
+ 
 	}
 	
 	static void populateDomain(BubbleDocs pb) {
@@ -54,8 +61,54 @@ public class BubbleApplication {
 	 	CalcSheet cal = user1.createCalcSheet("Notas ES",300,20);
 	 	Cell c = new Cell (3,4);
 	 	c.setContent(new Literal(5));
+	 	Cell c2 = new Cell (4,3);
+	 	c2.setContent(new Reference(c));
 	 	cal.getCellSet().add(c);
+	 	cal.getCellSet().add(c2);
 	 	pb.getCalcSheetSet().add(cal);
+	 	org.jdom2.Document jdomDoc = new org.jdom2.Document();
+		
+	 	jdomDoc.setRootElement(pb.getCalcSheetSet().iterator().next().exportToXML());
+	 	XMLOutputter xml = new XMLOutputter();
+		xml.setFormat(Format.getPrettyFormat());
+		System.out.println(xml.outputString(jdomDoc));
+
+	 	
 }
+
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//	NONE OF THIS WORKS - HELP. STUFF ONLY WORKS INSIDE A TRANSATION (UNLIKE THE PHONEBOOK???WHATS GOING ON)
+	
+	
+	  	@Atomic
+	    public static org.jdom2.Document convertToXML() {
+		 
+	  		BubbleDocs pb = BubbleDocs.getInstance();
+
+	  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
+	//	System.out.println(pb);
+		//jdomDoc.setRootElement(pb.getCalcSheetSet().iterator().next().exportToXML());
+
+		return jdomDoc;
+	    }
+
+	    @Atomic
+	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
+		XMLOutputter xml = new XMLOutputter();
+		xml.setFormat(Format.getPrettyFormat());
+		System.out.println(xml.outputString(jdomDoc));
+	    }
+
 }
+
+
+

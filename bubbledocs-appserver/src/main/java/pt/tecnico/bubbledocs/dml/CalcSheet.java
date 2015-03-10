@@ -3,7 +3,9 @@ import org.jdom2.Element;
 import org.joda.time.LocalDate;
 
 
+
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+
 
 
 
@@ -159,12 +161,15 @@ public class CalcSheet extends CalcSheet_Base {
 
     public Element exportToXML() {
     	Element element = new Element("calcSheet");
-    	element.setAttribute("date", this.getDate().toString());
-    	element.setAttribute("id", this.getId().toString());
+    	try{
+    	
+    	//element.setAttribute("date", this.getDate().toString());
+    	//element.setAttribute("id", this.getId().toString());
     	element.setAttribute("name", this.getName().toString());
     	element.setAttribute("lines", this.getLines().toString());
     	element.setAttribute("columns", this.getColumns().toString());
-    	element.setAttribute("protection", this.getProtection().toString());
+    	//element.setAttribute("protection", this.getProtection().toString());
+    	}catch(Exception e){System.out.println(e.toString());}
     	
     	for(Cell c: this.getCellSet())
     		element.addContent(c.exportToXML());

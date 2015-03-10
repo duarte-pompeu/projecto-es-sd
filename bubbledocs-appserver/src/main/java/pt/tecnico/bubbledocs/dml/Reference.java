@@ -18,7 +18,7 @@ public class Reference extends Reference_Base {
 	}
 	
 	private void init(Cell cell){
-		this.setCell(cell);
+		this.setPointedCell(cell);
 	}
 	
 	public int getValue() throws NullContentException{
@@ -42,7 +42,7 @@ public class Reference extends Reference_Base {
 	
 	public Element exportToXML(){
 		Element referenceElement=new Element("reference");
-		referenceElement.addContent(this.getCell().exportToXML());
+		referenceElement.addContent(this.getPointedCell().exportToXML());
 		return referenceElement;
 	}
 	public void importFromXML(Element element){
@@ -52,7 +52,7 @@ public class Reference extends Reference_Base {
     	Cell cell;
     	int id= Integer.parseInt(cellElement.getAttributeValue("id"));
     	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
-    		this.setCell(cell);
+    		this.setPointedCell(cell);
     	}
     	
     	else{
