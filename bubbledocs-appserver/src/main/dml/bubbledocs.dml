@@ -1,6 +1,8 @@
 package pt.tecnico.bubbledocs.dml;
 
-class BubbleDocs;
+class BubbleDocs {
+    Integer idCounter;
+}
 
 class User{
 	String userName;
