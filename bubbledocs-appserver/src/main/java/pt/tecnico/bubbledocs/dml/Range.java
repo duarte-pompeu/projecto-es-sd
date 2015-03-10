@@ -2,10 +2,11 @@ package pt.tecnico.bubbledocs.dml;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 import org.jdom2.Element;
 
-public class Range extends Range_Base {
+public class Range extends Range_Base implements Iterable<Cell>{
     
     public Range() {
         super();
@@ -38,7 +39,7 @@ public class Range extends Range_Base {
 	specific implementation (array? arraylist? etc.)
 	and return a generic iterable
 	*/
-	public Iterable<Cell> getIterable(){
+	public Iterator<Cell> iterator(){
 		int upperLine, leftmostColumn, downLine, rightmostColumn;
 		ArrayList<Cell> a=new ArrayList<Cell>();
 		
@@ -51,7 +52,7 @@ public class Range extends Range_Base {
 			for(int j=1; j<=rightmostColumn; j++)
 				a.add(this.getCalcSheet().getCell(i, j));
 		
-		return a;
+		return a.iterator();
 	}
 
 
