@@ -33,6 +33,12 @@ public class Cell extends Cell_Base {
 		
 		return this.getContent();
 	}
+	
+	@Override
+	public void setContent(Content c){
+		super.setContent(c);
+		setContentRepresentation(c.toString());
+	}
     
     public void importFromXML(Element cellElement) {
     	this.setLine(new Integer(cellElement.getAttribute("line").getValue()));
