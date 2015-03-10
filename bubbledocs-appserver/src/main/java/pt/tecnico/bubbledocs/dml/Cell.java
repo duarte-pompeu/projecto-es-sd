@@ -17,12 +17,12 @@ public class Cell extends Cell_Base {
     }
 	
 	public void init(int line, int column, Content content){
-		this.setContent(content);
-		this.setContentRepresentation(content.toString());
-		
 		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
         this.setId(new Integer(line*column+line));
+		
+		this.setContent(content);
+		this.setContentRepresentation(content.toString());
 	}
     
 	public Content _getContent() throws NullContentException{
@@ -66,14 +66,3 @@ public class Cell extends Cell_Base {
 	return element;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
