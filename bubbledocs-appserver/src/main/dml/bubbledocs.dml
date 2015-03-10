@@ -13,7 +13,6 @@ class User{
 class SuperUser extends User;
 
 class CalcSheet{
-	Boolean protection;
 	Integer id;
 	String name;
 	Integer lines;

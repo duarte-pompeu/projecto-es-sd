@@ -1,8 +1,6 @@
 package pt.tecnico.bubbledocs.dml;
 
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
-
-import org.joda.time.LocalDate;
 import java.util.*;
 
 public class User extends User_Base {
@@ -31,7 +29,7 @@ public class User extends User_Base {
      * calcsheet. The creator is added to the list of read-write users
      */
     public CalcSheet createCalcSheet(String name, int lines, int columns, boolean protection) {
-    	CalcSheet sheet = new CalcSheet(name, lines, columns, protection, new LocalDate());
+    	CalcSheet sheet = new CalcSheet(name, lines, columns);
     	this.addCreatedCalcSheet(sheet);
     	this.addReadableCalcSheet(sheet);
     	this.addWriteableCalcSheet(sheet);

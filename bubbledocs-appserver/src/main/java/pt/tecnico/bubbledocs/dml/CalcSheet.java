@@ -13,16 +13,15 @@ public class CalcSheet extends CalcSheet_Base {
 		super();
 	}
 	
-    public CalcSheet(String name, int lines, int columns, boolean protection, LocalDate date) {
+    public CalcSheet(String name, int lines, int columns) {
         //TODO
     	super();
-        this.setProtection(protection);
     	//get unique id
     	//BubbleDocs.getInstance().getUniqueId();
     	this.setName(name);
     	this.setLines(lines);
     	this.setColumns(columns);
-    	this.setDate(date);
+    	this.setDate(new LocalDate());
     	for (int i=0; i<lines; ++i) {
     		for (int j=0; j<columns; ++j) {
     			this.addCell(new Cell(i, j));
@@ -129,7 +128,6 @@ public class CalcSheet extends CalcSheet_Base {
     	this.setName(new String(calcSheetElement.getAttribute("name").getValue()));
     	this.setLines(new Integer(calcSheetElement.getAttribute("lines").getValue()));
     	this.setColumns(new Integer(calcSheetElement.getAttribute("columns").getValue()));
-    	this.setProtection(new Boolean(calcSheetElement.getAttribute("protection").getValue()));
     	
     	//to aid in the importation of references and ranges
     	BubbleDocs.currentSheet=this;
