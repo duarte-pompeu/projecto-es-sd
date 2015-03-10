@@ -12,8 +12,8 @@ public class Reference extends Reference_Base {
         super();
     }
     
-	
 	public Reference(Cell cell){
+		super();
 		init(cell);
 	}
 	
@@ -45,6 +45,7 @@ public class Reference extends Reference_Base {
 		referenceElement.addContent(this.getPointedCell().exportToXML());
 		return referenceElement;
 	}
+	
 	public void importFromXML(Element element){
 		
 		List<Element> cellsElement = element.getChildren();
@@ -60,7 +61,6 @@ public class Reference extends Reference_Base {
     		cell.importFromXML(cellElement);
     		this.setCell(cell);
     	}
-		
 	}
 }
     
