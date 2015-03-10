@@ -36,6 +36,11 @@ public class BubbleDocs extends BubbleDocs_Base {
     	}	
     }
     
+    public User login(String username, String password) {
+    	//TODO
+    	return null;
+    }
+    
     public User addUser(String userName, String name, String password) {
     	//TODO
     	//throw RepeatedIdentificationException case userName already exists
