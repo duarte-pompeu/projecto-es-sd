@@ -39,14 +39,5 @@ public class Prd extends Prd_Base {
 	return element;
 	}
 
-	@Override
-	public void importFromXML(Element element) {
-		List<Element> rangeElement = element.getChildren();
-    	Element c=rangeElement.get(0);
-    	Range r=new Range();
-    	r.importFromXML(c);
-    	this.setRange(r);
-	}
-
-    
+	
 }

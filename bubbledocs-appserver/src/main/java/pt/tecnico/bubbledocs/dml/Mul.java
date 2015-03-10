@@ -12,7 +12,7 @@ public class Mul extends Mul_Base {
         super();
     }
     
-    public Mul(SimpleContent arg1, SimpleContent arg2){
+    public Mul(FunctionArgument arg1, FunctionArgument arg2){
 		super();
     	super.init(arg1, arg2);
 	}
@@ -27,30 +27,9 @@ public class Mul extends Mul_Base {
 
 	@Override
 	public Element exportToXML() {
-		Element element = new Element("mul");
+		Element element = new Element("mull");
     	element.addContent(this.getArg1().exportToXML());
     	element.addContent(this.getArg2().exportToXML());
 	return element;
 	}
-
-	@Override
-	public void importFromXML(Element element) {
-		List<Element> addElement = element.getChildren();
-    	Element c=addElement.get(0);
-    	String name=c.getName();
-    	Content content1=BubbleDocs.parseName(name);
-    	try{
-    		content1.importFromXML(c);
-    		this.addArguments((SimpleContent)content1);
-    	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
-    	
-    	c=addElement.get(1);
-    	name=c.getName();
-    	Content content2=BubbleDocs.parseName(name);
-    	try{
-    		content2.importFromXML(c);
-    		this.addArguments((SimpleContent)content2);
-    	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
-	}
-    
 }

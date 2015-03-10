@@ -30,11 +30,12 @@ class Cell {
 
 class Content;
 
-class SimpleContent extends Content;
+class FunctionArgument extends Content;
 
-class Reference extends SimpleContent;
 
-class Literal extends SimpleContent{
+class Reference extends FunctionArgument;
+
+class Literal extends FunctionArgument{
   Integer val;
 }
 
@@ -120,11 +121,14 @@ relation ReferencePointsToCell{
 }
 
 
-relation BinaryFunctionHasTwoArguments{
+relation BinaryFunctionHasArgument1{
+	BinaryFunction playsRole binaryFunction_;
+	FunctionArgument playsRole argument1;
+}
+
+relation BinaryFunctionHasArgument2{
 	BinaryFunction playsRole binaryFunction;
-	SimpleContent playsRole arguments{
-	multiplicity 2;
-	}
+	FunctionArgument playsRole argument2;
 }
 
 relation RangeFunctionHasRange{
@@ -132,12 +136,16 @@ relation RangeFunctionHasRange{
 	Range playsRole range;
 }
 
-relation RangeHasCells{
+relation RangeHasLeftUpLimit{
 	Range playsRole range;
-	Cell playsRole cells{
-		multiplicity *;
-	}
+	Cell playsRole leftUpCell;
 }	
+
+relation RangeHasRightDownLimit{
+	Range playsRole range_;
+	Cell playsRole RightDownCell;
+}	
+
 relation RangePointsToCalcSheet{
 	Range playsRole range;
 	CalcSheet playsRole calcSheet;

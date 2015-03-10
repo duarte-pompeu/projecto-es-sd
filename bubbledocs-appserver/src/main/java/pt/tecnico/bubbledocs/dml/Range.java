@@ -1,5 +1,6 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -24,12 +25,12 @@ public class Range extends Range_Base {
 		int line;
 		
 		
-		//TODO: make sure logic is right
-		for(line = firstLine; line <= lastLine; line++){
+		//TODO: THIS NEXT CODE WAS BEFORE THE RECENT CHANGE. CHECK THE DML FILE
+	/*	for(line = firstLine; line <= lastLine; line++){
 			for(column = firstColumn; column <= lastColumn; column++){
 				this.getCellsSet().add(sheet.getCell(line, column));
 			}
-		}
+		}*/ 
 	}
 	
 	/*
@@ -38,15 +39,29 @@ public class Range extends Range_Base {
 	and return a generic iterable
 	*/
 	public Iterable<Cell> getIterable(){
-		return this.getCellsSet();
+		int upperLine, leftmostColumn, downLine, rightmostColumn;
+		ArrayList<Cell> a=new ArrayList<Cell>();
+		
+		upperLine=this.getLeftUpCell().getLine();
+		leftmostColumn=this.getLeftUpCell().getColumn();
+		downLine=this.getRightDownCell().getLine();
+		rightmostColumn=this.getRightDownCell().getColumn();
+		
+		for(int i=1; i<=downLine; i++)
+			for(int j=1; j<=rightmostColumn; j++)
+				a.add(this.getCalcSheet().getCell(i, j));
+		
+		return a;
 	}
 
 
 	public Element exportToXML() {
 		Element element = new Element("range");
     
-    	for(Cell c: this.getCellsSet())
-    		element.addContent(c.exportToXML());
+    	Cell c= this.getLeftUpCell();
+    	element.addContent(c.exportToXML());
+    	c=this.getRightDownCell();
+    	element.addContent(c.exportToXML());
     	
     	return element;
 	}
@@ -56,11 +71,33 @@ public class Range extends Range_Base {
 		
 		List<Element> cells = element.getChildren();
     	
-    	for (Element cell : cells) {
-    	    Cell c = new Cell();
-    	    c.importFromXML(cell);
-    	    this.addCells(c);
+    	Element cell1=cells.get(0);
+    	Cell cell;
+    	int id= Integer.parseInt(cell1.getAttributeValue("id"));
+    	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
+    		this.setLeftUpCell(cell);
     	}
+    	
+    	else{
+    		cell=new Cell();
+    		cell.importFromXML(cell1);
+    		this.setLeftUpCell(cell);
+    	}
+    	
+
+    	Element cell2=cells.get(1);
+    	
+    	id= Integer.parseInt(cell2.getAttributeValue("id"));
+    	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
+    		this.setRightDownCell(cell);
+    	}
+    	
+    	else{
+    		cell=new Cell();
+    		cell.importFromXML(cell2);
+    		this.setRightDownCell(cell);
+    	}
+    	
 	}
 	
 }
