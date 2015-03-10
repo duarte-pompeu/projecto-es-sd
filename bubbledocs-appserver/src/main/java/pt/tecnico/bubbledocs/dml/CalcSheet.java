@@ -9,7 +9,6 @@ import java.util.*;
 
 public class CalcSheet extends CalcSheet_Base {
 		
-	//Again, do you need an empty constructor in the Framework?
 	public CalcSheet() {
 		super();
 	}
@@ -19,7 +18,7 @@ public class CalcSheet extends CalcSheet_Base {
     	super();
         this.setProtection(protection);
     	//get unique id
-    	//this.setId(something that generates a unique id)
+    	//BubbleDocs.getInstance().getUniqueId();
     	this.setName(name);
     	this.setLines(lines);
     	this.setColumns(columns);
@@ -31,80 +30,80 @@ public class CalcSheet extends CalcSheet_Base {
     	}    
     }
     
-    public Cell getCell(int line, int column) {
-    	if (outsideBounds(line, column)) {
-    		throw new IllegalArgumentException("Out of bounds");
-    	}
-    	
+    //This method shouldn't be used by a user.
+    public Cell getCell(int line, int column) {    	
     	return this.getCellByIndex(line, column); 
     }
-    
-    public Cell getCell(int id) {
-    	 
-         for(Cell c : this.getCellSet()) {
-      	   if(c.getId().intValue()==id)
-      		   return c;
-         }
-           return null;
 
-      }
-    
-    public boolean hasCell(int id) {
-     
-       for(Cell c : this.getCellSet()) {
-    	   if(c.getId().intValue()==id)
-    		   return true;
-       }
-          return false;
-      }
-   
-    public Content getContent(int line, int column) {
-    	//TODO
-    	if (outsideBounds(line, column)) {
-    		throw new IllegalArgumentException("Out of bounds");
+    public Cell getCell(int id) {
+
+    	for(Cell c : this.getCellSet()) {
+    		if(c.getId().intValue()==id)
+    			return c;
     	}
+    	return null;
+
+    }
+
+    public boolean hasCell(int id) {
+
+    	for(Cell c : this.getCellSet()) {
+    		if(c.getId().intValue()==id)
+    			return true;
+    	}
+    	return false;
+    }
+
+    public Content getContent(User reader, int line, int column) {
+    	if (!(reader.getReadableCalcSheetSet().contains(this))) throw new PermissionException();
     	
     	return this.getCellByIndex(line, column).getContent();
     }
     
     //this may be changed to receive a string, and using a Content factory, create the Content
     // *whip* *whip* get that Parser working Tiago :P
-    public void setContent(int line, int column, Content content) {
-    	if (outsideBounds(line, column)) {
-    		throw new IllegalArgumentException("Out of bounds");
-    	}
+    public void setContent(User writer, Content content, int line, int column) {    	
+    	if (!(writer.getWriteableCalcSheetSet().contains(writer))) throw new PermissionException();
     	
     	this.getCellByIndex(line, column).setContent(content);
     }
     
-    //NOTE: should these 3 methods be moved to BubbleDocs?
+    
+    //These methods are implemented in BubbleDocs because users are only supposed
+    //to get their own user.
+    
     /*
      * This adds another user to the list of users that can use this file.
      * The file permission can be read-only or read-write
      */
-    public void addReader(User username) {
+    public void addReader(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username is not already in this list
-    	//TODO
+    	BubbleDocs.getInstance().addReader(author, username, this);    	
     }
     
-    public void addWriter(User username) {
+    
+
+	public void addWriter(User author, String username) {
     	//PRECOND: author owns or can write this file
-    	//PRECOND: username must be able to read this file
+    	//PRECOND: username MUST be able to read this file
+		BubbleDocs.getInstance().addWriter(author, username, this);
     }
     
     /*
      * This removes a user that is in the list of users that can use 
      * a calcsheet.
      */
-    public void removeReader(String username) {
-    	//PRECOND: username can use this file
-    	//PRECOND: this user owns id or can write id
-    	//TODO
+    public void removeReader(User author, String username) {
+    	//PRECOND: author owns or can write this file
+    	//PRECOND: username can read this file and CANNOT write this file
+    	BubbleDocs.getInstance().removeReader(author, username, this);
     }
     
-    public void removeWriter(String username) {
-    	//TODO
+    public void removeWriter(User author, String username) {
+    	//PRECOND: author owns or can write this file
+    	//PRECOND: username can read this file and CANNOT write this file
+    	BubbleDocs.getInstance().removeWriter(author, username, this);
     }
     
     private boolean outsideBounds(int line, int column) {
@@ -112,6 +111,10 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     private Cell getCellByIndex(int line, int column) {
+    	if (outsideBounds(line, column)) {
+    		throw new IllegalArgumentException("Out of bounds");
+    	}
+    	
     	for (Cell cell : this.getCellSet()) {
     		if (cell.getLine() == line && cell.getColumn() == column) {
     			return cell;
