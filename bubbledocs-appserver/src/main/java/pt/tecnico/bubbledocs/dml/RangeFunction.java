@@ -19,7 +19,7 @@ public class RangeFunction extends RangeFunction_Base {
 	}
 	
 	public Iterable<Cell> getRangeCells(){
-		return this.getRange().getIterable();
+		return this.getRange();
 	}
 	
 	@Override
