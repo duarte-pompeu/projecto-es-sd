@@ -51,4 +51,31 @@ public class BubbleDocs extends BubbleDocs_Base {
     	//TODO
     	//throw NotFoundException case userName doesn't exist
     }
+
+    //author is the user that is doing the action.
+	public void addReader(User author, String userName, CalcSheet calcSheet) {
+		//TODO
+    	//PRECOND: author owns or can write this file
+    	//PRECOND: username is not already in this association
+		
+	}
+
+	public void addWriter(User author, String username, CalcSheet calcSheet) {
+		// TODO Auto-generated method stub
+		//PRECOND: author owns or can write this file
+    	//PRECOND: username MUST be able to read this file		
+	}
+
+	public void removeReader(User author, String username, CalcSheet calcSheet) {
+		// TODO Auto-generated method stub
+		//PRECOND: author owns or can write this file
+    	//PRECOND: username can read this file and CANNOT write this file
+		
+	}
+
+	public void removeWriter(User author, String username, CalcSheet calcSheet) {
+		// TODO Auto-generated method stub
+		//PRECOND: author owns or can write this file
+    	//PRECOND: username can write this file.
+	}
 }
