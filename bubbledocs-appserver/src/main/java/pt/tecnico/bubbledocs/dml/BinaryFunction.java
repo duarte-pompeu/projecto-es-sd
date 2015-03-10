@@ -7,7 +7,8 @@ public class BinaryFunction extends BinaryFunction_Base {
     }
     
     public BinaryFunction(SimpleContent arg1, SimpleContent arg2){
-		init(arg1, arg2);
+		super();
+    	init(arg1, arg2);
 	}
 	
 	protected void init(SimpleContent arg1, SimpleContent arg2){
