@@ -72,6 +72,9 @@ public class BubbleApplication {
 	
 	static void populateDomain(BubbleDocs pb) {
 		
+		if (!pb.getUserSet().isEmpty() )
+		    return;
+		
 		// setup the initial state if BubbleDocs is empty
 
 		User user1 = new User("pf","Paul Door","sub");
