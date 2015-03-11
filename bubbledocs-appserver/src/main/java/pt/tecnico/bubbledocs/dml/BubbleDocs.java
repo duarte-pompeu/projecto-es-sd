@@ -1,5 +1,6 @@
 package pt.tecnico.bubbledocs.dml;
 
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 
 public class BubbleDocs extends BubbleDocs_Base {
