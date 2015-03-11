@@ -30,6 +30,7 @@ public class BubbleApplication {
     		tm.begin();
     		pb = BubbleDocs.getInstance();
     		populateDomain(pb);
+    		getAllPeople();
     		tm.commit();
     		committed = true;
     	}catch (Exception ex) {
@@ -74,13 +75,19 @@ public class BubbleApplication {
 		System.out.println(xml.outputString(jdomDoc));
 	*/
 
-	 	
+	 	 
 }
 
 	
 	
 	
-	
+	 @Atomic
+	    static void getAllPeople() {
+		 BubbleDocs pb = BubbleDocs.getInstance();
+		 	for (User p : pb.getUserSet()) {
+		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
+		 	}
+	    }
 	
 	
 	
