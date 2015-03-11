@@ -23,6 +23,13 @@ public class BubbleDocs extends BubbleDocs_Base {
     public static CalcSheet currentSheet;
     
     
+    @Atomic
+    public synchronized int getUniqueId() {
+    	int id = this.getIdCounter();
+    	this.setIdCounter(id + 1);
+    	return id;
+    }
+    
     public static Content parseName(String name){
     	switch(name){
     	case "literal": return new Literal();

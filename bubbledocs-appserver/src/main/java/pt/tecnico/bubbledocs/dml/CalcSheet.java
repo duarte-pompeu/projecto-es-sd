@@ -17,7 +17,7 @@ public class CalcSheet extends CalcSheet_Base {
         //TODO
     	super();
     	//get unique id
-    	//BubbleDocs.getInstance().getUniqueId();
+    	this.setId(BubbleDocs.getInstance().getUniqueId());
     	this.setName(name);
     	this.setLines(lines);
     	this.setColumns(columns);
