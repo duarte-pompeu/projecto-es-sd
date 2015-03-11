@@ -35,7 +35,7 @@ public class BubbleApplication {
     		System.out.println(pb.getCalcSheetSet().size());
     		
     		printDomainInXML(doc=convertToXML());
-    		
+    		getAllPeople();
     		tm.commit();
     		committed = true;
     	}catch (Exception ex) {
