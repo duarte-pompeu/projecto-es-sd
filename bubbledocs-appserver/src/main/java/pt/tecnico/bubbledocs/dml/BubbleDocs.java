@@ -6,7 +6,7 @@ import pt.ist.fenixframework.FenixFramework;
 public class BubbleDocs extends BubbleDocs_Base {
 	
 	public static BubbleDocs getInstance() {
-		BubbleDocs pb=null;
+		BubbleDocs pb;
 		
 		pb = FenixFramework.getDomainRoot().getBubbleDocs();
 		if(pb==null)

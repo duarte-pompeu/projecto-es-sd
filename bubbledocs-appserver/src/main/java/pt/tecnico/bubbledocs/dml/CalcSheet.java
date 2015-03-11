@@ -19,14 +19,16 @@ public class CalcSheet extends CalcSheet_Base {
     	//get unique id
     	this.setId(BubbleDocs.getInstance().getUniqueId());
     	this.setName(name);
-    	this.setLines(lines);
-    	this.setColumns(columns);
+    	this.setLines(new Integer(lines));
+    	this.setColumns(new Integer(columns));
     	this.setDate(new LocalDate());
+    	
     	for (int i=0; i<lines; ++i) {
     		for (int j=0; j<columns; ++j) {
     			this.addCell(new Cell(i, j));
     		}
-    	}    
+    	} 
+    
     }
     
     //This method shouldn't be used by a user.
@@ -146,12 +148,12 @@ public class CalcSheet extends CalcSheet_Base {
     	Element element = new Element("calcSheet");
     	try{
     	
-    	//element.setAttribute("date", this.getDate().toString());
-    	//element.setAttribute("id", this.getId().toString());
+    	element.setAttribute("date", this.getDate().toString());
+    	element.setAttribute("id", this.getId().toString());
     	element.setAttribute("name", this.getName().toString());
     	element.setAttribute("lines", this.getLines().toString());
     	element.setAttribute("columns", this.getColumns().toString());
-    	//element.setAttribute("protection", this.getProtection().toString());
+    	
     	}catch(Exception e){System.out.println(e.toString());}
     	
     	for(Cell c: this.getCellSet())

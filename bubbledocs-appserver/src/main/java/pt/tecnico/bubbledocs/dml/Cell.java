@@ -25,9 +25,10 @@ public class Cell extends Cell_Base {
 		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
         this.setId(new Integer(line*column+line));
-		
-		this.setContent(content);
-		this.setContentRepresentation(content.toString());
+        if(content!=null){
+        	this.setContent(content);
+        	this.setContentRepresentation(content.toString());
+        }
 	}
     
 	public Content _getContent() throws NullContentException{
@@ -65,8 +66,8 @@ public class Cell extends Cell_Base {
     	Element element = new Element("cell");
     	element.setAttribute("line", this.getLine().toString());
     	element.setAttribute("column", this.getColumn().toString());
-    	
-    	element.addContent(this.getContent().exportToXML());
+    	if(this.getContent()!=null)
+    		element.addContent(this.getContent().exportToXML());
     	
 	return element;
     }
