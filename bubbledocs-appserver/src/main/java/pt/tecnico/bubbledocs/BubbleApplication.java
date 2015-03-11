@@ -23,19 +23,16 @@ public class BubbleApplication {
     	try {
     		tm.begin();
     		pb = BubbleDocs.getInstance();
+    		//ponto 1 do enunciado
     		populateDomain(pb);
     		
-    		org.jdom2.Document doc;
-    		printDomainInXML(doc=convertToXML());
-    		
-    		pb.getCalcSheetSet().clear();
-    		
-    		recoverFromBackup(doc);
-    		
-    		System.out.println(pb.getCalcSheetSet().size());
-    		
-    		printDomainInXML(doc=convertToXML());
+    		//ponto 2 do enunciado
     		getAllPeople();
+
+    		//ponto 4 do enunciado
+    		printAllCalcSheetsFromUser("pf");
+    		
+
     		tm.commit();
     		committed = true;
     	}catch (Exception ex) {
@@ -60,6 +57,15 @@ public class BubbleApplication {
  
 	}
 	
+	
+	private static void printAllCalcSheetsFromUser(String user){
+		BubbleDocs pb = BubbleDocs.getInstance();
+		for(CalcSheet c: pb.getCalcSheetSet()){
+			if(c.getCreator().getUserName().compareTo(user)==0)
+				printDomainInXML(convertToXML(c));
+			
+		}
+	}
 	
 	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
 		CalcSheet a=new CalcSheet();
@@ -122,13 +128,13 @@ public class BubbleApplication {
 	
 	
 	  	@Atomic
-	    public static org.jdom2.Document convertToXML() {
+	    public static org.jdom2.Document convertToXML(CalcSheet c) {
 		 
-	  		BubbleDocs pb = BubbleDocs.getInstance();
+	  		
 
 	  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 	
-	  		jdomDoc.setRootElement(pb.getCalcSheetSet().iterator().next().exportToXML());
+	  		jdomDoc.setRootElement(c.exportToXML());
 
 		return jdomDoc;
 	    }
