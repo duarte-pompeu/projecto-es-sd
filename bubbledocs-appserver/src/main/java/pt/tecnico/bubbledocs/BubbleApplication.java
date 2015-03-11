@@ -11,6 +11,7 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
+import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
 
 
@@ -58,8 +59,9 @@ public class BubbleApplication {
 	 	pb.addUser(user1);
 	 	User user2 = new User("ra","Step Rabbit","cor");
 	 	pb.addUser(user2);
-	 	CalcSheet a=new CalcSheet("like any other", 10, 10);
-	 	pb.addCalcSheet(a);
+	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20, false);
+	 	//c1.setContent(user1, new Literal(5), 3, 4); getting permission exception, but this user has permission to write 
+	 	pb.addCalcSheet(c1);
 }
 
 	
