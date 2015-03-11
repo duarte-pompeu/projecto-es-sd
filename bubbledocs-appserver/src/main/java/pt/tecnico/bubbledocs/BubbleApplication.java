@@ -80,18 +80,13 @@ public class BubbleApplication {
 	 	pb.addUser(user2);
 
 	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20, false);
-	 	//c1.setContent(user1, new Literal(5), 3, 4); getting permission exception, but this user has permission to write 
-	
-	 	//while permission bug not fixed, using old methods
+
 	 	c1.getCell(3, 4).setContent(new Literal(5));
 	 	c1.getCell(1,1).setContent(new Reference(c1.getCell(5,6)));
 	 	c1.getCell(5,6).setContent(new Add ( new Literal (2), new Reference(c1.getCell(3,4)) ));
-	 	//c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
+	 	c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
 	 	pb.addCalcSheet(c1);
-	 
-	 	
-	
-	 	
+
 
 }
 

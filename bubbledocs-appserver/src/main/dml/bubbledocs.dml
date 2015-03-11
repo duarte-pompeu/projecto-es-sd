@@ -116,7 +116,9 @@ relation CellOwnsContent {
 }
 
 relation ReferencePointsToCell{
-	Reference playsRole reference;
+	Reference playsRole reference{
+		multiplicity *;
+	}
 	Cell playsRole pointedCell;
 }
 
