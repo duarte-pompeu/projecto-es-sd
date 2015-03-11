@@ -18,8 +18,8 @@ public class Div extends Div_Base {
 	
 	@Override
 	public int getValue() throws NullContentException {
-		int val1 = getArg1().getValue();
-		int val2 = getArg2().getValue();
+		int val1 = this.getArg1().getValue();
+		int val2 = this.getArg2().getValue();
 		
 		return val1 / val2;
 	}
