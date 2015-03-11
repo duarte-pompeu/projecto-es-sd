@@ -83,23 +83,20 @@ public class BubbleApplication {
 		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
 		 	}
 	    }
-	 
-	 @Atomic
-	 static Iterable<CalcSheet> getAllSheets(User u){
-		 ArrayList<CalcSheet> list = new ArrayList<CalcSheet>();
-		 BubbleDocs bd = BubbleDocs.getInstance();
-		 for(CalcSheet cs: bd.getCalcSheetSet()){
-			 if(cs.getCreator().getUserName() == u.getUserName()){
-				 list.add(cs);
-			 }
-		 }
-		 return list;
-	 }
-	
-	
-	
-	
-	
+	 	
+	 // FIXME: cant test due to issue #4 - calcsheets arent added to fenix or BD
+	 // TODO: test when that's corrected
+	@Atomic
+	static Iterable<CalcSheet> getAllSheets(User u, String substring){
+		ArrayList<CalcSheet> csList = new ArrayList<CalcSheet>();
+		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
+			if(cs.getName().contains(substring)){
+				csList.add(cs);
+			}
+		}
+		
+		return csList;
+	}
 	
 	//	NONE OF THIS WORKS - HELP. STUFF ONLY WORKS INSIDE A TRANSATION (UNLIKE THE PHONEBOOK???WHATS GOING ON)
 	
