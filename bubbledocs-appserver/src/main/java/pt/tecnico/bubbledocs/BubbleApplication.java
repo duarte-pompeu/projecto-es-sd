@@ -90,7 +90,7 @@ public class BubbleApplication {
 	 	pb.addCalcSheet(c1);
 	 
 	 	
-	 //	a.getCell(1,1).setContent(new Div(new Literal(2), new Reference(a.getCell(1,2))));
+	
 	 	
 
 }
