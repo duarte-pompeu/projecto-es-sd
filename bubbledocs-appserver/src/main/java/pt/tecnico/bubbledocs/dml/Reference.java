@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jdom2.Element;
 
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class Reference extends Reference_Base {
@@ -51,15 +52,22 @@ public class Reference extends Reference_Base {
 		List<Element> cellsElement = element.getChildren();
     	Element cellElement=cellsElement.get(0);
     	Cell cell;
-    	int id= Integer.parseInt(cellElement.getAttributeValue("id"));
-    	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
+    	
+    	if(cellElement==null)
+    		return;
+    	
+    	int line= Integer.parseInt(cellElement.getAttributeValue("line"));
+    	int column= Integer.parseInt(cellElement.getAttributeValue("column"));
+    	
+    	try {
+    		cell=BubbleDocs.currentSheet.getCell(line, column);
     		this.setPointedCell(cell);
     	}
+    	catch(NotFoundException e){
     	
-    	else{
     		cell=new Cell();
     		cell.importFromXML(cellElement);
-    		this.setCell(cell);
+    		this.setPointedCell(cell);
     	}
 	}
 }

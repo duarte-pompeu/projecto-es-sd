@@ -23,8 +23,8 @@ public class CalcSheet extends CalcSheet_Base {
     	this.setColumns(new Integer(columns));
     	this.setDate(new LocalDate());
     	
-    	for (int i=0; i<lines; ++i) {
-    		for (int j=0; j<columns; ++j) {
+    	for (int i=1; i<=lines; i++) {
+    		for (int j=1; j<=columns; j++) {
     			this.addCell(new Cell(i, j));
     		}
     	} 

@@ -9,10 +9,8 @@ import org.jdom2.output.XMLOutputter;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Literal;
-import pt.tecnico.bubbledocs.dml.User;
+
+import pt.tecnico.bubbledocs.dml.*;
 
 
 public class BubbleApplication {
@@ -26,7 +24,18 @@ public class BubbleApplication {
     		tm.begin();
     		pb = BubbleDocs.getInstance();
     		populateDomain(pb);
-    		printDomainInXML(convertToXML());
+    		
+    		org.jdom2.Document doc;
+    		printDomainInXML(doc=convertToXML());
+    		
+    		pb.getCalcSheetSet().clear();
+    		
+    		recoverFromBackup(doc);
+    		
+    		System.out.println(pb.getCalcSheetSet().size());
+    		
+    		printDomainInXML(doc=convertToXML());
+    		
     		tm.commit();
     		committed = true;
     	}catch (Exception ex) {
@@ -51,6 +60,16 @@ public class BubbleApplication {
  
 	}
 	
+	
+	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
+		CalcSheet a=new CalcSheet();
+		
+		a.importFromXML(jdomDoc.getRootElement());
+		
+		BubbleDocs.getInstance().getCalcSheetSet().add(a);
+	    }
+	
+	
 	static void populateDomain(BubbleDocs pb) {
 		
 		// setup the initial state if BubbleDocs is empty
@@ -59,9 +78,16 @@ public class BubbleApplication {
 	 	pb.addUser(user1);
 	 	User user2 = new User("ra","Step Rabbit","cor");
 	 	pb.addUser(user2);
+
 	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20, false);
 	 	//c1.setContent(user1, new Literal(5), 3, 4); getting permission exception, but this user has permission to write 
 	 	pb.addCalcSheet(c1);
+
+	 	CalcSheet a=new CalcSheet("like any other", 3, 3);
+	 	
+	 	a.getCell(1,1).setContent(new Div(new Literal(2), new Reference(a.getCell(1,2))));
+	 	pb.addCalcSheet(a);
+
 }
 
 	

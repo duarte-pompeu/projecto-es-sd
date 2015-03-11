@@ -28,7 +28,7 @@ public class Literal extends Literal_Base {
 
     public Element exportToXML() {
     	Element element = new Element("literal");
-    	element.setAttribute("val", ""+this.getValue());
+    	element.setAttribute("val", this.getVal().toString());
 	return element;
     }
     

@@ -51,6 +51,10 @@ public class Cell extends Cell_Base {
     	this.setColumn(new Integer(cellElement.getAttribute("column").getValue()));
     	
     	List<Element> contentElement = cellElement.getChildren();
+    	
+    	if(contentElement.isEmpty())
+    		return;
+    	
     	Element c=contentElement.get(0);
     	String name=c.getName();
     		
@@ -60,10 +64,12 @@ public class Cell extends Cell_Base {
     	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
     	
     	this.setContent(content);
+    
     }
 
     public Element exportToXML() {
     	Element element = new Element("cell");
+    	
     	element.setAttribute("line", this.getLine().toString());
     	element.setAttribute("column", this.getColumn().toString());
     	if(this.getContent()!=null)
