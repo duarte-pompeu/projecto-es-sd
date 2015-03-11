@@ -59,7 +59,7 @@ relation DomainRootHasBubbleDocsApplication {
   .pt.ist.fenixframework.DomainRoot playsRole root {
     multiplicity 0..1;
   }
-  BubbleDocs playsRole bubbledocs {
+  BubbleDocs playsRole bubbleDocs {
     multiplicity 0..1;
   }
 }
