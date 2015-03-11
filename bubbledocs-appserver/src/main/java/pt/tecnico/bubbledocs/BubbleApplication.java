@@ -1,22 +1,17 @@
 package pt.tecnico.bubbledocs;
 
 
+import java.util.ArrayList;
+
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
-import pt.tecnico.bubbledocs.dml.Add;
 import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
-
-import pt.tecnico.bubbledocs.dml.Literal;
-import pt.tecnico.bubbledocs.dml.Reference;
-
-
-import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 
 public class BubbleApplication {
@@ -88,6 +83,18 @@ public class BubbleApplication {
 		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
 		 	}
 	    }
+	 
+	 @Atomic
+	 static Iterable<CalcSheet> getAllSheets(User u){
+		 ArrayList<CalcSheet> list = new ArrayList<CalcSheet>();
+		 BubbleDocs bd = BubbleDocs.getInstance();
+		 for(CalcSheet cs: bd.getCalcSheetSet()){
+			 if(cs.getCreator().getUserName() == u.getUserName()){
+				 list.add(cs);
+			 }
+		 }
+		 return list;
+	 }
 	
 	
 	
