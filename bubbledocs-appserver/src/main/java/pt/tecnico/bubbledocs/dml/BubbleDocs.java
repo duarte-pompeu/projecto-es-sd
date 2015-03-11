@@ -16,7 +16,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	    }
 	
     private BubbleDocs() {
-    	FenixFramework.getDomainRoot().setBubbledocs(this);
+    	FenixFramework.getDomainRoot().setBubbleDocs(this);
     	this.setIdCounter(1);
     }
     
