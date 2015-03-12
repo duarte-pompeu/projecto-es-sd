@@ -47,6 +47,22 @@ public class BubbleDocs extends BubbleDocs_Base {
     public static CalcSheet currentSheet;
     
     
+    
+    public CalcSheet getCalcSheetByName(String name) {
+		for(CalcSheet c: this.getCalcSheetSet()){
+			if(c.getName().equals(name))
+				return c;
+		}
+		return null;
+	}
+    
+    public void RemoveCalcSheet(String name) {
+    	CalcSheet toRemove = getCalcSheetByName(name);
+    	toRemove.getCellSet().clear();
+    	this.removeCalcSheet(toRemove);
+    }
+    
+    
     /**
      * @return
      */
