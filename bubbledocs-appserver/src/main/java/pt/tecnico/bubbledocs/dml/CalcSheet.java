@@ -7,12 +7,24 @@ import java.util.*;
 
 
 
+/**
+ * @author pc-w
+ *
+ */
 public class CalcSheet extends CalcSheet_Base {
 		
+	/**
+	 * 
+	 */
 	public CalcSheet() {
 		super();
 	}
 	
+    /**
+     * @param name
+     * @param lines
+     * @param columns
+     */
     public CalcSheet(String name, int lines, int columns) {
         //TODO
     	super();
@@ -33,6 +45,11 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     //This method shouldn't be used by a user.
+    /**
+     * @param line
+     * @param column
+     * @return
+     */
     public Cell getCell(int line, int column) {    	
     	return this.getCellByIndex(line, column); 
     }
@@ -47,6 +64,10 @@ public class CalcSheet extends CalcSheet_Base {
 
     }
 
+    /**
+     * @param id
+     * @return
+     */
     public boolean hasCell(int id) {
 
     	for(Cell c : this.getCellSet()) {
@@ -56,6 +77,12 @@ public class CalcSheet extends CalcSheet_Base {
     	return false;
     }
 
+    /**
+     * @param reader
+     * @param line
+     * @param column
+     * @return
+     */
     public Content getContent(User reader, int line, int column) {
     	if (!(reader.getReadableCalcSheetSet().contains(this))) throw new PermissionException();
     	
@@ -64,6 +91,12 @@ public class CalcSheet extends CalcSheet_Base {
     
     //this may be changed to receive a string, and using a Content factory, create the Content
     // *whip* *whip* get that Parser working Tiago :P
+    /**
+     * @param writer
+     * @param content
+     * @param line
+     * @param column
+     */
     public void setContent(User writer, Content content, int line, int column) {    	
     	if (!(writer.getWriteableCalcSheetSet().contains(writer))) throw new PermissionException();
     	
@@ -78,6 +111,10 @@ public class CalcSheet extends CalcSheet_Base {
      * This adds another user to the list of users that can use this file.
      * The file permission can be read-only or read-write
      */
+    /**
+     * @param author
+     * @param username
+     */
     public void addReader(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username is not already in this list
@@ -86,6 +123,10 @@ public class CalcSheet extends CalcSheet_Base {
     
     
 
+	/**
+	 * @param author
+	 * @param username
+	 */
 	public void addWriter(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username MUST be able to read this file
@@ -96,22 +137,40 @@ public class CalcSheet extends CalcSheet_Base {
      * This removes a user that is in the list of users that can use 
      * a calcsheet.
      */
+    /**
+     * @param author
+     * @param username
+     */
     public void removeReader(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username can read this file and CANNOT write this file
     	BubbleDocs.getInstance().removeReader(author, username, this);
     }
     
+    /**
+     * @param author
+     * @param username
+     */
     public void removeWriter(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username can read this file and CANNOT write this file
     	BubbleDocs.getInstance().removeWriter(author, username, this);
     }
     
+    /**
+     * @param line
+     * @param column
+     * @return
+     */
     private boolean outsideBounds(int line, int column) {
     	return line < 1 || column < 1 || line > this.getLines() || column > this.getColumns();
     }
     
+    /**
+     * @param line
+     * @param column
+     * @return
+     */
     private Cell getCellByIndex(int line, int column) {
     	if (outsideBounds(line, column)) {
     		throw new IllegalArgumentException("Out of bounds");
@@ -125,6 +184,9 @@ public class CalcSheet extends CalcSheet_Base {
     	throw new NotFoundException();
     }
     
+    /**
+     * @param calcSheetElement
+     */
     public void importFromXML(Element calcSheetElement) {
     	this.setDate(new LocalDate(calcSheetElement.getAttribute("date").getValue()));
     	this.setId(new Integer(calcSheetElement.getAttribute("id").getValue()));
@@ -145,6 +207,9 @@ public class CalcSheet extends CalcSheet_Base {
     	
     }
 
+    /**
+     * @return
+     */
     public Element exportToXML() {
     	Element element = new Element("calcSheet");
     	try{

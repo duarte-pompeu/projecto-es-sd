@@ -15,7 +15,14 @@ import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.dml.*;
 
 
+/**
+ * @author pc-w
+ *
+ */
 public class BubbleApplication {
+	/**
+	 * @param args
+	 */
 	public static void main(String args[]){
 		System.out.println("Welcome to the BubbleDocs application!");
 		
@@ -32,6 +39,9 @@ public class BubbleApplication {
 	}
 	
 	
+	/**
+	 * @param user
+	 */
 	private static void printAllCalcSheetsFromUser(String user){
 		
 		TransactionManager tm = FenixFramework.getTransactionManager();
@@ -58,6 +68,9 @@ public class BubbleApplication {
 			}}
 	}
 	
+	/**
+	 * @param jdomDoc
+	 */
 	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
 		CalcSheet a=new CalcSheet();
 		
@@ -67,6 +80,9 @@ public class BubbleApplication {
 	    }
 	
 	
+	/**
+	 * 
+	 */
 	static void populateDomain() {
 		
 		TransactionManager tm = FenixFramework.getTransactionManager();
@@ -85,7 +101,7 @@ public class BubbleApplication {
 	 	User user2 = new User("ra","Step Rabbit","cor");
 	 	pb.addUser(user2);
 
-	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20, false);
+	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20);
 
 	 	c1.getCell(3, 4).setContent(new Literal(5));
 	 	c1.getCell(1,1).setContent(new Reference(c1.getCell(5,6)));
@@ -108,6 +124,9 @@ public class BubbleApplication {
 	
 	
 	
+	    /**
+	     * 
+	     */
 	    static void getAllPeople() {
 	    	
 	    	TransactionManager tm = FenixFramework.getTransactionManager();
@@ -133,8 +152,12 @@ public class BubbleApplication {
 				}}
 	    }
 	 	
-	 // FIXME: cant test due to issue #4 - calcsheets arent added to fenix or BD
-	 // TODO: test when that's corrected
+	 
+	/**
+	 * @param u
+	 * @param substring
+	 * @return
+	 */
 	@Atomic
 	static Iterable<CalcSheet> getAllSheets(User u, String substring){
 		ArrayList<CalcSheet> csList = new ArrayList<CalcSheet>();
@@ -150,6 +173,10 @@ public class BubbleApplication {
 	//	NONE OF THIS WORKS - HELP. STUFF ONLY WORKS INSIDE A TRANSATION (UNLIKE THE PHONEBOOK???WHATS GOING ON)
 	
 	
+	  	/**
+	  	 * @param c
+	  	 * @return
+	  	 */
 	  	@Atomic
 	    public static org.jdom2.Document convertToXML(CalcSheet c) {
 		 
@@ -162,6 +189,9 @@ public class BubbleApplication {
 		return jdomDoc;
 	    }
 
+	    /**
+	     * @param jdomDoc
+	     */
 	    @Atomic
 	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
 		XMLOutputter xml = new XMLOutputter();

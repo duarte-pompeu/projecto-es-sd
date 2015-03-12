@@ -5,22 +5,43 @@ import java.util.List;
 import org.jdom2.Element;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
+/**
+ * @author pc-w
+ *
+ */
 public class Cell extends Cell_Base {
     
+	/**
+	 * 
+	 */
 	public Cell() {
 		super();
 	}
 	
+	/**
+	 * @param line
+	 * @param column
+	 * @param content
+	 */
 	public Cell(int line, int column, Content content) {
     	super();
     	init(line, column, content);
     }
 	
+	/**
+	 * @param line
+	 * @param column
+	 */
 	public Cell(int line, int column) {
 		super();
 		init(line, column, null);
 	}
 	
+	/**
+	 * @param line
+	 * @param column
+	 * @param content
+	 */
 	public void init(int line, int column, Content content){
 		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
@@ -31,6 +52,10 @@ public class Cell extends Cell_Base {
         }
 	}
     
+	/**
+	 * @return
+	 * @throws NullContentException
+	 */
 	public Content _getContent() throws NullContentException{
 	
 		if(this.getContent() == null){
@@ -40,12 +65,18 @@ public class Cell extends Cell_Base {
 		return this.getContent();
 	}
 	
+	/* (non-Javadoc)
+	 * @see pt.tecnico.bubbledocs.dml.Cell_Base#setContent(pt.tecnico.bubbledocs.dml.Content)
+	 */
 	@Override
 	public void setContent(Content c){
 		super.setContent(c);
 		setContentRepresentation(c.toString());
 	}
     
+    /**
+     * @param cellElement
+     */
     public void importFromXML(Element cellElement) {
     	this.setLine(new Integer(cellElement.getAttribute("line").getValue()));
     	this.setColumn(new Integer(cellElement.getAttribute("column").getValue()));
@@ -67,6 +98,9 @@ public class Cell extends Cell_Base {
     
     }
 
+    /**
+     * @return
+     */
     public Element exportToXML() {
     	Element element = new Element("cell");
     	

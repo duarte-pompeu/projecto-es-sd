@@ -6,19 +6,40 @@ import java.util.Iterator;
 
 import org.jdom2.Element;
 
+/**
+ * @author pc-w
+ *
+ */
 public class Range extends Range_Base implements Iterable<Cell>{
     
+    /**
+     * 
+     */
     public Range() {
         super();
     }
     
 
+	/**
+	 * @param firstLine
+	 * @param firstColumn
+	 * @param lastLine
+	 * @param lastColumn
+	 * @param sheet
+	 */
 	public Range (int firstLine, int firstColumn, int lastLine,
 			int lastColumn, CalcSheet sheet){
 		super();
 		init(firstLine, firstColumn, lastLine, lastColumn, sheet);
 	}
 	
+	/**
+	 * @param firstLine
+	 * @param firstColumn
+	 * @param lastLine
+	 * @param lastColumn
+	 * @param sheet
+	 */
 	public void init(int firstLine, int firstColumn, int lastLine,
 			int lastColumn, CalcSheet sheet){
 		
@@ -39,6 +60,9 @@ public class Range extends Range_Base implements Iterable<Cell>{
 	specific implementation (array? arraylist? etc.)
 	and return a generic iterable
 	*/
+	/* (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
 	public Iterator<Cell> iterator(){
 		int upperLine, leftmostColumn, downLine, rightmostColumn;
 		ArrayList<Cell> a=new ArrayList<Cell>();
@@ -56,6 +80,9 @@ public class Range extends Range_Base implements Iterable<Cell>{
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Element exportToXML() {
 		Element element = new Element("range");
     
@@ -67,6 +94,9 @@ public class Range extends Range_Base implements Iterable<Cell>{
     	return element;
 	}
 	
+	/**
+	 * @param element
+	 */
 	public void importFromXML(Element element){
 		
 		

@@ -7,8 +7,15 @@ import javax.transaction.*;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 
+/**
+ * @author pc-w
+ *
+ */
 public class BubbleDocs extends BubbleDocs_Base {
 	
+	/**
+	 * @return
+	 */
 	@Atomic
 	public static BubbleDocs getInstance() {
 		
@@ -25,15 +32,24 @@ public class BubbleDocs extends BubbleDocs_Base {
     
 	    	}
     	
+    /**
+     * 
+     */
     private BubbleDocs() {
     	FenixFramework.getDomainRoot().setBubbleDocs(this);
     	this.setIdCounter(1);
     }
     
     //for now only used for the xml import
+    /**
+     * 
+     */
     public static CalcSheet currentSheet;
     
     
+    /**
+     * @return
+     */
     @Atomic
     public synchronized int getUniqueId() {
     	int id = this.getIdCounter();
@@ -41,6 +57,10 @@ public class BubbleDocs extends BubbleDocs_Base {
     	return id;
     }
     
+    /**
+     * @param name
+     * @return
+     */
     public static Content parseName(String name){
     	switch(name){
     	case "literal": return new Literal();
@@ -55,23 +75,42 @@ public class BubbleDocs extends BubbleDocs_Base {
     	}	
     }
     
+    /**
+     * @param username
+     * @param password
+     * @return
+     */
     public User login(String username, String password) {
     	//TODO
     	return null;
     }
     
+    /**
+     * @param userName
+     * @param name
+     * @param password
+     * @return
+     */
     public User addUser(String userName, String name, String password) {
     	//TODO
     	//throw RepeatedIdentificationException case userName already exists
     	return null;
     }
     
+    /**
+     * @param userName
+     */
     public void deleteUser(String userName) {
     	//TODO
     	//throw NotFoundException case userName doesn't exist
     }
 
     //author is the user that is doing the action.
+	/**
+	 * @param author
+	 * @param userName
+	 * @param calcSheet
+	 */
 	public void addReader(User author, String userName, CalcSheet calcSheet) {
 		//TODO
     	//PRECOND: author owns or can write this file
@@ -79,12 +118,22 @@ public class BubbleDocs extends BubbleDocs_Base {
 		
 	}
 
+	/**
+	 * @param author
+	 * @param username
+	 * @param calcSheet
+	 */
 	public void addWriter(User author, String username, CalcSheet calcSheet) {
 		// TODO Auto-generated method stub
 		//PRECOND: author owns or can write this file
     	//PRECOND: username MUST be able to read this file		
 	}
 
+	/**
+	 * @param author
+	 * @param username
+	 * @param calcSheet
+	 */
 	public void removeReader(User author, String username, CalcSheet calcSheet) {
 		// TODO Auto-generated method stub
 		//PRECOND: author owns or can write this file
@@ -92,6 +141,11 @@ public class BubbleDocs extends BubbleDocs_Base {
 		
 	}
 
+	/**
+	 * @param author
+	 * @param username
+	 * @param calcSheet
+	 */
 	public void removeWriter(User author, String username, CalcSheet calcSheet) {
 		// TODO Auto-generated method stub
 		//PRECOND: author owns or can write this file

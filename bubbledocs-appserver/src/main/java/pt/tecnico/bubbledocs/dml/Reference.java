@@ -7,21 +7,37 @@ import org.jdom2.Element;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
+/**
+ * @author pc-w
+ *
+ */
 public class Reference extends Reference_Base {
     
+    /**
+     * 
+     */
     public Reference() {
         super();
     }
     
+	/**
+	 * @param cell
+	 */
 	public Reference(Cell cell){
 		super();
 		init(cell);
 	}
 	
+	/**
+	 * @param cell
+	 */
 	private void init(Cell cell){
 		this.setPointedCell(cell);
 	}
 	
+	/* (non-Javadoc)
+	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#getValue()
+	 */
 	public int getValue() throws NullContentException{
 		Content content = this.getPointedCell().getContent();
 		
@@ -35,18 +51,27 @@ public class Reference extends Reference_Base {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see pt.ist.fenixframework.backend.jvstmojb.pstm.AbstractDomainObject#toString()
+	 */
 	@Override
 	public String toString(){
 		return "=" + this.getPointedCell().getColumn()
 				+ ";" + this.getPointedCell().getLine();
 	}
 	
+	/* (non-Javadoc)
+	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#exportToXML()
+	 */
 	public Element exportToXML(){
 		Element referenceElement=new Element("reference");
 		referenceElement.addContent(this.getPointedCell().exportToXML());
 		return referenceElement;
 	}
 	
+	/* (non-Javadoc)
+	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)
+	 */
 	public void importFromXML(Element element){
 		
 		List<Element> cellsElement = element.getChildren();

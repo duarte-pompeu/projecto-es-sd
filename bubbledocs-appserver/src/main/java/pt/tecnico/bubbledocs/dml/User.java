@@ -3,13 +3,24 @@ package pt.tecnico.bubbledocs.dml;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import java.util.*;
 
-public class User extends User_Base {
-    
+/**
+ * @author pc-w
+ *
+ */
+public class User extends User_Base { 
 
+    /**
+     * 
+     */
     public User() {
     	super();
     }
 	
+	/**
+	 * @param userName
+	 * @param name
+	 * @param password
+	 */
 	public User(String userName, String name, String password) {
         super();
         init(userName, name, password);
@@ -17,6 +28,11 @@ public class User extends User_Base {
         //this.allFiles = new HashMap<Integer, Boolean>();
     }
 	
+	/**
+	 * @param userName
+	 * @param name
+	 * @param password
+	 */
 	protected void init(String userName, String name, String password) {
 		this.setUserName(userName);
         this.setName(name);
@@ -27,6 +43,12 @@ public class User extends User_Base {
      * Creates a calcsheet that is associated with this user
      * as its creator. This returns the id number of the created
      * calcsheet. The creator is added to the list of read-write users
+     */
+    /**
+     * @param name
+     * @param lines
+     * @param columns
+     * @return
      */
     public CalcSheet createCalcSheet(String name, int lines, int columns) {
     	CalcSheet sheet = new CalcSheet(name, lines, columns);
@@ -40,6 +62,9 @@ public class User extends User_Base {
     //For now I'm simplifying, this method could have splited versions
     //This returns an iterator for the files id's that the user created, the user can read 
     //and the user can read-write
+    /**
+     * @return
+     */
     public Iterable<CalcSheet> getAllFiles() {    	
     	Set<CalcSheet> set = new HashSet<CalcSheet>(this.getReadableCalcSheetSet());
     	set.addAll(this.getCreatedCalcSheetSet());
@@ -47,14 +72,26 @@ public class User extends User_Base {
     }
 
     
+    /**
+     * @param userName
+     * @param name
+     * @param password
+     * @return
+     */
     public User createUser(String userName, String name, String password) {
     	throw new PermissionException("You don't have permission to do this action");
     }
 
+    /**
+     * @param userName
+     */
     public void deleteUser(String userName) {
     	throw new PermissionException("You don't have permission to do this action");
     }
     
+    /**
+     * @return
+     */
     public Set<User> getUserSet() {
     	throw new PermissionException("You don't have permission to do this action");
     }
