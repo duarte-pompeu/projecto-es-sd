@@ -52,7 +52,17 @@ public class BinaryFunction extends BinaryFunction_Base {
 	 */
 	public FunctionArgument getArg2(){	return this.getArgument2(); }
     
-
+	public void delete() {
+		
+		if(this.getArgument1() !=null)
+		this.setArgument1(null);
+		if(this.getArgument2() !=null)
+		this.setArgument2(null);
+		if(this.getCell() !=null)
+		this.setCell(null);
+		this.deleteDomainObject();
+		
+	}
 	
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Function#importFromXML(org.jdom2.Element)

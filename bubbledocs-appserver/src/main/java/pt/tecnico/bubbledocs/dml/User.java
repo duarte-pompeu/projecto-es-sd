@@ -57,7 +57,7 @@ public class User extends User_Base {
     	this.addWriteableCalcSheet(sheet);
     	return sheet;
     }
-  
+    
     
     //For now I'm simplifying, this method could have splited versions
     //This returns an iterator for the files id's that the user created, the user can read 
@@ -96,4 +96,5 @@ public class User extends User_Base {
     	throw new PermissionException("You don't have permission to do this action");
     }
 
+    
 }

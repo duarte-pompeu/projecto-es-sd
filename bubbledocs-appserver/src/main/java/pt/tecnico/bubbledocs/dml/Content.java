@@ -32,5 +32,12 @@ public abstract class Content extends Content_Base {
 	 * @param c
 	 */
 	public abstract void importFromXML(Element c);
+
+	public void delete() {
+		if(this.getCell() !=null)
+		this.setCell(null);
+		this.deleteDomainObject();
+		
+	}
     
 }

@@ -75,11 +75,13 @@ public class Cell extends Cell_Base {
 	}
 	
 	  public void delete() {
-	    	for (Reference ref : this.getReferenceSet() ) {
+		  if(this.getContent()!=null)
+		    	this.getContent().delete();
+		  for (Reference ref : this.getReferenceSet() ) {
 	    		ref.delete();
 	    		}
-	    	
-	    	setContent(null); // doesnt work
+	    	this.setLine(null);
+	    	this.setColumn(null);
 	    	setCalcSheet(null);
 	    	deleteDomainObject();
 	        }

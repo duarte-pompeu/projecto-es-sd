@@ -174,7 +174,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 		public void removeCalcSheet(CalcSheet calcSheet) {
 			
 			calcSheet.deleteAllCells();
-		//	calcSheet.deleteUsers();
+		  
 			this.getCalcSheetSet().remove(calcSheet);
 		}
 	

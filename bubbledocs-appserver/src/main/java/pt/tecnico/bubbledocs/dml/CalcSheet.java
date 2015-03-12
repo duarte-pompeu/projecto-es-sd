@@ -191,6 +191,10 @@ public class CalcSheet extends CalcSheet_Base {
     	for (Cell cell : this.getCellSet()) {
     		cell.delete();
     		}
+    	if(this.getCreator() !=null)
+        	setCreator(null);
+    	
+
     	setBubbleDocs(null);
     	deleteDomainObject();
     }

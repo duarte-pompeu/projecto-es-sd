@@ -53,10 +53,10 @@ public class BubbleApplication {
     		printAllCalcSheetsFromUser("pf");
     		tm.commit();
     		
-    		/*tm.begin();
-    		removeCalcSheet("Notas Es"); still buggy
+    		tm.begin();
+    		//removeCalcSheet("Notas Es"); //still buggy
     		tm.commit();
-    		*/
+    		
 		    committed = true;
 			
     		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {

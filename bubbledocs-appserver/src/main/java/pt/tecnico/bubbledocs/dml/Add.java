@@ -37,6 +37,7 @@ public class Add extends Add_Base {
 		
 		return val1 + val2;
 	}
+	
 
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Function#exportToXML()
