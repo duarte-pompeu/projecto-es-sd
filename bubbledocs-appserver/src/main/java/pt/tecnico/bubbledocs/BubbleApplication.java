@@ -3,7 +3,10 @@ package pt.tecnico.bubbledocs;
 
 import java.util.ArrayList;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
 import org.jdom2.output.Format;
@@ -22,8 +25,13 @@ import pt.tecnico.bubbledocs.dml.*;
 public class BubbleApplication {
 	/**
 	 * @param args
+	 * @throws HeuristicRollbackException 
+	 * @throws HeuristicMixedException 
+	 * @throws RollbackException 
+	 * @throws IllegalStateException 
+	 * @throws SecurityException 
 	 */
-	public static void main(String args[]){
+	public static void main(String args[]) throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
 		System.out.println("Welcome to the BubbleDocs application!");
 		
 
@@ -41,8 +49,13 @@ public class BubbleApplication {
 	
 	/**
 	 * @param user
+	 * @throws HeuristicRollbackException 
+	 * @throws HeuristicMixedException 
+	 * @throws RollbackException 
+	 * @throws IllegalStateException 
+	 * @throws SecurityException 
 	 */
-	private static void printAllCalcSheetsFromUser(String user){
+	private static void printAllCalcSheetsFromUser(String user) throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
 		
 		TransactionManager tm = FenixFramework.getTransactionManager();
     	boolean committed = false;
@@ -54,7 +67,8 @@ public class BubbleApplication {
 		for(CalcSheet c: pb.getCalcSheetSet()){
 			if(c.getCreator().getUserName().compareTo(user)==0)
 				printDomainInXML(convertToXML(c));
-			
+			tm.commit();
+		    committed = true;
 		}
 		
     	}catch (SystemException | NotSupportedException ex) {
@@ -81,9 +95,14 @@ public class BubbleApplication {
 	
 	
 	/**
+	 * @throws HeuristicRollbackException 
+	 * @throws HeuristicMixedException 
+	 * @throws RollbackException 
+	 * @throws IllegalStateException 
+	 * @throws SecurityException 
 	 * 
 	 */
-	static void populateDomain() {
+	static void populateDomain() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		
 		TransactionManager tm = FenixFramework.getTransactionManager();
     	boolean committed = false;
@@ -108,6 +127,8 @@ public class BubbleApplication {
 	 	c1.getCell(5,6).setContent(new Add ( new Literal (2), new Reference(c1.getCell(3,4)) ));
 	 	c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
 	 	pb.addCalcSheet(c1);
+	 	tm.commit();
+	    committed = true;
 	 	
     	}catch (SystemException | NotSupportedException ex) {
 		    System.err.println("Error in execution of transaction: " + ex);
@@ -125,9 +146,14 @@ public class BubbleApplication {
 	
 	
 	    /**
+	     * @throws HeuristicRollbackException 
+	     * @throws HeuristicMixedException 
+	     * @throws RollbackException 
+	     * @throws IllegalStateException 
+	     * @throws SecurityException 
 	     * 
 	     */
-	    static void getAllPeople() {
+	    static void getAllPeople() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 	    	
 	    	TransactionManager tm = FenixFramework.getTransactionManager();
 	    	boolean committed = false;
@@ -140,7 +166,8 @@ public class BubbleApplication {
 		 	for (User p : pb.getUserSet()) {
 		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
 		 	}
-		 	
+		 	tm.commit();
+		    committed = true;
 	    	}catch (SystemException | NotSupportedException ex) {
 			    System.err.println("Error in execution of transaction: " + ex);
 			} finally {
