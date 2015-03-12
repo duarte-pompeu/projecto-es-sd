@@ -70,8 +70,7 @@ public class BubbleApplication {
 			tm.commit();
 		    committed = true;
 		}
-		tm.commit();
-		committed = true;
+		
     	}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
 		    System.err.println("Error in execution of transaction: " + ex);
 		} finally {
