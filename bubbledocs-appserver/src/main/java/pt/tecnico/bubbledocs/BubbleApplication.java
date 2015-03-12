@@ -3,13 +3,15 @@ package pt.tecnico.bubbledocs;
 
 import java.util.ArrayList;
 
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
-
 import pt.tecnico.bubbledocs.dml.*;
 
 
@@ -17,14 +19,9 @@ public class BubbleApplication {
 	public static void main(String args[]){
 		System.out.println("Welcome to the BubbleDocs application!");
 		
-		TransactionManager tm = FenixFramework.getTransactionManager();
-    	boolean committed = false;
-    	BubbleDocs pb=null;
-    	try {
-    		tm.begin();
-    		pb = BubbleDocs.getInstance();
-    		//ponto 1 do enunciado
-    		populateDomain(pb);
+
+			//ponto 1 do enunciado
+    		populateDomain();
     		
     		//ponto 2 do enunciado
     		getAllPeople();
@@ -32,39 +29,33 @@ public class BubbleApplication {
     		//ponto 4 do enunciado
     		printAllCalcSheetsFromUser("pf");
     		
-
-    		tm.commit();
-    		committed = true;
-    	}catch (Exception ex) {
-    	    System.err.println("Error in execution of transaction: " + ex);
-    	} finally {
-    	    if (!committed) 
-    		try {
-    		    tm.rollback();
-    		} catch (Exception ex) {
-    		    System.err.println("Error in roll back of transaction: " + ex);
-    		}
-    	    
-    	    
-    	}
-    	
-    	
-    	
-    	
-    	
-
-    	
- 
 	}
 	
 	
 	private static void printAllCalcSheetsFromUser(String user){
+		
+		TransactionManager tm = FenixFramework.getTransactionManager();
+    	boolean committed = false;
+
+    	try {
+    		tm.begin();
+		
 		BubbleDocs pb = BubbleDocs.getInstance();
 		for(CalcSheet c: pb.getCalcSheetSet()){
 			if(c.getCreator().getUserName().compareTo(user)==0)
 				printDomainInXML(convertToXML(c));
 			
 		}
+		
+    	}catch (SystemException | NotSupportedException ex) {
+		    System.err.println("Error in execution of transaction: " + ex);
+		} finally {
+		    if (!committed) 
+			try {
+			    tm.rollback();
+			} catch (SystemException ex) {
+			    System.err.println("Error in roll back of transaction: " + ex);
+			}}
 	}
 	
 	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
@@ -76,8 +67,14 @@ public class BubbleApplication {
 	    }
 	
 	
-	static void populateDomain(BubbleDocs pb) {
+	static void populateDomain() {
 		
+		TransactionManager tm = FenixFramework.getTransactionManager();
+    	boolean committed = false;
+
+    	try {
+    		tm.begin();
+    		BubbleDocs pb=BubbleDocs.getInstance();
 		if (!pb.getUserSet().isEmpty() )
 		    return;
 		
@@ -95,19 +92,45 @@ public class BubbleApplication {
 	 	c1.getCell(5,6).setContent(new Add ( new Literal (2), new Reference(c1.getCell(3,4)) ));
 	 	c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
 	 	pb.addCalcSheet(c1);
-
-
+	 	
+    	}catch (SystemException | NotSupportedException ex) {
+		    System.err.println("Error in execution of transaction: " + ex);
+		} finally {
+		    if (!committed) 
+			try {
+			    tm.rollback();
+			} catch (SystemException ex) {
+			    System.err.println("Error in roll back of transaction: " + ex);
+			}}
 }
 
 	
 	
 	
-	 @Atomic
+	
 	    static void getAllPeople() {
+	    	
+	    	TransactionManager tm = FenixFramework.getTransactionManager();
+	    	boolean committed = false;
+
+	    	try {
+	    		tm.begin(); 	
+	    	
+	   
 		 BubbleDocs pb = BubbleDocs.getInstance();
 		 	for (User p : pb.getUserSet()) {
 		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
 		 	}
+		 	
+	    	}catch (SystemException | NotSupportedException ex) {
+			    System.err.println("Error in execution of transaction: " + ex);
+			} finally {
+			    if (!committed) 
+				try {
+				    tm.rollback();
+				} catch (SystemException ex) {
+				    System.err.println("Error in roll back of transaction: " + ex);
+				}}
 	    }
 	 	
 	 // FIXME: cant test due to issue #4 - calcsheets arent added to fenix or BD

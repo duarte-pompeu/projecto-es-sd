@@ -1,20 +1,30 @@
 package pt.tecnico.bubbledocs.dml;
 
 import pt.ist.fenixframework.Atomic;
+
+import javax.transaction.*;
+
 import pt.ist.fenixframework.FenixFramework;
+import pt.ist.fenixframework.TransactionManager;
 
 public class BubbleDocs extends BubbleDocs_Base {
 	
+	@Atomic
 	public static BubbleDocs getInstance() {
-		BubbleDocs pb;
 		
-		pb = FenixFramework.getDomainRoot().getBubbleDocs();
-		if(pb==null)
-			pb = new BubbleDocs(); 
 		
-		return pb;
-	    }
-	
+			
+    		BubbleDocs pb;
+		
+    		pb = FenixFramework.getDomainRoot().getBubbleDocs();
+    		if(pb==null)
+    			pb = new BubbleDocs(); 
+		
+    		return pb;
+		
+    
+	    	}
+    	
     private BubbleDocs() {
     	FenixFramework.getDomainRoot().setBubbleDocs(this);
     	this.setIdCounter(1);
