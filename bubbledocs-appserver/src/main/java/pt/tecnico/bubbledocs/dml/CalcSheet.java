@@ -191,6 +191,10 @@ public class CalcSheet extends CalcSheet_Base {
     	for (Cell cell : this.getCellSet()) {
     		cell.delete();
     		}
+    	
+    	this.getReadingUserSet().clear();// y u no work
+    	this.getWritingUserSet().clear();
+    	
     	if(this.getCreator() !=null)
         	setCreator(null);
     	
