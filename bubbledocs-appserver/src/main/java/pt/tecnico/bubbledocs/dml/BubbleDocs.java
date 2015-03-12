@@ -151,4 +151,15 @@ public class BubbleDocs extends BubbleDocs_Base {
 		//PRECOND: author owns or can write this file
     	//PRECOND: username can write this file.
 	}
+	
+	/**
+	 * @param calcSheet
+	 */
+		public void removeCalcSheet(CalcSheet calcSheet) {
+			
+			calcSheet.deleteAllCells();
+		//	calcSheet.deleteUsers();
+			this.getCalcSheetSet().remove(calcSheet);
+		}
+	
 }

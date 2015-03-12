@@ -35,6 +35,12 @@ public class Reference extends Reference_Base {
 		this.setPointedCell(cell);
 	}
 	
+	public void delete() {
+		setPointedCell(null);
+    	setCell(null);
+    	deleteDomainObject();
+        }
+	
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#getValue()
 	 */

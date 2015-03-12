@@ -53,6 +53,10 @@ public class BubbleApplication {
     		printAllCalcSheetsFromUser("pf");
     		tm.commit();
     		
+    		/*tm.begin();
+    		removeCalcSheet("Notas Es"); still buggy
+    		tm.commit();
+    		*/
 		    committed = true;
 			
     		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
@@ -65,6 +69,20 @@ public class BubbleApplication {
 			    System.err.println("Error in roll back of transaction: " + ex);
 			}}
 	}
+	
+	/**
+	 * @param name
+	 */
+	
+	 @Atomic
+	    static void removeCalcSheet(String name) {
+	    		
+	    		BubbleDocs pb = BubbleDocs.getInstance();
+	    		for(CalcSheet c: pb.getCalcSheetSet()){
+	    			if(c.getName().compareTo(name)==0)
+	    				pb.removeCalcSheet(c);
+	    		}
+	    }
 	
 	
 	/**

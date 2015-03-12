@@ -185,6 +185,17 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     /**
+     * @return
+     */
+    public void deleteAllCells() {
+    	for (Cell cell : this.getCellSet()) {
+    		cell.delete();
+    		}
+    	setBubbleDocs(null);
+    	deleteDomainObject();
+    }
+    
+    /**
      * @param calcSheetElement
      */
     public void importFromXML(Element calcSheetElement) {

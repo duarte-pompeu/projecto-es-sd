@@ -73,6 +73,16 @@ public class Cell extends Cell_Base {
 		super.setContent(c);
 		setContentRepresentation(c.toString());
 	}
+	
+	  public void delete() {
+	    	for (Reference ref : this.getReferenceSet() ) {
+	    		ref.delete();
+	    		}
+	    	
+	    	setContent(null); // doesnt work
+	    	setCalcSheet(null);
+	    	deleteDomainObject();
+	        }
     
     /**
      * @param cellElement
