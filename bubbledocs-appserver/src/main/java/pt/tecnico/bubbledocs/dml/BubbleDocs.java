@@ -16,7 +16,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	/**
 	 * @return
 	 */
-	@Atomic
+	
 	public static BubbleDocs getInstance() {
 		
 		
@@ -50,7 +50,7 @@ public class BubbleDocs extends BubbleDocs_Base {
     /**
      * @return
      */
-    @Atomic
+    
     public synchronized int getUniqueId() {
     	int id = this.getIdCounter();
     	this.setIdCounter(id + 1);

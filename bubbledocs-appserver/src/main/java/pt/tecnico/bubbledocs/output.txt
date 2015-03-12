@@ -1,0 +1,8 @@
+Welcome to the BubbleDocs application!
+2015-03-11/23:57:57.970/GMT INFO  [main] {pt.ist.fenixframework.FenixFramework} Found configuration by convention in resource 'fenix-framework-jvstm-ojb.properties'.
+2015-03-11/23:57:58.014/GMT INFO  [main] {pt.ist.fenixframework.FenixFramework} Initializing Fenix Framework with backend config: JvstmOJBConfig
+2015-03-11/23:57:58.478/GMT INFO  [main] {pt.ist.fenixframework.backend.jvstmojb.repository.RepositoryBootstrap} Updating Repository Structure
+2015-03-11/23:57:58.496/GMT INFO  [main] {pt.ist.fenixframework.backend.jvstmojb.repository.RepositoryBootstrap} Repository Structure update completed
+2015-03-11/23:57:58.746/GMT INFO  [main] {pt.ist.fenixframework.backend.jvstmojb.repository.ServerId} Obtained server id: 3
+2015-03-11/23:57:58.878/GMT INFO  [main] {pt.ist.fenixframework.backend.jvstmojb.pstm.TransactionSupport} Setting the last committed TX number to 13
+2015-03-11/23:57:58.956/GMT INFO  [main] {pt.ist.fenixframework.FenixFramework} Initialization of Fenix Framework is now complete.

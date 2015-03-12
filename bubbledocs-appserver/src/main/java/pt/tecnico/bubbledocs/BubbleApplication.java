@@ -70,8 +70,9 @@ public class BubbleApplication {
 			tm.commit();
 		    committed = true;
 		}
-		
-    	}catch (SystemException | NotSupportedException ex) {
+		tm.commit();
+		committed = true;
+    	}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
 		    System.err.println("Error in execution of transaction: " + ex);
 		} finally {
 		    if (!committed) 
@@ -128,9 +129,10 @@ public class BubbleApplication {
 	 	c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
 	 	pb.addCalcSheet(c1);
 	 	tm.commit();
-	    committed = true;
-	 	
-    	}catch (SystemException | NotSupportedException ex) {
+
+	 	committed = true;
+    	}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
+
 		    System.err.println("Error in execution of transaction: " + ex);
 		} finally {
 		    if (!committed) 
@@ -167,8 +169,10 @@ public class BubbleApplication {
 		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
 		 	}
 		 	tm.commit();
-		    committed = true;
-	    	}catch (SystemException | NotSupportedException ex) {
+
+		 	committed = true;
+	    	}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
+
 			    System.err.println("Error in execution of transaction: " + ex);
 			} finally {
 			    if (!committed) 
@@ -185,7 +189,7 @@ public class BubbleApplication {
 	 * @param substring
 	 * @return
 	 */
-	@Atomic
+
 	static Iterable<CalcSheet> getAllSheets(User u, String substring){
 		ArrayList<CalcSheet> csList = new ArrayList<CalcSheet>();
 		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
@@ -204,7 +208,7 @@ public class BubbleApplication {
 	  	 * @param c
 	  	 * @return
 	  	 */
-	  	@Atomic
+	  	
 	    public static org.jdom2.Document convertToXML(CalcSheet c) {
 		 
 	  		
@@ -219,7 +223,7 @@ public class BubbleApplication {
 	    /**
 	     * @param jdomDoc
 	     */
-	    @Atomic
+	    
 	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
 		XMLOutputter xml = new XMLOutputter();
 		xml.setFormat(Format.getPrettyFormat());
