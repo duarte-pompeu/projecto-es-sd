@@ -57,6 +57,17 @@ public class BubbleDocs extends BubbleDocs_Base {
     	toRemove.getCellSet().clear();
     	this.removeCalcSheet(toRemove);
     }
+
+    
+    
+    public void removeCalcSheet(String name, String user) {
+		
+		for(CalcSheet c: this.getCalcSheetSet()){
+			if( c.getCreator().getUserName().compareTo(user)==0 &&
+			    c.getName().compareTo(name)==0)
+				this.removeCalcSheet(c);
+		}
+}
     
     
     /**

@@ -19,12 +19,13 @@ import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 
 /**
- * @author pc-w
- *
+ * @author Diogo, Duarte, Tiago
+ *	This is the class which contains the main method.
+ *	It also contains several static methods that are used in main.
  */
 public class BubbleApplication {
 	/**
-	 * @param args
+	 * @param args Not used at the moment.
 	 */
 	public static void main(String args[]) {
 		System.out.println("Welcome to the BubbleDocs application!");
@@ -115,25 +116,27 @@ public class BubbleApplication {
 			}}
 	}
 	
-	/**
-	 * @param name
-	 */
 	
-	 
-	    static void removeCalcSheet(String name, String user) {
+	/**
+	 * Given the name of the calcSheet and the user name of its owner, this method will remove the calcSheet
+	 * from the persistent state of the application
+	 * @param name the calcSheet's creator's name
+	 * @param user the name of the calcSheet which will be removed
+	 */
+	private static void removeCalcSheet(String name, String user) {
 	    		
 	    		BubbleDocs pb = BubbleDocs.getInstance();
+	    		pb.removeCalcSheet(name, user);
 	    		
-	    		for(CalcSheet c: pb.getCalcSheetSet()){
-	    			if( c.getCreator().getUserName().compareTo(user)==0 &&
-	    			    c.getName().compareTo(name)==0)
-	    				pb.removeCalcSheet(c);
-	    		}
 	    }
 	
-	
 	/**
-	 * @param user
+	 * This method will convert all the calcSheet from a user into XML.
+	 * It then prints the resulting XML to the stdout.
+	 * It also returns an ArrayList of the user's documents.
+	 * @param user the user name of the person whose calcSheets will be converted
+	 * @param doc the arrayList in which the converted calcSheets will be saved
+	 * @return the arrayList which contains all of the user's calcSheets in XML document format
 	 */
 	private static ArrayList<org.jdom2.Document> printAllCalcSheetsFromUser(String user, ArrayList<org.jdom2.Document> doc){
 
@@ -148,7 +151,8 @@ public class BubbleApplication {
 	}
 	
 	/**
-	 * @param jdomDoc
+	 * This method will import a XML document, containing a CalcSheet into the application.
+	 * @param jdomDoc The XML document which will be imported.
 	 */
 	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
 		CalcSheet a=new CalcSheet();
@@ -160,7 +164,9 @@ public class BubbleApplication {
 	
 	
 	/**
-	 * 
+	 * This method will verify if the database is empty by verifying if it had any users.
+	 * In case the database is empty, it will then populate it.
+	 * If it isn't empty then it simply returns. 
 	 */
 	static void populateDomain() {
     		
@@ -190,7 +196,7 @@ public class BubbleApplication {
 	
 	
 	    /**
-	     * 
+	     * This method will print information about each of the users stored in the database.
 	     */
 	    static void getAllPeople(){
 	   
@@ -207,9 +213,7 @@ public class BubbleApplication {
 	 * @param substring
 	 * @return
 	 */
-
-	  //TODO: test
-		static User getUser(BubbleDocs bd, String username) throws NotFoundException{
+	public static User getUser(BubbleDocs bd, String username) throws NotFoundException{
 			
 			for(User tempUser: bd.getUserSet()){
 				if (tempUser.getUserName().equals(username)){
@@ -217,19 +221,17 @@ public class BubbleApplication {
 				}
 			}
 			
-			// we only get here if we don't find the user
+			
 			throw new NotFoundException("NotFoundException: " + 
 					" User " + username + " not found.");
 		}
 	
-	//	NONE OF THIS WORKS - HELP. STUFF ONLY WORKS INSIDE A TRANSATION (UNLIKE THE PHONEBOOK???WHATS GOING ON)
-	
-	
+		
 	  	/**
-	  	 * @param c
-	  	 * @return
+	  	 * This method converts a calcSheet into a XML document.
+	  	 * @param c The calcSheet which will be converted
+	  	 * @return The resulting XML document.
 	  	 */
-	  	
 	    public static org.jdom2.Document convertToXML(CalcSheet c) {
 		 
 	  		
@@ -242,9 +244,9 @@ public class BubbleApplication {
 	    }
 
 	    /**
-	     * @param jdomDoc
+	     * This method take a XML jdomDoc object, convert it into a String and print the result to stdout.
+	     * @param jdomDoc The document which will be converted and printed to stdout.
 	     */
-	    
 	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
 		XMLOutputter xml = new XMLOutputter();
 		xml.setFormat(Format.getPrettyFormat());
