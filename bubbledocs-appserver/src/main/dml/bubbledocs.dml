@@ -149,7 +149,9 @@ relation RangeHasRightDownLimit{
 }	
 
 relation RangePointsToCalcSheet{
-	Range playsRole range;
+	Range playsRole range{
+		multiplicity *;
+		}
 	CalcSheet playsRole calcSheet;
 }
 

@@ -54,9 +54,11 @@ public class BubbleApplication {
     		tm.commit();
     		
     		tm.begin();
-    		//removeCalcSheet("Notas Es"); //still buggy
-    		tm.commit();
+    		removeCalcSheet("Notas Es"); //still buggy
     		
+    		System.out.println(BubbleDocs.getInstance().getCalcSheetSet().isEmpty());
+    		
+    		tm.commit();
 		    committed = true;
 			
     		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
@@ -74,7 +76,7 @@ public class BubbleApplication {
 	 * @param name
 	 */
 	
-	 @Atomic
+	 
 	    static void removeCalcSheet(String name) {
 	    		
 	    		BubbleDocs pb = BubbleDocs.getInstance();

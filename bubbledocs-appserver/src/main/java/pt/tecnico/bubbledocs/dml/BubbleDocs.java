@@ -172,9 +172,9 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 		public void removeCalcSheet(CalcSheet calcSheet) {
-			
-			calcSheet.deleteAllCells();
 			this.getCalcSheetSet().remove(calcSheet);
+			calcSheet.deleteAllCells();
+
 		}
 	
 }

@@ -200,9 +200,9 @@ public class CalcSheet extends CalcSheet_Base {
     		w.getWriteableCalcSheetSet().remove(this);
     	this.getWritingUserSet().clear();
     	
-    	if(this.getCreator() !=null)
-        	setCreator(null);
     	
+        this.setCreator(null);
+    	this.getRangeSet().clear();
 
     	setBubbleDocs(null);
     	deleteDomainObject();
