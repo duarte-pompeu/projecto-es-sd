@@ -1,7 +1,7 @@
 package pt.tecnico.bubbledocs.dml;
 
 import pt.ist.fenixframework.Atomic;
-
+import pt.tecnico.bubbledocs.exceptions.*;
 import javax.transaction.*;
 
 import pt.ist.fenixframework.FenixFramework;
@@ -101,6 +101,12 @@ public class BubbleDocs extends BubbleDocs_Base {
     	return null;
     }
     
+    //João, por favor usa  este método
+    private User getUser(String username) {
+    	//TODO
+    	return null;
+    }
+    
     /**
      * @param userName
      * @param name
@@ -121,18 +127,34 @@ public class BubbleDocs extends BubbleDocs_Base {
     	//throw NotFoundException case userName doesn't exist
     }
 
+    
+    /* The semantics of permissions is the following:
+     *  * read  - the user can read that calcSheet
+     *  * write - the user can write that calcSheet
+     *  A writer MUST be a reader. So write permission MUST include read permission  
+     */
+    
+    
     //author is the user that is doing the action.
 	/**
-	 * @param author
-	 * @param userName
-	 * @param calcSheet
+	 * @param author the user adding another user
+	 * @param userName the userName of the user being added
+	 * @param calcSheet the related CalcSheet
 	 */
-	public void addReader(User author, String userName, CalcSheet calcSheet) {
+	public void addReader(User author, String username, CalcSheet calcSheet) {
 		//TODO
     	//PRECOND: author owns or can write this file
     	//PRECOND: username is not already in this association
+		checkAuthorsPermission(author, calcSheet);
+		User user = author.getUserName().equals(username) ? author : getUser(username);
 		
+		if (calcSheet.getReadingUserSet().contains(user)) return; //do nothing if in this list.
+		
+		calcSheet.getReadingUserSet().add(user);
+		user.getReadableCalcSheetSet().add(calcSheet);
 	}
+
+	
 
 	/**
 	 * @param author
@@ -142,7 +164,17 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public void addWriter(User author, String username, CalcSheet calcSheet) {
 		// TODO Auto-generated method stub
 		//PRECOND: author owns or can write this file
-    	//PRECOND: username MUST be able to read this file		
+    	//PRECOND: username MUST be able to read this file
+		checkAuthorsPermission(author, calcSheet);
+		User user = author.getUserName().equals(username) ? author : getUser(username);
+		
+		if (calcSheet.getWritingUserSet().contains(user)) return; //do nothing if in this list.
+		if (!calcSheet.getReadingUserSet().contains(user)) {
+			this.addReader(author, username, calcSheet); //to conform with the permission's specification. 
+		}
+		
+		calcSheet.getWritingUserSet().add(user); 
+		user.getWriteableCalcSheetSet().add(calcSheet);
 	}
 
 	/**
@@ -154,7 +186,16 @@ public class BubbleDocs extends BubbleDocs_Base {
 		// TODO Auto-generated method stub
 		//PRECOND: author owns or can write this file
     	//PRECOND: username can read this file and CANNOT write this file
+		checkAuthorsPermission(author, calcSheet);
+		User user = author.getUserName().equals(username) ? author : getUser(username);
 		
+		if (!calcSheet.getReadingUserSet().contains(user)) return; //do nothing if it's not a reader
+		if (calcSheet.getWritingUserSet().contains(user)) {
+			this.removeWriter(author, username, calcSheet); 
+		}
+		
+		calcSheet.getReadingUserSet().remove(user);
+		user.getReadableCalcSheetSet().remove(calcSheet);		
 	}
 
 	/**
@@ -166,6 +207,21 @@ public class BubbleDocs extends BubbleDocs_Base {
 		// TODO Auto-generated method stub
 		//PRECOND: author owns or can write this file
     	//PRECOND: username can write this file.
+		checkAuthorsPermission(author, calcSheet);
+		User user = author.getUserName().equals(username) ? author : getUser(username);
+		
+		if (!calcSheet.getWritingUserSet().contains(user)) return; //do nothing if it's not a writer
+		
+		calcSheet.getWritingUserSet().remove(user);
+		user.getWriteableCalcSheetSet().remove(calcSheet);	
+	}
+	
+	//if the current user (author) isn't the file creator, or has write permissions
+	//he can't do permission related actions
+	private void checkAuthorsPermission(User author, CalcSheet sheet) {
+		if (!(author.getCreatedCalcSheetSet().contains(sheet) || author.getWriteableCalcSheetSet().contains(sheet))) {
+			throw new PermissionException(author.getUserName() + " doesn't have permission to complete this action.");
+		}		
 	}
 	
 	/**
