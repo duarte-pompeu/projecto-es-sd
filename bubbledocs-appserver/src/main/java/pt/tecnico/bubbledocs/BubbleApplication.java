@@ -44,7 +44,6 @@ public class BubbleApplication {
     		tm.commit();
     		
     		tm.begin();
-    		//TODO test
     		//TODO Duarte - ponto 3 do enunciado
     		User[] users = new User[2];
     		users[0] = getUser(BubbleDocs.getInstance(), "pf");
