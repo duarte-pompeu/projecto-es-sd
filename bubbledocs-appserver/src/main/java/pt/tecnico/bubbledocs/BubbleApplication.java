@@ -16,6 +16,7 @@ import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.dml.*;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 
 /**
@@ -177,16 +178,19 @@ public class BubbleApplication {
 	 * @return
 	 */
 
-	static Iterable<CalcSheet> getAllSheets(User u, String substring){
-		ArrayList<CalcSheet> csList = new ArrayList<CalcSheet>();
-		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-			if(cs.getName().contains(substring)){
-				csList.add(cs);
+	  //TODO: test
+		static User getUser(BubbleDocs bd, String username) throws NotFoundException{
+			
+			for(User tempUser: bd.getUserSet()){
+				if (tempUser.getName().equals(username)){
+					return tempUser;
+				}
 			}
+			
+			// we only get here if we don't find the user
+			throw new NotFoundException("NotFoundException: " + 
+					" User " + username + " not found.");
 		}
-		
-		return csList;
-	}
 	
 	//	NONE OF THIS WORKS - HELP. STUFF ONLY WORKS INSIDE A TRANSATION (UNLIKE THE PHONEBOOK???WHATS GOING ON)
 	
