@@ -54,6 +54,7 @@ public class BubbleApplication {
 	    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
 	    			System.out.println(cs.getName());
 	    		}
+	    		System.out.println("END");
     		}
     		tm.commit();
     		
@@ -68,15 +69,34 @@ public class BubbleApplication {
     		removeCalcSheet("Notas Es","pf"); 
     		tm.commit();
     		
+    		tm.begin();
     		//TODO Duarte - ponto 6 do enunciado
-    		
+    		User u = getUser(BubbleDocs.getInstance(), "pf");
+    		System.out.println("Calcsheets created by " + u.getName() + ":");
+    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
+    			String s = "CalcSheet: name,ID=(" + cs.getName() + ","
+    					+ cs.getId() + ")";
+    			System.out.println(s);
+    		}
+    		System.out.println("END");
+    		tm.commit();
     		
     		tm.begin();
     		//ponto 7 do enunciado
     		recoverFromBackup(doc.get(0));
     		tm.commit();
     		
+    		tm.begin();
     		//TODO Duarte - ponto 8 do enunciado
+    		u = getUser(BubbleDocs.getInstance(), "pf");
+    		System.out.println("Calcsheets created by " + u.getName() + ":");
+    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
+    			String s = "CalcSheet: name,ID=(" + cs.getName() + ","
+    					+ cs.getId() + ")";
+    			System.out.println(s);
+    		}
+    		System.out.println("END");
+    		tm.commit();
     		
     		tm.begin();
     		//ponto 9 do enunciado
