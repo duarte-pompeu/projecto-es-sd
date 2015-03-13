@@ -44,7 +44,19 @@ public class BubbleApplication {
     		getAllPeople();
     		tm.commit();
     		
+    		tm.begin();
+    		//TODO test
     		//TODO Duarte - ponto 3 do enunciado
+    		User[] users = new User[2];
+    		users[0] = getUser(BubbleDocs.getInstance(), "pf");
+    		users[1] = getUser(BubbleDocs.getInstance(), "ra");
+    		for(User u: users){
+    			System.out.println("Calcsheets created by " + u.getName() + ":");
+	    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
+	    			System.out.println(cs.getName());
+	    		}
+    		}
+    		tm.commit();
     		
     		tm.begin();
     		//ponto 4 do enunciado
@@ -182,7 +194,7 @@ public class BubbleApplication {
 		static User getUser(BubbleDocs bd, String username) throws NotFoundException{
 			
 			for(User tempUser: bd.getUserSet()){
-				if (tempUser.getName().equals(username)){
+				if (tempUser.getUserName().equals(username)){
 					return tempUser;
 				}
 			}
