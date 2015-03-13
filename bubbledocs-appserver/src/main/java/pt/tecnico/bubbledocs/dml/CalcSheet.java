@@ -202,7 +202,7 @@ public class CalcSheet extends CalcSheet_Base {
     	
     	
         this.setCreator(null);
-    	this.getRangeSet().clear();
+    	//this.getRangeSet().clear();
 
     	setBubbleDocs(null);
     	deleteDomainObject();

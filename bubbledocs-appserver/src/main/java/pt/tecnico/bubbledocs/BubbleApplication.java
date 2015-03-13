@@ -53,7 +53,7 @@ public class BubbleApplication {
     	
     		tm.begin();
     		//ponto 5 do enunciado
-    		removeCalcSheet("Notas Es"); 
+    		removeCalcSheet("Notas Es","pf"); 
     		tm.commit();
     		
     		//TODO Duarte - ponto 6 do enunciado
@@ -89,11 +89,13 @@ public class BubbleApplication {
 	 */
 	
 	 
-	    static void removeCalcSheet(String name) {
+	    static void removeCalcSheet(String name, String user) {
 	    		
 	    		BubbleDocs pb = BubbleDocs.getInstance();
+	    		
 	    		for(CalcSheet c: pb.getCalcSheetSet()){
-	    			if(c.getName().compareTo(name)==0)
+	    			if( c.getCreator().getUserName().compareTo(user)==0 &&
+	    			    c.getName().compareTo(name)==0)
 	    				pb.removeCalcSheet(c);
 	    		}
 	    }
