@@ -25,13 +25,8 @@ import pt.tecnico.bubbledocs.dml.*;
 public class BubbleApplication {
 	/**
 	 * @param args
-	 * @throws HeuristicRollbackException 
-	 * @throws HeuristicMixedException 
-	 * @throws RollbackException 
-	 * @throws IllegalStateException 
-	 * @throws SecurityException 
 	 */
-	public static void main(String args[]) throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
+	public static void main(String args[]) {
 		System.out.println("Welcome to the BubbleDocs application!");
 		
 		TransactionManager tm = FenixFramework.getTransactionManager();
@@ -48,17 +43,34 @@ public class BubbleApplication {
     		getAllPeople();
     		tm.commit();
     		
+    		//TODO Duarte - ponto 3 do enunciado
+    		
     		tm.begin();
     		//ponto 4 do enunciado
-    		printAllCalcSheetsFromUser("pf");
+    		ArrayList<org.jdom2.Document> doc=new ArrayList();
+    		doc=printAllCalcSheetsFromUser("pf",doc);
     		tm.commit();
+    	
+    		tm.begin();
+    		//ponto 5 do enunciado
+    		removeCalcSheet("Notas Es"); 
+    		tm.commit();
+    		
+    		//TODO Duarte - ponto 6 do enunciado
+    		
     		
     		tm.begin();
-    		removeCalcSheet("Notas Es"); //still buggy
-    		
-    		System.out.println(BubbleDocs.getInstance().getCalcSheetSet().isEmpty());
-    		
+    		//ponto 7 do enunciado
+    		recoverFromBackup(doc.get(0));
     		tm.commit();
+    		
+    		//TODO Duarte - ponto 8 do enunciado
+    		
+    		tm.begin();
+    		//ponto 9 do enunciado
+    		doc=printAllCalcSheetsFromUser("pf",doc);
+    		tm.commit();
+    		
 		    committed = true;
 			
     		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
@@ -90,14 +102,16 @@ public class BubbleApplication {
 	/**
 	 * @param user
 	 */
-	private static void printAllCalcSheetsFromUser(String user){
-		
-	
+	private static ArrayList<org.jdom2.Document> printAllCalcSheetsFromUser(String user, ArrayList<org.jdom2.Document> doc){
+
+		org.jdom2.Document d=null;
 		BubbleDocs pb = BubbleDocs.getInstance();
 		for(CalcSheet c: pb.getCalcSheetSet()){
 			if(c.getCreator().getUserName().compareTo(user)==0)
-				printDomainInXML(convertToXML(c));}
-		
+				printDomainInXML(d=convertToXML(c));}
+		if(d!=null)
+			doc.add(d);
+		return doc;
 	}
 	
 	/**

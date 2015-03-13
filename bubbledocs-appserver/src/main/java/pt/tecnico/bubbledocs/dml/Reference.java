@@ -40,6 +40,7 @@ public class Reference extends Reference_Base {
 		setPointedCell(null);
 		if(this.getCell() !=null)
     	setCell(null);
+		this.setBinaryFunction_(null);
     	deleteDomainObject();
         }
 	

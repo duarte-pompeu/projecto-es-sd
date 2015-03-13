@@ -212,6 +212,15 @@ public class CalcSheet extends CalcSheet_Base {
      * @param calcSheetElement
      */
     public void importFromXML(Element calcSheetElement) {
+    	Iterator<User> it=BubbleDocs.getInstance().getUserSet().iterator();
+    	User u;
+    	do{
+    		u= it.next();
+    		if(u.getUserName().compareTo(calcSheetElement.getAttribute("creator").getValue())==0)
+    			break;
+    	}while(it.hasNext());
+    	if(u!=null)
+    		this.setCreator(u);
     	this.setDate(new LocalDate(calcSheetElement.getAttribute("date").getValue()));
     	this.setId(new Integer(calcSheetElement.getAttribute("id").getValue()));
     	this.setName(new String(calcSheetElement.getAttribute("name").getValue()));
@@ -228,7 +237,7 @@ public class CalcSheet extends CalcSheet_Base {
     	    c.importFromXML(cell);
     	    addCell(c);
     	}
-    	
+    	this.setBubbleDocs(BubbleDocs.getInstance());
     }
 
     /**
@@ -237,7 +246,7 @@ public class CalcSheet extends CalcSheet_Base {
     public Element exportToXML() {
     	Element element = new Element("calcSheet");
     	try{
-    	
+    	element.setAttribute("creator", this.getCreator().getUserName());
     	element.setAttribute("date", this.getDate().toString());
     	element.setAttribute("id", this.getId().toString());
     	element.setAttribute("name", this.getName().toString());
