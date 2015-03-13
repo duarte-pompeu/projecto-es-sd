@@ -1,11 +1,7 @@
 package pt.tecnico.bubbledocs.dml;
 
-import pt.ist.fenixframework.Atomic;
 import pt.tecnico.bubbledocs.exceptions.*;
-import javax.transaction.*;
-
 import pt.ist.fenixframework.FenixFramework;
-import pt.ist.fenixframework.TransactionManager;
 
 /**
  * @author pc-w
