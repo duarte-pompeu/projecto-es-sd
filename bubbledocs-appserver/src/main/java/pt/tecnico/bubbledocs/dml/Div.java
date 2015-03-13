@@ -1,7 +1,5 @@
 package pt.tecnico.bubbledocs.dml;
 
-import java.util.List;
-
 import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
