@@ -96,5 +96,17 @@ public class User extends User_Base {
     	throw new PermissionException("You don't have permission to do this action");
     }
 
-    
+    // Pompeu
+  	// TODO: test
+  	Iterable<CalcSheet> getSheets(String substring){
+  		ArrayList<CalcSheet> csList = new ArrayList<CalcSheet>();
+  		
+  		for(CalcSheet cs: this.getCreatedCalcSheetSet()){
+  			if(cs.getName().contains(substring)){
+  				csList.add(cs);
+  			}
+  		}
+  		
+  		return csList;
+  	}
 }
