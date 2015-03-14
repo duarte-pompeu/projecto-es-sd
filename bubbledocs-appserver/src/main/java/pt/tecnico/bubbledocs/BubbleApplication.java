@@ -45,7 +45,7 @@ public class BubbleApplication {
     		tm.commit();
     		
     		tm.begin();
-    		//TODO Duarte - ponto 3 do enunciado
+    		// ponto 3 do enunciado
     		User[] users = new User[2];
     		users[0] = getUser(BubbleDocs.getInstance(), "pf");
     		users[1] = getUser(BubbleDocs.getInstance(), "ra");
@@ -70,15 +70,8 @@ public class BubbleApplication {
     		tm.commit();
     		
     		tm.begin();
-    		//TODO Duarte - ponto 6 do enunciado
-    		User u = getUser(BubbleDocs.getInstance(), "pf");
-    		System.out.println("Calcsheets created by " + u.getName() + ":");
-    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-    			String s = "CalcSheet: name,ID=(" + cs.getName() + ","
-    					+ cs.getId() + ")";
-    			System.out.println(s);
-    		}
-    		System.out.println("END");
+    		// ponto 6 do enunciado
+    		getThisUsersCalcSheets("pf");
     		tm.commit();
     		
     		tm.begin();
@@ -88,14 +81,7 @@ public class BubbleApplication {
     		
     		tm.begin();
     		//TODO Duarte - ponto 8 do enunciado
-    		u = getUser(BubbleDocs.getInstance(), "pf");
-    		System.out.println("Calcsheets created by " + u.getName() + ":");
-    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-    			String s = "CalcSheet: name,ID=(" + cs.getName() + ","
-    					+ cs.getId() + ")";
-    			System.out.println(s);
-    		}
-    		System.out.println("END");
+    		getThisUsersCalcSheets("pf");
     		tm.commit();
     		
     		tm.begin();
@@ -115,6 +101,28 @@ public class BubbleApplication {
 			    System.err.println("Error in roll back of transaction: " + ex);
 			}}
 	}
+	
+	
+	/**
+	 * This function prints to stdout information about the calcSheets of a specific user.
+	 * @param userName The user's user name.
+	 */
+	private static void getThisUsersCalcSheets(String userName){
+		
+		User u = getUser(BubbleDocs.getInstance(), userName);
+		System.out.println("Calcsheets created by " + u.getName() + ":");
+		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
+			String s = "CalcSheet: name,ID=(" + cs.getName() + ","
+					+ cs.getId() + ")";
+			System.out.println(s);
+		}
+		System.out.println("END");	
+		
+		
+		
+	}
+	
+	
 	
 	
 	/**
@@ -215,15 +223,7 @@ public class BubbleApplication {
 	 */
 	public static User getUser(BubbleDocs bd, String username) throws NotFoundException{
 			
-			for(User tempUser: bd.getUserSet()){
-				if (tempUser.getUserName().equals(username)){
-					return tempUser;
-				}
-			}
-			
-			
-			throw new NotFoundException("NotFoundException: " + 
-					" User " + username + " not found.");
+			return bd.getUser(username);
 		}
 	
 		

@@ -4,15 +4,18 @@ import pt.tecnico.bubbledocs.exceptions.*;
 import pt.ist.fenixframework.FenixFramework;
 
 /**
- * @author pc-w
- *
+ * @author Diogo, Marcos, Tiago, Duarte
+ * This class represents the bubbleDocs application.
+ * Contains the set of users and the set of calcSheets.
+ * Generate unique an unique Id for each new calcSheet.
  */
 public class BubbleDocs extends BubbleDocs_Base {
 	
 	/**
-	 * @return
+	 * This method makes a connection to the database, returning the instance of bubbledocs saved there.
+	 * If the database is empty then it creates a new instance.
+	 * @return the bubbleDocs instance
 	 */
-	
 	public static BubbleDocs getInstance() {
 		
 		
@@ -29,21 +32,26 @@ public class BubbleDocs extends BubbleDocs_Base {
 	    	}
     	
     /**
-     * 
+     * The bubbleDocs constructor, only to be used when the database is empty.
      */
     private BubbleDocs() {
     	FenixFramework.getDomainRoot().setBubbleDocs(this);
     	this.setIdCounter(1);
     }
     
-    //for now only used for the xml import
+ 
     /**
-     * 
+     * This variable is used during the xml importation of a calcSheet.
+     * It is used to identify the calcSheet which is currently being imported.
      */
     public static CalcSheet currentSheet;
     
     
-    
+    /**
+	 * Searches the calcSheet set and returns the calcSheet with a specific name.
+	 * @param name the calcSheet
+	 * @return The desired calcSheet. If it is not found then null is returned.
+	 */
     public CalcSheet getCalcSheetByName(String name) {
 		for(CalcSheet c: this.getCalcSheetSet()){
 			if(c.getName().equals(name))
@@ -52,14 +60,32 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return null;
 	}
     
-    public void RemoveCalcSheet(String name) {
-    	CalcSheet toRemove = getCalcSheetByName(name);
-    	toRemove.getCellSet().clear();
-    	this.removeCalcSheet(toRemove);
-    }
 
+    /**
+   	 * Searches the user set and returns the user with a specific user name.
+   	 * @param name the user's user name
+   	 * @return The desired user. If it is not found, a NotFoundException is thrown.
+   	 */
+    public User getUser(String username) throws NotFoundException{
+		
+		for(User tempUser: this.getUserSet()){
+			if (tempUser.getUserName().equals(username)){
+				return tempUser;
+			}
+		}
+		
+		
+		throw new NotFoundException("NotFoundException: " + 
+				" User " + username + " not found.");
+	}
     
     
+    
+    /**
+	 * Searches the calcSheet set removes the calcSheet with a specific name, created by a specific user.
+	 * @param name the calcSheet
+	 * @param user the user
+	 */
     public void removeCalcSheet(String name, String user) {
 		
 		for(CalcSheet c: this.getCalcSheetSet()){
@@ -71,9 +97,9 @@ public class BubbleDocs extends BubbleDocs_Base {
     
     
     /**
-     * @return
+     * This method generates a unique calcSheet id.
+     * @return The unique calcSheet id generated.
      */
-    
     public synchronized int getUniqueId() {
     	int id = this.getIdCounter();
     	this.setIdCounter(id + 1);
@@ -104,12 +130,6 @@ public class BubbleDocs extends BubbleDocs_Base {
      * @return
      */
     public User login(String username, String password) {
-    	//TODO
-    	return null;
-    }
-    
-    //João, por favor usa  este método
-    private User getUser(String username) {
     	//TODO
     	return null;
     }
