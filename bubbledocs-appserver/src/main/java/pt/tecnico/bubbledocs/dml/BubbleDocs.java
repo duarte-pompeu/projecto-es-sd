@@ -136,23 +136,17 @@ public class BubbleDocs extends BubbleDocs_Base {
 		User out = getUser (username); //throws exception se nao existir
 		
 		//verificar que password é a correspondente
-		
-		
-		
-		
+				
+		if (!(password.equals(out.getpassword()))) {
+				throw new NotFoundException("Invalid username or password"); //Esconder que o username existe 4safety?
+				}
 		
 		//------------------------------------
 		
 		return out; 
 		
 	}
-		
-		
-		
-		
-    	return null;
-    }
-    
+
     /**
      * @param userName
      * @param name
