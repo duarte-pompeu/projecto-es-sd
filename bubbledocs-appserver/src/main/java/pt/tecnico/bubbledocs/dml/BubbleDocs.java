@@ -130,7 +130,26 @@ public class BubbleDocs extends BubbleDocs_Base {
      * @return
      */
     public User login(String username, String password) {
-    	//TODO
+    	
+		//verificar que user existe
+		
+		User out = getUser (username); //throws exception se nao existir
+		
+		//verificar que password é a correspondente
+		
+		
+		
+		
+		
+		//------------------------------------
+		
+		return out; 
+		
+	}
+		
+		
+		
+		
     	return null;
     }
     
