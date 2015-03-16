@@ -59,13 +59,13 @@ public class BubbleApplication {
     		tm.commit();
     		
     		tm.begin();
-    		//ponto 4 do enunciado
+    		// ponto 4 do enunciado
     		ArrayList<org.jdom2.Document> doc=new ArrayList<org.jdom2.Document>();
     		doc=printAllCalcSheetsFromUser("pf",doc);
     		tm.commit();
     	
     		tm.begin();
-    		//ponto 5 do enunciado
+    		// ponto 5 do enunciado
     		removeCalcSheet("Notas Es","pf"); 
     		tm.commit();
     		
@@ -75,17 +75,17 @@ public class BubbleApplication {
     		tm.commit();
     		
     		tm.begin();
-    		//ponto 7 do enunciado
+    		// ponto 7 do enunciado
     		recoverFromBackup(doc.get(0));
     		tm.commit();
     		
     		tm.begin();
-    		//TODO Duarte - ponto 8 do enunciado
+    		// ponto 8 do enunciado
     		getThisUsersCalcSheets("pf");
     		tm.commit();
     		
     		tm.begin();
-    		//ponto 9 do enunciado
+    		// ponto 9 do enunciado
     		doc=printAllCalcSheetsFromUser("pf",doc);
     		tm.commit();
     		
