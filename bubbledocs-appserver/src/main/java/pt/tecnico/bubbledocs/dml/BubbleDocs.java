@@ -200,7 +200,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 	public void addWriter(User author, String username, CalcSheet calcSheet) {
-		// TODO Auto-generated method stub
+		// TODO addWriter
 		//PRECOND: author owns or can write this file
     	//PRECOND: username MUST be able to read this file
 		checkAuthorsPermission(author, calcSheet);
@@ -221,7 +221,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 	public void removeReader(User author, String username, CalcSheet calcSheet) {
-		// TODO Auto-generated method stub
+		// TODO removeReader
 		//PRECOND: author owns or can write this file
     	//PRECOND: username can read this file and CANNOT write this file
 		checkAuthorsPermission(author, calcSheet);
@@ -242,7 +242,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 	public void removeWriter(User author, String username, CalcSheet calcSheet) {
-		// TODO Auto-generated method stub
+		// TODO removeWriter
 		//PRECOND: author owns or can write this file
     	//PRECOND: username can write this file.
 		checkAuthorsPermission(author, calcSheet);

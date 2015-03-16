@@ -43,7 +43,7 @@ public class Range extends Range_Base implements Iterable<Cell>{
 	public void init(int firstLine, int firstColumn, int lastLine,
 			int lastColumn, CalcSheet sheet){
 		
-		// TODO: this values aren't used (yet)
+		// TODO: these values aren't used (yet)
 //		int column;
 //		int line;
 		
