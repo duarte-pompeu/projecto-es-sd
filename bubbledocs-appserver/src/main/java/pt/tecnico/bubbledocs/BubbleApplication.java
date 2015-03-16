@@ -60,7 +60,7 @@ public class BubbleApplication {
     		
     		tm.begin();
     		//ponto 4 do enunciado
-    		ArrayList<org.jdom2.Document> doc=new ArrayList();
+    		ArrayList<org.jdom2.Document> doc=new ArrayList<org.jdom2.Document>();
     		doc=printAllCalcSheetsFromUser("pf",doc);
     		tm.commit();
     	
