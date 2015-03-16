@@ -43,8 +43,9 @@ public class Range extends Range_Base implements Iterable<Cell>{
 	public void init(int firstLine, int firstColumn, int lastLine,
 			int lastColumn, CalcSheet sheet){
 		
-		int column;
-		int line;
+		// TODO: this values aren't used (yet)
+//		int column;
+//		int line;
 		
 		
 		//TODO: THIS NEXT CODE WAS BEFORE THE RECENT CHANGE. CHECK THE DML FILE
@@ -64,11 +65,17 @@ public class Range extends Range_Base implements Iterable<Cell>{
 	 * @see java.lang.Iterable#iterator()
 	 */
 	public Iterator<Cell> iterator(){
-		int upperLine, leftmostColumn, downLine, rightmostColumn;
+		int downLine, rightmostColumn;
+		
+		// TODO: the values of these variables aren't used (yet)
+		// int leftmostColumn, upperLine;
+		
+		
 		ArrayList<Cell> a=new ArrayList<Cell>();
 		
-		upperLine=this.getLeftUpCell().getLine();
-		leftmostColumn=this.getLeftUpCell().getColumn();
+		// TODO: the values of these variables aren't used (yet)
+		//upperLine=this.getLeftUpCell().getLine();
+		//leftmostColumn=this.getLeftUpCell().getColumn();
 		downLine=this.getRightDownCell().getLine();
 		rightmostColumn=this.getRightDownCell().getColumn();
 		
