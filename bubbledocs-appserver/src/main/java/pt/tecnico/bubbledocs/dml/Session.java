@@ -7,10 +7,12 @@ public class Session extends Session_Base {
     
 	private final static int EXPIRATION = 120; //minutes
 	
-    public Session() {
+    public Session(User user) {
         super();
         this.setToken(generateRandomToken());
-        touch();        
+        touch();
+        this.setUser(user);
+        user.setSession(this);
     }
     
     public boolean isExpired() {
