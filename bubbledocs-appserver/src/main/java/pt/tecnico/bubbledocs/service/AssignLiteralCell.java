@@ -13,9 +13,9 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
     private String accessUsername;
-    int docId;
-    String cellId;
-    String literal;
+    private int docId;
+    private String cellId;
+    private String literal;
 
     // TODO:AssignLiteralCell: finish service
     // TODO:AssignLiteralCell: test
