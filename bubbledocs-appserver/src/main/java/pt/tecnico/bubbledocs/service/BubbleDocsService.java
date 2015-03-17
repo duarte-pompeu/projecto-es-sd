@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.service;
 import pt.ist.fenixframework.Atomic;
 
 // add needed import declarations
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
 public abstract class BubbleDocsService {
 

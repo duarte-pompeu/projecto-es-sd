@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 // add needed import declarations
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
 public class CreateSpreadSheet extends BubbleDocsService {
     private int sheetId;  // id of the new sheet
