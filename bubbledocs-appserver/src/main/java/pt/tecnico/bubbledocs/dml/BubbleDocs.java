@@ -2,6 +2,8 @@ package pt.tecnico.bubbledocs.dml;
 
 import pt.tecnico.bubbledocs.exceptions.*;
 import pt.ist.fenixframework.FenixFramework;
+
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -72,7 +74,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param name the user's user name
 	 * @return The desired user. If it is not found, a NotFoundException is thrown.
 	 */
-	public User getUser(String username) throws NotFoundException{
+	public User getUser(String username) throws NotFoundException {
 
 		for(User tempUser: this.getUserSet()){
 			if (tempUser.getUserName().equals(username)){
@@ -135,20 +137,50 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param password
 	 * @return
 	 */
-	public User login(String username, String password) {
+	public User login(String username, String password) throws NotFoundException {
+		User out = null;
+		try {
+			out = getUser(username); //throws exception se nao existir
 
-		//verificar que user existe
-
-		User out = getUser (username); //throws exception se nao existir
-
-		//verificar que password é a correspondente
-
-		if (password.compareTo(out.getPassword())!=0) {
-			throw new NotFoundException("Invalid username or password"); //Esconder que o username existe 4safety?
+			if (!password.equals(out.getPassword())) {
+				throw new NotFoundException(); 
+			}
+			
+			
+			
+		} catch (NotFoundException e) {
+			throw new NotFoundException("Invalid username or password");
 		}
 
 		return out; 
 
+	}
+	
+	
+	public void refreshSessions() {
+		for (Session session : this.getSessionSet()) {
+			if (session.isExpired()) {
+				session.getUser().setSession(null);
+				session.setUser(null);
+				this.removeSession(session);
+				//anything else to remove the session completely?
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param user
+	 */
+	public String addSession(User user) {
+		if (user.getSession() != null) {
+			user.getSession().touch();
+			return user.getSession().getToken(); //the user is in session
+		}
+		
+		Session newSession = new Session(user);
+		this.addSession(newSession);
+		return newSession.getToken();
 	}
 
 	/**
