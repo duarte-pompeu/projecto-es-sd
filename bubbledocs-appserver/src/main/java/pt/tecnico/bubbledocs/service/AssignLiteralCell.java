@@ -14,12 +14,12 @@ public class AssignLiteralCell extends BubbleDocsService{
     private String result;
     private String accessUsername;
     private int docId;
-    private String cellId;
-    private String literal;
+    private int cellId;
+    Integer literal;
 
     // TODO:AssignLiteralCell: finish service
     // TODO:AssignLiteralCell: test
-    public AssignLiteralCell(String accessUsername, int docId, String cellId, String literal) {
+    public AssignLiteralCell(String accessUsername, int docId, int cellId, int literal) {
     	
     	this.accessUsername = accessUsername;
     	this.docId = docId;
@@ -28,7 +28,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     }
 
     @Override
-    protected void dispatch() throws BubbleDocsException {
+    public void dispatch() throws BubbleDocsException {
     	//TODO: make sure it's a literal
     	
     	BubbleDocs bd = BubbleDocs.getInstance();
@@ -46,12 +46,13 @@ public class AssignLiteralCell extends BubbleDocsService{
     		throw new NotFoundException("can't find cell with ID " + docId + ".");
     	}
     	
-    	Literal content = new Literal(Integer.valueOf(literal));
+    	//TODO: make sure it's a literal
+    	Literal content = new Literal(literal);
     	User user = bd.getUser(accessUsername);
     	
     	// FIXME: AssignLiteralCell: this is a weird way to get a cell line and column
     	// we find the cell, get the object, and then access it again
-    	Cell cell = cs.getCell(Integer.valueOf(cellId));
+    	Cell cell = cs.getCell(cellId);
     	try{
     		cs.setContent(user, content, cell.getLine(), cell.getColumn());
     	}
