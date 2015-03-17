@@ -84,6 +84,13 @@ relation BubbleDocsHasCalcSheets {
   }
 }
 
+relation BubbleDocsHasSessions {
+  BubbleDocs playsRole bubbleDocs;
+  Session playsRole session {
+    multiplicity *;
+  }
+}
+
 relation UserCreatesCalcSheet {
   CalcSheet playsRole createdCalcSheet{
     multiplicity *;
