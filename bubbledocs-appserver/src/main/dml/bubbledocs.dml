@@ -28,6 +28,12 @@ class Cell {
   String contentRepresentation;
 }
 
+class Session {
+  String token;
+  DateTime access;
+  DateTime expiration;
+}
+
 class Content;
 
 class FunctionArgument extends Content;
@@ -83,6 +89,11 @@ relation UserCreatesCalcSheet {
     multiplicity *;
   }
   User playsRole creator;
+}
+
+relation UserIsInSession {
+  Session playsRole session;
+  User playsRole user;
 }
 
 relation CalcSheetHasReadPermitionsAboutUsers {
