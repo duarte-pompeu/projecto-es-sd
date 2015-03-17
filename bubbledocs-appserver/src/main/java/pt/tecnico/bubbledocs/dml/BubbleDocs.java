@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.dml;
 
 import pt.tecnico.bubbledocs.exceptions.*;
 import pt.ist.fenixframework.FenixFramework;
+import java.util.Random;
 
 /**
  * @author Diogo, Marcos, Tiago, Duarte
@@ -11,15 +12,13 @@ import pt.ist.fenixframework.FenixFramework;
  */
 public class BubbleDocs extends BubbleDocs_Base {
 
+	Random rng;
 	/**
 	 * This method makes a connection to the database, returning the instance of bubbledocs saved there.
 	 * If the database is empty then it creates a new instance.
 	 * @return the bubbleDocs instance
 	 */
 	public static BubbleDocs getInstance() {
-
-
-
 		BubbleDocs pb;
 
 		pb = FenixFramework.getDomainRoot().getBubbleDocs();
@@ -27,8 +26,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 			pb = new BubbleDocs(); 
 
 		return pb;
-
-
 	}
 
 	/**
@@ -37,6 +34,15 @@ public class BubbleDocs extends BubbleDocs_Base {
 	private BubbleDocs() {
 		FenixFramework.getDomainRoot().setBubbleDocs(this);
 		this.setIdCounter(1);
+		this.rng = new Random();
+	}
+	
+	/**
+	 * Gets the random number generator (RNG) associated with bubbledocs.
+	 * @return this random number generator
+	 */
+	public Random getRng() {
+		return rng;
 	}
 
 
