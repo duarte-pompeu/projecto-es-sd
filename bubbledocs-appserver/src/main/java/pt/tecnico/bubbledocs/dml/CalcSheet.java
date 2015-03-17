@@ -97,7 +97,8 @@ public class CalcSheet extends CalcSheet_Base {
      * @param line
      * @param column
      */
-    public void setContent(User writer, Content content, int line, int column) {    	
+    public void setContent(User writer, Content content, int line, int column)
+    	throws PermissionException{    	
     	if (!(writer.getWriteableCalcSheetSet().contains(writer))) throw new PermissionException();
     	
     	this.getCellByIndex(line, column).setContent(content);
