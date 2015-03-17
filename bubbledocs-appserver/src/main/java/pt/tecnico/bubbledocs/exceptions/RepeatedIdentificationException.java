@@ -5,7 +5,7 @@ package pt.tecnico.bubbledocs.exceptions;
  * (Like User and CalcSheet in this project)
  */
 
-public class RepeatedIdentificationException extends RuntimeException {
+public class RepeatedIdentificationException extends BubbleDocsException {
 
 	private static final long serialVersionUID = -3487585108085182671L;
 

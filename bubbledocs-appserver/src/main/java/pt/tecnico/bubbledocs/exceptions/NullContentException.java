@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.exceptions;
 
-public class NullContentException extends Exception{
+public class NullContentException extends BubbleDocsException {
 	// The serializable class NullContentException does not declare a 
 	// static final serialVersionUID field of type long
 	// from superclass Exception

@@ -15,6 +15,7 @@ import org.jdom2.output.XMLOutputter;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.dml.*;
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 
@@ -29,77 +30,80 @@ public class BubbleApplication {
 	 */
 	public static void main(String args[]) {
 		System.out.println("Welcome to the BubbleDocs application!");
-		
-		TransactionManager tm = FenixFramework.getTransactionManager();
-    	boolean committed = false;
 
-    	try {
-    		tm.begin();
-    		//ponto 1 do enunciado
-    		populateDomain();
-    		tm.commit();
-		    
-    		tm.begin();
-    		//ponto 2 do enunciado
-    		getAllPeople();
-    		tm.commit();
-    		
-    		tm.begin();
-    		// ponto 3 do enunciado
-    		User[] users = new User[2];
-    		users[0] = getUser(BubbleDocs.getInstance(), "pf");
-    		users[1] = getUser(BubbleDocs.getInstance(), "ra");
-    		for(User u: users){
-    			System.out.println("Calcsheets created by " + u.getName() + ":");
-	    		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-	    			System.out.println(cs.getName());
-	    		}
-	    		System.out.println("END");
-    		}
-    		tm.commit();
-    		
-    		tm.begin();
-    		// ponto 4 do enunciado
-    		ArrayList<org.jdom2.Document> doc=new ArrayList<org.jdom2.Document>();
-    		doc=printAllCalcSheetsFromUser("pf",doc);
-    		tm.commit();
-    	
-    		tm.begin();
-    		// ponto 5 do enunciado
-    		removeCalcSheet("Notas Es","pf"); 
-    		tm.commit();
-    		
-    		tm.begin();
-    		// ponto 6 do enunciado
-    		getThisUsersCalcSheets("pf");
-    		tm.commit();
-    		
-    		tm.begin();
-    		// ponto 7 do enunciado
-    		recoverFromBackup(doc.get(0));
-    		tm.commit();
-    		
-    		tm.begin();
-    		// ponto 8 do enunciado
-    		getThisUsersCalcSheets("pf");
-    		tm.commit();
-    		
-    		tm.begin();
-    		// ponto 9 do enunciado
-    		doc=printAllCalcSheetsFromUser("pf",doc);
-    		tm.commit();
-    		
-		    committed = true;
-			
-    		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
-		    System.err.println("Error in execution of transaction: " + ex);
+		TransactionManager tm = FenixFramework.getTransactionManager();
+		boolean committed = false;
+
+		try {
+			tm.begin();
+			//ponto 1 do enunciado
+			populateDomain();
+			tm.commit();
+
+			tm.begin();
+			//ponto 2 do enunciado
+			getAllPeople();
+			tm.commit();
+
+			tm.begin();
+			// ponto 3 do enunciado
+			User[] users = new User[2];
+			users[0] = getUser(BubbleDocs.getInstance(), "pf");
+			users[1] = getUser(BubbleDocs.getInstance(), "ra");
+			for(User u: users){
+				System.out.println("Calcsheets created by " + u.getName() + ":");
+				for(CalcSheet cs: u.getCreatedCalcSheetSet()){
+					System.out.println(cs.getName());
+				}
+				System.out.println("END");
+			}
+			tm.commit();
+
+			tm.begin();
+			// ponto 4 do enunciado
+			ArrayList<org.jdom2.Document> doc=new ArrayList<org.jdom2.Document>();
+			doc=printAllCalcSheetsFromUser("pf",doc);
+			tm.commit();
+
+			tm.begin();
+			// ponto 5 do enunciado
+			removeCalcSheet("Notas Es","pf"); 
+			tm.commit();
+
+			tm.begin();
+			// ponto 6 do enunciado
+			getThisUsersCalcSheets("pf");
+			tm.commit();
+
+			tm.begin();
+			// ponto 7 do enunciado
+			recoverFromBackup(doc.get(0));
+			tm.commit();
+
+			tm.begin();
+			// ponto 8 do enunciado
+			getThisUsersCalcSheets("pf");
+			tm.commit();
+
+			tm.begin();
+			// ponto 9 do enunciado
+			doc=printAllCalcSheetsFromUser("pf",doc);
+			tm.commit();
+
+			committed = true;
+
+		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
+			System.err.println("Error in execution of transaction: " + ex);
+		} catch (BubbleDocsException e) {
+			e.printStackTrace();
 		} finally {
-		    if (!committed) 
-			try {
-			    tm.rollback();
-			} catch (SystemException ex) {
-			    System.err.println("Error in roll back of transaction: " + ex);
-			}}
+			if (!committed) 
+				try {
+					tm.rollback();
+				} catch (SystemException ex) {
+					System.err.println("Error in roll back of transaction: " + ex);
+				}
+		}
 	}
 	
 	
