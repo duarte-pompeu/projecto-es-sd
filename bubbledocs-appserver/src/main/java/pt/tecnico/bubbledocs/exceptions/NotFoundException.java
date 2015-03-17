@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.exceptions;
 
-public class NotFoundException extends BubbleDocsException {
+public class NotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 6648681915942771821L;
 

@@ -4,7 +4,7 @@ package pt.tecnico.bubbledocs.exceptions;
  * This exception is thrown when an action that is done without permission
  */
 
-public class PermissionException extends BubbleDocsException {
+public class PermissionException extends RuntimeException {
 
 	private static final long serialVersionUID = 476115369516210901L;
 

@@ -94,8 +94,6 @@ public class BubbleApplication {
 
 		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
 			System.err.println("Error in execution of transaction: " + ex);
-		} catch (BubbleDocsException e) {
-			e.printStackTrace();
 		} finally {
 			if (!committed) 
 				try {
