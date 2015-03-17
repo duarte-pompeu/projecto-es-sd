@@ -15,7 +15,6 @@ import org.jdom2.output.XMLOutputter;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.dml.*;
-import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 
