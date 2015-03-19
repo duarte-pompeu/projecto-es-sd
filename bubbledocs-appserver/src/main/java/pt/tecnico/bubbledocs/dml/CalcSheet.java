@@ -90,18 +90,32 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     //this may be changed to receive a string, and using a Content factory, create the Content
-    // *whip* *whip* get that Parser working Tiago :P
     /**
      * @param writer
      * @param content
      * @param line
      * @param column
+     * 
+     * Only used to convert a line and column to a cellID.
+     * Then directs the work to setContent(User writer, Content content, int cellId)
      */
     public void setContent(User writer, Content content, int line, int column)
     	throws PermissionException{    	
-    	if (!(writer.getWriteableCalcSheetSet().contains(writer))) throw new PermissionException();
     	
-    	this.getCellByIndex(line, column).setContent(content);
+    	Cell cell = this.getCellByIndex(line, column);
+    	int cellId = cell.getId();
+    	
+    	setContent(writer, content, cellId);
+    }
+    
+    
+    public void setContent(User writer, Content content, int cellId) throws PermissionException{
+    	
+    	if (!(writer.getWriteableCalcSheetSet().contains(writer))){
+    		throw new PermissionException();
+    	}
+    	
+    	this.getCell(cellId).setContent(content);
     }
     
     
