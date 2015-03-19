@@ -12,65 +12,75 @@ import org.joda.time.Seconds;
 
 public class LoginUserTest extends BubbleDocsServiceTest {
 
-    private String jp; // the token for user jp
-    private String root; // the token for user root
+	private String danix; // the token for user danix
+	private String manel; // the token for user manel
+	private String root;  // the token for user root
 
-    private static final String USERNAME = "jp";
-    private static final String PASSWORD = "jp#";
+	private static final String ROOT = "root";
+	private static final String ROOTPASS = "rute";	
+	private static final String USERNAME = "danix";
+	private static final String NON_EXISTING = "spock";
+	private static final String LOGGED_IN = "manel";
+	private static final String PASSWORD = "hunter2";
 
-    @Override
-    public void populate4Test() {
-        createUser(USERNAME, PASSWORD, "João Pereira");
-    }
+	@Overrideregistered	
+	public void populate4Test() {
+		createUser(ROOT, ROOTPASS, "Super User");
+		createUser(USERNAME, PASSWORD, "Marcos Pires");
+		createUser(LOGGED_IN_USER, PASSWORD, "Manuel da Silva");
+		manel = loginUser(LOGGED_IN_USER);
+	}
 
-    // returns the time of the last access for the user with token userToken.
-    // It must get this data from the session object of the application
-    private LocalTime getLastAccessTimeInSession(String userToken) {
-	// add code here
-    }
+	// returns the time of the last access for the user with token userToken.
+	// It must get this data from the session object of the application
+	private LocalTime getLastAccessTimeInSession(String userToken) {
+		// add code here
+	}
 
-    @Test
-    public void success() {
-        LoginUser service = new LoginUser(USERNAME, PASSWORD);
-        service.execute();
-	LocalTime currentTime = new LocalTime();
-	
-	String token = service.getUserToken();
+	@Test
+	public void success() {
+		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		service.execute();
+		LocalTime currentTime = new LocalTime();
 
-        User user = getUserFromSession(service.getUserToken());
-        assertEquals(USERNAME, user.getUsername());
+		String token = service.getUserToken();
 
-	int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
+		User user = getUserFromSession(service.getUserToken());
+		assertEquals(USERNAME, user.getUsername());
 
-	assertTrue("Access time in session not correctly set", difference >= 0);
-	assertTrue("diference in seconds greater than expected", difference < 2);
-    }
+		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
 
-    @Test
-    public void successLoginTwice() {
-        LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		assertTrue("Access time in session not correctly set", difference >= 0);
+		assertTrue("diference in seconds greater than expected", difference < 4);
+	}
 
-        service.execute();
-        String token1 = service.getUserToken();
+	@Test
+	public void successLoginTwice() {
+		LoginUser service = new LoginUser(USERNAME, PASSWORD);
 
-        service.execute();
-        String token2 = service.getUserToken();
+		service.execute();
+		String token1 = service.getUserToken();
 
-        User user = getUserFromSession(token1);
-        assertNull(user);
-        user = getUserFromSession(token2);
-        assertEquals(USERNAME, user.getUsername());
-    }
+		service.execute();
+		String token2 = service.getUserToken();
 
-    @Test(expected = UnknownBubbleDocsUserException.class)
-    public void loginUnknownUser() {
-        LoginUser service = new LoginUser("jp2", "jp");
-        service.execute();
-    }
+		//User user = getUserFromSession(token1);
+		//assertNull(user);
+		//user = getUserFromSession(token2);
+		//assertEquals(USERNAME, user.getUsername());
+		
+		assertEquals(token1, token2);		
+	}
 
-    @Test(expected = WrongPasswordException.class)
-    public void loginUserWithinWrongPassword() {
-        LoginUser service = new LoginUser(USERNAME, "jp2");
-        service.execute();
-    }
+	@Test(expected = UnknownBubbleDocsUserException.class)
+	public void loginUnknownUser() {
+		LoginUser service = new LoginUser("jp2", "jp");
+		service.execute();
+	}
+
+	@Test(expected = WrongPasswordException.class)
+	public void loginUserWithinWrongPassword() {
+		LoginUser service = new LoginUser(USERNAME, "jp2");
+		service.execute();
+	}
 }
