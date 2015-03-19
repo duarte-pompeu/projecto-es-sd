@@ -72,7 +72,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param name the user's user name
 	 * @return The desired user. If it is not found, a NotFoundException is thrown.
 	 */
-	public User getUser(String username) {
+	public User getUser(String username) throws NotFoundException {
 
 		for(User tempUser: this.getUserSet()){
 			if (tempUser.getUserName().equals(username)){

@@ -222,7 +222,7 @@ public class BubbleApplication {
 	 * @param substring
 	 * @return
 	 */
-	public static User getUser(BubbleDocs bd, String username) throws NotFoundException{
+	public static User getUser(BubbleDocs bd, String username) {
 			
 			return bd.getUser(username);
 		}

@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.exceptions;
 
-public class BubbleDocsException extends Exception {
+public class BubbleDocsException extends RuntimeException {
 
 	private static final long serialVersionUID = -3443130309722963275L;
 
