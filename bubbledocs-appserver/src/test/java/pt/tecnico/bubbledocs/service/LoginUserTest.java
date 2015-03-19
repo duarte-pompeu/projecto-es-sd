@@ -1,22 +1,19 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.joda.time.LocalTime;
 import org.joda.time.Seconds;
 
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.Session;
+import pt.tecnico.bubbledocs.dml.*;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
 
 // add needed import declarations
 public class LoginUserTest extends BubbleDocsServiceTest {
 
-	private String danix; // the token for user danix
 	private String manel; // the token for user manel
-	private String root;  // the token for user root
 
 	private static final String USERNAME = "danix";
 	private static final String NON_EXISTING = "spock";
@@ -47,7 +44,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LocalTime currentTime = new LocalTime();
 		String token = service.getUserToken();
 		User user = getUserFromSession(token);
-		assertEquals(USERNAME, user.getUsername());
+		assertEquals(USERNAME, user.getUserName());
 
 		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
 
@@ -63,15 +60,18 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		String token1 = service.getUserToken();
 		LocalTime access1 = getLastAccessTimeInSession(token1);
 		
-		Thread.sleep(1453); //Κωνσταντινούπολη έπεσε!
+		try {
+			Thread.sleep(1453); //Κωνσταντινούπολη έπεσε!
+		} catch (InterruptedException e) {/*good luck with that*/}
 
 		service.execute();
 		String token2 = service.getUserToken();
 		LocalTime access2 = getLastAccessTimeInSession(token2);
 		
-		int difference = Seconds.secondsBetween(access1, access2).getSeconds()
+		int difference = Seconds.secondsBetween(access1, access2).getSeconds();
 		
 		assertEquals("Tokens don't change", token1, token2);
+		assertEquals("Tokens are like the first login", token1, manel);
 		assertTrue("Tokens were touched", difference > 0);
 	}
 

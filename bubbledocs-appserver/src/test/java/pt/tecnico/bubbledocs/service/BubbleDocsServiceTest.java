@@ -8,8 +8,7 @@ import org.junit.Before;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.Session;
+import pt.tecnico.bubbledocs.dml.*;
 
 // add needed import declarations
 
@@ -46,24 +45,28 @@ public class BubbleDocsServiceTest {
     	return BubbleDocs.getInstance().addUser(username, name, password);
     }
 
-    public SpreadSheet createSpreadSheet(User user, String name, int row,
+    public CalcSheet createSpreadSheet(User user, String name, int row,
             int column) {
 	// add code here
+    	return null;
     }
 
     // returns a spreadsheet whose name is equal to name
-    public SpreadSheet getSpreadSheet(String name) {
+    public CalcSheet getSpreadSheet(String name) {
 	// add code here
+    	return null;
     }
 
     // returns the user registered in the application whose username is equal to username
     User getUserFromUsername(String username) {
 	// add code here
+    	return null;
     }
 
     // put a user into session and returns the token associated to it
     String addUserToSession(String username) {
 	// add code here
+    	return null;
     }
 
     // remove a user from session given its token
