@@ -60,13 +60,13 @@ public class BubbleDocsServiceTest {
     // returns the user registered in the application whose username is equal to username
     User getUserFromUsername(String username) {
 	// add code here
-    	return null;
+    	return BubbleDocs.getInstance().getUser(username);
     }
 
     // put a user into session and returns the token associated to it
     String addUserToSession(String username) {
-	// add code here
-    	return null;
+    	User user = BubbleDocs.getInstance().getUser(username);
+    	return BubbleDocs.getInstance().addSession(user);
     }
 
     // remove a user from session given its token

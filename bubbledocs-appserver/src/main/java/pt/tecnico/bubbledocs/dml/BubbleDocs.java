@@ -42,7 +42,8 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @return this random number generator
 	 */
 	public Random getRng() {
-		return rng;
+		if (rng == null) this.rng = new Random();
+		return this.rng;
 	}
 
 

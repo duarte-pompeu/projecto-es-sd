@@ -2,6 +2,8 @@ package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 import org.joda.time.LocalTime;
@@ -38,18 +40,23 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void successNewToken() {
+		assertNull("The user was not logged in", getUserFromUsername(USERNAME).getSession());
+		
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
 		service.execute(); //it shouldn't explode here.
 		
 		LocalTime currentTime = new LocalTime();
 		String token = service.getUserToken();
 		User user = getUserFromSession(token);
-		assertEquals(USERNAME, user.getUserName());
 
 		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
 
 		assertTrue("Access time in session is correctly set", difference >= 0);
-		assertTrue("diference in seconds greater than expected", difference < 2);
+		assertTrue("Diference in seconds greater than expected", difference < 2);
+		assertNotEquals("Token is different", token, manel);
+		assertEquals("Usernames match", USERNAME, user.getUserName());
+		assertEquals("Password match", PASSWORD, user.getPassword());
+		assertEquals("Token match", token, user.getSession().getToken());
 	}
 
 	@Test
