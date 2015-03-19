@@ -7,6 +7,7 @@ import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
@@ -15,22 +16,34 @@ public class AssignLiteralCell extends BubbleDocsService{
     private String accessUsername;
     private int docId;
     private int cellId;
-    Integer literal;
+    String literal;
 
-    // TODO:AssignLiteralCell: finish service
-    // TODO:AssignLiteralCell: test
-    public AssignLiteralCell(String accessUsername, int docId, int cellId, int literal) {
+    
+    //TODO: revert method signature to example signature?
+    public AssignLiteralCell(String accessUsername, int docId, int cellId, String literal) {
     	
     	this.accessUsername = accessUsername;
     	this.docId = docId;
     	this.cellId = cellId;
     	this.literal = literal;
     }
-
+    
+    // TODO:AssignLiteralCell: finish service
+    // TODO:AssignLiteralCell: TEST TEST TEST
     @Override
     public void dispatch() throws BubbleDocsException {
-    	//TODO: make sure it's a literal
+    	Integer literal_val;
+    	// check if literal string translates to an int
+    	try{
+    		literal_val = Integer.valueOf(literal);
+    	}
+    	catch (NumberFormatException NFEexception){
+    		throw new InvalidFormatException(literal + " isnt an integer.");
+    	}
     	
+    	//TODO: check if token is in session
+    	
+    	// check if doc exists
     	BubbleDocs bd = BubbleDocs.getInstance();
     	CalcSheet cs = null;
     	for(CalcSheet tempCs: bd.getCalcSheetSet()){
@@ -42,21 +55,24 @@ public class AssignLiteralCell extends BubbleDocsService{
     	if(cs == null){
     		throw new NotFoundException("can't find calcsheet with ID " + docId + ".");
     	}
+    	//TODO: check if user has write access
+    	
+    	// check if cell exists
     	if(!cs.hasCell(Integer.valueOf(cellId))){
     		throw new NotFoundException("can't find cell with ID " + docId + ".");
     	}
     	
-    	//TODO: make sure it's a literal
-    	Literal content = new Literal(literal);
+    	//TODO: check if cell is protected
+    	
+    	
+    	
+    	Literal content = new Literal(literal_val);
     	User user = bd.getUser(accessUsername);
     	
     	// FIXME: AssignLiteralCell: this is a weird way to get a cell line and column
     	// we find the cell, get the object, and then access it again
     	Cell cell = cs.getCell(cellId);
-    	try{
-    		cs.setContent(user, content, cell.getLine(), cell.getColumn());
-    	}
-    	catch (PermissionException permException){	throw permException;	}
+    	cs.setContent(user, content, cell.getLine(), cell.getColumn());
     }
 
     public String getResult() {
