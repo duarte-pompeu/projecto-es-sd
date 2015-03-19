@@ -30,8 +30,8 @@ class Cell {
 
 class Session {
   String token;
-  DateTime access;
-  DateTime expiration;
+  LocalTime access;
+  LocalTime expiration;
 }
 
 class Content;
