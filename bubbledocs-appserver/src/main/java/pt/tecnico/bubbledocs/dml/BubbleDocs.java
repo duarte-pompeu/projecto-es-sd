@@ -180,6 +180,15 @@ public class BubbleDocs extends BubbleDocs_Base {
 		this.addSession(newSession);
 		return newSession.getToken();
 	}
+	
+	public Session getSessionFromToken(String token) {
+		for (Session session : this.getSessionSet()) {
+				if (session.getToken().equals(token))
+					return session;
+		}
+		
+		return null;
+	}
 
 	/**
 	 * @param userName

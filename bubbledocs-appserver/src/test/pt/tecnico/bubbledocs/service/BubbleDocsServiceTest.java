@@ -8,6 +8,8 @@ import org.junit.Before;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
+import pt.tecnico.bubbledocs.dml.BubbleDocs;
+import pt.tecnico.bubbledocs.dml.Session;
 
 // add needed import declarations
 
@@ -41,7 +43,7 @@ public class BubbleDocsServiceTest {
     // auxiliary methods that access the domain layer and are needed in the test classes
     // for defining the iniital state and checking that the service has the expected behavior
     User createUser(String username, String password, String name) {
-	// add code here
+    	return BubbleDocs.getInstance().addUser(username, name, password);
     }
 
     public SpreadSheet createSpreadSheet(User user, String name, int row,
@@ -71,7 +73,11 @@ public class BubbleDocsServiceTest {
 
     // return the user registered in session whose token is equal to token
     User getUserFromSession(String token) {
-	// add code here
+    	return getSessionFromToken(token).getUser();
+    }
+
+    Session getSessionFromToken(String token) {
+    	return BubbleDocs.getInstance().getSessionFromToken(token);
     }
 
 }
