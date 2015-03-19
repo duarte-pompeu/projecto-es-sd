@@ -96,8 +96,9 @@ public class CalcSheet extends CalcSheet_Base {
      * @param line
      * @param column
      * 
-     * Only used to convert a line and column to a cellID.
-     * Then directs the work to setContent(User writer, Content content, int cellId)
+     * Only used to convert a line and column to a cellID. 
+     * Then directs the hard work (checking permissions and writing on cell) 
+     * to setContent(User writer, Content content, int cellId)
      */
     public void setContent(User writer, Content content, int line, int column)
     	throws PermissionException{    	
@@ -108,6 +109,15 @@ public class CalcSheet extends CalcSheet_Base {
     	setContent(writer, content, cellId);
     }
     
+    /**
+     * 
+     * @param writer
+     * @param content
+     * @param cellId
+     * @throws PermissionException
+     * 
+     * Sets cell content if user has enough permissions.
+     */
     
     public void setContent(User writer, Content content, int cellId) throws PermissionException{
     	
