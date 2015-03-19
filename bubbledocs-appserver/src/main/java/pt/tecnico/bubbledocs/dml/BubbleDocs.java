@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs.dml;
 
 import pt.tecnico.bubbledocs.exceptions.*;
 import pt.ist.fenixframework.FenixFramework;
-
 import java.util.Random;
 
 /**
