@@ -72,7 +72,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param name the user's user name
 	 * @return The desired user. If it is not found, a NotFoundException is thrown.
 	 */
-	public User getUser(String username) throws NotFoundException {
+	public User getUser(String username) {
 
 		for(User tempUser: this.getUserSet()){
 			if (tempUser.getUserName().equals(username)){
@@ -187,10 +187,26 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param password
 	 * @return
 	 */
-	public User addUser(String userName, String name, String password) {
+	public User addUser(String username, String name, String password) {
 		//TODO
 		//throw RepeatedIdentificationException case userName already exists
-		return null;
+
+		//if the user already exists, don't create a new one. 
+		try {
+			User user = getUser(username);
+			throw new RepeatedIdentificationException();
+		} catch (NotFoundException e) {} //Hmm, this isn't very natural code. should this return null?
+		
+		User newuser;
+		
+		if (username.equals("root"))
+			newuser = new SuperUser(username, name, password);
+		else
+			newuser = new User(username, name, password);
+		
+		BubbleDocs.getInstance().addUser(newuser);
+		
+		return newuser;
 	}
 
 	/**
