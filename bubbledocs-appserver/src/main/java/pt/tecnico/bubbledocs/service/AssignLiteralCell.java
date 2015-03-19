@@ -9,7 +9,6 @@ import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
