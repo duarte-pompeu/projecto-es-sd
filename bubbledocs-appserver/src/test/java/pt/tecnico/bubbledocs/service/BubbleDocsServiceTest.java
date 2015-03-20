@@ -50,8 +50,11 @@ public class BubbleDocsServiceTest {
 
     public CalcSheet createSpreadSheet(User user, String name, int row,
             int column) {
-	// add code here
-    	return null;
+		BubbleDocs bd = BubbleDocs.getInstance();
+		CalcSheet cs = user.createCalcSheet(name, row, column);
+		bd.addCalcSheet(cs);
+    	
+		return cs;
     }
 
     // returns a spreadsheet whose name is equal to name

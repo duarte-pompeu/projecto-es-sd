@@ -72,7 +72,7 @@ public class CalcSheet extends CalcSheet_Base {
      * @param id
      * @return
      */
-    public boolean hasCell(int id) {
+    public boolean hasCell(String id) {
 
     	for(Cell c : this.getCellSet()) {
     		if(c.getId().equals(id))

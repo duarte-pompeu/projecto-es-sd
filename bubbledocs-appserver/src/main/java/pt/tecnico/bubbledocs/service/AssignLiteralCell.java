@@ -14,12 +14,12 @@ public class AssignLiteralCell extends BubbleDocsService{
     private String result;
     private String accessUsername;
     private int docId;
-    private int cellId;
+    private String cellId;
     String literal;
 
     
     //TODO: revert method signature to example signature?
-    public AssignLiteralCell(String accessUsername, int docId, int cellId, String literal) {
+    public AssignLiteralCell(String accessUsername, int docId, String cellId, String literal) {
     	
     	this.accessUsername = accessUsername;
     	this.docId = docId;
@@ -57,7 +57,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     	//TODO: check if user has write access
     	
     	// check if cell exists
-    	if(!cs.hasCell(Integer.valueOf(cellId))){
+    	if(!cs.hasCell(cellId)){
     		throw new NotFoundException("can't find cell with ID " + docId + ".");
     	}
     	

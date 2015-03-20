@@ -23,7 +23,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	private final int SH_ROWS = 10;
 	private final int SH_LINES = 10;
 	
-	private int CELL_ID0;
+	private String CELL_ID0;
 	private final int VAL0 = 0;
 	private final String LIT0 = "0";
 
@@ -54,7 +54,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		
 		// TODO:
 		//make sure this is an impossible cellID
-		int bad_cell_id = -123;
+		String bad_cell_id = "123";
 		
 		AssignLiteralCell service = new AssignLiteralCell(userName, docId, bad_cell_id, int_as_string);
 		service.dispatch();
