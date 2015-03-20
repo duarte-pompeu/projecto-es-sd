@@ -55,13 +55,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
 
-		assertTrue("Access time in session is correctly set", difference >= 0);
+		assertTrue("Access time in session is not correctly set", difference >= 0);
 		assertTrue("Diference in seconds greater than expected", difference < 2);
-		assertNotEquals("Token is different", token, manel);
-		assertEquals("Usernames match", USERNAME, user.getUserName());
-		assertEquals("Password match", PASSWORD, user.getPassword());
-		assertEquals("Token match", token, user.getSession().getToken());
-		assertFalse("User is not Super User", user instanceof SuperUser);
+		assertNotEquals("Didn't generate a different token", token, manel); //P(failure) = The sun doesn't rise.
+		assertEquals("Usernames don't match", USERNAME, user.getUserName());
+		assertEquals("Password don't match", PASSWORD, user.getPassword());
+		assertEquals("Token doesn't match", token, user.getSession().getToken());
+		assertFalse("User shouldn't be SuperUser", user instanceof SuperUser);
 	}
 
 	@Test
@@ -73,6 +73,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LocalTime access1 = getLastAccessTimeInSession(token1);
 		
 		try {
+			//Wait at least one second.
 			Thread.sleep(1453); //Κωνσταντινούπολη έπεσε!
 		} catch (InterruptedException e) {/*good luck with that*/}
 
@@ -82,9 +83,9 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		int difference = Seconds.secondsBetween(access1, access2).getSeconds();
 		
-		assertEquals("Tokens don't change", token1, token2);
-		assertEquals("Tokens are like the first login", token1, manel);
-		assertTrue("Tokens were touched", difference > 0);
+		assertEquals("Tokens are not supposed to change", token1, token2);
+		assertEquals("Token is different from previous login", token1, manel);
+		assertTrue("Tokens were not touched", difference > 0);
 	}
 	
 	@Test
@@ -94,7 +95,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		User supah = getUserFromSession(service.getUserToken());
 		
-		assertTrue("User is SuperUser", supah instanceof SuperUser);
+		assertTrue("Root should be an instance of SuperUser", supah instanceof SuperUser);
 	}
 
 	@Test(expected = LoginException.class)
