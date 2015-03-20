@@ -9,7 +9,6 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
-import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
@@ -18,6 +17,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	private final String U_USERNAME = "jubileu";
 	private final String U_PASS = "password";
 	private final String U_NAME = "Jubileu Mandafacas";
+	private String U_TOKEN;
 	
 	private User USER;
 	
@@ -35,7 +35,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	@Override
 	public void populate4Test(){
 		USER = createUser(U_USERNAME, U_PASS, U_NAME);
-		addUserToSession(U_USERNAME);
+		U_TOKEN = addUserToSession(U_USERNAME);
 		
 		CS_SHEET = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
 		CS_ID = CS_SHEET.getId();
@@ -45,7 +45,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void populateSuccess(){
-		AssignLiteralCell service = new AssignLiteralCell(U_USERNAME, CS_ID, CELL_ID0, LIT0);
+		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 		
 		assertEquals("Owner is correct", 
@@ -62,7 +62,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String literal_str = "0";
 		String bad_cell_id = "123";
 		
-		AssignLiteralCell service = new AssignLiteralCell (U_USERNAME, CS_ID, bad_cell_id, literal_str);
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, literal_str);
 		service.dispatch();
 	}
 	
@@ -74,7 +74,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String bad_cell_id = lines + ";1";
 		
 		assertTrue(CS_SHEET.getLines() < lines);
-		AssignLiteralCell service = new AssignLiteralCell (U_USERNAME, CS_ID, bad_cell_id, literal_str);
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, literal_str);
 		service.dispatch();
 	}
 	
@@ -83,7 +83,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void docDoesntExist(){
 		int bad_doc_id = -123;
 		
-		AssignLiteralCell service = new AssignLiteralCell(U_USERNAME, bad_doc_id, CELL_ID0, LIT0);
+		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_doc_id, CELL_ID0, LIT0);
 		service.dispatch();
 	}
 	
@@ -97,7 +97,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		//FIXME: this isn't a proper way to change protection
 		cell.setProtect(true);
 		
-		AssignLiteralCell service = new AssignLiteralCell(U_USERNAME, CS_ID, CELL_ID0, LIT0);
+		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
 		try{
 			service.dispatch();
 		}
@@ -111,9 +111,9 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	@Test(expected = PermissionException.class)
 	public void noWriteAccess(){
 		User data_spy = createUser("NSA", "password", "National Security Agency");
-		addUserToSession(U_USERNAME);
+		String spy_token = addUserToSession(data_spy.getUserName());
 		
-		AssignLiteralCell service = new AssignLiteralCell(data_spy.getUserName(), CS_ID, CELL_ID0, LIT0);
+		AssignLiteralCell service = new AssignLiteralCell(spy_token, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 		
 	}

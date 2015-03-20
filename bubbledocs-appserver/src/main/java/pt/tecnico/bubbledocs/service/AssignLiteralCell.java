@@ -8,20 +8,21 @@ import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
-    private String accessUsername;
+    private String accessToken;
     private int docId;
     private String cellId;
     String literal;
 
     
     //TODO: revert method signature to example signature?
-    public AssignLiteralCell(String accessUsername, int docId, String cellId, String literal) {
+    public AssignLiteralCell(String accessToken, int docId, String cellId, String literal) {
     	
-    	this.accessUsername = accessUsername;
+    	this.accessToken = accessToken;
     	this.docId = docId;
     	this.cellId = cellId;
     	this.literal = literal;
@@ -41,9 +42,19 @@ public class AssignLiteralCell extends BubbleDocsService{
     	}
     	
     	//TODO: check if token is in session
+    	BubbleDocs bd = BubbleDocs.getInstance();
+    	User user;
+    	try{
+    		user = bd.getSessionFromToken(accessToken).getUser();
+    	}
+    	catch(LoginException LEexcept){
+    		throw LEexcept;
+    	}
     	
     	// check if doc exists
-    	BubbleDocs bd = BubbleDocs.getInstance();
+    	
+  
+    			
     	CalcSheet cs = null;
     	for(CalcSheet tempCs: bd.getCalcSheetSet()){
     		if(tempCs.getId() == docId){
@@ -54,6 +65,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     	if(cs == null){
     		throw new NotFoundException("can't find calcsheet with ID " + docId + ".");
     	}
+    	
     	//TODO: check if user has write access
     	
     	// check if cell exists
@@ -64,14 +76,10 @@ public class AssignLiteralCell extends BubbleDocsService{
     	//TODO: check if cell is protected
     	
     	
-    	
-    	Literal content = new Literal(literal_val);
-    	User user = bd.getUser(accessUsername);
-    	
     	// FIXME: AssignLiteralCell: this is a weird way to get a cell line and column
     	// we find the cell, get the object, and then access it again
     	Cell cell = cs.getCell(cellId);
-    	cs.setContent(user, content, cell.getLine(), cell.getColumn());
+    	cs.setContent(user, new Literal(literal_val), cell.getLine(), cell.getColumn());
     }
 
     public String getResult() {
