@@ -6,6 +6,7 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
+import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 /**
  * @author Diogo, Marcos, Tiago, Duarte
@@ -186,12 +187,20 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public Session getSessionFromToken(String token) {
-		for (Session session : this.getSessionSet()) {
-				if (session.getToken().equals(token))
-					return session;
+		Session session = null;
+		
+		for (Session s : this.getSessionSet()) {
+				if (s.getToken().equals(token)) {
+					session = s;
+					break;
+				}
+		}
+		if (session == null || session.isExpired()) {
+			this.refreshSessions();
+			throw new UserNotInSessionException();
 		}
 		
-		return null;
+		return session;
 	}
 
 	/**
