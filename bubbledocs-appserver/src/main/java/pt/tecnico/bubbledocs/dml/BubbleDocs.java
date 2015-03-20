@@ -185,21 +185,22 @@ public class BubbleDocs extends BubbleDocs_Base {
 		this.addSession(newSession);
 		return newSession.getToken();
 	}
-	
+
 	public Session getSessionFromToken(String token) {
 		Session session = null;
-		
+
 		for (Session s : this.getSessionSet()) {
-				if (s.getToken().equals(token)) {
-					session = s;
-					break;
-				}
+			if (s.getToken().equals(token)) {
+				session = s;
+				break;
+			}
 		}
+		
 		if (session == null || session.isExpired()) {
 			this.refreshSessions();
 			throw new UserNotInSessionException();
 		}
-		
+
 		return session;
 	}
 

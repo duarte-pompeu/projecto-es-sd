@@ -10,6 +10,7 @@ import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
@@ -49,7 +50,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     	try{
     		user = bd.getSessionFromToken(accessToken).getUser();
     	}
-    	catch(LoginException LEexcept){
+    	catch(UserNotInSessionException LEexcept){
     		throw LEexcept;
     	}
     	
