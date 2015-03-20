@@ -1,27 +1,31 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.dml.CalcSheet;
+import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class AssignLiteralCellTest extends BubbleDocsServiceTest {
-	String userName;
-	int docId;
 	
-	private final String U_NAME = "jubileu";
+	private final String U_USERNAME = "jubileu";
 	private final String U_PASS = "password";
+	private final String U_NAME = "Jubileu Mandafacas";
 	
 	private User USER;
 	
-	private CalcSheet SH_SHEET;
-	private int SH_ID;
-	private final String SH_NAME = "Cabulas ES";
-	private final int SH_ROWS = 10;
-	private final int SH_LINES = 10;
+	private CalcSheet CS_SHEET;
+	private int CS_ID;
+	private final String CS_NAME = "Cabulas ES";
+	private final int CS_ROWS = 10;
+	private final int CS_LINES = 10;
 	
 	private String CELL_ID0;
 	private final int VAL0 = 0;
@@ -29,60 +33,88 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 	
 	@Override
-	// TODO: login user before inserting
-	// TODO: create a calcsheet
 	public void populate4Test(){
-		USER = createUser(U_NAME, U_PASS, "Jubileu Mandafacas");
-		addUserToSession(U_NAME);
+		USER = createUser(U_USERNAME, U_PASS, U_NAME);
+		addUserToSession(U_USERNAME);
 		
-		SH_SHEET = createSpreadSheet(USER, SH_NAME, SH_ROWS, SH_LINES);
-		SH_ID = SH_SHEET.getId();
-		CELL_ID0 = SH_SHEET.getCell(1, 1).getId();
+		CS_SHEET = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
+		CS_ID = CS_SHEET.getId();
+		CELL_ID0 = CS_SHEET.getCell(1, 1).getId();
 	}
 	
 	
 	@Test
-	public void simpleSuccess(){
-		AssignLiteralCell service = new AssignLiteralCell(U_NAME, SH_ID, CELL_ID0, LIT0);
+	public void populateSuccess(){
+		AssignLiteralCell service = new AssignLiteralCell(U_USERNAME, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 		
-		assertEquals("Owner is correct", U_NAME, getSpreadSheet(SH_NAME).getCreator().getUserName());
-		assertEquals(VAL0, SH_SHEET.getCell(CELL_ID0).getContent().getValue());
+		assertEquals("Owner is correct", 
+				U_USERNAME, getSpreadSheet(CS_NAME).getCreator().getUserName());
+		assertEquals("Cell ID is correct",
+				CELL_ID0, CS_SHEET.getCell(CELL_ID0).getId());
+		assertEquals("Value is correct", 
+				VAL0, CS_SHEET.getCell(CELL_ID0).getContent().getValue());
 	}
 	
 	
-	@Test(expected = BubbleDocsException.class)
+	@Test(expected = NotFoundException.class)
 	public void cellDoesntExist(){
-		String int_as_string = "0";
-		
-		// if you change this value, make sure it remains a BAD cell id
+		String literal_str = "0";
 		String bad_cell_id = "123";
 		
-		AssignLiteralCell service = new AssignLiteralCell (userName, docId, bad_cell_id, int_as_string);
+		AssignLiteralCell service = new AssignLiteralCell (U_USERNAME, CS_ID, bad_cell_id, literal_str);
 		service.dispatch();
 	}
 	
 	
-	@Test(expected = BubbleDocsException.class)
+	@Test(expected = NotFoundException.class)
+	public void cellOutOfBonds(){
+		int lines = 100;
+		String literal_str = "0";
+		String bad_cell_id = lines + ";1";
+		
+		assertTrue(CS_SHEET.getLines() < lines);
+		AssignLiteralCell service = new AssignLiteralCell (U_USERNAME, CS_ID, bad_cell_id, literal_str);
+		service.dispatch();
+	}
+	
+	
+	@Test(expected = NotFoundException.class)
 	public void docDoesntExist(){
-		// make sure this doesnt exist
-		int bad_doc = -123;
+		int bad_doc_id = -123;
 		
-		AssignLiteralCell service = new AssignLiteralCell(U_NAME, bad_doc, CELL_ID0, LIT0);
+		AssignLiteralCell service = new AssignLiteralCell(U_USERNAME, bad_doc_id, CELL_ID0, LIT0);
 		service.dispatch();
 	}
 	
 	
-	@Test(expected = BubbleDocsException.class)
-	//TODO: ALCTest complete stub method
+	//FIXME: do we even have methods to protect cells?
+	@Test(expected = PermissionException.class)
 	public void cellIsProtected(){
+		Cell cell = CS_SHEET.getCell(CELL_ID0);
+		assertNotNull(cell);
 		
+		//FIXME: this isn't a proper way to change protection
+		cell.setProtect(true);
+		
+		AssignLiteralCell service = new AssignLiteralCell(U_USERNAME, CS_ID, CELL_ID0, LIT0);
+		try{
+			service.dispatch();
+		}
+		catch(PermissionException Permexcept){
+			cell.setProtect(false);
+			throw Permexcept;
+		}
 	}
 	
 	
-	@Test(expected = BubbleDocsException.class)
-	//TODO: ALCTest complete stub method
+	@Test(expected = PermissionException.class)
 	public void noWriteAccess(){
+		User data_spy = createUser("NSA", "password", "National Security Agency");
+		addUserToSession(U_USERNAME);
+		
+		AssignLiteralCell service = new AssignLiteralCell(data_spy.getUserName(), CS_ID, CELL_ID0, LIT0);
+		service.dispatch();
 		
 	}
 }
