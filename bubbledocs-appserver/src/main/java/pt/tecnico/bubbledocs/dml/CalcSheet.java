@@ -125,11 +125,29 @@ public class CalcSheet extends CalcSheet_Base {
     
     public void setContent(User writer, Content content, String cellId) throws PermissionException{
     	
-    	if (!(writer.getWriteableCalcSheetSet().contains(writer))){
+    	// the line below doesnt seem to make sense, I changed the verification
+    	// -Duarte
+    	//if (!(writer.getWriteableCalcSheetSet().contains(writer))){
+    	if(!allowedToWrite(writer)){
     		throw new PermissionException();
     	}
     	
     	this.getCell(cellId).setContent(content);
+    }
+    
+    /**
+     * Authors: Duarte
+     * Checks if user has writer permissions over referenced sheet.
+     * @param writer
+     * @return
+     */
+    public boolean allowedToWrite(User user){
+    	for(CalcSheet cs: user.getWriteableCalcSheetSet()){
+    		if(cs.getId().equals(this.getId()))
+    			return true;
+    	}
+    	
+    	return false;
     }
     
     
