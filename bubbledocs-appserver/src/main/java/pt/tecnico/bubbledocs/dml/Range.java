@@ -111,7 +111,7 @@ public class Range extends Range_Base implements Iterable<Cell>{
     	
     	Element cell1=cells.get(0);
     	Cell cell;
-    	int id= Integer.parseInt(cell1.getAttributeValue("id"));
+    	String id= cell1.getAttributeValue("id");
     	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
     		this.setLeftUpCell(cell);
     	}
@@ -125,7 +125,7 @@ public class Range extends Range_Base implements Iterable<Cell>{
 
     	Element cell2=cells.get(1);
     	
-    	id= Integer.parseInt(cell2.getAttributeValue("id"));
+    	id= cell2.getAttributeValue("id");
     	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
     		this.setRightDownCell(cell);
     	}

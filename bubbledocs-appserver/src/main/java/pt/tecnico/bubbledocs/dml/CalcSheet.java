@@ -58,10 +58,10 @@ public class CalcSheet extends CalcSheet_Base {
     	return this.getCellByIndex(line, column); 
     }
 
-    public Cell getCell(int id) {
+    public Cell getCell(String id) {
 
     	for(Cell c : this.getCellSet()) {
-    		if(c.getId().intValue()==id)
+    		if(c.getId().equals(id))
     			return c;
     	}
     	return null;
@@ -75,7 +75,7 @@ public class CalcSheet extends CalcSheet_Base {
     public boolean hasCell(int id) {
 
     	for(Cell c : this.getCellSet()) {
-    		if(c.getId().intValue()==id)
+    		if(c.getId().equals(id))
     			return true;
     	}
     	return false;
@@ -108,7 +108,7 @@ public class CalcSheet extends CalcSheet_Base {
     	throws PermissionException{    	
     	
     	Cell cell = this.getCellByIndex(line, column);
-    	int cellId = cell.getId();
+    	String cellId = cell.getId();
     	
     	setContent(writer, content, cellId);
     }
@@ -123,7 +123,7 @@ public class CalcSheet extends CalcSheet_Base {
      * Sets cell content if user has enough permissions.
      */
     
-    public void setContent(User writer, Content content, int cellId) throws PermissionException{
+    public void setContent(User writer, Content content, String cellId) throws PermissionException{
     	
     	if (!(writer.getWriteableCalcSheetSet().contains(writer))){
     		throw new PermissionException();

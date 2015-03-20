@@ -97,14 +97,15 @@ public class BubbleApplication {
 			committed = true;
 
 		}catch (SystemException | NotSupportedException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
-			System.err.println("Error in execution of transaction: " + ex);
+			ex.printStackTrace();
 		} finally {
-			if (!committed) 
+			if (!committed){ 
 				try {
 					tm.rollback();
 				} catch (SystemException ex) {
 					System.err.println("Error in roll back of transaction: " + ex);
 				}
+			}
 		}
 	}
 	

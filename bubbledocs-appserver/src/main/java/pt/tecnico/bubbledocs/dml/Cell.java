@@ -45,7 +45,10 @@ public class Cell extends Cell_Base {
 	public void init(int line, int column, Content content){
 		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
-        this.setId(new Integer(line*column+line));
+        String newId = String.valueOf(line) + ";" +	
+        			String.valueOf(column);
+        this.setId(newId);
+        
         if(content!=null){
         	this.setContent(content);
         	this.setContentRepresentation(content.toString());
