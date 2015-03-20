@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotEquals;
 
@@ -17,6 +18,8 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	private String manel; // the token for user manel
 
+	private static final String ROOT = "root";
+	private static final String ROOT_PASS = "rute";	
 	private static final String USERNAME = "danix";
 	private static final String NON_EXISTING = "spock";
 	private static final String LOGGED_IN = "manel";
@@ -26,6 +29,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
+		createUser(ROOT, ROOT_PASS, "Super User");
 		createUser(USERNAME, PASSWORD, "Marcos Pires");
 		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
 		manel = addUserToSession(LOGGED_IN);
@@ -57,6 +61,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertEquals("Usernames match", USERNAME, user.getUserName());
 		assertEquals("Password match", PASSWORD, user.getPassword());
 		assertEquals("Token match", token, user.getSession().getToken());
+		assertFalse("User is not Super User", user instanceof SuperUser);
 	}
 
 	@Test
@@ -80,6 +85,16 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertEquals("Tokens don't change", token1, token2);
 		assertEquals("Tokens are like the first login", token1, manel);
 		assertTrue("Tokens were touched", difference > 0);
+	}
+	
+	@Test
+	public void rootIsSuperUser() {
+		LoginUser service = new LoginUser(ROOT, ROOT_PASS);
+		service.execute();
+		
+		User supah = getUserFromSession(service.getUserToken());
+		
+		assertTrue("User is SuperUser", supah instanceof SuperUser);
 	}
 
 	@Test(expected = LoginException.class)
