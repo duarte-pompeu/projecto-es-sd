@@ -6,10 +6,10 @@ import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
-import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
@@ -31,9 +31,11 @@ public class AssignLiteralCell extends BubbleDocsService{
     // TODO:AssignLiteralCell: finish service
     // TODO:AssignLiteralCell: TEST TEST TEST
     @Override
-    public void dispatch() throws BubbleDocsException {
-    	Integer literal_val;
+    public void dispatch() throws InvalidFormatException, NotFoundException, 
+    	LoginException, PermissionException {
+    	
     	// check if literal string translates to an int
+    	Integer literal_val;
     	try{
     		literal_val = Integer.valueOf(literal);
     	}
@@ -41,7 +43,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     		throw new InvalidFormatException(literal + " isnt an integer.");
     	}
     	
-    	//TODO: check if token is in session
+    	// check if token is in session
     	BubbleDocs bd = BubbleDocs.getInstance();
     	User user;
     	try{
@@ -51,10 +53,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     		throw LEexcept;
     	}
     	
-    	// check if doc exists
-    	
-  
-    			
+    	// check if doc exists	
     	CalcSheet cs = null;
     	for(CalcSheet tempCs: bd.getCalcSheetSet()){
     		if(tempCs.getId() == docId){
@@ -67,6 +66,9 @@ public class AssignLiteralCell extends BubbleDocsService{
     	}
     	
     	//TODO: check if user has write access
+    	if(!cs.allowedToWrite(user)){
+    		throw new PermissionException();
+    	}
     	
     	// check if cell exists
     	if(!cs.hasCell(cellId)){
@@ -74,11 +76,12 @@ public class AssignLiteralCell extends BubbleDocsService{
     	}
     	
     	//TODO: check if cell is protected
-    	
-    	
-    	// FIXME: AssignLiteralCell: this is a weird way to get a cell line and column
-    	// we find the cell, get the object, and then access it again
     	Cell cell = cs.getCell(cellId);
+    	if(cell.getProtect()){
+    		throw new PermissionException();
+    	}
+    	
+    	// finally, set content
     	cs.setContent(user, new Literal(literal_val), cell.getLine(), cell.getColumn());
     }
 

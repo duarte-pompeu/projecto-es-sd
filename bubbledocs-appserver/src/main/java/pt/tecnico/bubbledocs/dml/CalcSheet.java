@@ -125,9 +125,6 @@ public class CalcSheet extends CalcSheet_Base {
     
     public void setContent(User writer, Content content, String cellId) throws PermissionException{
     	
-    	// the line below doesnt seem to make sense, I changed the verification
-    	// -Duarte
-    	//if (!(writer.getWriteableCalcSheetSet().contains(writer))){
     	if(!allowedToWrite(writer)){
     		throw new PermissionException();
     	}
