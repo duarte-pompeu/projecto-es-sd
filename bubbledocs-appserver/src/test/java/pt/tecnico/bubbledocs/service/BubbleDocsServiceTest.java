@@ -59,8 +59,8 @@ public class BubbleDocsServiceTest {
 
     // returns a spreadsheet whose name is equal to name
     public CalcSheet getSpreadSheet(String name) {
-	// add code here
-    	return null;
+		BubbleDocs bd = BubbleDocs.getInstance();
+		return bd.getCalcSheetByName(name);
     }
 
     // returns the user registered in the application whose username is equal to username
