@@ -38,39 +38,47 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		SH_SHEET = createSpreadSheet(USER, SH_NAME, SH_ROWS, SH_LINES);
 		SH_ID = SH_SHEET.getId();
 		CELL_ID0 = SH_SHEET.getCell(1, 1).getId();
-		
 	}
+	
 	
 	@Test
 	public void simpleSuccess(){
 		AssignLiteralCell service = new AssignLiteralCell(U_NAME, SH_ID, CELL_ID0, LIT0);
 		service.dispatch();
+		
+		assertEquals("Owner is correct", U_NAME, getSpreadSheet(SH_NAME).getCreator().getUserName());
 		assertEquals(VAL0, SH_SHEET.getCell(CELL_ID0).getContent().getValue());
 	}
+	
 	
 	@Test(expected = BubbleDocsException.class)
 	public void cellDoesntExist(){
 		String int_as_string = "0";
 		
-		// TODO:
-		//make sure this is an impossible cellID
+		// if you change this value, make sure it remains a BAD cell id
 		String bad_cell_id = "123";
 		
-		AssignLiteralCell service = new AssignLiteralCell(userName, docId, bad_cell_id, int_as_string);
+		AssignLiteralCell service = new AssignLiteralCell (userName, docId, bad_cell_id, int_as_string);
 		service.dispatch();
 	}
 	
-	//TODO: ALCTest complete stub method
+	
 	@Test(expected = BubbleDocsException.class)
 	public void docDoesntExist(){
+		// make sure this doesnt exist
+		int bad_doc = -123;
 		
+		AssignLiteralCell service = new AssignLiteralCell(U_NAME, bad_doc, CELL_ID0, LIT0);
+		service.dispatch();
 	}
+	
 	
 	@Test(expected = BubbleDocsException.class)
 	//TODO: ALCTest complete stub method
 	public void cellIsProtected(){
 		
 	}
+	
 	
 	@Test(expected = BubbleDocsException.class)
 	//TODO: ALCTest complete stub method
