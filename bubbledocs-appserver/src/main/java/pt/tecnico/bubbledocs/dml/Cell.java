@@ -3,7 +3,9 @@ package pt.tecnico.bubbledocs.dml;
 import java.util.List;
 
 import org.jdom2.Element;
+
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 /**
  * @author pc-w
@@ -43,6 +45,7 @@ public class Cell extends Cell_Base {
 	 * @param content
 	 */
 	public void init(int line, int column, Content content){
+		this.setProtect(false);
 		this.setLine(new Integer(line)); 
         this.setColumn(new Integer(column));
         String newId = String.valueOf(line) + ";" +	
@@ -72,7 +75,11 @@ public class Cell extends Cell_Base {
 	 * @see pt.tecnico.bubbledocs.dml.Cell_Base#setContent(pt.tecnico.bubbledocs.dml.Content)
 	 */
 	@Override
-	public void setContent(Content c){
+	public void setContent(Content c) throws PermissionException{
+		if(this.getProtect()){
+			throw new PermissionException("Cell " + getId() + " is protected.");
+		}
+		
 		super.setContent(c);
 		setContentRepresentation(c.toString());
 	}
