@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.dml.*;
 
 
 // add needed import declarations

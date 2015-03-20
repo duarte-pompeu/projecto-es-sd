@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.NullContentException;
+import pt.tecnico.bubbledocs.exceptions.*;
 
 /**
  * @author pc-w

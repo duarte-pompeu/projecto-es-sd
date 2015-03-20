@@ -1,9 +1,13 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.jdom2.Element;
 import org.joda.time.LocalDate;
-import pt.tecnico.bubbledocs.exceptions.*;
-import java.util.*;
+
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 
 

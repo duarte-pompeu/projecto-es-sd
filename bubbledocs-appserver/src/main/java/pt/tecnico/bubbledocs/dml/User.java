@@ -1,7 +1,10 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
-import java.util.*;
 
 /**
  * @author pc-w

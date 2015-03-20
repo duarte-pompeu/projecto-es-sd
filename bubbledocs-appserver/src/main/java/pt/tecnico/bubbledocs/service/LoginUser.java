@@ -1,7 +1,10 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.dml.*;
-import pt.tecnico.bubbledocs.exceptions.*;
+import pt.tecnico.bubbledocs.dml.BubbleDocs;
+import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 public class LoginUser extends BubbleDocsService {
 

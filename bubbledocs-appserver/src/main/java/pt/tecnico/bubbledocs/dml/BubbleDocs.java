@@ -1,8 +1,11 @@
 package pt.tecnico.bubbledocs.dml;
 
-import pt.tecnico.bubbledocs.exceptions.*;
-import pt.ist.fenixframework.FenixFramework;
 import java.util.Random;
+
+import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 
 /**
  * @author Diogo, Marcos, Tiago, Duarte
