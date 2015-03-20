@@ -16,7 +16,7 @@ public class Session extends Session_Base {
     }
     
     public boolean isExpired() {
-    	return this.getExpiration().isBefore(new LocalTime());
+    	return this.getExpiration().isAfter(new LocalTime());
     }
     
     //time is the instant being tested
