@@ -3,14 +3,13 @@ package pt.tecnico.bubbledocs.service;
 // add needed import declarations
 import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
-import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
@@ -50,8 +49,8 @@ public class AssignLiteralCell extends BubbleDocsService{
     	try{
     		user = getSessionFromToken(accessToken).getUser();
     	}
-    	catch(UserNotInSessionException LEexcept){
-    		throw LEexcept;
+    	catch(BubbleDocsException e){
+    		throw e;
     	}
     	
     	// check if doc exists	
