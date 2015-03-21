@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.dml;
 import java.util.Random;
 
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
@@ -196,6 +197,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 			}
 		}
 		
+
 		if (session == null || session.isExpired()) {
 			this.refreshSessions();
 			throw new UserNotInSessionException();
