@@ -7,7 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
-import org.joda.time.LocalTime;
+import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
 import pt.tecnico.bubbledocs.dml.*;
@@ -37,7 +37,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	// returns the time of the last access for the user with token userToken.
 	// It must get this data from the session object of the application
-	private LocalTime getLastAccessTimeInSession(String userToken) {
+	private DateTime getLastAccessTimeInSession(String userToken) {
 		Session s = getSessionFromToken(userToken);
 		return s.getAccess();
 	}
@@ -49,7 +49,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
 		service.execute(); //it shouldn't explode here.
 		
-		LocalTime currentTime = new LocalTime();
+		DateTime currentTime = new DateTime();
 		String token = service.getUserToken();
 		User user = getUserFromSession(token);
 
@@ -70,7 +70,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 		service.execute();
 		String token1 = service.getUserToken();
-		LocalTime access1 = getLastAccessTimeInSession(token1);
+		DateTime access1 = getLastAccessTimeInSession(token1);
 		
 		try {
 			//Wait at least one second.
@@ -79,7 +79,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 		service.execute();
 		String token2 = service.getUserToken();
-		LocalTime access2 = getLastAccessTimeInSession(token2);
+		DateTime access2 = getLastAccessTimeInSession(token2);
 		
 		int difference = Seconds.secondsBetween(access1, access2).getSeconds();
 		

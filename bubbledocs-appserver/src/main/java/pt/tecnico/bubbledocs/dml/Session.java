@@ -1,7 +1,8 @@
 package pt.tecnico.bubbledocs.dml;
 
 import java.util.Random;
-import org.joda.time.LocalTime;
+
+import org.joda.time.DateTime;
 
 public class Session extends Session_Base {
     
@@ -16,17 +17,17 @@ public class Session extends Session_Base {
     }
     
     public boolean isExpired() {
-    	return this.getExpiration().isBefore(new LocalTime());
+    	return this.getExpiration().isBeforeNow();
     }
     
     //time is the instant being tested
-    public boolean isExpired(LocalTime time) {
+    public boolean isExpired(DateTime time) {
     	return this.getExpiration().isBefore(time);
     }
     
     //Like unix touch, this refreshes the access and expiration time
     public void touch() {
-    	LocalTime now = new LocalTime();
+    	DateTime now = new DateTime();
         
         this.setAccess(now);
         this.setExpiration(now.plusMinutes(EXPIRATION));
