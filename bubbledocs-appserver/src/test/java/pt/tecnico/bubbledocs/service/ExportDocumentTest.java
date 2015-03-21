@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
+import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -35,22 +36,15 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private User USER;
 	
 	private CalcSheet CS_EMPTY;
-	private int CS_E_ID;
-	private final String CS_NAME = "Empty";
+	private int CS_ID;
+	private final String CS_NAME = "cs";
 	private final int CS_ROWS = 3;
 	private final int CS_LINES = 3;
-	
-	/*
-	
-	private CalcSheet CS_SHEET;
-	private int CS_ID;
-	private final String CS_NAME = "Cabulas ES";
-	
 	
 	private String CELL_ID0;
 	private final int VAL0 = 0;
 	private final String LIT0 = "0";
-*/
+
 	
 	@Override
 	public void populate4Test(){
@@ -58,7 +52,8 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		U_TOKEN = addUserToSession(U_USERNAME);
 		
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
-		CS_E_ID = CS_EMPTY.getId();
+		CS_ID = CS_EMPTY.getId();
+		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
 
 	}
 	
@@ -105,14 +100,40 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		}
 		
 	}
-	/*
 	
-	@Test(expected = NotFoundException.class)
-	public void cellDoesntExist(){
-	
+	//copying a lot of code from above, not sure if i need to repeat the tests above, need to ask
+	//the teacher on Tuesday
+	@Test
+	public void calcSheetWithOneCell() throws JDOMException, IOException{
+		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
+		c.setContent(new Literal(7));
+		
+		ExportDocument service = new ExportDocument(U_TOKEN, CS_NAME);
+		service.dispatch();
+		
+		//a local setup
+		SAXBuilder b=new SAXBuilder();
+		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		
+        XPathFactory xFactory = XPathFactory.instance();
+
+        XPathExpression<Element> expr = xFactory.compile("/", Filters.element());
+        List<Element> links = expr.evaluate(xmlDoc);
+        Element sheetElement=links.get(0);
+        Element literalElement=sheetElement.getChild("literal");
+		
+        //asserting the literal cell exists and has the correct value
+		assertEquals("literal cell is okey", 7 ,literalElement.getAttribute("val").getIntValue());
+		
+		sheetElement.getChildren().remove(literalElement);
+		//asserting that all the other cells have empty contents
+		for(Element cellElement: sheetElement.getChildren()){
+			assertEquals("empty cell", 0 ,cellElement.getContentSize());	
+		}
+		
 	}
 	
-	
+	/*
 	@Test(expected = NotFoundException.class)
 	public void cellOutOfBonds(){
 	
