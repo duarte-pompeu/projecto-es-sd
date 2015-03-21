@@ -9,6 +9,7 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
@@ -64,37 +65,6 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	}
 	
 	
-	@Test(expected = NotFoundException.class)
-	public void cellDoesntExist(){
-		String literal_str = "0";
-		String bad_cell_id = "123";
-		
-		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, literal_str);
-		service.dispatch();
-	}
-	
-	
-	@Test(expected = NotFoundException.class)
-	public void cellOutsideBoundsHigh(){
-		int lines = 100;
-		assertTrue("Position is outside sheet boundaries",
-				CS_SHEET.getLines() < lines);
-		String bad_cell_id = lines + ";1";
-		
-		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
-		service.dispatch();
-	}
-	
-	
-	@Test(expected = NotFoundException.class)
-	public void cellOutsideBoundsLow(){
-		String bad_cell_id = "0;0";
-		
-		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
-		service.dispatch();
-	}
-	
-	
 	@Test
 	public void insertInBoundary(){
 		assertEquals("Line is boundary line",
@@ -109,11 +79,66 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	}
 	
 	
+	@Test(expected = UserNotInSessionException.class)
+	public void noLogin(){
+		String bad_session_token = "Bad session token";
+		AssignLiteralCell service = new AssignLiteralCell(bad_session_token, CS_ID, CELL_ID0, LIT0);
+		service.dispatch();
+	}
+	
+	
 	@Test(expected = NotFoundException.class)
 	public void docDoesntExist(){
 		int bad_doc_id = -123;
 		
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_doc_id, CELL_ID0, LIT0);
+		service.dispatch();
+	}
+
+	
+	@Test(expected = NotFoundException.class)
+	public void cellDoesntExist(){
+		String literal_str = "0";
+		String bad_cell_id = "123";
+		
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, literal_str);
+		service.dispatch();
+	}
+	
+	
+	@Test(expected = NotFoundException.class)
+	public void cellOutsideBoundsLow(){
+		String bad_cell_id = "0;0";
+		
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
+		service.dispatch();
+	}
+
+	
+	@Test(expected = NotFoundException.class)
+	public void cellOutsideBoundsHigh(){
+		int lines = 100;
+		assertTrue("Position is outside sheet boundaries",
+				CS_SHEET.getLines() < lines);
+		String bad_cell_id = lines + ";1";
+		
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
+		service.dispatch();
+	}
+	
+	
+	@Test(expected = InvalidFormatException.class)
+	public void literalHasDecimals(){
+		String bad_literal = "1.5";
+		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, bad_literal);
+		service.dispatch();
+	}
+	
+	
+	@Test(expected = InvalidFormatException.class)
+	public void literalIsText(){
+		String bad_literal = "One hundred";
+		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, bad_literal);
 		service.dispatch();
 	}
 	
@@ -138,14 +163,6 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String spy_token = addUserToSession(data_spy.getUserName());
 		
 		AssignLiteralCell service = new AssignLiteralCell(spy_token, CS_ID, CELL_ID0, LIT0);
-		service.dispatch();
-	}
-	
-	
-	@Test(expected = UserNotInSessionException.class)
-	public void noLogin(){
-		String bad_session_token = "Bad session token";
-		AssignLiteralCell service = new AssignLiteralCell(bad_session_token, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 	}
 }
