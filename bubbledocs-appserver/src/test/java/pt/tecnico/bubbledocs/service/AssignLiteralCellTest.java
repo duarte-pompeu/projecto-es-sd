@@ -75,7 +75,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	
 	
 	@Test(expected = NotFoundException.class)
-	public void cellOutOfBondsOutside(){
+	public void cellOutsideBoundsHigh(){
 		int lines = 100;
 		assertTrue("Position is outside sheet boundaries",
 				CS_SHEET.getLines() < lines);
@@ -85,19 +85,21 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		service.dispatch();
 	}
 	
+	
 	@Test(expected = NotFoundException.class)
-	public void cellOutOfBondsOrigin(){
+	public void cellOutsideBoundsLow(){
 		String bad_cell_id = "0;0";
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
 		service.dispatch();
 	}
 	
+	
 	@Test
 	public void insertInBoundary(){
 		assertEquals("Line is boundary line",
 				CS_SHEET.getLines(), new Integer(CS_LINES));
-		assertEquals("Line is boundary column",
+		assertEquals("Column is boundary column",
 				CS_SHEET.getColumns(), new Integer(CS_ROWS));
 		
 		String id = CS_LINES + ";" + CS_ROWS;

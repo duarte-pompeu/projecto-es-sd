@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.service;
 // add needed import declarations
 import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
+import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
@@ -65,26 +66,22 @@ public class AssignLiteralCell extends BubbleDocsService{
     		throw new NotFoundException("can't find calcsheet with ID " + docId + ".");
     	}
     	
-    	/*
-    	//TODO: check if user has write access
-    	if(!cs.allowedToWrite(user)){
-    		throw new PermissionException();
-    	}
+    	
+//    	//TODO: check if user has write access
+//    	if(!cs.allowedToWrite(user)){
+//    		throw new PermissionException();
+//    	}
     	
     	// check if cell exists
     	if(!cs.hasCell(cellId)){
-    		throw new NotFoundException("can't find cell with ID " + docId + ".");
+    		throw new NotFoundException("can't find cell with ID " + cellId + ".");
     	}
     	
-    	//TODO: check if cell is protected
+    	// check if cell is protected
     	Cell cell = cs.getCell(cellId);
     	if(cell.getProtect()){
     		throw new PermissionException();
     	}
-    	
-    	// finally, set content
-    	cs.setContent(user, new Literal(literal_val), cell.getLine(), cell.getColumn());
-    	*/
     	
     	cs.setContent(user, new Literal(literal_val), cellId);
     }
@@ -92,5 +89,4 @@ public class AssignLiteralCell extends BubbleDocsService{
     public String getResult() {
         return result;
     }
-
 }
