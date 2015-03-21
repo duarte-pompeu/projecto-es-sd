@@ -96,7 +96,7 @@ public class Reference extends Reference_Base {
     		cell=BubbleDocs.currentSheet.getCell(line, column);
     		this.setPointedCell(cell);
     	}
-    	catch(NotFoundException e){
+    	catch(RuntimeException e){
     	
     		cell=new Cell();
     		cell.importFromXML(cellElement);

@@ -81,7 +81,9 @@ public class Cell extends Cell_Base {
 		}
 		
 		super.setContent(c);
-		setContentRepresentation(c.toString());
+		try{
+		setContentRepresentation(c.toString());}
+		catch(NullPointerException e){setContentRepresentation("#VALUE");} //or whatever is asked
 	}
 	
 	  public void delete() {
@@ -100,8 +102,10 @@ public class Cell extends Cell_Base {
      * @param cellElement
      */
     public void importFromXML(Element cellElement) {
+    	this.setId(new String(cellElement.getAttribute("id").getValue()));
     	this.setLine(new Integer(cellElement.getAttribute("line").getValue()));
     	this.setColumn(new Integer(cellElement.getAttribute("column").getValue()));
+    	this.setProtect(new Boolean(cellElement.getAttribute("protect").getValue()));
     	
     	List<Element> contentElement = cellElement.getChildren();
     	
@@ -125,9 +129,10 @@ public class Cell extends Cell_Base {
      */
     public Element exportToXML() {
     	Element element = new Element("cell");
-    	
+    	element.setAttribute("id", this.getId());
     	element.setAttribute("line", this.getLine().toString());
     	element.setAttribute("column", this.getColumn().toString());
+    	element.setAttribute("protect", this.getProtect().toString());
     	if(this.getContent()!=null)
     		element.addContent(this.getContent().exportToXML());
     	
