@@ -9,6 +9,7 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
@@ -115,6 +116,12 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		
 		AssignLiteralCell service = new AssignLiteralCell(spy_token, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
-		
+	}
+	
+	@Test(expected = LoginException.class)
+	public void noLogin(){
+		String bad_session_token = "Bad session token";
+		AssignLiteralCell service = new AssignLiteralCell(bad_session_token, CS_ID, CELL_ID0, LIT0);
+		service.dispatch();
 	}
 }
