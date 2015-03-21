@@ -48,7 +48,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     	BubbleDocs bd = BubbleDocs.getInstance();
     	User user;
     	try{
-    		user = bd.getSessionFromToken(accessToken).getUser();
+    		user = getSessionFromToken(accessToken).getUser();
     	}
     	catch(UserNotInSessionException LEexcept){
     		throw LEexcept;
