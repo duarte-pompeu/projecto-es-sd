@@ -99,13 +99,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		cell.setProtect(true);
 		
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
-		try{
-			service.dispatch();
-		}
-		catch(PermissionException Permexcept){
-			cell.setProtect(false);
-			throw Permexcept;
-		}
+		service.dispatch();
 	}
 	
 	
@@ -117,6 +111,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		AssignLiteralCell service = new AssignLiteralCell(spy_token, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 	}
+	
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void noLogin(){
