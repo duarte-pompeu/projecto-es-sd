@@ -99,7 +99,7 @@ public class CalcSheet extends CalcSheet_Base {
     
     private Content getContent(User reader, Cell cell) {
     	  //If this calcSheet is not one of the calcSheet readable by reader. 
-    	if (!(reader.getReadableCalcSheetSet().contains(this))) throw new PermissionException();    	
+    	if (!reader.canRead(this)) throw new PermissionException();    	
     	return cell.getContent();
     }
     
@@ -143,8 +143,7 @@ public class CalcSheet extends CalcSheet_Base {
      * @param cell
      */
     private void setContent(User writer, Content content, Cell cell) {
-    	 //If this calcSheet is not one of the calcSheet writeable by writer.
-    	if(!(writer.getWriteableCalcSheetSet().contains(this)) || cell.getProtect()) {
+    	if(!writer.canWrite(this) || cell.getProtect()) {
     		throw new PermissionException();
     	}
     	

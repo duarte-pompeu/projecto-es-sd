@@ -98,6 +98,14 @@ public class User extends User_Base {
     public Set<User> getUserSet() {
     	throw new PermissionException("You don't have permission to do this action");
     }
+    
+    public boolean canRead(CalcSheet sheet) {
+    	return this.getReadableCalcSheetSet().contains(sheet);
+    }
+    
+    public boolean canWrite(CalcSheet sheet) {
+    	return this.getWriteableCalcSheetSet().contains(sheet);
+    }
 
     
   	Iterable<CalcSheet> getSheets(String substring){
