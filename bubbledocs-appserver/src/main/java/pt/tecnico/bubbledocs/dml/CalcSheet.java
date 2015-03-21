@@ -87,10 +87,20 @@ public class CalcSheet extends CalcSheet_Base {
      * @param column
      * @return
      */
-    public Content getContent(User reader, int line, int column) {
-    	if (!(reader.getReadableCalcSheetSet().contains(this))) throw new PermissionException();
-    	
-    	return this.getCellByIndex(line, column).getContent();
+    public Content getContent(User reader, int line, int column) throws PermissionException {
+    	Cell cell = this.getCellByIndex(line, column);    	
+    	return getContent(reader, cell);
+    }
+    
+    public Content getContent(User reader, String cellId) throws PermissionException {
+    	Cell cell = this.getCell(cellId);    	
+    	return getContent(reader, cell);
+    }
+    
+    private Content getContent(User reader, Cell cell) {
+    	  //If this calcSheet is not one of the calcSheet readable by reader. 
+    	if (!(reader.getReadableCalcSheetSet().contains(this))) throw new PermissionException();    	
+    	return cell.getContent();
     }
     
     //this may be changed to receive a string, and using a Content factory, create the Content
@@ -105,12 +115,9 @@ public class CalcSheet extends CalcSheet_Base {
      * to setContent(User writer, Content content, int cellId)
      */
     public void setContent(User writer, Content content, int line, int column)
-    	throws PermissionException{    	
-    	
+    	throws PermissionException {    	
     	Cell cell = this.getCellByIndex(line, column);
-    	String cellId = cell.getId();
-    	
-    	setContent(writer, content, cellId);
+    	setContent(writer, content, cell);
     }
     
     /**
@@ -123,13 +130,25 @@ public class CalcSheet extends CalcSheet_Base {
      * Sets cell content if user has enough permissions.
      */
     
-    public void setContent(User writer, Content content, String cellId) throws PermissionException{
-    	
-    	if(!allowedToWrite(writer)){
+    public void setContent(User writer, Content content, String cellId) throws PermissionException {
+    	Cell cell = this.getCell(cellId);
+    	if (cell == null) throw new NotFoundException(cellId + " does not exist");
+    	setContent(writer, content, cell);
+    }
+    
+    /**
+     * Sets content with given cell. Used by setContent(User,Content,String) and setContent(User,Content,int,int)
+     * @param writer
+     * @param content
+     * @param cell
+     */
+    private void setContent(User writer, Content content, Cell cell) {
+    	 //If this calcSheet is not one of the calcSheet writeable by writer.
+    	if(!(writer.getWriteableCalcSheetSet().contains(this)) || cell.getProtect()) {
     		throw new PermissionException();
     	}
     	
-    	this.getCell(cellId).setContent(content);
+    	cell.setContent(content);
     }
     
     /**
@@ -138,6 +157,7 @@ public class CalcSheet extends CalcSheet_Base {
      * @param writer
      * @return
      */
+    /*
     public boolean allowedToWrite(User user){
     	for(CalcSheet cs: user.getWriteableCalcSheetSet()){
     		if(cs.getId().equals(this.getId()))
@@ -146,7 +166,7 @@ public class CalcSheet extends CalcSheet_Base {
     	
     	return false;
     }
-    
+    */
     
     //These methods are implemented in BubbleDocs because users are only supposed
     //to get their own user.
@@ -217,7 +237,7 @@ public class CalcSheet extends CalcSheet_Base {
      */
     private Cell getCellByIndex(int line, int column) {
     	if (outsideBounds(line, column)) {
-    		throw new IllegalArgumentException("Out of bounds");
+    		throw new NotFoundException("" + line + ";" + column + " is out of bounds.");
     	}
     	
     	for (Cell cell : this.getCellSet()) {
@@ -225,7 +245,7 @@ public class CalcSheet extends CalcSheet_Base {
     			return cell;
     		}
     	}
-    	throw new NotFoundException();
+    	throw new RuntimeException("Error. Cell with position " + line + ";" + column + " does not exist when it should");
     }
     
     /**

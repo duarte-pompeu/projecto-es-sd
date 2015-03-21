@@ -66,6 +66,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     		throw new NotFoundException("can't find calcsheet with ID " + docId + ".");
     	}
     	
+    	/*
     	//TODO: check if user has write access
     	if(!cs.allowedToWrite(user)){
     		throw new PermissionException();
@@ -84,6 +85,9 @@ public class AssignLiteralCell extends BubbleDocsService{
     	
     	// finally, set content
     	cs.setContent(user, new Literal(literal_val), cell.getLine(), cell.getColumn());
+    	*/
+    	
+    	cs.setContent(user, new Literal(literal_val), cellId);
     }
 
     public String getResult() {
