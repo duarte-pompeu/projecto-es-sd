@@ -50,11 +50,17 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		service.dispatch();
 		
 		assertEquals("Owner is correct", 
-				U_USERNAME, getSpreadSheet(CS_NAME).getCreator().getUserName());
+				U_USERNAME, 
+				getSpreadSheet(CS_NAME).getCreator().getUserName());
+		assertEquals("User is in session",
+				getUserFromSession(U_TOKEN).getUserName(),
+				U_USERNAME);
 		assertEquals("Cell ID is correct",
-				CELL_ID0, CS_SHEET.getCell(CELL_ID0).getId());
+				CELL_ID0, 
+				CS_SHEET.getCell(CELL_ID0).getId());
 		assertEquals("Value is correct", 
-				VAL0, CS_SHEET.getCell(CELL_ID0).getContent().getValue());
+				VAL0, 
+				CS_SHEET.getCell(CELL_ID0).getContent().getValue());
 	}
 	
 	
@@ -69,13 +75,34 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	
 	
 	@Test(expected = NotFoundException.class)
-	public void cellOutOfBonds(){
+	public void cellOutOfBondsOutside(){
 		int lines = 100;
-		String literal_str = "0";
+		assertTrue("Position is outside sheet boundaries",
+				CS_SHEET.getLines() < lines);
 		String bad_cell_id = lines + ";1";
 		
-		assertTrue(CS_SHEET.getLines() < lines);
-		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, literal_str);
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
+		service.dispatch();
+	}
+	
+	@Test(expected = NotFoundException.class)
+	public void cellOutOfBondsOrigin(){
+		String bad_cell_id = "0;0";
+		
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
+		service.dispatch();
+	}
+	
+	@Test
+	public void insertInBoundary(){
+		assertEquals("Line is boundary line",
+				CS_SHEET.getLines(), new Integer(CS_LINES));
+		assertEquals("Line is boundary column",
+				CS_SHEET.getColumns(), new Integer(CS_ROWS));
+		
+		String id = CS_LINES + ";" + CS_ROWS;
+		
+		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, id, LIT0);
 		service.dispatch();
 	}
 	
