@@ -10,7 +10,7 @@ public class ExportDocument extends BubbleDocsService {
 	return docXML;
     }
 
-    public ExportDocument(String userToken, String docName) {
+    public ExportDocument(String userToken, int docId) {
 	// add code here
     }
 

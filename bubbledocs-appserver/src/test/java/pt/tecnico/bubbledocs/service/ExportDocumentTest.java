@@ -19,9 +19,12 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.junit.Test;
 
+import pt.tecnico.bubbledocs.dml.Add;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
+import pt.tecnico.bubbledocs.dml.FunctionArgument;
 import pt.tecnico.bubbledocs.dml.Literal;
+import pt.tecnico.bubbledocs.dml.Reference;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -42,9 +45,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private final int CS_LINES = 3;
 	
 	private String CELL_ID0;
+	private String CELL_ID1;
+	private String CELL_ID2;
 	private final int VAL0 = 0;
 	private final String LIT0 = "0";
-
+	
 	
 	@Override
 	public void populate4Test(){
@@ -54,13 +59,14 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
 		CS_ID = CS_EMPTY.getId();
 		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
-
+		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
+		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
 	}
 	
 	
 	@Test
 	public void emptyCalcSheet() throws JDOMException, IOException{
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_NAME);
+		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.dispatch();
 		
 		//a local setup
@@ -108,7 +114,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
 		c.setContent(new Literal(7));
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_NAME);
+		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.dispatch();
 		
 		//a local setup
@@ -133,16 +139,55 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 	}
 	
-	/*
-	@Test(expected = NotFoundException.class)
-	public void cellOutOfBonds(){
-	
+	@Test
+	public void calcSheetWithMultipleCells() throws JDOMException, IOException{
+		Cell c1=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
+		c1.setContent(new Literal(7));
+		Cell c2=this.getSpreadSheet(CS_NAME).getCell(CELL_ID1);
+		c2.setContent(new Reference(c1));
+		Cell c3=this.getSpreadSheet(CS_NAME).getCell(CELL_ID2);
+		c3.setContent(new Add(new Reference(c1), new Literal(5)));
 		
-	
+		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		service.dispatch();
+		
+		//a local setup
+		SAXBuilder b=new SAXBuilder();
+		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		
+        XPathFactory xFactory = XPathFactory.instance();
+
+        XPathExpression<Element> expr = xFactory.compile("/", Filters.element());
+        List<Element> links = expr.evaluate(xmlDoc);
+        Element sheetElement=links.get(0);
+        Element literalElement=sheetElement.getChild("literal");
+        Element referenceElement=sheetElement.getChild("reference");
+        Element pointedLiteralElement=referenceElement.getChild("literal");
+        Element addElement=sheetElement.getChild("add");
+        Element arg1Element=sheetElement.getChild("reference");
+        Element pointedLiteralElement2=arg1Element.getChild("literal");
+        Element arg2Element=sheetElement.getChild("literal");
+		
+        //asserting the literal cell exists and has the correct value
+		assertEquals("literal cell is okey", 7 ,literalElement.getAttribute("val").getIntValue());
+		//asserting the reference is pointing to the literal
+		assertEquals("reference points to the literal", 7, 
+				pointedLiteralElement.getAttribute("val").getIntValue());
+		assertEquals("add element has the correct reference and literal", 12, 
+				pointedLiteralElement2.getAttribute("val").getIntValue()+arg2Element.getAttribute("val").getIntValue());
+		
+		sheetElement.getChildren().remove(literalElement);
+		sheetElement.getChildren().remove(referenceElement);
+		sheetElement.getChildren().remove(addElement);
+		//asserting that all the other cells have empty contents
+		for(Element cellElement: sheetElement.getChildren()){
+			assertEquals("empty cell", 0 ,cellElement.getContentSize());	
+		}
 		
 	}
 	
 	
+	/*
 	@Test(expected = NotFoundException.class)
 	public void docDoesntExist(){
 	
