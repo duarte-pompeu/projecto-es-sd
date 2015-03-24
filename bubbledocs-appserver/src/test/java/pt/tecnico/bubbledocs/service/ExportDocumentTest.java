@@ -187,24 +187,13 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	}
 	
 	
-	/*
-	@Test(expected = NotFoundException.class)
-	public void docDoesntExist(){
-	
-	}
-	
-	
-	//FIXME: do we even have methods to protect cells?
-	@Test(expected = PermissionException.class)
-	public void cellIsProtected(){
-	
-	
-	}
-	
-	
-	@Test(expected = PermissionException.class)
-	public void noWriteAccess(){
-	
+	@Test(expected= NotFoundException.class)
+	public void nonExistingCalcSheet() throws JDOMException, IOException{
+		ExportDocument service = new ExportDocument(U_TOKEN, -1);
+		service.dispatch();
 		
-	}*/
-}
+		}
+		
+	}
+	
+	
