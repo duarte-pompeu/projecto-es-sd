@@ -64,12 +64,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param name the calcSheet
 	 * @return The desired calcSheet. If it is not found then null is returned.
 	 */
-	public CalcSheet getCalcSheetByName(String name) {
+	public CalcSheet getCalcSheetByName(String name)throws NotFoundException {
 		for(CalcSheet c: this.getCalcSheetSet()){
 			if(c.getName().equals(name))
 				return c;
 		}
-		return null;
+		throw new NotFoundException();
 	}
 
 

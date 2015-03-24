@@ -50,8 +50,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 		
-		assertEquals("Owner is correct", 
-				U_USERNAME, 
+		assertEquals("Owner is correct", U_USERNAME, 
 				getSpreadSheet(CS_NAME).getCreator().getUserName());
 		assertEquals("User is in session",
 				getUserFromSession(U_TOKEN).getUserName(),
