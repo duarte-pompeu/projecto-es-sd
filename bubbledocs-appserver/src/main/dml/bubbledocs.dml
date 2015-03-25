@@ -36,12 +36,17 @@ class Session {
 
 class Content;
 
-class FunctionArgument extends Content;
+class FunctionArgument;
 
+class ReferenceArgument extends FunctionArgument;
 
-class Reference extends FunctionArgument;
+class LiteralArgument extends FunctionArgument{
+  Integer val;
+}
 
-class Literal extends FunctionArgument{
+class Reference extends Content;
+
+class Literal extends Content {
   Integer val;
 }
 
@@ -138,6 +143,13 @@ relation ReferencePointsToCell{
 		multiplicity *;
 	}
 	Cell playsRole pointedCell;
+}
+
+relation ReferenceArgumentPointsToCell {
+ 	ReferenceArgument playsRole referenceArgument {
+ 		multiplicity *;
+ 	}
+ 	Cell playsRole pointedCell;
 }
 
 
