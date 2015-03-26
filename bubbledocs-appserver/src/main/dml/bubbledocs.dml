@@ -112,7 +112,9 @@ relation UserCreatesCalcSheet {
 }
 
 relation UserIsInSession {
-  Session playsRole session;
+  Session playsRole session {
+    multiplicity 1;
+  }
   User playsRole user;
 }
 
