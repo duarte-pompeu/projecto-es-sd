@@ -36,10 +36,19 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 	public void populateSuccess(){
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, CS_ROWS, CS_LINES);
 		service.dispatch();
+		CalcSheet calc = getSpreadSheet(CS_NAME);
 		
-		assertEquals("Owner is correct", U_USERNAME, getSpreadSheet(CS_NAME).getCreator().getUserName());
-		assertEquals("User is in session",getUserFromSession(U_TOKEN).getUserName(),U_USERNAME);
-		
+		assertEquals("User isnt in session",
+				getUserFromSession(U_TOKEN).getUserName(),U_USERNAME);
+		assertNotNull("calcsheet wasnt created", calc);
+		assertEquals("Invalid owner",
+				U_USERNAME, calc.getCreator().getUserName());
+		assertEquals("Invalid calcsheet name",
+				CS_NAME, calc.getName());
+		assertEquals("Invalid calcsheet rows",
+				CS_ROWS, (int) calc.getColumns());
+		assertEquals("Invalid calcsheet lines",
+				CS_LINES, (int) calc.getLines());
 	}
 	
 	
