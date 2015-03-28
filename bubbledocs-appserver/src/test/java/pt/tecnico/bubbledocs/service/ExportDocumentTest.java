@@ -100,7 +100,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 				this.getSpreadSheet(CS_NAME).getColumns().intValue(), spreadSheetColumns );
 		
 		//asserting the correct number of cells
-		assertEquals("The number of cells is correct", 9, sheetElement.getChildren().size());
+		assertEquals("The number of cells is correct", 0, sheetElement.getChildren().size());
 		
 		//asserting that all the cells have null contents
 		for(Element cellElement: sheetElement.getChildren()){

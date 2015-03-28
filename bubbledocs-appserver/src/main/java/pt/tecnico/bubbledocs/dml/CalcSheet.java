@@ -1,5 +1,6 @@
 package pt.tecnico.bubbledocs.dml;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +35,12 @@ public class CalcSheet extends CalcSheet_Base {
     	super();
     	//get unique id
     	this.setId(BubbleDocs.getInstance().getUniqueId());
+    	this.init(name, lines, columns);
+    
+    }
+    
+    public void init(String name, int lines, int columns){
+    	
     	this.setName(name);
     	this.setLines(new Integer(lines));
     	this.setColumns(new Integer(columns));
@@ -45,8 +52,9 @@ public class CalcSheet extends CalcSheet_Base {
     			this.addCell(new Cell(i, j));
     		}
     	} 
-    
+    	
     }
+    
     
     //This method shouldn't be used by a user.
     /**
@@ -294,12 +302,21 @@ public class CalcSheet extends CalcSheet_Base {
     	BubbleDocs.currentSheet=this;
     	
     	List<Element> cells = calcSheetElement.getChildren();
+    	HashMap<String, Boolean> map=new HashMap<String, Boolean>();
     	
     	for (Element cell : cells) {
     	    Cell c = new Cell();
     	    c.importFromXML(cell);
     	    addCell(c);
+    	    map.put(c.getId(), true);
     	}
+    	for (int i=1; i<=this.getLines(); ++i) {
+    		for (int j=1; j<=this.getColumns(); ++j) {
+    			if(!map.containsKey(String.valueOf(i)+";"+String.valueOf(j)))
+    				this.addCell(new Cell(i, j));
+    		}
+    	} 
+    	
     	this.setBubbleDocs(BubbleDocs.getInstance());
     }
 
@@ -318,8 +335,11 @@ public class CalcSheet extends CalcSheet_Base {
     	
     	}catch(Exception e){System.out.println(e.toString());}
     	
-    	for(Cell c: this.getCellSet())
-    		element.addContent(c.exportToXML());
+    	for(Cell c: this.getCellSet()){
+    		if(c.getContent()!=null)
+    			element.addContent(c.exportToXML());
+    	}
+    		
 	
     	return element;
     	}
