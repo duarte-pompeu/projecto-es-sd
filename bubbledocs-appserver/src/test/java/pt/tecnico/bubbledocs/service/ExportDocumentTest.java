@@ -172,13 +172,33 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
         XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
         List<Element> links = expr.evaluate(xmlDoc);
         Element sheetElement=links.get(0);
-        Element literalElement=sheetElement.getChild("literal");
-        Element referenceElement=sheetElement.getChild("reference");
+        List<Element> cellsList=sheetElement.getChildren();
+        Element literalElement=null;
+        Element referenceElement=null;
+        Element addElement=null;
+        for(Element cellElement: cellsList){
+        	if(cellElement.getChild("literal")!=null){
+				literalElement=cellElement.getChild("literal");
+				break;
+			}
+        }
+        for(Element cellElement: cellsList){
+        	if(cellElement.getChild("reference")!=null){
+				referenceElement=cellElement.getChild("reference");
+				break;
+			}
+        }
+        for(Element cellElement: cellsList){
+        	if(cellElement.getChild("add")!=null){
+				addElement=cellElement.getChild("add");
+				break;
+			}
+        }
+        
         Element pointedLiteralElement=referenceElement.getChild("cell").getChild("literal");
-        Element addElement=sheetElement.getChild("add");
-        Element arg1Element=sheetElement.getChild("reference");
-        Element pointedLiteralElement2=arg1Element.getChild("literal");
-        Element arg2Element=sheetElement.getChild("literal");
+        Element arg1Element=addElement.getChild("referenceArgument");
+        Element pointedLiteralElement2=arg1Element.getChild("cell").getChild("literal");
+        Element arg2Element=addElement.getChild("literalArgument");
 		
         //asserting the literal cell exists and has the correct value
 		assertEquals("literal cell is okey", 7 ,literalElement.getAttribute("val").getIntValue());
@@ -188,13 +208,15 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		assertEquals("add element has the correct reference and literal", 12, 
 				pointedLiteralElement2.getAttribute("val").getIntValue()+arg2Element.getAttribute("val").getIntValue());
 		
-		sheetElement.getChildren().remove(literalElement);
-		sheetElement.getChildren().remove(referenceElement);
-		sheetElement.getChildren().remove(addElement);
-		//asserting that all the other cells have empty contents
+		
+		int counter=0;
+		
 		for(Element cellElement: sheetElement.getChildren()){
-			assertEquals("empty cell", 0 ,cellElement.getContentSize());	
+			if(cellElement.getContentSize()!=0)
+				counter++;
 		}
+		//asserting that all the other cells have empty contents
+		assertEquals("non empty cells", counter, 3);
 		
 	}
 	
