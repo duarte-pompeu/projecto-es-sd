@@ -142,10 +142,10 @@ public class BubbleApplication {
 	 */
 	private static void removeCalcSheet(String name, String user) {
 	    		
-	    		BubbleDocs pb = BubbleDocs.getInstance();
-	    		pb.removeCalcSheet(name, user);
+	    BubbleDocs pb = BubbleDocs.getInstance();
+	    pb.removeCalcSheet(name, user);
 	    		
-	    }
+	}
 	
 	/**
 	 * This method will convert all the calcSheet from a user into XML.
@@ -177,7 +177,7 @@ public class BubbleApplication {
 		a.importFromXML(jdomDoc.getRootElement());
 		
 		BubbleDocs.getInstance().getCalcSheetSet().add(a);
-	    }
+	}
 	
 	
 	/**
@@ -206,7 +206,7 @@ public class BubbleApplication {
 	 	c1.getCell(2,2).setContent(new Div ( new ReferenceArgument(c1.getCell(1,1)), new ReferenceArgument(c1.getCell(3,4)) ));
 	 	pb.addCalcSheet(c1);
 	 	
-}
+	}
 
 	
 	
@@ -249,7 +249,7 @@ public class BubbleApplication {
 	
 	  		jdomDoc.setRootElement(c.exportToXML());
 
-		return jdomDoc;
+	  		return jdomDoc;
 	    }
 
 	    /**
@@ -257,9 +257,9 @@ public class BubbleApplication {
 	     * @param jdomDoc The document which will be converted and printed to stdout.
 	     */
 	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
-		XMLOutputter xml = new XMLOutputter();
-		xml.setFormat(Format.getPrettyFormat());
-		System.out.println(xml.outputString(jdomDoc));
+			XMLOutputter xml = new XMLOutputter();
+			xml.setFormat(Format.getPrettyFormat());
+			System.out.println(xml.outputString(jdomDoc));
 	    }
 
 }
