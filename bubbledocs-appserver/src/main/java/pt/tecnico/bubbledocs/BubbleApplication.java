@@ -126,9 +126,7 @@ public class BubbleApplication {
 			System.out.println(s);
 		}
 		System.out.println("END");	
-		
-		
-		
+
 	}
 	
 	
@@ -209,20 +207,17 @@ public class BubbleApplication {
 	}
 
 	
-	
-	
-	
-	    /**
-	     * This method will print information about each of the users stored in the database.
-	     */
-	    static void getAllPeople(){
-	   
-		 BubbleDocs pb = BubbleDocs.getInstance();
-		 	for (User p : pb.getUserSet()) {
-		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
-		 	}
-		 	
-	    }
+    /**
+     * This method will print information about each of the users stored in the database.
+     */
+    static void getAllPeople(){
+   
+	 BubbleDocs pb = BubbleDocs.getInstance();
+	 	for (User p : pb.getUserSet()) {
+	 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
+	 	}
+	 	
+    }
 	 	
 	 
 	/**
@@ -232,35 +227,33 @@ public class BubbleApplication {
 	 */
 	public static User getUser(BubbleDocs bd, String username) {
 			
-			return bd.getUser(username);
-		}
+		return bd.getUser(username);
+	}
 	
 		
-	  	/**
-	  	 * This method converts a calcSheet into a XML document.
-	  	 * @param c The calcSheet which will be converted
-	  	 * @return The resulting XML document.
-	  	 */
-	    public static org.jdom2.Document convertToXML(CalcSheet c) {
-		 
-	  		
+  	/**
+  	 * This method converts a calcSheet into a XML document.
+  	 * @param c The calcSheet which will be converted
+  	 * @return The resulting XML document.
+  	 */
+    public static org.jdom2.Document convertToXML(CalcSheet c) {
+	 
+  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 
-	  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-	
-	  		jdomDoc.setRootElement(c.exportToXML());
+  		jdomDoc.setRootElement(c.exportToXML());
 
-	  		return jdomDoc;
-	    }
+  		return jdomDoc;
+    }
 
-	    /**
-	     * This method take a XML jdomDoc object, convert it into a String and print the result to stdout.
-	     * @param jdomDoc The document which will be converted and printed to stdout.
-	     */
-	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
-			XMLOutputter xml = new XMLOutputter();
-			xml.setFormat(Format.getPrettyFormat());
-			System.out.println(xml.outputString(jdomDoc));
-	    }
+    /**
+     * This method take a XML jdomDoc object, convert it into a String and print the result to stdout.
+     * @param jdomDoc The document which will be converted and printed to stdout.
+     */
+    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
+		XMLOutputter xml = new XMLOutputter();
+		xml.setFormat(Format.getPrettyFormat());
+		System.out.println(xml.outputString(jdomDoc));
+    }
 
 }
 
