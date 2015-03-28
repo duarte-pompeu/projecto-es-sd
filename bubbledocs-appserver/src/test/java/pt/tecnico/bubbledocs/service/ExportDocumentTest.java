@@ -1,10 +1,6 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +9,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
-import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
@@ -22,14 +17,12 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.dml.Add;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
-import pt.tecnico.bubbledocs.dml.FunctionArgument;
 import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.dml.LiteralArgument;
 import pt.tecnico.bubbledocs.dml.Reference;
 import pt.tecnico.bubbledocs.dml.ReferenceArgument;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
 	

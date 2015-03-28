@@ -2,17 +2,10 @@ package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.User;
-import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
-import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.PermissionException;
-import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 
