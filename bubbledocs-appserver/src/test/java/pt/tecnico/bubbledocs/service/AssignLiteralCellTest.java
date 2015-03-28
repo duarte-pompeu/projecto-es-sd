@@ -50,15 +50,22 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
 		service.dispatch();
 		
+		/* assertEquals indentation style might seem a little weird
+		 * but it does make the tests more legible IMO
+		 * -Duarte
+		 */
 		assertEquals("Owner is NOT correct",
 				U_USERNAME, 
 				getSpreadSheet(CS_NAME).getCreator().getUserName());
+		
 		assertEquals("User is NOT in session",
 				U_USERNAME,
 				getUserFromSession(U_TOKEN).getUserName());
+		
 		assertEquals("Cell ID is NOT correct",
 				CELL_ID0, 
 				CS_SHEET.getCell(CELL_ID0).getId());
+		
 		assertEquals("Value is NOT correct", 
 				VAL0, 
 				CS_SHEET.getCell(CELL_ID0).getContent().getValue());
@@ -144,14 +151,12 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		service.dispatch();
 	}
 	
-	
-	//FIXME: do we even have methods to protect cells?
 	@Test(expected = PermissionException.class)
 	public void cellIsProtected(){
 		Cell cell = CS_SHEET.getCell(CELL_ID0);
 		assertNotNull(cell);
 		
-		//FIXME: this isn't a proper way to change protection
+		//FIXME: this doesnt seem a proper way to change cell protection
 		cell.setProtect(true);
 		
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
