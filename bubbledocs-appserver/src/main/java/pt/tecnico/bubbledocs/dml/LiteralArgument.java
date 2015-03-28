@@ -10,22 +10,37 @@ public class LiteralArgument extends LiteralArgument_Base {
         super();
     }
 
+    public LiteralArgument(int value){
+  		super();
+      	init(value);
+  	}
+  	
+  	/**
+  	 * @param value
+  	 */
+  	private void init(int value){
+  		this.setVal(value);
+  	}
+  	
+  	/* (non-Javadoc)
+  	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#getValue()
+  	 */
+  	public int getValue(){
+  		return this.getVal();
+  	}
+
+
+	@Override
+	public void importFromXML(Element literalElement) {
+		int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
+    	init(value);
+	}
+	
 	@Override
 	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getValue() throws NullContentException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void importFromXML(Element c) {
-		// TODO Auto-generated method stub
-		
+		Element element = new Element("literalArgument");
+    	element.setAttribute("val", this.getVal().toString());
+	return element;
 	}
     
 }

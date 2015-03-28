@@ -24,7 +24,9 @@ import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Cell;
 import pt.tecnico.bubbledocs.dml.FunctionArgument;
 import pt.tecnico.bubbledocs.dml.Literal;
+import pt.tecnico.bubbledocs.dml.LiteralArgument;
 import pt.tecnico.bubbledocs.dml.Reference;
+import pt.tecnico.bubbledocs.dml.ReferenceArgument;
 import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -75,12 +77,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
         XPathFactory xFactory = XPathFactory.instance();
 
-        XPathExpression<Element> expr = xFactory.compile("/", Filters.element());
+        XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
         List<Element> links = expr.evaluate(xmlDoc);
         Element sheetElement=links.get(0);
       		
 		String nameReadFromDocument= sheetElement.getAttribute("creator").getValue();
-        int spreadSheetId= sheetElement.getAttribute("Id").getIntValue();
+        int spreadSheetId= sheetElement.getAttribute("id").getIntValue();
 		String spreadSheetDate= sheetElement.getAttribute("date").getValue();
         String spreadSheetName= sheetElement.getAttribute("name").getValue();
         int spreadSheetLines = sheetElement.getAttribute("lines").getIntValue();
@@ -123,19 +125,29 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
         XPathFactory xFactory = XPathFactory.instance();
 
-        XPathExpression<Element> expr = xFactory.compile("/", Filters.element());
+        XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
         List<Element> links = expr.evaluate(xmlDoc);
         Element sheetElement=links.get(0);
-        Element literalElement=sheetElement.getChild("literal");
+        List<Element> cellsList=sheetElement.getChildren();
+        Element literalElement=null;
+        for(Element cellElement: cellsList){
+			if(cellElement.getChild("literal")!=null){
+				literalElement=cellElement.getChild("literal");
+				break;
+			}
+		}
+      
 		
         //asserting the literal cell exists and has the correct value
 		assertEquals("literal cell is okey", 7 ,literalElement.getAttribute("val").getIntValue());
 		
-		sheetElement.getChildren().remove(literalElement);
+		int counter=0;
 		//asserting that all the other cells have empty contents
 		for(Element cellElement: sheetElement.getChildren()){
-			assertEquals("empty cell", 0 ,cellElement.getContentSize());	
+			if(cellElement.getContentSize()!=0)
+				counter++;
 		}
+		assertEquals("non empty cells", counter, 1);
 		
 	}
 	
@@ -146,7 +158,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		Cell c2=this.getSpreadSheet(CS_NAME).getCell(CELL_ID1);
 		c2.setContent(new Reference(c1));
 		Cell c3=this.getSpreadSheet(CS_NAME).getCell(CELL_ID2);
-		c3.setContent(new Add(new Reference(c1), new Literal(5)));
+		c3.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
 		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.dispatch();
@@ -157,12 +169,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
         XPathFactory xFactory = XPathFactory.instance();
 
-        XPathExpression<Element> expr = xFactory.compile("/", Filters.element());
+        XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
         List<Element> links = expr.evaluate(xmlDoc);
         Element sheetElement=links.get(0);
         Element literalElement=sheetElement.getChild("literal");
         Element referenceElement=sheetElement.getChild("reference");
-        Element pointedLiteralElement=referenceElement.getChild("literal");
+        Element pointedLiteralElement=referenceElement.getChild("cell").getChild("literal");
         Element addElement=sheetElement.getChild("add");
         Element arg1Element=sheetElement.getChild("reference");
         Element pointedLiteralElement2=arg1Element.getChild("literal");

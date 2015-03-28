@@ -136,6 +136,16 @@ public class BubbleDocs extends BubbleDocs_Base {
 		}	
 	}
 
+	public static FunctionArgument parseArgumentName(String name){
+		switch(name){
+		case "literalArgument": return new LiteralArgument();
+		case "referenceArgument": return new ReferenceArgument();
+		default: return null;
+		}	
+	}
+	
+	
+	
 	/**
 	 * @param username
 	 * @param password

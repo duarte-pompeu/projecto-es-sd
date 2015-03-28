@@ -35,11 +35,11 @@ public class Reference extends Reference_Base {
 	}
 	
 	public void delete() {
-		//this.setBinaryFunction(null);
+		
 		setPointedCell(null);
 		if(this.getCell() !=null)
     	setCell(null);
-		//this.setBinaryFunction_(null);
+		
     	deleteDomainObject();
         }
 	

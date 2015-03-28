@@ -1,5 +1,10 @@
 package pt.tecnico.bubbledocs.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import org.jdom2.output.XMLOutputter;
+
 import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.BubbleApplication;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
@@ -46,6 +51,17 @@ public class ExportDocument extends BubbleDocsService {
     		throw new NotFoundException();
     	d=BubbleApplication.convertToXML(c);
     	
+    	XMLOutputter xmlOut = new XMLOutputter();
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	try {
+			xmlOut.output(d, out);
+			out.close();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+    	 
+    	docXML = out.toByteArray();
     	
     }
 }

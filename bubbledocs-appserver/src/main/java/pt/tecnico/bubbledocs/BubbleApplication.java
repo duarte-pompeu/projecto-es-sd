@@ -19,7 +19,9 @@ import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Div;
 import pt.tecnico.bubbledocs.dml.Literal;
+import pt.tecnico.bubbledocs.dml.LiteralArgument;
 import pt.tecnico.bubbledocs.dml.Reference;
+import pt.tecnico.bubbledocs.dml.ReferenceArgument;
 import pt.tecnico.bubbledocs.dml.User;
 
 
@@ -200,8 +202,8 @@ public class BubbleApplication {
 
 	 	c1.getCell(3, 4).setContent(new Literal(5));
 	 	c1.getCell(1,1).setContent(new Reference(c1.getCell(5,6)));
-	 	c1.getCell(5,6).setContent(new Add ( new Literal (2), new Reference(c1.getCell(3,4)) ));
-	 	c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
+	 	c1.getCell(5,6).setContent(new Add ( new LiteralArgument (2), new ReferenceArgument(c1.getCell(3,4)) ));
+	 	c1.getCell(2,2).setContent(new Div ( new ReferenceArgument(c1.getCell(1,1)), new ReferenceArgument(c1.getCell(3,4)) ));
 	 	pb.addCalcSheet(c1);
 	 	
 }

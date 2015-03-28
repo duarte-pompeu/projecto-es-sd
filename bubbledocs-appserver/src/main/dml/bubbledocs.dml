@@ -25,7 +25,6 @@ class Cell {
   Integer line;
   Integer column;
   Boolean protect;
-  String contentRepresentation;
 }
 
 class Session {
@@ -68,10 +67,10 @@ class Range;
 
 relation DomainRootHasBubbleDocsApplication {
   .pt.ist.fenixframework.DomainRoot playsRole root {
-    multiplicity 1;
+    multiplicity 0..1;
   }
   BubbleDocs playsRole bubbleDocs {
-    multiplicity 1;
+    multiplicity 0..1;
   }
 }
 

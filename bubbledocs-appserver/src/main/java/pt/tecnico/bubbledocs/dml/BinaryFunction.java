@@ -72,18 +72,18 @@ public class BinaryFunction extends BinaryFunction_Base {
     	List<Element> addElement = element.getChildren();
     	Element c=addElement.get(0);
     	String name=c.getName();
-    	Content content1=BubbleDocs.parseName(name);
+    	FunctionArgument arg1=BubbleDocs.parseArgumentName(name);
     	try{
-    		content1.importFromXML(c);
-    		this.setArgument1((FunctionArgument)content1);
+    		arg1.importFromXML(c);
+    		this.setArgument1(arg1);
     	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
     	
     	c=addElement.get(1);
     	name=c.getName();
-    	Content content2=BubbleDocs.parseName(name);
+    	FunctionArgument arg2=BubbleDocs.parseArgumentName(name);
     	try{
-    		content2.importFromXML(c);
-    		this.setArgument2((FunctionArgument)content2);
+    		arg2.importFromXML(c);
+    		this.setArgument2(arg2);
     	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
     	
 	}

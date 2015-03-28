@@ -51,11 +51,7 @@ public class Cell extends Cell_Base {
         String newId = String.valueOf(line) + ";" +	
         			String.valueOf(column);
         this.setId(newId);
-        
-        if(content!=null){
-        	this.setContent(content);
-        	this.setContentRepresentation(content.toString());
-        }
+   
 	}
     
 	/**
@@ -81,15 +77,16 @@ public class Cell extends Cell_Base {
 		}
 		
 		super.setContent(c);
-		try{
-		setContentRepresentation(c.toString());}
-		catch(NullPointerException e){setContentRepresentation("#VALUE");} //or whatever is asked
+		
 	}
 	
 	  public void delete() {
 		  if(this.getContent()!=null)
 		    	this.getContent().delete();
 		  for (Reference ref : this.getReferenceSet() ) {
+	    		ref.delete();
+	    		}
+		  for (ReferenceArgument ref : this.getReferenceArgumentSet() ) {
 	    		ref.delete();
 	    		}
 	    	this.setLine(null);
