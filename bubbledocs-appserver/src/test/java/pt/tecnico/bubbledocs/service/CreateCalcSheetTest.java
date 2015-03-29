@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;

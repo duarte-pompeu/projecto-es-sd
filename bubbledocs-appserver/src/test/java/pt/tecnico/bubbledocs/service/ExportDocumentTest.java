@@ -42,8 +42,10 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String CELL_ID0;
 	private String CELL_ID1;
 	private String CELL_ID2;
-	private final int VAL0 = 0;
-	private final String LIT0 = "0";
+	
+	//FIXME: values are never used, consider removing them
+//	private final int VAL0 = 0;
+//	private final String LIT0 = "0";
 	
 	
 	@Override

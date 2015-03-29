@@ -8,7 +8,6 @@ import org.jdom2.output.XMLOutputter;
 import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.BubbleApplication;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.User;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
@@ -32,10 +31,13 @@ public class ExportDocument extends BubbleDocsService {
     protected void dispatch() throws BubbleDocsException {
     	org.jdom2.Document d=null;
 		BubbleDocs pb = BubbleDocs.getInstance();
-		User user;
+		
+		// FIXME: variable user is not used, considerer removing
+		// User user;
 		CalcSheet c = null;
     	try{
-    		user = getSessionFromToken(userToken).getUser();
+    		//user = getSessionFromToken(userToken).getUser();
+    		getSessionFromToken(userToken).getUser();
     	}catch(BubbleDocsException e){
     		System.out.println(e.toString()+e.getMessage());
     	}
