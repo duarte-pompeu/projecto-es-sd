@@ -82,21 +82,23 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
         int spreadSheetColumns = sheetElement.getAttribute("columns").getIntValue();
 		
 		//asserting all the attribute values
-		assertEquals("Owner is correct", U_USERNAME, nameReadFromDocument);
-		assertEquals("ID is correct", this.getSpreadSheet(CS_NAME).getId().intValue(), spreadSheetId );
-		assertEquals("Creation date is correct", 
+		assertEquals("Owner is NOT correct", U_USERNAME, nameReadFromDocument);
+		assertEquals("ID is NOT correct", this.getSpreadSheet(CS_NAME).getId().intValue(), spreadSheetId );
+		assertEquals("Creation date is NOT correct", 
 				this.getSpreadSheet(CS_NAME).getDate().toString(), spreadSheetDate );
-		assertEquals("Name is correct", this.getSpreadSheet(CS_NAME).getName(), spreadSheetName );
-		assertEquals("The number of lines is correct", 
+		assertEquals("Name is NOT correct", this.getSpreadSheet(CS_NAME).getName(), spreadSheetName );
+		assertEquals("The number of lines is NOT correct", 
 				this.getSpreadSheet(CS_NAME).getLines().intValue(), spreadSheetLines );
-		assertEquals("The number of columns is correct", 
+		assertEquals("The number of columns is NOT correct", 
 				this.getSpreadSheet(CS_NAME).getColumns().intValue(), spreadSheetColumns );
 		
 		//asserting the correct number of cells
 		assertEquals("The number of cells is correct", 0, sheetElement.getChildren().size());
 		
+		
 		//asserting that all the cells have null contents
 		for(Element cellElement: sheetElement.getChildren()){
+			//FIXME: we have 0 cells, so this loop doesn't execute
 			assertEquals("empty cell", 0 ,cellElement.getContentSize());	
 		}
 		
@@ -132,7 +134,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
       
 		
         //asserting the literal cell exists and has the correct value
-		assertEquals("literal cell is okey", 7 ,literalElement.getAttribute("val").getIntValue());
+		assertEquals("literal cell is wrong", 7 ,literalElement.getAttribute("val").getIntValue());
 		
 		int counter=0;
 		//asserting that all the other cells have empty contents
@@ -194,11 +196,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
         Element arg2Element=addElement.getChild("literalArgument");
 		
         //asserting the literal cell exists and has the correct value
-		assertEquals("literal cell is okey", 7 ,literalElement.getAttribute("val").getIntValue());
+		assertEquals("literal cell is wrong", 7 ,literalElement.getAttribute("val").getIntValue());
 		//asserting the reference is pointing to the literal
-		assertEquals("reference points to the literal", 7, 
+		assertEquals("reference DOES NOT point to the literal", 7, 
 				pointedLiteralElement.getAttribute("val").getIntValue());
-		assertEquals("add element has the correct reference and literal", 12, 
+		assertEquals("add element DOES NOT HAVE the correct reference and literal", 12, 
 				pointedLiteralElement2.getAttribute("val").getIntValue()+arg2Element.getAttribute("val").getIntValue());
 		
 		
