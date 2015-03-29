@@ -6,6 +6,7 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.dml.CalcSheet;
 import pt.tecnico.bubbledocs.dml.Reference;
 import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
@@ -65,14 +66,14 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		service.dispatch();
 	}
 	
-	@Test(expected = NotFoundException.class)
+	@Test(expected = InvalidFormatException.class)
 	public void DocDoesntExist(){
 		int bad_cs_id = -9000; 
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_cs_id, CELL_ID0, REFF_ID0);
 		service.dispatch();
 	}
 	
-	@Test(expected = NotFoundException.class)
+	@Test(expected = InvalidFormatException.class)
 	public void CellDoesntExist(){
 		String bad_cell_id = "666";
 		
