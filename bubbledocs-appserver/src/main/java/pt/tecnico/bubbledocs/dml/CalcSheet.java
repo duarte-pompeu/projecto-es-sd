@@ -31,7 +31,6 @@ public class CalcSheet extends CalcSheet_Base {
      * @param columns
      */
     public CalcSheet(String name, int lines, int columns) {
-        //TODO
     	super();
     	//get unique id
     	this.setId(BubbleDocs.getInstance().getUniqueId());

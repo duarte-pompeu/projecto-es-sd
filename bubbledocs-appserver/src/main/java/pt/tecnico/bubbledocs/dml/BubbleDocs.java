@@ -222,8 +222,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @return
 	 */
 	public User addUser(String username, String name, String password) {
-		//TODO
-		//throw RepeatedIdentificationException case userName already exists
 
 		//if the user already exists, don't create a new one. 
 		try {
