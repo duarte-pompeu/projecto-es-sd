@@ -23,9 +23,9 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test(){
-		createUser(U_USERNAME, U_PASS, U_NAME);
+		User USER = createUser(U_USERNAME, U_PASS, U_NAME);
 		U_TOKEN = addUserToSession(U_USERNAME);
-		
+		createSpreadSheet(USER,CS_NAME,CS_ROWS,CS_LINES);
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 		service.dispatch();
 	}
 	
-	@Test(expected = InvalidFormatException.class)
+	@Test(expected = NullPointerException.class)
 	public void nullName(){
 		String bad_name = null;
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, bad_name, CS_ROWS, CS_LINES);
