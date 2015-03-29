@@ -1,8 +1,9 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.List;
 
 import org.jdom2.Element;
+
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;

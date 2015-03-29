@@ -1,10 +1,10 @@
 package pt.tecnico.bubbledocs.service;
 //imports
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Cell;
-import pt.tecnico.bubbledocs.dml.Reference;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException; //token in session?
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException; //Is it a Reference?
 import pt.tecnico.bubbledocs.exceptions.NotFoundException; //incorrect Cell or Reference given

@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.jdom2.output.XMLOutputter;
 
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
 import pt.tecnico.bubbledocs.BubbleApplication;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;

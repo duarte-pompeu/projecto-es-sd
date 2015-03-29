@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
-import pt.tecnico.bubbledocs.dml.*;
+import pt.tecnico.bubbledocs.domain.*;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 
 // add needed import declarations

@@ -8,10 +8,10 @@ import org.junit.Before;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Session;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Session;
+import pt.tecnico.bubbledocs.domain.User;
 
 // add needed import declarations
 

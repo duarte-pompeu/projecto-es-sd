@@ -1,6 +1,8 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
+
+
 
 /**
  * @author pc-w

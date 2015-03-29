@@ -1,11 +1,12 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Reference;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;

@@ -1,6 +1,8 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.Set;
+
+
 
 /**
  * @author pc-w

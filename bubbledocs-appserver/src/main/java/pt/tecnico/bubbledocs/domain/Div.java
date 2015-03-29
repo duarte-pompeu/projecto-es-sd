@@ -1,6 +1,7 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
+
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
@@ -8,23 +9,21 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public class Sub extends Sub_Base {
+public class Div extends Div_Base {
     
     /**
      * 
      */
-    public Sub() {
+    public Div() {
         super();
     }
-    
-    
-    /**
-     * @param arg1
-     * @param arg2
-     */
-    public Sub(FunctionArgument arg1, FunctionArgument arg2){
+	/**
+	 * @param arg1
+	 * @param arg2
+	 */
+	public Div(FunctionArgument arg1, FunctionArgument arg2){
 		super();
-    	super.init(arg1, arg2);
+		super.init(arg1, arg2);
 	}
 	
 	/* (non-Javadoc)
@@ -32,10 +31,10 @@ public class Sub extends Sub_Base {
 	 */
 	@Override
 	public int getValue() throws NullContentException {
-		int val1 = getArg1().getValue();
-		int val2 = getArg2().getValue();
+		int val1 = this.getArg1().getValue();
+		int val2 = this.getArg2().getValue();
 		
-		return val1 - val2;
+		return val1 / val2;
 	}
 
 	/* (non-Javadoc)
@@ -43,9 +42,11 @@ public class Sub extends Sub_Base {
 	 */
 	@Override
 	public Element exportToXML() {
-		Element element = new Element("sub");
+		Element element = new Element("div");
     	element.addContent(this.getArg1().exportToXML());
     	element.addContent(this.getArg2().exportToXML());
 	return element;
 	}
+
+	
 }

@@ -1,28 +1,19 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.List;
 
 import org.jdom2.Element;
 
-import pt.tecnico.bubbledocs.exceptions.*;
 
-/**
- * @author pc-w
- *
- */
-public class Reference extends Reference_Base {
+import pt.tecnico.bubbledocs.exceptions.NullContentException;
+
+public class ReferenceArgument extends ReferenceArgument_Base {
     
-    /**
-     * 
-     */
-    public Reference() {
+    public ReferenceArgument() {
         super();
     }
-    
-	/**
-	 * @param cell
-	 */
-	public Reference(Cell cell){
+
+	public ReferenceArgument(Cell cell){
 		super();
 		init(cell);
 	}
@@ -34,19 +25,20 @@ public class Reference extends Reference_Base {
 		this.setPointedCell(cell);
 	}
 	
-	public void delete() {
+    
+    public void delete() {
 		
+    	this.setBinaryFunction_(null);
+    	this.setBinaryFunction(null);
+    	
 		setPointedCell(null);
-		if(this.getCell() !=null)
-    	setCell(null);
+	
 		
     	deleteDomainObject();
         }
-	
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#getValue()
-	 */
-	public int getValue() throws NullContentException{
+
+    
+    public int getValue() throws NullContentException{
 		Content content = this.getPointedCell().getContent();
 		
 		if(content == null){
@@ -58,11 +50,8 @@ public class Reference extends Reference_Base {
 			return content.getValue();
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see pt.ist.fenixframework.backend.jvstmojb.pstm.AbstractDomainObject#toString()
-	 */
-	@Override
+    
+    @Override
 	public String toString(){
 		return "=" + this.getPointedCell().getColumn()
 				+ ";" + this.getPointedCell().getLine();
@@ -72,7 +61,7 @@ public class Reference extends Reference_Base {
 	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#exportToXML()
 	 */
 	public Element exportToXML(){
-		Element referenceElement=new Element("reference");
+		Element referenceElement=new Element("referenceArgument");
 		referenceElement.addContent(this.getPointedCell().exportToXML());
 		return referenceElement;
 	}
@@ -104,5 +93,3 @@ public class Reference extends Reference_Base {
     	}
 	}
 }
-    
-

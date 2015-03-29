@@ -1,8 +1,8 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.dml.*;
 
 
+import pt.tecnico.bubbledocs.domain.*;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 

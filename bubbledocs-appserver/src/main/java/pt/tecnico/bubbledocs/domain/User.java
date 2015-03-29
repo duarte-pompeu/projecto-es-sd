@@ -1,8 +1,9 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
 
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 

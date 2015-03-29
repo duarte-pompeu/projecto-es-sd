@@ -1,6 +1,10 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
+
+
+
+
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
@@ -8,19 +12,19 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public class Avg extends Avg_Base {
+public class Prd extends Prd_Base {
     
     /**
      * 
      */
-    public Avg() {
+    public Prd() {
         super();
     }
     
     /**
      * @param range
      */
-    public Avg(Range range){
+    public Prd(Range range){
 		super();
     	super.init(range);
 	}
@@ -30,15 +34,15 @@ public class Avg extends Avg_Base {
 	 */
 	@Override
 	public int getValue() throws NullContentException {
-		int total = 0;
-		int n = 0;
+		// initialize with 1 since we're multiplying
+		int total = 1;
 		
 		for(Cell cell: this.getRangeCells()){
-			total += cell.getContent().getValue();
-			n += 1;
+			total *= cell.getContent().getValue();
 		}
 		
-		return total / n;
+		return total;
+		
 	}
 
 	/* (non-Javadoc)
@@ -46,7 +50,7 @@ public class Avg extends Avg_Base {
 	 */
 	@Override
 	public Element exportToXML() {
-		Element element = new Element("avg");
+		Element element = new Element("prd");
     	element.addContent(this.getRange().exportToXML());
 	return element;
 	}
