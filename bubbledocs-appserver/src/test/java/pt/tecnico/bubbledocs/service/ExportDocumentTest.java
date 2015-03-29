@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -14,14 +15,14 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.dml.Add;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Cell;
-import pt.tecnico.bubbledocs.dml.Literal;
-import pt.tecnico.bubbledocs.dml.LiteralArgument;
-import pt.tecnico.bubbledocs.dml.Reference;
-import pt.tecnico.bubbledocs.dml.ReferenceArgument;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.Add;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.LiteralArgument;
+import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.ReferenceArgument;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {

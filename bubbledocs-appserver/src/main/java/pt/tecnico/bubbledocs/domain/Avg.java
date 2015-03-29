@@ -1,6 +1,7 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
+
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
@@ -8,21 +9,21 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public class Div extends Div_Base {
+public class Avg extends Avg_Base {
     
     /**
      * 
      */
-    public Div() {
+    public Avg() {
         super();
     }
-	/**
-	 * @param arg1
-	 * @param arg2
-	 */
-	public Div(FunctionArgument arg1, FunctionArgument arg2){
+    
+    /**
+     * @param range
+     */
+    public Avg(Range range){
 		super();
-		super.init(arg1, arg2);
+    	super.init(range);
 	}
 	
 	/* (non-Javadoc)
@@ -30,10 +31,15 @@ public class Div extends Div_Base {
 	 */
 	@Override
 	public int getValue() throws NullContentException {
-		int val1 = this.getArg1().getValue();
-		int val2 = this.getArg2().getValue();
+		int total = 0;
+		int n = 0;
 		
-		return val1 / val2;
+		for(Cell cell: this.getRangeCells()){
+			total += cell.getContent().getValue();
+			n += 1;
+		}
+		
+		return total / n;
 	}
 
 	/* (non-Javadoc)
@@ -41,9 +47,8 @@ public class Div extends Div_Base {
 	 */
 	@Override
 	public Element exportToXML() {
-		Element element = new Element("div");
-    	element.addContent(this.getArg1().exportToXML());
-    	element.addContent(this.getArg2().exportToXML());
+		Element element = new Element("avg");
+    	element.addContent(this.getRange().exportToXML());
 	return element;
 	}
 

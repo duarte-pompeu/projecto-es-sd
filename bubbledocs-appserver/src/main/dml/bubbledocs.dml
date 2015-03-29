@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 class BubbleDocs {
     Integer idCounter;

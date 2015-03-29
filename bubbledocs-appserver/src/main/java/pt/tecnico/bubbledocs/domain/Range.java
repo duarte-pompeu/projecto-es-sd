@@ -1,10 +1,12 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
 import org.jdom2.Element;
+
+
 
 /**
  * @author pc-w

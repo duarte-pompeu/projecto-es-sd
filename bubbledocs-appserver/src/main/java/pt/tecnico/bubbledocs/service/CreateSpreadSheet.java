@@ -1,7 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.User;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;

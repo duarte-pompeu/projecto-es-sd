@@ -1,8 +1,10 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.List;
 
 import org.jdom2.Element;
+
+
 
 
 /**

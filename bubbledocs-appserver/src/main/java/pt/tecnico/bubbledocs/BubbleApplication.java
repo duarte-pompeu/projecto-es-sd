@@ -14,15 +14,15 @@ import org.jdom2.output.XMLOutputter;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
-import pt.tecnico.bubbledocs.dml.Add;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Div;
-import pt.tecnico.bubbledocs.dml.Literal;
-import pt.tecnico.bubbledocs.dml.LiteralArgument;
-import pt.tecnico.bubbledocs.dml.Reference;
-import pt.tecnico.bubbledocs.dml.ReferenceArgument;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.Add;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Div;
+import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.LiteralArgument;
+import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.ReferenceArgument;
+import pt.tecnico.bubbledocs.domain.User;
 
 
 /**

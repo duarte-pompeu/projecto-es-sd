@@ -1,6 +1,7 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
+
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
@@ -8,32 +9,40 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public abstract class FunctionArgument extends FunctionArgument_Base {
+public class Function extends Function_Base {
     
     /**
      * 
      */
-    public FunctionArgument() {
+    public Function() {
         super();
     }
-    
 
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Content#exportToXML()
 	 */
-	
-	public abstract Element exportToXML();
+	@Override
+	public Element exportToXML() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Content#getValue()
 	 */
-
-	public abstract int getValue() throws NullContentException;
+	@Override
+	public int getValue() throws NullContentException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Content#importFromXML(org.jdom2.Element)
 	 */
-
-	public abstract void importFromXML(Element c);
+	@Override
+	public void importFromXML(Element c) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

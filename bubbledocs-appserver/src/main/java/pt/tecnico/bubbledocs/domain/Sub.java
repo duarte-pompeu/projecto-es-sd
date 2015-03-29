@@ -1,7 +1,6 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
-
 
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
@@ -10,21 +9,23 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public class Prd extends Prd_Base {
+public class Sub extends Sub_Base {
     
     /**
      * 
      */
-    public Prd() {
+    public Sub() {
         super();
     }
     
+    
     /**
-     * @param range
+     * @param arg1
+     * @param arg2
      */
-    public Prd(Range range){
+    public Sub(FunctionArgument arg1, FunctionArgument arg2){
 		super();
-    	super.init(range);
+    	super.init(arg1, arg2);
 	}
 	
 	/* (non-Javadoc)
@@ -32,15 +33,10 @@ public class Prd extends Prd_Base {
 	 */
 	@Override
 	public int getValue() throws NullContentException {
-		// initialize with 1 since we're multiplying
-		int total = 1;
+		int val1 = getArg1().getValue();
+		int val2 = getArg2().getValue();
 		
-		for(Cell cell: this.getRangeCells()){
-			total *= cell.getContent().getValue();
-		}
-		
-		return total;
-		
+		return val1 - val2;
 	}
 
 	/* (non-Javadoc)
@@ -48,10 +44,9 @@ public class Prd extends Prd_Base {
 	 */
 	@Override
 	public Element exportToXML() {
-		Element element = new Element("prd");
-    	element.addContent(this.getRange().exportToXML());
+		Element element = new Element("sub");
+    	element.addContent(this.getArg1().exportToXML());
+    	element.addContent(this.getArg2().exportToXML());
 	return element;
 	}
-
-	
 }

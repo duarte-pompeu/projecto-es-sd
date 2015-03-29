@@ -1,8 +1,10 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 import java.util.Random;
 
 import org.joda.time.DateTime;
+
+
 
 public class Session extends Session_Base {
     
