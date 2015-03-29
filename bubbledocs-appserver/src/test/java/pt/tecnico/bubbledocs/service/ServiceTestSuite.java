@@ -14,7 +14,11 @@ import org.junit.runners.Suite.SuiteClasses;
 //Add more tests when they are done.
 
 @RunWith(Suite.class)
-@SuiteClasses({ AssignLiteralCellTest.class, LoginUserTest.class, ExportDocumentTest.class, CreateCalcSheetTest.class })
+@SuiteClasses({ AssignLiteralCellTest.class, 
+	LoginUserTest.class, 
+	ExportDocumentTest.class, 
+	CreateCalcSheetTest.class,
+	AssignReferenceCellTest.class})
 public class ServiceTestSuite {
 
 }
