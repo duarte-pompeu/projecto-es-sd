@@ -8,6 +8,7 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException; //token in session?
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException; //Is it a Reference?
 import pt.tecnico.bubbledocs.exceptions.NotFoundException; //incorrect Cell or Reference given
+import pt.tecnico.bubbledocs.exceptions.NullContentException; //Content Null
 import pt.tecnico.bubbledocs.exceptions.PermissionException; //User doesnt have write permissions
 
 public class AssignReferenceCell extends BubbleDocsService {
@@ -44,7 +45,9 @@ public class AssignReferenceCell extends BubbleDocsService {
 
 		Cell refcell = c1.getCell(refId);
 		if (refcell == null) throw new NotFoundException("Reference out of bounds in " + refId);
-
+		
+		if(c1.getCell(refId).getContent() == null) throw new NullContentException(c1.getCell(refId).getLine(), c1.getCell(refId).getColumn());
+			
 		c1.setContent(user, new Reference(c1.getCell(refId)), cellId);
 
 		result = Integer.toString(cell.getContent().getValue());

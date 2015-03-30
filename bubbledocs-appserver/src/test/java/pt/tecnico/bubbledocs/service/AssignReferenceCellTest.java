@@ -10,6 +10,7 @@ import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
@@ -29,6 +30,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	
 	private String CELL_ID0;
 	private String REFF_ID0;
+	private String REFF_ID1;
 	
 	@Override
 	public void populate4Test(){
@@ -39,6 +41,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		CS_ID = CS_SHEET.getId();
 		CELL_ID0 = CS_SHEET.getCell(1, 1).getId();
 		REFF_ID0 = CS_SHEET.getCell(2, 2).getId();
+		REFF_ID1 = CS_SHEET.getCell(3,3).getId();
 		Literal num1 = new Literal(5);
 		CS_SHEET.setContent(USER, num1, REFF_ID0);
 	}
@@ -74,6 +77,12 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	public void DocDoesntExist(){
 		int bad_cs_id = -9000; 
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_cs_id, CELL_ID0, REFF_ID0);
+		service.dispatch();
+	}
+	
+	@Test(expected = NullContentException.class)
+	public void NullReference(){
+		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, CELL_ID0, REFF_ID1);
 		service.dispatch();
 	}
 	
