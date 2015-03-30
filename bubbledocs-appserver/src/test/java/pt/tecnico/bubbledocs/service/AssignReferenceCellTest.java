@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
-import pt.tecnico.bubbledocs.dml.Literal;
+import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
