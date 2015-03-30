@@ -64,6 +64,9 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		assertEquals("Reference is NOT correct", 
 				REFF_ID0, 
 				comp_ref.getPointedCell().getId());
+		assertEquals("Bad result",
+				CS_SHEET.getCell(REFF_ID0).getContent().toString(),
+				service.getResult());
 	}
 	
 	@Test(expected = UserNotInSessionException.class)
