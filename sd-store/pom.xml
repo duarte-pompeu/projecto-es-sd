@@ -20,7 +20,7 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <mainclass>pt.tecnico.sd-store.impl.Store</mainclass>
+    <mainclass>pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain</mainclass>
 
     <ws.name>sd-store</ws.name>
     <ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>

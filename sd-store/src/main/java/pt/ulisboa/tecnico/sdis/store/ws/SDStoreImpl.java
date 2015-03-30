@@ -18,7 +18,9 @@ public class SDStoreImpl implements SDStore{
 	@Override
 	public void createDoc(DocUserPair docUserPair)
 			throws DocAlreadyExists_Exception {
-		// TODO Auto-generated method stub
+		// TODO complete method stub
+		String docId = docUserPair.getDocumentId();
+		String userId = docUserPair.getUserId();
 		
 	}
 
