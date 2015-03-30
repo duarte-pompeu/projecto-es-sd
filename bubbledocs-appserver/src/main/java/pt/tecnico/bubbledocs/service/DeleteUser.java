@@ -21,49 +21,8 @@ public class DeleteUser extends BubbleDocsService {
 
     @Override
     protected void dispatch() throws BubbleDocsException {
-    	BubbleDocs pb = BubbleDocs.getInstance();
-    	
-	//Caso o user que chama nao exista
-	
-	/* // metodo suspeito: 
-	boolean found = false; 
-	BubbleDocs pb = BubbleDocs.getInstance();
-	 	for (User p : pb.getUserSet()) {
-		 	if (p.getUserName().equals(username) ) {
-		 		found = true ;
-		 		break; 
-		 	} 
-	 	}
-	 	
-	 if (!found) { 
-	 	throw new NotFoundException ("User trying to delete does not exist") ; 
-	 }
-	 
-	 */
-	//Caso o user que chama nao esteja em sessao
-    	
-    	// token must be from Root
-    	
-    	try{ 
-    		User user = getSessionFromToken(token).getUser(); 
-    		if(!user.getUserName().equals("root")){
-    			throw new PermissionException("Only root can delete users.");
-    		}
-    	}
-    	catch(UserNotInSessionException e){
-    		throw e;
-    	}
-    	
-
-    	
-    	
-    	//User a ser removido nao existe
-    	
-    	
-	 	for (User p : pb.getUserSet()) 
-		 	if (!p.getUserName().equals(username) ) 
-	 		throw new NotFoundException ("Trying to delete a user not found");
-	 		
+    	User user = this.getSessionFromToken(token).getUser();
+    	user.deleteUser(username);	 		
     }
 
 }
