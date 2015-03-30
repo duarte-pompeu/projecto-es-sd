@@ -8,7 +8,7 @@ import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
-import pt.tecnico.bubbledocs.exceptions.RepeatExceptionException;
+import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
@@ -42,7 +42,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	// User is the domain class that represents a User
         User user = getUserFromUsername(ALT_USERNAME);
 
-        assertEquals(ALT_USERNAME, user.getUsername());
+        assertEquals(ALT_USERNAME, user.getUserName());
         assertEquals("queijo", user.getPassword());
         assertEquals("Sensei", user.getName());
     }

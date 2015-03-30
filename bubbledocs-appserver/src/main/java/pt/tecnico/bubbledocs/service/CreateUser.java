@@ -5,8 +5,8 @@ package pt.tecnico.bubbledocs.service;
 import pt.tecnico.bubbledocs.domain.*;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
-import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificatonException; 
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException; //Case empty username
+import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException; //incorrect Cell or Reference given
 import pt.tecnico.bubbledocs.exceptions.PermissionException; //User doesnt have create permissions
 
@@ -27,6 +27,7 @@ public class CreateUser extends BubbleDocsService {
     
     @Override
     protected void dispatch() throws BubbleDocsException, RepeatedIdentificationException, InvalidValueException,UserNotInSessionException, PermissionException {
+    	User user = null;
     	//Código para autenticação, temos de decidir o método.
     	//User user = Session.getInstance().getUser(token);
     	//TODO
@@ -39,7 +40,7 @@ public class CreateUser extends BubbleDocsService {
     	
     	//Caso o user root nao esteja em sessao
     	try{ 
-    		User user = getSessionFromToken(token).getUser(); 
+    		user = getSessionFromToken(token).getUser(); 
     	}
     	catch(UserNotInSessionException e){
     		throw e;
