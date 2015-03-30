@@ -5,6 +5,10 @@ package pt.tecnico.bubbledocs.service;
 import pt.tecnico.bubbledocs.domain.*;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificatonException; 
+import pt.tecnico.bubbledocs.exceptions.InvalidValueException; //Case empty username
+import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException; //incorrect Cell or Reference given
+import pt.tecnico.bubbledocs.exceptions.PermissionException; //User doesnt have create permissions
 
 public class CreateUser extends BubbleDocsService {
 
@@ -22,11 +26,35 @@ public class CreateUser extends BubbleDocsService {
     }
     
     @Override
-    protected void dispatch() throws BubbleDocsException {
+    protected void dispatch() throws BubbleDocsException, RepeatedIdentificationException, InvalidValueException,UserNotInSessionException, PermissionException {
     	//Código para autenticação, temos de decidir o método.
     	//User user = Session.getInstance().getUser(token);
     	//TODO
-    	User user = null; //Given the token, get the user.
+    	
+    	//Se o campo username estava vazio
+    	if (username.isEmpty()) {
+    		throw new InvalidValueException("Username field is empty!"); 
+    	}
+    	
+    	
+    	//Caso o user root nao esteja em sessao
+    	try{ 
+    		User user = getSessionFromToken(token).getUser(); 
+    	}
+    	catch(UserNotInSessionException e){
+    		throw e;
+    	}
+    	
+    	
+    	//Caso nao tenha sido accionado pelo root
+    	if ( !token.toLowerCase().contains("root".toLowerCase()) ){ //que outras maneiras existem para verificar o token? 
+    		throw new PermissionException("User is not allowed to create new users");
+    	}
+    	
+    	
+    	//Caso o user ja exista
+    	//TODO
+    	
     	user.createUser(username, name, password);    	
     }
 }
