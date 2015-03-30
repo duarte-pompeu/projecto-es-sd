@@ -18,7 +18,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	LoginUserTest.class, 
 	ExportDocumentTest.class, 
 	CreateCalcSheetTest.class,
-	AssignReferenceCellTest.class})
+	AssignReferenceCellTest.class,
+	CreateUserTest.class,
+	DeleteUserTest.class})
 public class ServiceTestSuite {
 
 }
