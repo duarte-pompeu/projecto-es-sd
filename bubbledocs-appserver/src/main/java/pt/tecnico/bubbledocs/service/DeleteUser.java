@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 // add needed import declarations
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
@@ -20,7 +21,7 @@ public class DeleteUser extends BubbleDocsService {
 
     @Override
     protected void dispatch() throws BubbleDocsException {
-	
+    	BubbleDocs pb = BubbleDocs.getInstance();
 	
 	
 	//Caso o user que chama nao exista
@@ -50,25 +51,13 @@ public class DeleteUser extends BubbleDocsService {
 
     	
     	
-    	//User a ser deletado nao existe
+    	//User a ser removido nao existe
     	
-    	/*
     	
-    	boolean found = false ; 
-    	BubbleDocs pb = BubbleDocs.getInstance();
-	 	for (User p : pb.getUserSet()) {
-		 	if (p.getUserName().equals(username) ) {
-		 		found = true; 
-		 		break; 
-		 	} 
-	 	} 
-	 	if (!found) {	//Username a ser deletado not found...
+	 	for (User p : pb.getUserSet()) 
+		 	if (!p.getUserName().equals(username) ) 
 	 		throw new NotFoundException ("Trying to delete a user not found");
-	 	}
-    	*/
-    
-    	
-    	
+	 		
     }
 
 }
