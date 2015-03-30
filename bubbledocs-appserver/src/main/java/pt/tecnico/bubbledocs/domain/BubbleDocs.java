@@ -69,8 +69,24 @@ public class BubbleDocs extends BubbleDocs_Base {
 			if(c.getName().equals(name))
 				return c;
 		}
-		throw new NotFoundException();
+		throw new NotFoundException("No calcSheet has this: '" + name + "' as name.");
 	}
+	
+	/**
+	 * Searches the calcSheet set and returns the calcSheet with the id
+	 * @param id
+	 * @return the calcSheet with id if it exists.
+	 * @throws NotFoundException if there is no calcSheet with that id
+	 */
+	public CalcSheet getCalcSheetById(int id) throws NotFoundException {
+		for (CalcSheet c : this.getCalcSheetSet()) {
+			if (c.getId() == id) {
+				return c;
+			}
+		}
+		
+		throw new NotFoundException("No calcSheet has this: '" + id + "' as id.");
+	}	
 
 
 	/**
@@ -265,7 +281,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet the related CalcSheet
 	 */
 	public void addReader(User author, String username, CalcSheet calcSheet) {
-		//TODO
 		//PRECOND: author owns or can write this file
 		//PRECOND: username is not already in this association
 		checkAuthorsPermission(author, calcSheet);
@@ -285,7 +300,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 	public void addWriter(User author, String username, CalcSheet calcSheet) {
-		// TODO addWriter
 		//PRECOND: author owns or can write this file
 		//PRECOND: username MUST be able to read this file
 		checkAuthorsPermission(author, calcSheet);
@@ -306,7 +320,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 	public void removeReader(User author, String username, CalcSheet calcSheet) {
-		// TODO removeReader
 		//PRECOND: author owns or can write this file
 		//PRECOND: username can read this file and CANNOT write this file
 		checkAuthorsPermission(author, calcSheet);
@@ -327,7 +340,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param calcSheet
 	 */
 	public void removeWriter(User author, String username, CalcSheet calcSheet) {
-		// TODO removeWriter
 		//PRECOND: author owns or can write this file
 		//PRECOND: username can write this file.
 		checkAuthorsPermission(author, calcSheet);
