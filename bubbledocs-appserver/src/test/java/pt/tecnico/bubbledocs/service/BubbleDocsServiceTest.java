@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.service;
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 
@@ -76,7 +77,10 @@ public class BubbleDocsServiceTest {
 
     // remove a user from session given its token
     void removeUserFromSession(String token) {
-	// add code here
+    	Session session = getSessionFromToken(token);
+    	DateTime time = new DateTime();
+    	time = time.minusHours(1);
+    	session.setExpiration(time);
     }
 
     // return the user registered in session whose token is equal to token
