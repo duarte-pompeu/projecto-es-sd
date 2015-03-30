@@ -16,7 +16,7 @@ import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 public class CreateUserTest extends BubbleDocsServiceTest {
 
     // the tokens
-    private String root;
+    private String root_token;
     private String user_token;
 
 	private User USER;
@@ -29,14 +29,14 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     @Override
     public void populate4Test() {
 		createUser(ROOT_USERNAME, PASSWORD, "Super User");
-    	root = addUserToSession(ROOT_USERNAME);
+    	root_token = addUserToSession(ROOT_USERNAME);
         USER = createUser(USERNAME, PASSWORD, NAME);
         user_token = addUserToSession(USERNAME);
     }
 
     @Test
     public void success() {
-        CreateUser service = new CreateUser(root, ALT_USERNAME, "queijo",
+        CreateUser service = new CreateUser(root_token, ALT_USERNAME, "queijo",
                 "Sensei");
         service.execute();
 
@@ -50,13 +50,13 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
     @Test(expected =  RepeatedIdentificationException.class)
     public void usernameExists() {
-        CreateUser service = new CreateUser(root, USERNAME, PASSWORD, NAME);
+        CreateUser service = new CreateUser(root_token, USERNAME, PASSWORD, NAME);
         service.execute();
     }
 
     @Test(expected = InvalidValueException.class)
     public void emptyUsername() {
-        CreateUser service = new CreateUser(root, "", "queijo", "sensei");
+        CreateUser service = new CreateUser(root_token, "", "queijo", "sensei");
         service.execute();
     }
 
@@ -69,8 +69,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
     @Test(expected = UserNotInSessionException.class)
     public void accessUsernameNotExist() {
-        removeUserFromSession(root);
-        CreateUser service = new CreateUser(root, ALT_USERNAME, "queijo",
+        removeUserFromSession(root_token);
+        CreateUser service = new CreateUser(root_token, ALT_USERNAME, "queijo",
                 "Sensei");
         service.execute();
     }

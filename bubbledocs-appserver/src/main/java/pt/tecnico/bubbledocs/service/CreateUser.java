@@ -47,12 +47,6 @@ public class CreateUser extends BubbleDocsService {
     	}
     	
     	
-    	//Caso nao tenha sido accionado pelo root
-    	if ( !token.toLowerCase().contains("root".toLowerCase()) ){ //que outras maneiras existem para verificar o token? 
-    		throw new PermissionException("User is not allowed to create new users");
-    	}
-    	
-    	
     	//Caso o user ja exista
     	/* TODO 
     	?
