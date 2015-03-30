@@ -28,7 +28,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
     @Override
     public void populate4Test() {
-		root = addUserToSession("root");
+		createUser(ROOT_USERNAME, PASSWORD, "Super User");
+    	root = addUserToSession(ROOT_USERNAME);
         USER = createUser(USERNAME, PASSWORD, NAME);
         user_token = addUserToSession(USERNAME);
     }
