@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.dml.Literal;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
@@ -38,6 +39,8 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		CS_ID = CS_SHEET.getId();
 		CELL_ID0 = CS_SHEET.getCell(1, 1).getId();
 		REFF_ID0 = CS_SHEET.getCell(2, 2).getId();
+		Literal num1 = new Literal(5);
+		CS_SHEET.setContent(USER, num1, REFF_ID0);
 	}
 	
 	@Test
