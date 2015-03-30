@@ -53,8 +53,16 @@ public class CreateUser extends BubbleDocsService {
     	
     	
     	//Caso o user ja exista
-    	//TODO
-    	
+    	/* TODO 
+    	?
+    	BubbleDocs pb = BubbleDocs.getInstance();
+	 	for (User p : pb.getUserSet()) {
+		 	if (p.getUserName().equals(username) ) {
+		 		throw new RepeatedIdentificationException("Username already in use!"); 
+		 	} 
+	 	}
+	 
+    	*/
     	user.createUser(username, name, password);    	
     }
 }
