@@ -65,6 +65,8 @@ public class AssignReferenceCell extends BubbleDocsService {
     	}
 		c1.setContent(user, new Reference(c1.getCell(refId)), cellId);
 		
+		result = Integer.toString(cell.getContent().getValue());
+		
     }
 
     public final String getResult() {
