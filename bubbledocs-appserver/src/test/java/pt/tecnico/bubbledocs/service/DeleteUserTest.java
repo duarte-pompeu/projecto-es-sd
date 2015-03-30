@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
@@ -37,7 +38,9 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         createUser(USERNAME, PASSWORD, NAME);
         toDelete = createUser(USERNAME_TO_DELETE, "please", "john de lete");
         createSpreadSheet(toDelete, USERNAME_TO_DELETE, 20, 20);
-
+        
+        User rootUser = new User(ROOT_USERNAME, "root", "root");
+        BubbleDocs.getInstance().addUser(rootUser);
         root = addUserToSession(ROOT_USERNAME);
     };
 
