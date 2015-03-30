@@ -47,12 +47,7 @@ public class DeleteUser extends BubbleDocsService {
     	catch(UserNotInSessionException e){
     		throw e;
     	}
-    	
-    	
-    	//Caso nao tenha sido accionado pelo root
-    	if ( !token.toLowerCase().contains("root".toLowerCase()) ){ //que outras maneiras existem para verificar o token? 
-    		throw new PermissionException("User is not allowed to create new users");
-    	}
+
     	
     	
     	//User a ser deletado nao existe
