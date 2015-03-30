@@ -30,8 +30,8 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	private final int CS_LINES = 10;
 	
 	private String CELL_ID0;
-	private final int VAL0 = 0;
-	private final String LIT0 = "0";
+	private final int VAL0 = 1;
+	private final String LIT0 = "1";
 
 	
 	@Override
@@ -69,6 +69,10 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		assertEquals("Value is NOT correct", 
 				VAL0, 
 				CS_SHEET.getCell(CELL_ID0).getContent().getValue());
+		
+		assertEquals("Bad result",
+				CS_SHEET.getCell(CELL_ID0).getContent().toString(),
+				service.getResult());
 	}
 	
 	
@@ -85,6 +89,10 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, id, LIT0);
 		service.dispatch();
+		
+		assertEquals("Bad result",
+				CS_SHEET.getCell(id).getContent().toString(),
+				service.getResult());
 	}
 	
 	

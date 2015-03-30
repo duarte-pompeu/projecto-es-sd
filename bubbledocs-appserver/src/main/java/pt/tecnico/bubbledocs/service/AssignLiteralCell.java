@@ -17,7 +17,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     private int docId;
     private String cellId;
     String literal;
-
+    
     public AssignLiteralCell(String accessToken, int docId, String cellId, String literal) {
     	
     	this.accessToken = accessToken;
@@ -79,6 +79,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     	}
     	
     	cs.setContent(user, new Literal(literal_val), cellId);
+    	result = cs.getContent(user, cellId).toString();
     }
 
     public String getResult() {
