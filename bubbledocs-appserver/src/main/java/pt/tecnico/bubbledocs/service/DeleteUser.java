@@ -22,8 +22,7 @@ public class DeleteUser extends BubbleDocsService {
     @Override
     protected void dispatch() throws BubbleDocsException {
     	BubbleDocs pb = BubbleDocs.getInstance();
-	
-	
+    	
 	//Caso o user que chama nao exista
 	
 	/* // metodo suspeito: 
@@ -42,12 +41,19 @@ public class DeleteUser extends BubbleDocsService {
 	 
 	 */
 	//Caso o user que chama nao esteja em sessao
+    	
+    	// token must be from Root
+    	
     	try{ 
     		User user = getSessionFromToken(token).getUser(); 
+    		if(!user.getUserName().equals("root")){
+    			throw new PermissionException("Only root can delete users.");
+    		}
     	}
     	catch(UserNotInSessionException e){
     		throw e;
     	}
+    	
 
     	
     	
