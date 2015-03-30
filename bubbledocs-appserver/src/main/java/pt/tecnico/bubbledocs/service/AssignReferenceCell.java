@@ -37,32 +37,14 @@ public class AssignReferenceCell extends BubbleDocsService {
     		throw e;
     	}
 		
-		//check if CalcSheet exists	
-    	CalcSheet c1 = null;
-    	for(CalcSheet cx: bd.getCalcSheetSet()){
-    		if(cx.getId() == docId){
-    			c1 = cx;
-    		}
-    	}
-    	if(c1 == null){
-    		throw new NotFoundException("Can't find calcsheet with ID " + docId + ".");
-    	}
-		
-		//check if cell exists
-    	if(!c1.hasCell(cellId)){
-    		throw new NotFoundException("Can't find cell with ID " + cellId + ".");
-    	}
-		
-		//check if reference is valid
-		if(!c1.hasCell(refId)){
-    		throw new NotFoundException("Can't find reference, cell with ID" + refId + "does not exist.");
-    	}
-		
-		//check if cell is protected
-    	Cell cell = c1.getCell(cellId);
-    	if(cell.getProtect()){
-    		throw new PermissionException();
-    	}
+		CalcSheet c1 = bd.getCalcSheetById(docId);
+    	
+		Cell cell = c1.getCell(cellId);
+    	if (cell == null) throw new NotFoundException("Cell out of bounds in " + cellId);
+    	
+    	Cell refcell = c1.getCell(refId);
+		if (refcell == null) throw new NotFoundException("Reference out of bounds in " + refId);
+    	
 		c1.setContent(user, new Reference(c1.getCell(refId)), cellId);
 		
 		result = Integer.toString(cell.getContent().getValue());
