@@ -54,19 +54,6 @@ public class Cell extends Cell_Base {
         this.setId(newId);
    
 	}
-    
-	/**
-	 * @return
-	 * @throws NullContentException
-	 */
-	public Content _getContent() throws NullContentException{
-	
-		if(this.getContent() == null){
-			throw new NullContentException(getLine(), getColumn());
-		}
-		
-		return this.getContent();
-	}
 	
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Cell_Base#setContent(pt.tecnico.bubbledocs.dml.Content)
