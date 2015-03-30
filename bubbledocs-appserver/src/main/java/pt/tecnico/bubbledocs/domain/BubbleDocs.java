@@ -261,9 +261,23 @@ public class BubbleDocs extends BubbleDocs_Base {
 	/**
 	 * @param userName
 	 */
-	public void deleteUser(String userName) {
-		//TODO
-		//throw NotFoundException case userName doesn't exist
+	public void deleteUser(String username) {
+		User user = this.getUser(username);
+		for (CalcSheet sheet : user.getCreatedCalcSheetSet()) {
+			sheet.deleteAllCells();
+		}
+		
+		for (CalcSheet writing : user.getWriteableCalcSheetSet()) {
+			user.removeWriteableCalcSheet(writing);
+			writing.removeWritingUser(user);
+		}
+		
+		for (CalcSheet reading : user.getReadableCalcSheetSet()) {
+			user.removeReadableCalcSheet(reading);
+			reading.removeReadingUser(user);
+		}
+		
+		deleteDomainObject();
 	}
 
 
