@@ -52,6 +52,12 @@ public class Session extends Session_Base {
     }
 
 	public void delete() {
+		User user = this.getUser();
+		if (user != null)
+			this.getUser().setSession(null);
+		this.setUser(null);
+		this.getBubbleDocs().removeSession(this);
+		this.setBubbleDocs(null);		
 		deleteDomainObject();
 	}
     

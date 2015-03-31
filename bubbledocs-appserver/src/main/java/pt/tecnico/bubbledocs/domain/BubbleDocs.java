@@ -190,9 +190,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public void refreshSessions() {
 		for (Session session : this.getSessionSet()) {
 			if (session.isExpired()) {
-				session.getUser().setSession(null);
-				session.setUser(null);
-				this.removeSession(session);
 				session.delete();
 				//anything else to remove the session completely?
 			}
