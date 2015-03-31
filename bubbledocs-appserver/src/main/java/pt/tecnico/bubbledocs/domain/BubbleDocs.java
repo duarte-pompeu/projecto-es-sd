@@ -277,6 +277,8 @@ public class BubbleDocs extends BubbleDocs_Base {
 			reading.removeReadingUser(user);
 		}
 		
+		this.removeUser(user);
+		
 		deleteDomainObject();
 	}
 
