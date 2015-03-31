@@ -22,7 +22,10 @@ public class DeleteUser extends BubbleDocsService {
     @Override
     protected void dispatch() throws BubbleDocsException {
     	User user = this.getSessionFromToken(token).getUser();
-    	user.deleteUser(username);	 		
+    	user.deleteUser(username);	 	
+    	
+   
     }
+    
 
 }

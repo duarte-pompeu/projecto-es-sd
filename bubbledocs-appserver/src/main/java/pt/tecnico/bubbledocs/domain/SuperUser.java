@@ -42,6 +42,7 @@ public class SuperUser extends SuperUser_Base {
     @Override
     public void deleteUser(String userName) {
     	BubbleDocs bb = BubbleDocs.getInstance();
+    	bb.getUser(userName);
     	bb.deleteUser(userName);
     }
     
