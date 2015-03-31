@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.User;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
@@ -9,7 +10,7 @@ import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class CreateSpreadSheet extends BubbleDocsService {
-	 	private String result;
+	 	private int result;
 	    private String accessToken;
 	    private String name;
 	    private int rows;
@@ -50,16 +51,17 @@ public class CreateSpreadSheet extends BubbleDocsService {
     		 throw new InvalidValueException(columns + " isn't greater then zero.");
     
     	 //creates the calcsheet
-    	 user.createCalcSheet(name, rows, columns);
+    	 CalcSheet sheet = user.createCalcSheet(name, rows, columns);
+    	 result = sheet.getId();
     }
 
     
     //GETTERS AND SETTERS
-	public String getResult() {
+	public int getResult() {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public void setResult(int result) {
 		this.result = result;
 	}
 
