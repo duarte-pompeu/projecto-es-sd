@@ -43,57 +43,47 @@ public class BubbleApplication {
 		try {
 			tm.begin();
 			//ponto 1 do enunciado
-			populateDomain();
+
 			tm.commit();
 
 			tm.begin();
 			//ponto 2 do enunciado
-			getAllPeople();
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 3 do enunciado
-			User[] users = new User[2];
-			users[0] = getUser(BubbleDocs.getInstance(), "pf");
-			users[1] = getUser(BubbleDocs.getInstance(), "ra");
-			for(User u: users){
-				System.out.println("Calcsheets created by " + u.getName() + ":");
-				for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-					System.out.println(cs.getName());
-				}
-				System.out.println("END");
-			}
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 4 do enunciado
-			ArrayList<org.jdom2.Document> doc=new ArrayList<org.jdom2.Document>();
-			doc=printAllCalcSheetsFromUser("pf",doc);
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 5 do enunciado
-			removeCalcSheet("Notas Es","pf"); 
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 6 do enunciado
-			getThisUsersCalcSheets("pf");
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 7 do enunciado
-			recoverFromBackup(doc.get(0));
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 8 do enunciado
-			getThisUsersCalcSheets("pf");
+
 			tm.commit();
 
 			tm.begin();
 			// ponto 9 do enunciado
-			doc=printAllCalcSheetsFromUser("pf",doc);
+
 			tm.commit();
 
 			committed = true;
