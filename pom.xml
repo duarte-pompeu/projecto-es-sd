@@ -18,6 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
        <version.junit>4.11</version.junit>
        <version.java>1.8</version.java>
+       <version.jmockit>1.16</version.jmockit>
     </properties>
     
     <build>
@@ -37,6 +38,12 @@
     </build>
     
     <dependencies>
+      <dependency>
+       <groupId>org.jmockit</groupId> 
+       <artifactId>jmockit</artifactId>
+       <version>${version.jmockit}</version>
+       <scope>test</scope>
+      </dependecy>
       <dependency>
        <groupId>junit</groupId> 
        <artifactId>junit</artifactId>
