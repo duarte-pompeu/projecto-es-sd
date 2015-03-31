@@ -20,6 +20,7 @@ public class ExportDocument extends BubbleDocsService {
     int docId;
     
     
+    
     public byte[] getDocXML() {
 	return docXML;
     }
