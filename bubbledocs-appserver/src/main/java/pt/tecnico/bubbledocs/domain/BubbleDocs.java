@@ -193,6 +193,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 				session.getUser().setSession(null);
 				session.setUser(null);
 				this.removeSession(session);
+				session.delete();
 				//anything else to remove the session completely?
 			}
 		}
