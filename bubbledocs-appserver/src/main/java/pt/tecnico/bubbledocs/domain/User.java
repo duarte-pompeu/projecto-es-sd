@@ -122,4 +122,8 @@ public class User extends User_Base {
   		
   		return csList;
   	}
+
+	public void delete() {
+		deleteDomainObject();
+	}
 }

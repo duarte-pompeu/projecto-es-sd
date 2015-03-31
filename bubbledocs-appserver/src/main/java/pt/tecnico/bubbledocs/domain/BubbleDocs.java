@@ -277,9 +277,17 @@ public class BubbleDocs extends BubbleDocs_Base {
 			reading.removeReadingUser(user);
 		}
 		
+		Session session = user.getSession();
+		if (session !=  null) {
+			session.setUser(null);
+			session.delete();
+		}
+		
+		user.setBubbleDocs(null);
+		
 		this.removeUser(user);
 		
-		deleteDomainObject();
+		user.delete();
 	}
 
 

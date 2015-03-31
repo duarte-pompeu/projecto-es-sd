@@ -50,5 +50,9 @@ public class Session extends Session_Base {
     	else
     	    return builder.toString();
     }
+
+	public void delete() {
+		deleteDomainObject();
+	}
     
 }
