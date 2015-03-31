@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -45,12 +46,24 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
         service.execute();
 
-        boolean deleted = (getUserFromUsername(USERNAME_TO_DELETE) == null);
+        boolean caught = false;
+        try {
+        	this.getUserFromUsername(USERNAME_TO_DELETE);
+        } catch (NotFoundException e) {
+        	caught = true; //cool
+        }        
+        
+        assertTrue("User should not exist", caught);
+        
+        caught = false;
+        try {
+        	this.getUserFromUsername(USERNAME_TO_DELETE);
+        } catch (NotFoundException e) {
+        	caught = true; //cool
+        }
+        
+        assertTrue("Spreadsheet should not exist", caught);
 
-        assertTrue("user was not deleted", deleted);
-
-        assertNull("Spreadsheet was not deleted",
-                getSpreadSheet(SPREADSHEET_NAME));
     }
 
 	
@@ -59,11 +72,11 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         success();
     }
 
-    @Test
+    @Test(expected = UserNotInSessionException.class)
     public void successToDeleteIsInSession() {
         String token = addUserToSession(USERNAME_TO_DELETE);
         success();
-	assertNull("User removed but not from session", getUserFromSession(token));
+		getUserFromSession(token);
     }
 
     @Test(expected = NotFoundException.class)
