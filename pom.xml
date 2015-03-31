@@ -43,7 +43,7 @@
        <artifactId>jmockit</artifactId>
        <version>${version.jmockit}</version>
        <scope>test</scope>
-      </dependecy>
+      </dependency>
       <dependency>
        <groupId>junit</groupId> 
        <artifactId>junit</artifactId>
