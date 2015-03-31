@@ -49,8 +49,11 @@ public class AssignReferenceCell extends BubbleDocsService {
 		if(c1.getCell(refId).getContent() == null) throw new NullContentException(c1.getCell(refId).getLine(), c1.getCell(refId).getColumn());
 			
 		c1.setContent(user, new Reference(c1.getCell(refId)), cellId);
-
+		try {
 		result = Integer.toString(cell.getContent().getValue());
+		} catch (NullPointerException e) {
+			result = "#VALUE";
+		}
 
 	}
 
