@@ -18,7 +18,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     private String user_token;
 
 	private User USER;
-    private static final String USERNAME = "tartaruga";
+    private static final String USERNAME = "turtle";
     private static final String PASSWORD = "pizza";
 	private static final String NAME = "Franklin" ; 
     private static final String ROOT_USERNAME = "root";

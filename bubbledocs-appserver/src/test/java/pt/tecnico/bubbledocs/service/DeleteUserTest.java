@@ -14,7 +14,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
     private static final String USERNAME_TO_DELETE = "todelete";
 	
-    private static final String USERNAME = "Tartaruga";
+    private static final String USERNAME = "turtle";
     private static final String PASSWORD = "pizza";
 	private static final String NAME = "Franklin"; 
     private static final String ROOT_USERNAME = "root";
