@@ -1,15 +1,12 @@
 package pt.tecnico.bubbledocs.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.SuperUser;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -39,7 +36,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         toDelete = createUser(USERNAME_TO_DELETE, "please", "john de lete");
         createSpreadSheet(toDelete, USERNAME_TO_DELETE, 20, 20);
         
-        User rootUser = new User(ROOT_USERNAME, "root", "root");
+       User rootUser = createUser(ROOT_USERNAME, "root", "root");
         BubbleDocs.getInstance().addUser(rootUser);
         root = addUserToSession(ROOT_USERNAME);
     };

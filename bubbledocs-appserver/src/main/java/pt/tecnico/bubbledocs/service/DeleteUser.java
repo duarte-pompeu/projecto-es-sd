@@ -22,14 +22,9 @@ public class DeleteUser extends BubbleDocsService {
 
     @Override
     protected void dispatch() throws BubbleDocsException {
-	User user = this.getSessionFromToken(token).getUser();
+    	User user = this.getSessionFromToken(token).getUser();
        
-        if(user.getUserName() != "root"){
-                throw new PermissionException("Only root can delete users.");
-        }
-       
-        SuperUser su = (SuperUser) user;
-        su.deleteUser(username);
+        user.deleteUser(username);
     }
     
 
