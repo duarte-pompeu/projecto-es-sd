@@ -27,37 +27,7 @@ public class CreateUser extends BubbleDocsService {
     
     @Override
     protected void dispatch() throws BubbleDocsException, RepeatedIdentificationException, InvalidValueException,UserNotInSessionException, PermissionException {
-    	User user = null;
-    	//Código para autenticação, temos de decidir o método.
-    	//User user = Session.getInstance().getUser(token);
-    	//TODO
-    	
-    	//Se o campo username estava vazio
-    	if (username.isEmpty()) {
-    		throw new InvalidValueException("Username field is empty!"); 
-    	}
-    	
-    	
-    	//Caso o user root nao esteja em sessao
-    	try{ 
-    		user = getSessionFromToken(token).getUser(); 
-    	}
-    	catch(UserNotInSessionException e){
-    		throw e;
-    	}
-    	
-    	
-    	//Caso o user ja exista
-    	/* TODO 
-    	?
-    	BubbleDocs pb = BubbleDocs.getInstance();
-	 	for (User p : pb.getUserSet()) {
-		 	if (p.getUserName().equals(username) ) {
-		 		throw new RepeatedIdentificationException("Username already in use!"); 
-		 	} 
-	 	}
-	 
-    	*/
+    	User user = this.getSessionFromToken(token).getUser();
     	user.createUser(username, name, password);    	
     }
 }

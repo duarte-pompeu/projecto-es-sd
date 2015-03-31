@@ -3,7 +3,7 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.Random;
 
 import pt.ist.fenixframework.FenixFramework;
-
+import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
@@ -237,7 +237,10 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @return
 	 */
 	public User addUser(String username, String name, String password) {
-
+		if (username.equals("") || username == null) {
+			throw new InvalidValueException();
+		}
+		
 		//if the user already exists, don't create a new one. 
 		try {
 			User user = getUser(username);
