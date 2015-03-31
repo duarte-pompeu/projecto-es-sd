@@ -5,6 +5,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.domain.SuperUser;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -27,7 +28,7 @@ public class DeleteUser extends BubbleDocsService {
                 throw new PermissionException("Only root can delete users.");
         }
        
-        SuperUser su = new SuperUser(user.getUserName(), user.getName(), user.getPassword());
+        SuperUser su = (SuperUser) user;
         su.deleteUser(username);
     }
     
