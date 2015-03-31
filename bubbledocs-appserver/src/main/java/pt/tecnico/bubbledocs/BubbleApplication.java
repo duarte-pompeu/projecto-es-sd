@@ -23,6 +23,7 @@ import pt.tecnico.bubbledocs.domain.LiteralArgument;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.ReferenceArgument;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.service.*;
 
 
 /**
@@ -41,50 +42,11 @@ public class BubbleApplication {
 		boolean committed = false;
 
 		try {
+		
 			tm.begin();
-			//ponto 1 do enunciado
-
+			populateDomain();
 			tm.commit();
 
-			tm.begin();
-			//ponto 2 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 3 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 4 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 5 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 6 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 7 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 8 do enunciado
-
-			tm.commit();
-
-			tm.begin();
-			// ponto 9 do enunciado
-
-			tm.commit();
 
 			committed = true;
 
@@ -179,20 +141,29 @@ public class BubbleApplication {
 		if (!pb.getUserSet().isEmpty() )
 		    return;
 		
-		// setup the initial state if BubbleDocs is empty
+		String root_token, pf_token;
+		LoginUser login;
+		int sheet_id;
 
-		User user1 = new User("pf","Paul Door","sub");
-	 	pb.addUser(user1);
-	 	User user2 = new User("ra","Step Rabbit","cor");
-	 	pb.addUser(user2);
+		//criar o root e colocá-lo em sessão
+		BubbleDocs.getInstance().addUser("root", "Super User", "rootroot");
+		login = new LoginUser("root", "rootroot");
+		login.execute();
+		root_token = login.getUserToken();
+		
+		new CreateUser(root_token, "pf", "sub", "Paul Door").execute();
 
-	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20);
+		new CreateUser(root_token, "ra", "cor", "Step Rabbit").execute();		
 
-	 	c1.getCell(3, 4).setContent(new Literal(5));
-	 	c1.getCell(1,1).setContent(new Reference(c1.getCell(5,6)));
-	 	c1.getCell(5,6).setContent(new Add ( new LiteralArgument (2), new ReferenceArgument(c1.getCell(3,4)) ));
-	 	c1.getCell(2,2).setContent(new Div ( new ReferenceArgument(c1.getCell(1,1)), new ReferenceArgument(c1.getCell(3,4)) ));
-	 	pb.addCalcSheet(c1);
+		login = new LoginUser("pf", "sub");
+		login.execute();
+		pf_token = login.getUserToken();
+		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, "Notas ES", 300, 20);
+		spread.execute();
+		sheet_id = spread.getResult();
+
+		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
+		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
 	 	
 	}
 
