@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 /**
@@ -38,10 +37,7 @@ public class User extends User_Base {
 	 * @param password
 	 */
 	protected void init(String userName, String name, String password) {
-		if (!(userName.length() >= 3 && userName.length() <= 8)) {
-			throw new InvalidUsernameException();
-		}
-		this.setUserName(userName);
+	    this.setUserName(userName);
         this.setName(name);
         this.setPassword(password);
 	}
