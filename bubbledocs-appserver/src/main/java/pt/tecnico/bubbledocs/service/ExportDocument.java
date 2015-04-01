@@ -3,6 +3,8 @@ package pt.tecnico.bubbledocs.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import mockit.Mock;
+
 import org.jdom2.output.XMLOutputter;
 
 import pt.tecnico.bubbledocs.BubbleApplication;
@@ -37,7 +39,8 @@ public class ExportDocument extends BubbleDocsService {
 		User user=null;
 		String userName;
 		CalcSheet c = null;
-		StoreRemoteServices remoteService=new StoreRemoteServices();
+		
+		StoreRemoteServices remoteService;
 		
 		//getting the user from the token
     	try{
