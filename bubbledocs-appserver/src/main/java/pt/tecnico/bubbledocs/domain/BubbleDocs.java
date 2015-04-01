@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.Random;
 
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -16,7 +17,9 @@ import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
  * Generate unique an unique Id for each new calcSheet.
  */
 public class BubbleDocs extends BubbleDocs_Base {
-
+	private static final int USERNAME_MIN_LEN = 3;
+	private static final int USERNAME_MAX_LEN = 8;
+	
 	Random rng;
 	/**
 	 * This method makes a connection to the database, returning the instance of bubbledocs saved there.
@@ -237,6 +240,19 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @return
 	 */
 	public User addUser(String username, String name, String password) {
+		//business constraint: length of username is restricted
+		//FIXME: check this in 1: (new User) or 2: (BubbleDocs.addUser()) ???
+		if(username.length() < USERNAME_MIN_LEN){
+			throw new InvalidUsernameException("Username " + username + " is too short. "
+					+ "Minimum length is " + USERNAME_MIN_LEN + ".");
+		}
+		if(username.length() > USERNAME_MAX_LEN){
+			throw new InvalidUsernameException("Username " + username + " is too long. "
+					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
+		}
+		
+		//FIXME: useless after doing test for length
+		// unless keeping InvalidValueException for empty names is desired
 		if (username.equals("") || username == null) {
 			throw new InvalidValueException();
 		}

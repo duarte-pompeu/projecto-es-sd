@@ -5,9 +5,10 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
-import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 
@@ -52,7 +53,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
         service.execute();
     }
 
-    @Test(expected = InvalidValueException.class)
+    //TODO: empty username: InvalidValueException or InvalidUserNameException ???
+    @Test(expected = InvalidUsernameException.class)
     public void emptyUsername() {
         CreateUser service = new CreateUser(root_token, "", "queijo", "sensei");
         service.execute();
@@ -71,6 +73,19 @@ public class CreateUserTest extends BubbleDocsServiceTest {
         CreateUser service = new CreateUser(root_token, ALT_USERNAME, "queijo",
                 "Sensei");
         service.execute();
+    }
+    
+    @Test(expected = InvalidUsernameException.class)
+    public void usernameTooShort(){
+    	CreateUser service = new CreateUser(root_token, "a", "password", "name");
+    	service.execute();
+    }
+    
+    @Test(expected = InvalidUsernameException.class)
+    public void usernameTooLong(){
+    	String long_name = "Maria Teresa García Ramírez de Arroyo";
+    	CreateUser service = new CreateUser(root_token, long_name, "password", "name");
+    	service.execute();
     }
 
 }
