@@ -1,17 +1,25 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import mockit.Expectations;
+import mockit.Mocked;
 
-import org.junit.Test;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
+import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.*;
+import pt.tecnico.bubbledocs.Cache;
+import pt.tecnico.bubbledocs.domain.Session;
+import pt.tecnico.bubbledocs.domain.SuperUser;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 // add needed import declarations
 public class LoginUserTest extends BubbleDocsServiceTest {
@@ -26,12 +34,17 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	private static final String PASSWORD = "hunter2";
 	private static final String DIFF_PASS = "toaster-repair";
 	private static final String ANY_PASS = "I-C-I-D";
+	
+	private static final String JUBI_UNAME = "jubi";
+	private static final String JUBI_PASS = "password";
+	private static final String JUBI_NAME = "Jubileu Mandafacas";
 
 	@Override
 	public void populate4Test() {
 		createUser(ROOT, ROOT_PASS, "Super User");
 		createUser(USERNAME, PASSWORD, "Marcos Pires");
 		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
+		createUser(JUBI_UNAME, JUBI_PASS, JUBI_NAME);
 		manel = addUserToSession(LOGGED_IN);
 	}
 
@@ -109,4 +122,62 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LoginUser service = new LoginUser(USERNAME, DIFF_PASS);
 		service.execute();
 	}
+	
+	
+	//////////////////////////
+	// TESTS FOR 2ND SPRINT //
+	//////////////////////////
+	
+	@Mocked IDRemoteServices idRemoteMock;
+	@Mocked Cache local_cache;
+	
+	@Test
+	public void loginWithRemote(){
+		
+		new Expectations(){{
+			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+		}};
+		
+		//FIXME: assert cache is NOT used to login
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		service.dispatch();
+		
+		//FIXME: might have to clean cache for further testing
+	}
+	
+	@Test
+	public void loginWithCachedPass(){
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+			result = new RemoteInvocationException();
+		}};
+		
+		new Expectations(){{
+			local_cache.login(JUBI_UNAME, JUBI_PASS);
+		}};
+		
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		service.dispatch();
+	}
+	
+	@Test(expected = UnavailableServiceException.class)
+	public void noRemoteNoCache(){
+		
+		new Expectations(){{
+			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+			result = new RemoteInvocationException();
+		}};
+		
+		new Expectations(){{
+			local_cache.login(JUBI_UNAME, JUBI_PASS);
+			result = new LoginException();
+		}};
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		service.dispatch();
+	}
+	
 }
