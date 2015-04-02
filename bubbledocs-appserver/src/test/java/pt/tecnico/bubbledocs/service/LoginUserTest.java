@@ -137,11 +137,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test
 	public void loginWithRemote(){
 		
-		new Expectations(){{
-			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
-		}};
-		
-		//FIXME: assert cache is NOT used to login
+		//FIXME: assert login is remote and not cached
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();
@@ -159,11 +155,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
 			result = new RemoteInvocationException();
 		}};
-		
-		new Expectations(){{
-			local_cache.login(JUBI_UNAME, JUBI_PASS);
-		}};
-		
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();
@@ -183,7 +174,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		}};
 		
 		new Expectations(){{
-			local_cache.login(JUBI_UNAME, JUBI_PASS);
+			local_cache.validate(JUBI_UNAME, JUBI_PASS);
 			result = new LoginException();
 		}};
 		
@@ -198,11 +189,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test (expected = LoginException.class)
 	public void loginRemoteBadPass(){
 		String bad_pass = "Ah ah ah, you didn't say the magic word.";
-		
-		new Expectations(){{			
-			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
-			result = new LoginException();
-		}};
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
 		service.dispatch();
@@ -222,11 +208,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		new Expectations(){{			
-			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
-			result = new LoginException();
-		}};
-		
 		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
 		service.dispatch();
 	}
@@ -238,11 +219,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test(expected = LoginException.class)
 	public void loginRemoteBadUser(){
 		String bad_user = "I'm root, let me in.";
-		
-		new Expectations(){{			
-			idRemoteMock.loginUser(bad_user, JUBI_PASS);
-			result = new LoginException();
-		}};
 		
 		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
 		service.dispatch();
@@ -259,11 +235,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		new Expectations(){{			
 			idRemoteMock.loginUser(bad_user, JUBI_PASS);
 			result = new RemoteInvocationException();
-		}};
-		
-		new Expectations(){{			
-			idRemoteMock.loginUser(bad_user, JUBI_PASS);
-			result = new LoginException();
 		}};
 		
 		LoginUser service = new LoginUser(bad_user, JUBI_PASS);

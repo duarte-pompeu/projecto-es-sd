@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.Random;
 
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.Cache;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
@@ -19,6 +20,8 @@ import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 public class BubbleDocs extends BubbleDocs_Base {
 	private static final int USERNAME_MIN_LEN = 3;
 	private static final int USERNAME_MAX_LEN = 8;
+	
+	private static Cache cache = new Cache();
 	
 	Random rng;
 	/**
@@ -408,5 +411,8 @@ public class BubbleDocs extends BubbleDocs_Base {
 		calcSheet.deleteAllCells();
 
 	}
-
+	
+	public Cache getCache(){
+		return cache;
+	}
 }
