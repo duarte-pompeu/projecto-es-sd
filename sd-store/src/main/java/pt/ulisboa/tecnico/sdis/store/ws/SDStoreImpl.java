@@ -21,35 +21,50 @@ public class SDStoreImpl implements SDStore{
 	public void createDoc(DocUserPair docUserPair)
 			throws DocAlreadyExists_Exception {
 		
+		Storage storage = SDStoreMain.getStorage();
+		
 		try{
-			SDStoreMain.getDB().addDoc(docUserPair);
+			storage.addDoc(docUserPair);
 		}
+		
+		
 		//TODO: catch? throw? think about it...
 		catch(DocAlreadyExists_Exception daeExcept){
 			throw daeExcept;
+		}
+		
+		catch(UserDoesNotExist_Exception udne){
+			//FIXME: what do we do here?
 		}
 	}
 
 	
 	@Override
-	public List<String> listDocs(String userId)
+	public List<String> listDocs(String userID)
 			throws UserDoesNotExist_Exception {
 		// TODO Auto-generated method stub
 		
-		ArrayList<String> userDocs = new ArrayList<String>();
-		Collection<Doc> allDocs = SDStoreMain.getDB().getAllDocs();
+		Storage storage = SDStoreMain.getStorage();
 		
-		for(Doc d: allDocs){
-			String owner = d.getOwner();
+		List<Doc> docsList = storage.getUserDocs(userID);
+		
+		if(docsList == null){
+			UserDoesNotExist udneM = new UserDoesNotExist();
+			udneM.setUserId(userID);
 			
-			if (owner.equals(userId)){
-				userDocs.add(owner);
-			}
+			throw new UserDoesNotExist_Exception("User does not exist", udneM);
 		}
 		
-		return null;
+		ArrayList<String> idsList = new ArrayList<String>();
+		
+		for(Doc d: docsList){
+			idsList.add(d.getDocID());
+		}
+		
+		return idsList;
 	}
 
+	
 	@Override
 	public void store(DocUserPair docUserPair, byte[] contents)
 			throws CapacityExceeded_Exception, DocDoesNotExist_Exception,
