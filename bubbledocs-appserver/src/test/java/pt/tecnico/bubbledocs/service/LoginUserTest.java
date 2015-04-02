@@ -131,6 +131,9 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Mocked IDRemoteServices idRemoteMock;
 	@Mocked Cache local_cache;
 	
+	
+	/** A successful login with remote authentication.
+	 */
 	@Test
 	public void loginWithRemote(){
 		
@@ -146,8 +149,11 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		//FIXME: might have to clean cache for further testing
 	}
 	
+	
+	/** A successful login with local authentication.
+	 */
 	@Test
-	public void loginWithCachedPass(){
+	public void loginWithCache(){
 		
 		new Expectations(){{			
 			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
@@ -163,6 +169,11 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		service.dispatch();
 	}
 	
+	
+	/** An unsuccessful login because remote authentication is down
+	 *  and there is no cached login.
+	 *  It should fail.
+	 */
 	@Test(expected = UnavailableServiceException.class)
 	public void noRemoteNoCache(){
 		
@@ -180,4 +191,82 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		service.dispatch();
 	}
 	
+	
+	/** A remote authentication attempt with a bad password.
+	 *  It should fail.
+	 */
+	@Test (expected = LoginException.class)
+	public void loginRemoteBadPass(){
+		String bad_pass = "Ah ah ah, you didn't say the magic word.";
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			result = new LoginException();
+		}};
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
+		service.dispatch();
+	}
+	
+	
+	/** A local authentication attempt with a bad password when
+	 *  remote authentication is down.
+	 *  It should fail.
+	 */
+	@Test(expected = LoginException.class)
+	public void loginCacheBadPass(){
+		String bad_pass = "Ah ah ah, you didn't say the magic word.";
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			result = new RemoteInvocationException();
+		}};
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			result = new LoginException();
+		}};
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
+		service.dispatch();
+	}
+	
+	
+	/** A remote authentication attempt with a username that doesn't exist.
+	 *  It should fail.
+	 */
+	@Test(expected = LoginException.class)
+	public void loginRemoteBadUser(){
+		String bad_user = "I'm root, let me in.";
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(bad_user, JUBI_PASS);
+			result = new LoginException();
+		}};
+		
+		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
+		service.dispatch();
+	}
+	
+	
+	/** A local authentication attempt with a username that doesn't exist.
+	 *  It should fail.
+	 */
+	@Test(expected = LoginException.class)
+	public void loginCacheBadUser(){
+		String bad_user = "I'm root, let me in.";
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(bad_user, JUBI_PASS);
+			result = new RemoteInvocationException();
+		}};
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(bad_user, JUBI_PASS);
+			result = new LoginException();
+		}};
+		
+		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
+		service.dispatch();
+	}
 }
