@@ -13,6 +13,7 @@ import org.joda.time.Seconds;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.Cache;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.SuperUser;
 import pt.tecnico.bubbledocs.domain.User;
@@ -142,7 +143,25 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();
 		
-		//FIXME: might have to clean cache for further testing
+		//FIXME: clean cache, not tested
+		BubbleDocs bd = BubbleDocs.getInstance();
+		bd.getCache().removeFromCache(JUBI_NAME);
+	}
+	
+	/** Try to login after cache is cleaned.
+	 *  The test should fail.
+	 */
+	@Test (expected = LoginException.class)
+	public void loginAfterCleanCache(){
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		service.dispatch();
+		
+		Cache cache = BubbleDocs.getInstance().getCache();
+		assertTrue(cache.validate(JUBI_UNAME, JUBI_PASS));
+		
+		cache.removeFromCache(JUBI_UNAME);
+		cache.validate(JUBI_UNAME, JUBI_PASS);
 	}
 	
 	

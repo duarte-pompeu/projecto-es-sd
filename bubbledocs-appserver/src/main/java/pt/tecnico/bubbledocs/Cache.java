@@ -38,4 +38,9 @@ public class Cache {
 		throws LoginException{
 		storage.put(username, newPassword);
 	}
+	
+	
+	public boolean hasUser(String username){
+		return storage.containsKey(username);
+	}
 }
