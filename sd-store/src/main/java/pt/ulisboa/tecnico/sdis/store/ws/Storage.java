@@ -3,10 +3,10 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 import java.util.Collection;
 import java.util.TreeMap;
 
-public class Database {
+public class Storage {
 	private TreeMap<DocUserPair, Doc> treeMap;
 
-	public Database(){
+	public Storage(){
 		init();
 	}
 	

@@ -1,7 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
 
 public class SDStoreMain{
-	private static Database db;
+	private static Storage db;
 	
 	public static void main(String[] args){
 		initDB();
@@ -9,7 +9,7 @@ public class SDStoreMain{
 	}
 	
 	
-	public static Database getDB(){
+	public static Storage getDB(){
 		if(db == null){
 			initDB();
 		}
@@ -18,6 +18,6 @@ public class SDStoreMain{
 	
 	
 	public static void initDB(){
-		db = new Database();
+		db = new Storage();
 	}
 }
