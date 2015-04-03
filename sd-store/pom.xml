@@ -10,21 +10,35 @@
 
   <name>${project.artifactId}</name>
   
+  <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <version.java>1.8</version.java>
+        <version.junit>4.11</version.junit>
+        <version.maven.build-helper-plugin>1.7</version.maven.build-helper-plugin>
+        
+		<mainclass>pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain</mainclass>
+
+		<ws.name>sd-store</ws.name>
+		<ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>
+    </properties>
+  
   <dependencies>
     <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-rt</artifactId>
       <version>2.2.10</version>
     </dependency>
+    
+    <dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>${version.junit}</version>
+		<scope>test</scope>
+		</dependency>
+    
   </dependencies>
-  
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <mainclass>pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain</mainclass>
-
-    <ws.name>sd-store</ws.name>
-    <ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>
-  </properties>
   
   <build>
     <plugins>
