@@ -24,8 +24,23 @@ public class Storage {
 	}
 	
 	
-	public List<String> getUserDocs(String userID){
-		return getCollection(userID).getAllDocs();
+	public List<String> getUserDocs(String userID)
+		throws UserDoesNotExist_Exception{
+		
+		DocsCollection collection = this.getCollection(userID);
+		List<String> docs = null;
+		
+		if(collection != null){
+			docs = collection.getAllDocs();
+		}
+		
+		if(collection == null || docs == null){
+			String message = "User " + userID + " has no docs.";
+			UserDoesNotExist faultInfo = new UserDoesNotExist();
+			throw new UserDoesNotExist_Exception(message, faultInfo);
+		}
+		
+		return docs;
 	}
 	
 	

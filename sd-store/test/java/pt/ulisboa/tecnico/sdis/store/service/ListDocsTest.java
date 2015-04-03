@@ -1,8 +1,9 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -58,7 +59,8 @@ public class ListDocsTest{
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void noUser() throws UserDoesNotExist_Exception {
-		ListDocsService service = new ListDocsService(U1);
+		String badUser = "Hello, I'm root and I want all the documents.";
+		ListDocsService service = new ListDocsService(badUser);
 		service.dispatch();
 	}
 	
