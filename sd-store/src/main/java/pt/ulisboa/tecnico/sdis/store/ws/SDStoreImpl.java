@@ -43,6 +43,7 @@ public class SDStoreImpl implements SDStore{
 	public void store(DocUserPair docUserPair, byte[] contents)
 			throws CapacityExceeded_Exception, DocDoesNotExist_Exception,
 			UserDoesNotExist_Exception {
+		
 		StoreService service = new StoreService(docUserPair.getUserId(), docUserPair.getDocumentId(), contents);
 		service.dispatch();
 	}
@@ -50,9 +51,9 @@ public class SDStoreImpl implements SDStore{
 	@Override
 	public byte[] load(DocUserPair docUserPair)
 			throws DocDoesNotExist_Exception, UserDoesNotExist_Exception {
-		// TODO Auto-generated method stub
-		LoadService service = new LoadService(docUserPair.getUserId(), docUserPair.getDocumentId());
 		
-		return null;
+		LoadService service = new LoadService(docUserPair.getUserId(), docUserPair.getDocumentId());
+		service.dispatch();
+		return service.getResult();
 	}
 }

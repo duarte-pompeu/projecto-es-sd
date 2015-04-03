@@ -52,8 +52,7 @@ public class CreateDocTest extends SDStoreTest {
 		try{
 			CreateDocService service1 = new CreateDocService("jubi", "emails");
 			service1.dispatch();
-			CreateDocService service2 = new CreateDocService("jubi", "emails");
-			service2.dispatch();
+			service1.dispatch();
 		}
 		
 		catch(DocAlreadyExists_Exception e){

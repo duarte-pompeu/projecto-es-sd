@@ -47,25 +47,25 @@ public class Storage {
 		return docs;
 	}
 	
-	public void addCollection(String userID, DocsCollection docsCol){
-		this.collections.put(userID, docsCol);
+	public void createCollection(String userID){
+		DocsCollection col = new DocsCollection(userID);
+		this.collections.put(userID, col);
 	}
 	
 	
 	//FIXME: this should probably be thread-safe, it may not be atm
-	public void addDoc(String user, String doc) 
-			throws DocAlreadyExists_Exception{
+	public void addDoc(String user, String doc) throws DocAlreadyExists_Exception{
 		
-		/* Check if user exists - it should
+		/* Check if user has collection and get it.
+		 * Create a new one otherwise.
 		 */
 		DocsCollection col = getCollection(user);
 		
 		if(col == null){
-			col = new DocsCollection(user);
-			this.addCollection(user, col);
+			this.createCollection(user);
 		}
 		
-		/* Check if doc exists - it should not
+		/* Check if doc exists - if it does, throw exception.
 		 */
 		if(col.contains(doc)){
 			//FIXME: check if this is how you're supposed to throw

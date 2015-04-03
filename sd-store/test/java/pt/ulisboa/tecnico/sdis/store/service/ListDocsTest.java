@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
@@ -54,6 +54,12 @@ public class ListDocsTest extends SDStoreTest{
 		assertEquals(4, storage.getAllDocs().size());
 	}
 	
+	@Test (expected = UserDoesNotExist_Exception.class)
+	public void noUser() throws UserDoesNotExist_Exception {
+		ListDocsService service = new ListDocsService(U1);
+		service.dispatch();
+	}
+	
 	@Test
 	public void listDocs()
 		throws UserDoesNotExist_Exception{
@@ -67,16 +73,16 @@ public class ListDocsTest extends SDStoreTest{
 			service.dispatch();
 		}
 
-		//U1 - 1 document
+		// U1 - 1 document
 		assertEquals(1, services.get(0).getResult().size());
 		assertEquals(U1D1, services.get(0).getResult().get(0));
 		
-		//U2 - 2 documents
+		// U2 - 2 documents
 		assertEquals(2, services.get(1).getResult().size());
 		assertEquals(U2D1, services.get(1).getResult().get(0));
 		assertEquals(U2D2, services.get(1).getResult().get(1));
 		
-		//U3 - 1 document
+		// U3 - 1 document
 		assertEquals(1, services.get(2).getResult().size());
 		assertEquals(U3D1, services.get(2).getResult().get(0));
 	}
