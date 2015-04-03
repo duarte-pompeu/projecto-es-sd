@@ -1,6 +1,9 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class Storage {
@@ -11,7 +14,7 @@ public class Storage {
 	}
 	
 	
-	private void init(){
+	public void init(){
 		collections = new TreeMap<String, DocsCollection>();
 	}
 	
@@ -21,16 +24,39 @@ public class Storage {
 	}
 	
 	
-	public List getUserDocs(String userID){
+	public List<Doc> getUserDocs(String userID){
 		return getCollection(userID).getAllDocs();
 	}
 	
 	
+	public List<String> getUsers(){
+		Set<String> key_set = collections.keySet();
+
+		return new ArrayList<String>(key_set);
+	}
+	
+	public List<Doc> getAllDocs(){
+		Collection<DocsCollection> collections_set = collections.values();
+		
+		ArrayList<Doc> docs = new ArrayList<Doc>();
+		
+		for(DocsCollection col: collections_set){
+			for(Doc d: col.getAllDocs()){
+				docs.add(d);
+			}
+		}
+		
+		return docs;
+	}
+	
+	public void addCollection(String userID, DocsCollection docsCol){
+		this.collections.put(userID, docsCol);
+	}
+	
+	
 	//FIXME: this should probably be thread-safe, it may not be atm
-	public void addDoc(DocUserPair duPair) 
-			throws DocAlreadyExists_Exception, UserDoesNotExist_Exception{
-		String user = duPair.getUserId();
-		String doc = duPair.getDocumentId();
+	public void addDoc(String user, String doc) 
+			throws DocAlreadyExists_Exception{
 		
 		
 		/* Check if user exists - it should
@@ -38,10 +64,8 @@ public class Storage {
 		DocsCollection col = getCollection(user);
 		
 		if(col == null){
-			//FIXME: check if this is how you're supposed to throw
-			UserDoesNotExist udne = new UserDoesNotExist();
-			udne.setUserId(user);
-			throw new UserDoesNotExist_Exception("User " + user + " does not exist", udne);
+			col = new DocsCollection(user);
+			this.addCollection(user, col);
 		}
 		
 		/* Check if doc exists - it should not
@@ -49,7 +73,7 @@ public class Storage {
 		if(col.contains(doc)){
 			//FIXME: check if this is how you're supposed to throw
 			DocAlreadyExists dae = new DocAlreadyExists();
-			dae.setDocId(duPair.getDocumentId());
+			dae.setDocId(doc);
 			throw new DocAlreadyExists_Exception("Doc already exists", dae);
 		}
 		

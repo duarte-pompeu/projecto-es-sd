@@ -1,10 +1,11 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.jws.WebService;
+
+import pt.ulisboa.tecnico.sdis.store.service.CreateDocService;
 
 @WebService(
 	endpointInterface="pt.ulisboa.tecnico.sdis.store.ws.SDStore",
@@ -21,20 +22,16 @@ public class SDStoreImpl implements SDStore{
 	public void createDoc(DocUserPair docUserPair)
 			throws DocAlreadyExists_Exception {
 		
-		Storage storage = SDStoreMain.getStorage();
-		
 		try{
-			storage.addDoc(docUserPair);
+			CreateDocService service =
+					new CreateDocService(docUserPair.getUserId(), docUserPair.getDocumentId());
+			
+			service.dispatch();
 		}
-		
 		
 		//TODO: catch? throw? think about it...
-		catch(DocAlreadyExists_Exception daeExcept){
-			throw daeExcept;
-		}
-		
-		catch(UserDoesNotExist_Exception udne){
-			//FIXME: what do we do here?
+		catch(DocAlreadyExists_Exception e){
+			throw e;
 		}
 	}
 
