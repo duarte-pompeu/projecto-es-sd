@@ -1,9 +1,11 @@
-package pt.ulisboa.tecnico.sdis.store.ws;
+package pt.ulisboa.tecnico.sdis.store.service;
 
 import org.junit.After;
 import org.junit.Before;
 
-public class StoreTest {
+import pt.ulisboa.tecnico.sdis.store.ws.Storage;
+
+public class SDStoreTest {
 	
 	@Before
 	public void setUp(){

@@ -24,7 +24,7 @@ public class Storage {
 	}
 	
 	
-	public List<Doc> getUserDocs(String userID){
+	public List<String> getUserDocs(String userID){
 		return getCollection(userID).getAllDocs();
 	}
 	
@@ -35,15 +35,13 @@ public class Storage {
 		return new ArrayList<String>(key_set);
 	}
 	
-	public List<Doc> getAllDocs(){
+	public List<String> getAllDocs(){
 		Collection<DocsCollection> collections_set = collections.values();
 		
-		ArrayList<Doc> docs = new ArrayList<Doc>();
+		ArrayList<String> docs = new ArrayList<String>();
 		
 		for(DocsCollection col: collections_set){
-			for(Doc d: col.getAllDocs()){
-				docs.add(d);
-			}
+			docs.addAll(col.getAllDocs());
 		}
 		
 		return docs;
@@ -57,7 +55,6 @@ public class Storage {
 	//FIXME: this should probably be thread-safe, it may not be atm
 	public void addDoc(String user, String doc) 
 			throws DocAlreadyExists_Exception{
-		
 		
 		/* Check if user exists - it should
 		 */
@@ -77,8 +74,6 @@ public class Storage {
 			throw new DocAlreadyExists_Exception("Doc already exists", dae);
 		}
 		
-		col.addDoc(user);
+		col.addDoc(doc);
 	}
-	
-
 }

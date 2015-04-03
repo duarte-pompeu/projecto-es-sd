@@ -2,15 +2,16 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class DocsCollection {
-	private ArrayList<Doc> docs;
+	private TreeMap<String, byte[]> docs;
 	private String owner;
 	
 	
 	public DocsCollection(String owner){
 		this.owner = owner;
-		docs = new ArrayList<Doc>();
+		docs = new TreeMap<String, byte[]>();
 	}
 	
 	
@@ -19,34 +20,21 @@ public class DocsCollection {
 	}
 	
 	
-	public void addDoc(String userID){
-		docs.add(new Doc(userID, this.owner));
+	public void addDoc(String docID){
+		docs.put(docID, null);
 	}
 	
 	
 	public boolean contains(String docID){
-		
-		for(Doc d: docs){
-			if(d.getDocID().equals(docID)){
-				return true;
-			}
-		}
-		
-		return false;
-
+		return docs.containsValue(docID);
 	}
 	
-	public Doc getDoc(String docID){
-		for(Doc d: docs){
-			if(d.getDocID().equals(docID)){
-				return d;
-			}
-		}
-		
-		return null;
+	
+	public byte[] getContent(String docID){
+		return docs.get(docID);
 	}
 	
-	public List<Doc> getAllDocs(){
-		return this.docs;
+	public List<String> getAllDocs(){
+		return new ArrayList<String>(docs.keySet());
 	}
 }
