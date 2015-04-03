@@ -47,9 +47,11 @@ public class Storage {
 		return docs;
 	}
 	
-	public void createCollection(String userID){
+	public DocsCollection createCollection(String userID){
 		DocsCollection col = new DocsCollection(userID);
 		this.collections.put(userID, col);
+		
+		return col;
 	}
 	
 	
@@ -62,7 +64,8 @@ public class Storage {
 		DocsCollection col = getCollection(user);
 		
 		if(col == null){
-			this.createCollection(user);
+			col = this.createCollection(user);
+			
 		}
 		
 		/* Check if doc exists - if it does, throw exception.

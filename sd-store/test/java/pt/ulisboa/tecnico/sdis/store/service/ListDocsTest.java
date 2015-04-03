@@ -1,9 +1,11 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
@@ -11,7 +13,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class ListDocsTest extends SDStoreTest{
+public class ListDocsTest{
 	Storage storage;
 	
 	String U1 = "jubi";
@@ -24,7 +26,7 @@ public class ListDocsTest extends SDStoreTest{
 	String U3 = "grupo2";
 	String U3D1 = U1D1;
 	
-	@Override
+	@Before
 	public void populate4Test(){
 		storage = SDStoreMain.getStorage();
 		ArrayList<CreateDocService> services = new ArrayList<CreateDocService>();
@@ -43,7 +45,7 @@ public class ListDocsTest extends SDStoreTest{
 		}
 	}
 	
-	@Override
+	@After
 	public void destroy(){
 		storage.init();
 	}
