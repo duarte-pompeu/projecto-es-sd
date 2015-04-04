@@ -45,8 +45,13 @@ public class BubbleDocsServiceTest {
 
     // auxiliary methods that access the domain layer and are needed in the test classes
     // for defining the inital state and checking that the service has the expected behavior
+    @Deprecated
     User createUser(String username, String password, String name) {
-    	return BubbleDocs.getInstance().addUser(username, name, password);
+    	return createUser(username, null, password, name);
+    }
+    
+    User createUser(String username, String email, String password, String name) {
+    	return BubbleDocs.getInstance().addUser(username, name, email, password);
     }
 
     public CalcSheet createSpreadSheet(User user, String name, int row,
