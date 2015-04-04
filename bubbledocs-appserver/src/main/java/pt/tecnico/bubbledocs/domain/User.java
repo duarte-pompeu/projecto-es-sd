@@ -31,6 +31,11 @@ public class User extends User_Base {
         //this.ownedFilenames = new HashSet<String>();
         //this.allFiles = new HashMap<Integer, Boolean>();
     }
+    
+    public User(String userName, String name, String email, String password) {
+    	super();
+    	init(userName, name, email, password);
+    }
 	
 	/**
 	 * @param userName
@@ -44,6 +49,13 @@ public class User extends User_Base {
         this.setEmail(null);
         this.setPassword(password);
 	}
+    
+    protected void init(String userName, String name, String email, String password) {
+    	this.setUserName(userName);
+        this.setName(name);
+        this.setEmail(email);
+        this.setPassword(password);
+    }
     
     /*
      * Creates a calcsheet that is associated with this user
@@ -86,6 +98,10 @@ public class User extends User_Base {
      */
     @Deprecated
     public User createUser(String userName, String name, String password) {
+    	throw new PermissionException("You don't have permission to do this action");
+    }
+    
+    public User createUser(String userName, String name, String email, String password) {
     	throw new PermissionException("You don't have permission to do this action");
     }
 

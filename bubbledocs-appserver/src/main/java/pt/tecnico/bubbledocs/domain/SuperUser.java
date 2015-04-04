@@ -28,6 +28,11 @@ public class SuperUser extends SuperUser_Base {
     	init(userName, name, password);
     }
     
+    public SuperUser(String userName, String name, String email, String password) {
+    	super();
+    	init(userName, name, email, password);
+    }
+    
     /* (non-Javadoc)
      * @see pt.tecnico.bubbledocs.dml.User#createUser(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -36,6 +41,11 @@ public class SuperUser extends SuperUser_Base {
     public User createUser(String userName, String name, String password) {
     	BubbleDocs bb = BubbleDocs.getInstance();
     	return bb.addUser(userName, name, password);
+    }
+    
+    public User createUser(String userName, String name, String email, String password) {
+    	BubbleDocs bb = BubbleDocs.getInstance();
+    	return bb.addUser(userName, name, email, password);
     }
     
     /* (non-Javadoc)

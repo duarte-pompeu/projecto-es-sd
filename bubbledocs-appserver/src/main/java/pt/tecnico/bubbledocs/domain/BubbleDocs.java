@@ -113,6 +113,13 @@ public class BubbleDocs extends BubbleDocs_Base {
 				" User " + username + " not found.");
 	}
 
+	public boolean hasUser(String username) {
+		for (User user : this.getUserSet()) {
+			if (user.getUserName().equals(username)) return true;
+		}		
+		
+		return false;
+	}
 
 
 	/**
@@ -244,6 +251,10 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 */
 	@Deprecated
 	public User addUser(String username, String name, String password) {
+		return addUser(username, name, null, password);
+	}
+
+	public User addUser(String username, String name, String email, String password) {
 		//business constraint: length of username is restricted
 		//FIXME: check this in 1: (new User) or 2: (BubbleDocs.addUser()) ???
 		if(username.length() < USERNAME_MIN_LEN){
@@ -254,28 +265,19 @@ public class BubbleDocs extends BubbleDocs_Base {
 			throw new InvalidUsernameException("Username " + username + " is too long. "
 					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
 		}
-		
-		//FIXME: useless after doing test for length
-		// unless keeping InvalidValueException for empty names is desired
-		if (username.equals("") || username == null) {
-			throw new InvalidValueException();
-		}
-		
-		//if the user already exists, don't create a new one. 
-		try {
-			User user = getUser(username);
-			throw new RepeatedIdentificationException();
-		} catch (NotFoundException e) {} //Hmm, this isn't very natural code. should this return null?
-		
+
+		//if the user already exists, don't create a new one.		
+		if (hasUser(username)) throw new RepeatedIdentificationException();
+
 		User newuser;
-		
+
 		if (username.equals("root"))
-			newuser = new SuperUser(username, name, password);
+			newuser = new SuperUser(username, name, email, password);
 		else
-			newuser = new User(username, name, password);
-		
+			newuser = new User(username, name, email, password);
+
 		BubbleDocs.getInstance().addUser(newuser);
-		
+
 		return newuser;
 	}
 
