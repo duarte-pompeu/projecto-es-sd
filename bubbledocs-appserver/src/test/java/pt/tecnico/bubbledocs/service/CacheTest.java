@@ -1,13 +1,12 @@
 package pt.tecnico.bubbledocs.service;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 import pt.tecnico.bubbledocs.Cache;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 
 public class CacheTest extends BubbleDocsServiceTest {
 	Cache cache;
@@ -21,8 +20,8 @@ public class CacheTest extends BubbleDocsServiceTest {
 	@Override
 	public void populate4Test() {
 		cache = BubbleDocs.getInstance().getCache();
-		cache.setNewPassword(ZAC_UN, ZAC_PASS);
-		cache.setNewPassword(JUBI_UN, JUBI_PASS);
+		cache.put(ZAC_UN, ZAC_PASS);
+		cache.put(JUBI_UN, JUBI_PASS);
 	}
 	
 	
@@ -33,11 +32,11 @@ public class CacheTest extends BubbleDocsServiceTest {
 	}
 	
 	
-	@Test (expected = NotFoundException.class)
+	@Test
 	public void noUser(){
 		String bad_user = "Hello I'm root. Let me in.";
 		assertFalse(cache.hasUser(bad_user));
-		cache.validate(bad_user, "any pass");
+		assertFalse(cache.validate(bad_user, "any pass"));
 	}
 	
 	
@@ -52,8 +51,8 @@ public class CacheTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void cleanCache(){
-		assertTrue(cache.validate(ZAC_UN, ZAC_PASS));
-		assertTrue(cache.validate(JUBI_UN, JUBI_PASS));
+		assertTrue(cache.hasUser(JUBI_UN));
+		assertTrue(cache.hasUser(ZAC_UN));
 		
 		cache.removeFromCache(JUBI_UN);
 		cache.removeFromCache(ZAC_UN);

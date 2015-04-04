@@ -159,14 +159,19 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	 */
 	@Test (expected = LoginException.class)
 	public void loginAfterCleanCache(){
-		
-		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		String temp_username = "abcd123";
+		String temp_password = "abd123";
+		String temp_name = "abcd123";
+				
+		createUser(temp_username, temp_password, temp_name);
+		LoginUser service = new LoginUser(temp_username, temp_password);
 		service.dispatch();
 		
 		Cache cache = BubbleDocs.getInstance().getCache();
-		//assertTrue(cache.validate(JUBI_UNAME, JUBI_PASS));
+		assertTrue("Cache didnt store user.", cache.hasUser(temp_username));
 		
-		cache.removeFromCache(JUBI_UNAME);
+		cache.removeFromCache(temp_username);
+		assertFalse("Cache didnt remove user.", cache.hasUser(temp_username));
 		service.dispatch();
 	}
 	
@@ -180,6 +185,9 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
 			result = new RemoteInvocationException();
 		}};
+		
+		Cache cache = BubbleDocs.getInstance().getCache();
+		assertTrue("Cache doesn't have user", cache.hasUser(JUBI_UNAME));
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();

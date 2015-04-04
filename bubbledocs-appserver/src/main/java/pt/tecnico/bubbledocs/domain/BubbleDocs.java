@@ -282,7 +282,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 
 	private void addToCache(String username, String newPassword) {
-		this.getCache().setNewPassword(username, newPassword);
+		this.getCache().put(username, newPassword);
 	}
 
 	/**

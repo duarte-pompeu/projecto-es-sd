@@ -30,8 +30,7 @@ public class Cache {
 	}
 	
 	
-	public void setNewPassword(String username, String newPassword)
-		throws LoginException{
+	public void put(String username, String newPassword){
 		storage.put(username, newPassword);
 	}
 	
