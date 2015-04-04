@@ -277,8 +277,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 			newuser = new User(username, name, email, password);
 
 		BubbleDocs.getInstance().addUser(newuser);
-
+		BubbleDocs.getInstance().addToCache(username, password);
 		return newuser;
+	}
+
+	private void addToCache(String username, String newPassword) {
+		this.getCache().setNewPassword(username, newPassword);
 	}
 
 	/**
@@ -418,4 +422,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public Cache getCache(){
 		return cache;
 	}
+	
+	
 }

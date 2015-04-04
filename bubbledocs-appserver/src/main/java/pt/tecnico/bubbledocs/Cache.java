@@ -8,12 +8,13 @@ import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 public class Cache {
 	private HashMap<String,String> storage = new HashMap<String, String>();
 	
-	public boolean validate(String username, String password)
-			throws LoginException {
+	public boolean validate(String username, String password) {
 			
 		String storedPass = storage.get(username);
 		if( storedPass == null){
-			throw new NotFoundException("Cache: can't find values for username " + username);
+			
+			//throw new NotFoundException("Cache: can't find values for username " + username);
+			return false;
 		}
 			
 		if(storedPass.equals(password)){
@@ -24,13 +25,8 @@ public class Cache {
 	}
 	
 	
-	public void removeFromCache(String username)
-			throws NotFoundException {
-		String old_pass = storage.remove(username);
-		if(old_pass == null){
-			throw new NotFoundException("Cache: username " + username +
-					" has no stored password.");
-		}
+	public void removeFromCache(String username) {
+		storage.remove(username);
 	}
 	
 	
