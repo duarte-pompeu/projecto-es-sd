@@ -242,6 +242,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param password
 	 * @return
 	 */
+	@Deprecated
 	public User addUser(String username, String name, String password) {
 		//business constraint: length of username is restricted
 		//FIXME: check this in 1: (new User) or 2: (BubbleDocs.addUser()) ???

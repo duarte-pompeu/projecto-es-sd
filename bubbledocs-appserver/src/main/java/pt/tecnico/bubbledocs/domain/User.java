@@ -24,6 +24,7 @@ public class User extends User_Base {
 	 * @param name
 	 * @param password
 	 */
+    @Deprecated
 	public User(String userName, String name, String password) {
         super();
         init(userName, name, password);
@@ -36,9 +37,11 @@ public class User extends User_Base {
 	 * @param name
 	 * @param password
 	 */
+    @Deprecated
 	protected void init(String userName, String name, String password) {
 	    this.setUserName(userName);
         this.setName(name);
+        this.setEmail(null);
         this.setPassword(password);
 	}
     
@@ -81,6 +84,7 @@ public class User extends User_Base {
      * @param password
      * @return
      */
+    @Deprecated
     public User createUser(String userName, String name, String password) {
     	throw new PermissionException("You don't have permission to do this action");
     }

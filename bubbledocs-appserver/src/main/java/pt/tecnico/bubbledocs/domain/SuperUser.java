@@ -22,6 +22,7 @@ public class SuperUser extends SuperUser_Base {
      * @param name
      * @param password
      */
+    @Deprecated
     public SuperUser(String userName, String name, String password) {
     	super();
     	init(userName, name, password);
@@ -31,6 +32,7 @@ public class SuperUser extends SuperUser_Base {
      * @see pt.tecnico.bubbledocs.dml.User#createUser(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
+    @Deprecated
     public User createUser(String userName, String name, String password) {
     	BubbleDocs bb = BubbleDocs.getInstance();
     	return bb.addUser(userName, name, password);
