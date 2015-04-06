@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import mockit.Expectations;
 import mockit.Mocked;
 
@@ -50,6 +51,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
 		createUser(JUBI_UNAME, JUBI_PASS, JUBI_NAME);
 		manel = addUserToSession(LOGGED_IN);
+	}
+	
+	@Override
+	public void tearDown(){
+		//FIXME: clean cache, not tested
+		BubbleDocs bd = BubbleDocs.getInstance();
+		bd.getCache().removeFromCache(JUBI_UNAME);
 	}
 
 	// returns the time of the last access for the user with token userToken.
@@ -149,9 +157,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();
 		
-		//FIXME: clean cache, not tested
-		BubbleDocs bd = BubbleDocs.getInstance();
-		bd.getCache().removeFromCache(JUBI_NAME);
+		User u = this.getUserFromUsername(JUBI_UNAME);
+		String utoken = u.getSession().getToken();
+		String stoken = service.getUserToken();
+		
+		assertNotNull(utoken);
+		assertNotNull(stoken);
+		assertEquals(stoken, utoken);
 	}
 	
 	/** Try to login after cache is cleaned.
@@ -191,6 +203,14 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();
+		
+		User u = this.getUserFromUsername(JUBI_UNAME);
+		String utoken = u.getSession().getToken();
+		String stoken = service.getUserToken();
+		
+		assertNotNull(utoken);
+		assertNotNull(stoken);
+		assertEquals(stoken, utoken);
 	}
 	
 	
@@ -266,6 +286,10 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test(expected = LoginException.class)
 	public void loginCacheBadUser(){
 		String bad_user = "I'm root, let me in.";
+		
+		// service fails, without even calling remote services
+		// that's good, but our expectation fails due to missing invocation 
+		// and we cant test the cache for that situation - bummer
 		
 //		new Expectations(){{			
 //			idRemoteMock.loginUser(bad_user, JUBI_PASS);

@@ -16,12 +16,14 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	AssignLiteralCellTest.class, 
-	LoginUserTest.class, 
-	ExportDocumentTest.class, 
-	CreateCalcSheetTest.class,
 	AssignReferenceCellTest.class,
+	BubbleDocsServiceTest.class,
+	CacheTest.class,
+	CreateCalcSheetTest.class,
 	CreateUserTest.class,
 	DeleteUserTest.class,
+	ExportDocumentTest.class,
+	LoginUserTest.class,
 	RenewPasswordServiceTest.class})
 public class ServiceTestSuite {
 
