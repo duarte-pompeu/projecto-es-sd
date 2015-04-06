@@ -18,31 +18,31 @@ public class RenewPasswordServiceTest extends BubbleDocsServiceTest {
 	IDRemoteServices remote;
 	
 	private final static String USERNAME = "jack";
-//	private final static String EMAIL = "jack@jackson.com";
+	private final static String EMAIL = "jack@jackson.com";
 	private final static String NAME = "Jack Jackson";
 	private String token;
 	
 	
 	@Override
 	public void populate4Test() {
-		createUser(USERNAME, "silly_goose", NAME);
+		createUser(USERNAME, EMAIL, "silly_goose", NAME);
 		token = addUserToSession(USERNAME);		
 	}
 	
 	@Test
-	public void success() {
-		new Expectations() {{
-			remote.renewPassword(USERNAME); times = 1;
-		}};
-		
+	public void success() {		
 		RenewPassword service = new RenewPassword(token);
 		service.execute();
 		
 		User user = getUserFromUsername(USERNAME);
 		Session session = getSessionFromToken(token);
+
+		new Verifications() {{
+			remote.renewPassword(USERNAME); times = 1;
+		}};
 		
 		assertEquals("username should not be changed", user.getUserName(), USERNAME);
-		//assertEquals("e-mail should not be changed", user.getEmail(), EMAIL);
+		assertEquals("e-mail should not be changed", user.getEmail(), EMAIL);
 		assertEquals("name should not be changed", user.getName(), NAME);
 		assertNull("password must be null", user.getPassword());
 		assertEquals("should be the same token", session.getToken());
