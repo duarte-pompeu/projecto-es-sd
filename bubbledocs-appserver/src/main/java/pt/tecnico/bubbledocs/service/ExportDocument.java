@@ -2,7 +2,9 @@ package pt.tecnico.bubbledocs.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import org.jdom2.output.XMLOutputter;
+
 import pt.tecnico.bubbledocs.BubbleApplication;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
@@ -10,6 +12,8 @@ import pt.tecnico.bubbledocs.domain.User;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class ExportDocument extends BubbleDocsService {
@@ -38,13 +42,9 @@ public class ExportDocument extends BubbleDocsService {
 		
 		StoreRemoteServices remoteService = new StoreRemoteServices();
 		
-		//getting the user from the token
-    	try{
-    		user = getSessionFromToken(userToken).getUser();
-    		getSessionFromToken(userToken).getUser();
-    	}catch(BubbleDocsException e){
-    		System.out.println(e.toString()+e.getMessage());
-    	}
+		//getting the user from the token	
+    	user = getSessionFromToken(userToken).getUser();
+   
     	//getting the username of the calcsheet owner
     	userName=user.getUserName();
     	
@@ -71,9 +71,9 @@ public class ExportDocument extends BubbleDocsService {
 		}
     	 
     	docXML = out.toByteArray();
-    	
-    	remoteService.storeDocument(userName, c.getName(), docXML);
-    	
+    	try{
+    		remoteService.storeDocument(userName, c.getName(), docXML);
+    	}catch(RemoteInvocationException e){ throw new UnavailableServiceException();}
     	
     }
 }

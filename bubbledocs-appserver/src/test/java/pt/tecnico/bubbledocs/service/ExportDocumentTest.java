@@ -6,6 +6,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import pt.tecnico.bubbledocs.service.remote.*;
+import mockit.Mock;
+import mockit.MockUp;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -23,7 +27,11 @@ import pt.tecnico.bubbledocs.domain.LiteralArgument;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.ReferenceArgument;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.CannotStoreDocumentException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
 	
@@ -43,7 +51,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String CELL_ID0;
 	private String CELL_ID1;
 	private String CELL_ID2;
-	
+	private String U_EMAIL="email@email.com";
 	//FIXME: values are never used, consider removing them
 //	private final int VAL0 = 0;
 //	private final String LIT0 = "0";
@@ -51,7 +59,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test(){
-		USER = createUser(U_USERNAME, U_PASS, U_NAME);
+		USER = createUser(U_USERNAME, U_PASS, U_NAME, U_EMAIL);
 		U_TOKEN = addUserToSession(U_USERNAME);
 		
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
@@ -59,6 +67,35 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
 		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
 		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
+	}
+	
+	
+	
+	//Mock class simulating an unavailable SD-STORE service
+	public static class MockSDStoreUnavailableContext extends MockUp<StoreRemoteServices>
+	{
+	   @Mock
+	   public void $init() {}
+
+	   @Mock
+	   public void storeDocument(String username, String docName, byte[] document) throws RemoteInvocationException
+	   {
+	      throw new RemoteInvocationException();
+	   }
+	}
+	
+
+	//Mock class simulating a context where SD-STORE cannot store a specific document
+	public static class MockSDStoreCannotStoreDocumentContext extends MockUp<StoreRemoteServices>
+	{
+	   @Mock
+	   public void $init() {}
+
+	   @Mock
+	   public void storeDocument(String username, String docName, byte[] document) throws CannotStoreDocumentException
+	   {
+	      throw new CannotStoreDocumentException();
+	   }
 	}
 	
 	
@@ -218,7 +255,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 	}
 	
-	
+	//Testing the case of trying to export a non existing spread sheet
 	@Test(expected= NotFoundException.class)
 	public void nonExistingCalcSheet() throws JDOMException, IOException{
 		ExportDocument service = new ExportDocument(U_TOKEN, -1);
@@ -226,6 +263,35 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 		}
 		
+	//Testing the case of trying to export an existing spread sheet with an invalid login token
+	@Test(expected = UserNotInSessionException.class)
+	public void noLogin(){
+		String bad_session_token = "Bad session token";
+		ExportDocument service = new ExportDocument(bad_session_token, CS_ID);
+		service.dispatch();
+		}
+	
+	
+
+	
+	//Testing the case of trying to export an existing spread sheet and SD-STORE being unavailable
+	@Test(expected = UnavailableServiceException.class)
+	public void storeServiceUnavailable(){
+		new MockSDStoreUnavailableContext();
+		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		service.dispatch();
+		}
+	
+	//Testing the case of trying to export an existing spread sheet and SD-STORE being unable to store it
+	@Test(expected = CannotStoreDocumentException.class)
+	public void storeServiceCantStore(){
+		new  MockSDStoreCannotStoreDocumentContext();
+		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		service.dispatch();
+		}
+		
+
 	}
-	
-	
+
+
+
