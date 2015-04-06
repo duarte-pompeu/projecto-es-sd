@@ -45,8 +45,8 @@ public class RenewPasswordServiceTest extends BubbleDocsServiceTest {
 		assertEquals("e-mail should not be changed", user.getEmail(), EMAIL);
 		assertEquals("name should not be changed", user.getName(), NAME);
 		assertNull("password must be null", user.getPassword());
-		assertEquals("should be the same token", session.getToken());
-		assertFalse("user should still be in session", session.isExpired());		
+		assertEquals("should be the same token", session.getToken(), token);
+		assertFalse("user should still be in session", session.isExpired());
 	}
 	
 	@Test(expected = UnavailableServiceException.class)
