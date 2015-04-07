@@ -31,7 +31,7 @@ public class LoginUser extends BubbleDocsService {
     		user = bd.getUser(username); //search for a valid user
     	}
     	catch (NotFoundException e){
-    		throw new LoginException("invalid password or username");
+    		throw new LoginException("Invalid username or password");
     	}
     	
     	// try remote login
@@ -54,10 +54,13 @@ public class LoginUser extends BubbleDocsService {
     			throw new LoginException("Login User Service: Invalid password");
     	
     		*/
-    		if(!user.getPassword().equals(password)){
-    			throw new  UnavailableServiceException("Can't login: fail on both remote and local login."); 
+    		if (user.getPassword() == null || !user.getPassword().equals(password)) {
+    			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
     		}
     	}
+    	
+    	if (!password.equals(user.getPassword()))
+    		user.setPassword(password);
     	
 		userToken = bd.addSession(user);   	
     }

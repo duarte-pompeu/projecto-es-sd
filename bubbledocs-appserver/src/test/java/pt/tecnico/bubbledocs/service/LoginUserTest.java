@@ -39,6 +39,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	private static final String JUBI_UNAME = "jubi";
 	private static final String JUBI_PASS = "password";
 	private static final String JUBI_NAME = "Jubileu Mandafacas";
+	private static final String NO_CACHE = "Nocache";
 
 	@Mocked IDRemoteServices idRemoteMock;
 	
@@ -48,6 +49,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		createUser(USERNAME, PASSWORD, "Marcos Pires");
 		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
 		createUser(JUBI_UNAME, JUBI_PASS, JUBI_NAME);
+		createUser(NO_CACHE, null, "No money");
 		manel = addUserToSession(LOGGED_IN);
 	}
 	
@@ -216,13 +218,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	public void noRemoteNoCache(){
 		
 		new Expectations(){{
-			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+			idRemoteMock.loginUser(NO_CACHE, "hunter2");
 			result = new RemoteInvocationException();
 		}};
 		
 		
 		
-		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		LoginUser service = new LoginUser(NO_CACHE, "hunter2");
 		service.dispatch();
 	}
 	
