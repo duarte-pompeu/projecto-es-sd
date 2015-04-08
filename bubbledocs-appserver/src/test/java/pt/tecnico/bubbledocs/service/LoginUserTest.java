@@ -126,6 +126,8 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test(expected = LoginException.class)
 	public void loginUserWithinWrongPassword() {
 		
+		// Remote Services aren't implemented in delivery 3, so we mock them.
+		// TODO: implement remote services
 		new Expectations(){{			
 			idRemoteMock.loginUser(USERNAME, DIFF_PASS);
 			result = new LoginException();
@@ -144,7 +146,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	/** A successful login with remote authentication.
 	 */
 	@Test
-	public void loginWithRemote(){
+	public void loginRemote(){
 		
 		//FIXME: assert login is remote and not cached
 		
@@ -160,42 +162,16 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertEquals(stoken, utoken);
 	}
 	
-	/** Try to login after cache is cleaned.
-	 *  The test should fail.
-	 */
-	/*
-	@Test (expected = LoginException.class)
-	public void loginAfterCleanCache(){
-		String temp_username = "abcd123";
-		String temp_password = "abd123";
-		String temp_name = "abcd123";
-				
-		createUser(temp_username, temp_password, temp_name);
-		LoginUser service = new LoginUser(temp_username, temp_password);
-		service.dispatch();
-		
-		Cache cache = BubbleDocs.getInstance().getCache();
-		assertTrue("Cache didnt store user.", cache.hasUser(temp_username));
-		
-		cache.removeFromCache(temp_username);
-		assertFalse("Cache didnt remove user.", cache.hasUser(temp_username));
-		service.dispatch();
-	}
-	*/
 	
 	/** A successful login with local authentication.
 	 */
-	/*
 	@Test
-	public void loginWithCache(){
+	public void loginLocal(){
 		
 		new Expectations(){{			
 			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
 			result = new RemoteInvocationException();
 		}};
-		
-		Cache cache = BubbleDocs.getInstance().getCache();
-		assertTrue("Cache doesn't have user", cache.hasUser(JUBI_UNAME));
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
 		service.dispatch();
@@ -208,23 +184,48 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertNotNull(stoken);
 		assertEquals(stoken, utoken);
 	}
-	*/
+	
 	
 	/** An unsuccessful login because remote authentication is down
 	 *  and there is no cached login.
 	 *  It should fail.
 	 */
 	@Test(expected = UnavailableServiceException.class)
-	public void noRemoteNoCache(){
+	public void noRemoteNoLocal(){
 		
 		new Expectations(){{
 			idRemoteMock.loginUser(NO_CACHE, "hunter2");
 			result = new RemoteInvocationException();
 		}};
 		
-		
-		
 		LoginUser service = new LoginUser(NO_CACHE, "hunter2");
+		service.dispatch();
+	}
+	
+	
+	/** Try to login after "cache is cleaned".
+	 *  Since we got rid of the cache concept, we just set user's stored password to null.
+	 *  The test should fail.
+	 */
+	@Test (expected = UnavailableServiceException.class)
+	public void loginAfterCleanLocal(){
+		String temp_username = "abcd123";
+		String temp_password = "abd123";
+		String temp_name = "abcd123";
+		
+		// simulate an exception with a mock
+		new Expectations(){{			
+			idRemoteMock.loginUser(temp_username, temp_password);
+			result = new RemoteInvocationException();
+		}};
+		
+		createUser(temp_username, temp_password, temp_name);
+		LoginUser service = new LoginUser(temp_username, temp_password);
+		service.dispatch();
+		
+		User u = this.getUserFromUsername(temp_username);
+		u.setPassword(null);
+		
 		service.dispatch();
 	}
 	
@@ -251,7 +252,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	 *  It should fail.
 	 */
 	@Test(expected = UnavailableServiceException.class)
-	public void loginCacheBadPass(){
+	public void loginLocalBadPass(){
 		String bad_pass = "Ah ah ah, you didn't say the magic word.";
 		
 		new Expectations(){{			
@@ -270,27 +271,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test(expected = LoginException.class)
 	public void loginRemoteBadUser(){
 		String bad_user = "I'm root, let me in.";
-		
-		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
-		service.dispatch();
-	}
-	
-	
-	/** A local authentication attempt with a username that doesn't exist.
-	 *  It should fail.
-	 */
-	@Test(expected = LoginException.class)
-	public void loginCacheBadUser(){
-		String bad_user = "I'm root, let me in.";
-		
-		// service fails, without even calling remote services
-		// that's good, but our expectation fails due to missing invocation 
-		// and we cant test the cache for that situation - bummer
-		
-//		new Expectations(){{			
-//			idRemoteMock.loginUser(bad_user, JUBI_PASS);
-//			result = new RemoteInvocationException();
-//		}};
 		
 		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
 		service.dispatch();
