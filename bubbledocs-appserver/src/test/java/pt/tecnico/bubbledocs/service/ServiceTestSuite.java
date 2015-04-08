@@ -17,8 +17,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	AssignLiteralCellTest.class, 
 	AssignReferenceCellTest.class,
-	BubbleDocsServiceTest.class,
-	CacheTest.class,
 	CreateCalcSheetTest.class,
 	CreateUserTest.class,
 	DeleteUserTest.class,

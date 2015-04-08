@@ -13,7 +13,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.Cache;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.SuperUser;
@@ -40,9 +39,9 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	private static final String JUBI_UNAME = "jubi";
 	private static final String JUBI_PASS = "password";
 	private static final String JUBI_NAME = "Jubileu Mandafacas";
+	private static final String NO_CACHE = "Nocache";
 
 	@Mocked IDRemoteServices idRemoteMock;
-	@Mocked Cache cache_mock;
 	
 	@Override
 	public void populate4Test() {
@@ -50,15 +49,10 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		createUser(USERNAME, PASSWORD, "Marcos Pires");
 		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
 		createUser(JUBI_UNAME, JUBI_PASS, JUBI_NAME);
+		createUser(NO_CACHE, null, "No money");
 		manel = addUserToSession(LOGGED_IN);
 	}
 	
-	@Override
-	public void tearDown(){
-		//FIXME: clean cache, not tested
-		BubbleDocs bd = BubbleDocs.getInstance();
-		bd.getCache().removeFromCache(JUBI_UNAME);
-	}
 
 	// returns the time of the last access for the user with token userToken.
 	// It must get this data from the session object of the application
@@ -169,6 +163,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	/** Try to login after cache is cleaned.
 	 *  The test should fail.
 	 */
+	/*
 	@Test (expected = LoginException.class)
 	public void loginAfterCleanCache(){
 		String temp_username = "abcd123";
@@ -186,10 +181,11 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertFalse("Cache didnt remove user.", cache.hasUser(temp_username));
 		service.dispatch();
 	}
-	
+	*/
 	
 	/** A successful login with local authentication.
 	 */
+	/*
 	@Test
 	public void loginWithCache(){
 		
@@ -212,7 +208,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertNotNull(stoken);
 		assertEquals(stoken, utoken);
 	}
-	
+	*/
 	
 	/** An unsuccessful login because remote authentication is down
 	 *  and there is no cached login.
@@ -222,13 +218,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	public void noRemoteNoCache(){
 		
 		new Expectations(){{
-			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+			idRemoteMock.loginUser(NO_CACHE, "hunter2");
 			result = new RemoteInvocationException();
 		}};
 		
 		
 		
-		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		LoginUser service = new LoginUser(NO_CACHE, "hunter2");
 		service.dispatch();
 	}
 	

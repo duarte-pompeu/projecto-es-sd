@@ -1,9 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.Cache;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
@@ -33,7 +31,7 @@ public class LoginUser extends BubbleDocsService {
     		user = bd.getUser(username); //search for a valid user
     	}
     	catch (NotFoundException e){
-    		throw new LoginException("invalid password or username");
+    		throw new LoginException("Invalid username or password");
     	}
     	
     	// try remote login
@@ -54,14 +52,15 @@ public class LoginUser extends BubbleDocsService {
     		
     		if (!user.getPassword().equals(password)) //correct password?
     			throw new LoginException("Login User Service: Invalid password");
-    		
+    	
     		*/
-    		
-    		Cache cache = bd.getCache();
-    		if(!cache.validate(username, password)){
-    			throw new  UnavailableServiceException("Can't login: fail on both remote and local login."); 
+    		if (user.getPassword() == null || !user.getPassword().equals(password)) {
+    			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
     		}
     	}
+    	
+    	if (!password.equals(user.getPassword()))
+    		user.setPassword(password);
     	
 		userToken = bd.addSession(user);   	
     }
