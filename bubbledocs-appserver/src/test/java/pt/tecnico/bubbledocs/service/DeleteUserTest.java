@@ -20,8 +20,6 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
     private static final String ROOT_USERNAME = "root";
 	
     private static final String ALT_USERNAME = "rato";
-	
-    private static final String SPREADSHEET_NAME = "spread";
 
 	private User toDelete;
     // the tokens for user root

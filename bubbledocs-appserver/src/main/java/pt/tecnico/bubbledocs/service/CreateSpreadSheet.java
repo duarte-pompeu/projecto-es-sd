@@ -1,6 +1,5 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.User;
 // add needed import declarations
@@ -29,7 +28,6 @@ public class CreateSpreadSheet extends BubbleDocsService {
     protected void dispatch() throws BubbleDocsException,UserNotInSessionException,InvalidFormatException, InvalidValueException {  
 	
     	// check if token is in session
-    	BubbleDocs bd = BubbleDocs.getInstance();
     	User user;
     	try{
     		user = getSessionFromToken(accessToken).getUser();

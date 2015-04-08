@@ -13,7 +13,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.SuperUser;
 import pt.tecnico.bubbledocs.domain.User;

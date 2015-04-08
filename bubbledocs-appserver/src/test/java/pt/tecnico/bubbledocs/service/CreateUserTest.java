@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
-import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
@@ -18,7 +17,6 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     private String root_token;
     private String user_token;
 
-	private User USER;
     private static final String USERNAME = "turtle";
     private static final String PASSWORD = "pizza";
 	private static final String NAME = "Franklin" ; 
@@ -29,7 +27,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     public void populate4Test() {
 		createUser(ROOT_USERNAME, PASSWORD, "Super User");
     	root_token = addUserToSession(ROOT_USERNAME);
-        USER = createUser(USERNAME, PASSWORD, NAME);
+       createUser(USERNAME, PASSWORD, NAME);
         user_token = addUserToSession(USERNAME);
     }
 
