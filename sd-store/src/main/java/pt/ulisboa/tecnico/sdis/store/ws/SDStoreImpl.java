@@ -11,11 +11,11 @@ import pt.ulisboa.tecnico.sdis.store.service.StoreService;
 
 @WebService(
 	endpointInterface="pt.ulisboa.tecnico.sdis.store.ws.SDStore",
-	wsdlLocation="SD-Store.1_1.wsdl",
+	wsdlLocation="SD-STORE.1_1.wsdl",
 	name="SDStore",
 	portName="SDStoreImplPort",
 	targetNamespace="urn:pt:ulisboa:tecnico:sdis:store:ws",
-	serviceName="SdStore"
+	serviceName="SDStore"
 )
 
 public class SDStoreImpl implements SDStore{
