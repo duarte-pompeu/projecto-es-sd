@@ -44,7 +44,7 @@
           <!-- https://jax-ws-commons.java.net/jaxws-maven-plugin/wsimport-mojo.html -->
           <wsdlDirectory>${basedir}/../sd-store/src/main/resources</wsdlDirectory>
           <wsdlFiles>
-            <wsdlFile>SD-Store.1_1.wsdl</wsdlFile>
+            <wsdlFile>SD-STORE.1_1.wsdl</wsdlFile>
           </wsdlFiles>
         </configuration>
         <dependencies>
