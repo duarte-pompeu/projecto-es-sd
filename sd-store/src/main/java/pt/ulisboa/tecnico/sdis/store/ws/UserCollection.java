@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 import pt.ulisboa.tecnico.sdis.store.exceptions.StorageCapacityException;
 
-public class DocsCollection {
+public class UserCollection {
 	
 	private static final int DEFAULT_CAPACITY = 10 * 1000 * 1000; //10Mbytes
 	
@@ -15,7 +15,7 @@ public class DocsCollection {
 	private int totalCapacity;
 	private int usedCapacity;
 	
-	public DocsCollection(String owner){
+	public UserCollection(String owner){
 		this.owner = owner;
 		docs = new TreeMap<String, byte[]>();
 		usedCapacity = 0;

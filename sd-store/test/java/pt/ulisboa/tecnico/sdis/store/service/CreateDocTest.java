@@ -49,16 +49,13 @@ public class CreateDocTest {
 	}
 	
 	@Test (expected = DocAlreadyExists_Exception.class)
-	public void addRepeatedDoc(){
+	public void addRepeatedDoc() throws DocAlreadyExists_Exception{
+	
+		CreateDocService service1 = new CreateDocService("jubi", "emails");
+		service1.dispatch();
 		
-		try{
-			CreateDocService service1 = new CreateDocService("jubi", "emails");
-			service1.dispatch();
-			service1.dispatch();
-		}
+		CreateDocService service2 = new CreateDocService("jubi", "emails");
+		service2.dispatch();
 		
-		catch(DocAlreadyExists_Exception e){
-			throw new RuntimeException();
-		}
 	}
 }

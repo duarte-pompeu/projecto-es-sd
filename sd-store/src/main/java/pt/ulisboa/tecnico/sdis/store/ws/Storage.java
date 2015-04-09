@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class Storage {
-	private TreeMap<String, DocsCollection> collections;
+	private TreeMap<String, UserCollection> collections;
 
 	public Storage(){
 		init();
@@ -15,11 +15,11 @@ public class Storage {
 	
 	
 	public void init(){
-		collections = new TreeMap<String, DocsCollection>();
+		collections = new TreeMap<String, UserCollection>();
 	}
 	
 	
-	public DocsCollection getCollection(String userID){
+	public UserCollection getCollection(String userID){
 		return collections.get(userID);
 	}
 	
@@ -27,7 +27,7 @@ public class Storage {
 	public List<String> getUserDocs(String userID)
 		throws UserDoesNotExist_Exception{
 		
-		DocsCollection collection = this.getCollection(userID);
+		UserCollection collection = this.getCollection(userID);
 		List<String> docs = null;
 		
 		if(collection != null){
@@ -51,19 +51,19 @@ public class Storage {
 	}
 	
 	public List<String> getAllDocs(){
-		Collection<DocsCollection> collections_set = collections.values();
+		Collection<UserCollection> collections_set = collections.values();
 		
 		ArrayList<String> docs = new ArrayList<String>();
 		
-		for(DocsCollection col: collections_set){
+		for(UserCollection col: collections_set){
 			docs.addAll(col.getAllDocs());
 		}
 		
 		return docs;
 	}
 	
-	public DocsCollection createCollection(String userID){
-		DocsCollection col = new DocsCollection(userID);
+	public UserCollection createCollection(String userID){
+		UserCollection col = new UserCollection(userID);
 		this.collections.put(userID, col);
 		
 		return col;
@@ -76,22 +76,22 @@ public class Storage {
 		/* Check if user has collection and get it.
 		 * Create a new one otherwise.
 		 */
-		DocsCollection col = getCollection(user);
+		UserCollection collection = getCollection(user);
 		
-		if(col == null){
-			col = this.createCollection(user);
+		if(collection == null){
+			collection = this.createCollection(user);
 			
 		}
 		
 		/* Check if doc exists - if it does, throw exception.
 		 */
-		if(col.contains(doc)){
+		if(collection.contains(doc)){
 			//FIXME: check if this is how you're supposed to throw
 			DocAlreadyExists dae = new DocAlreadyExists();
 			dae.setDocId(doc);
 			throw new DocAlreadyExists_Exception("Doc already exists", dae);
 		}
 		
-		col.addDoc(doc);
+		collection.addDoc(doc);
 	}
 }
