@@ -8,18 +8,16 @@ import pt.ulisboa.tecnico.sdis.store.exceptions.StorageCapacityException;
 
 public class UserCollection {
 	
-	private static final int DEFAULT_CAPACITY = 10 * 1000 * 1000; //10Mbytes
-	
 	private TreeMap<String, byte[]> docs;
 	private String owner;
-	private int totalCapacity;
+	private int maxCapacity;
 	private int usedCapacity;
 	
-	public UserCollection(String owner){
+	public UserCollection(String owner, int capacity){
 		this.owner = owner;
 		docs = new TreeMap<String, byte[]>();
 		usedCapacity = 0;
-		totalCapacity = DEFAULT_CAPACITY;
+		maxCapacity = capacity;
 	}
 	
 	public String getOwner(){
@@ -55,7 +53,7 @@ public class UserCollection {
 		/* Throw exception if used_capacity above max allowed.
 		 */
 		int new_capacity = this.usedCapacity + new_size - old_size;
-		if(new_capacity > totalCapacity){
+		if(new_capacity > maxCapacity){
 			throw new StorageCapacityException();
 		}
 		

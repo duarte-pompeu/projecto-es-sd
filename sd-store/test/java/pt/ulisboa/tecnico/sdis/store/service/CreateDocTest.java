@@ -35,6 +35,9 @@ public class CreateDocTest {
 	public void addDocs() throws DocAlreadyExists_Exception{
 		ArrayList<CreateDocService> services = new ArrayList<CreateDocService>();
 		
+		storage.createCollection("jubi");
+		storage.createCollection("grupo1");
+		storage.createCollection("grupo2");
 		services.add(new CreateDocService("jubi", "email"));
 		services.add(new CreateDocService("grupo1", "email com anexo"));
 		services.add(new CreateDocService("grupo1", "email sem anexo"));
@@ -50,7 +53,8 @@ public class CreateDocTest {
 	
 	@Test (expected = DocAlreadyExists_Exception.class)
 	public void addRepeatedDoc() throws DocAlreadyExists_Exception{
-	
+		storage.createCollection("jubi");
+		
 		CreateDocService service1 = new CreateDocService("jubi", "emails");
 		service1.dispatch();
 		

@@ -18,12 +18,14 @@ public class CreateDocService extends SDStoreService {
 		
 		Storage storage = SDStoreMain.getStorage();
 		
-		try{
-			storage.addDoc(userID, docID);
-		}
-		
-		catch(DocAlreadyExists_Exception daeExcept){
-			throw daeExcept;
+		if(storage.hasUser(userID)){
+			try{
+				storage.addDoc(userID, docID);
+			}
+			
+			catch(DocAlreadyExists_Exception daeExcept){
+				throw daeExcept;
+			}
 		}
 	}
 }

@@ -7,12 +7,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class Storage {
+	private final int STORAGE_CAP;
+	
 	private TreeMap<String, UserCollection> collections;
 
-	public Storage(){
+	public Storage(int capacity){
 		init();
+		STORAGE_CAP = capacity;
 	}
-	
 	
 	public void init(){
 		collections = new TreeMap<String, UserCollection>();
@@ -63,7 +65,7 @@ public class Storage {
 	}
 	
 	public UserCollection createCollection(String userID){
-		UserCollection col = new UserCollection(userID);
+		UserCollection col = new UserCollection(userID, STORAGE_CAP);
 		this.collections.put(userID, col);
 		
 		return col;
@@ -93,5 +95,14 @@ public class Storage {
 		}
 		
 		collection.addDoc(doc);
+	}
+
+	public boolean hasUser(String userID) {
+		for(String owner: this.collections.keySet()){
+			if(owner.equals(userID)){
+				return true;
+			}
+		}
+		return false;
 	}
 }
