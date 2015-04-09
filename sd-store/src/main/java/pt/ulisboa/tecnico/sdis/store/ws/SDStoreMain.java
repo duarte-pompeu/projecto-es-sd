@@ -7,6 +7,8 @@ public class SDStoreMain{
 	private static Storage storage;
 	
 	public static void main(String[] args){
+		boolean debug_mode = true;
+		
 		initStorage();
 		populateStorage();
 		
@@ -19,7 +21,7 @@ public class SDStoreMain{
 		Endpoint endpoint = null;
 		
 		try{
-			endpoint = Endpoint.create(new SDStoreImpl());
+			endpoint = Endpoint.create(new SDStoreImpl(debug_mode));
 			
 			// publish endpoint
 			System.out.println("Starting " + url);

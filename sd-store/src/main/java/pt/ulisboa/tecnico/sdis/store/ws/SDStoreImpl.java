@@ -19,13 +19,30 @@ import pt.ulisboa.tecnico.sdis.store.service.StoreService;
 )
 
 public class SDStoreImpl implements SDStore{
-
+	public final boolean DEBUG;
+	
+	public SDStoreImpl(){
+		DEBUG = false;
+	}
+	
+	public SDStoreImpl(boolean debug){
+		DEBUG = true;
+	}
+	
+	
 	@Override
 	public void createDoc(DocUserPair docUserPair)
 		throws DocAlreadyExists_Exception {
-	
-		CreateDocService service = 	new CreateDocService(docUserPair.getUserId(), docUserPair.getDocumentId());
+		
+		String userID = docUserPair.getUserId();
+		String docID = docUserPair.getDocumentId();
+		
+		CreateDocService service = 	new CreateDocService(userID, docID);
 		service.dispatch();
+		
+		if(DEBUG){
+			System.out.printf("User '%s' created doc '%s'.\n", userID, docID);
+		}
 	}
 
 	
@@ -35,7 +52,14 @@ public class SDStoreImpl implements SDStore{
 		
 		ListDocsService service = new ListDocsService(userID);
 		service.dispatch();
-		return service.getResult();
+		
+		List<String> result = service.getResult();
+		
+		if(DEBUG){
+			System.out.printf("User '%s' is listing his collection of '%d' docs.\n", userID, result.size());
+		}
+		
+		return result;
 	}
 
 	
@@ -44,16 +68,32 @@ public class SDStoreImpl implements SDStore{
 			throws CapacityExceeded_Exception, DocDoesNotExist_Exception,
 			UserDoesNotExist_Exception {
 		
-		StoreService service = new StoreService(docUserPair.getUserId(), docUserPair.getDocumentId(), contents);
+		String userID = docUserPair.getUserId();
+		String docID = docUserPair.getDocumentId();
+		
+		StoreService service = new StoreService(userID, docID, contents);
 		service.dispatch();
+		
+		if(DEBUG){
+			System.out.printf("User '%s' stored '%d' bytes in doc '%s'.\n", userID, contents.length, docID);
+		}
 	}
 
 	@Override
 	public byte[] load(DocUserPair docUserPair)
 			throws DocDoesNotExist_Exception, UserDoesNotExist_Exception {
 		
-		LoadService service = new LoadService(docUserPair.getUserId(), docUserPair.getDocumentId());
+		String userID = docUserPair.getUserId();
+		String docID = docUserPair.getDocumentId();
+		
+		LoadService service = new LoadService(userID, docID);
 		service.dispatch();
-		return service.getResult();
+		byte result[] = service.getResult();
+		
+		if(DEBUG){
+			System.out.printf("User '%s' loaded '%d' bytes from doc '%s'.\n", userID, result.length, docID);
+		}
+		
+		return result;
 	}
 }

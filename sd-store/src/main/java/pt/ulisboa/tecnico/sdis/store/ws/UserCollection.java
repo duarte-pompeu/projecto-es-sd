@@ -31,7 +31,7 @@ public class UserCollection {
 	
 	
 	public boolean contains(String docID){
-		return docs.containsValue(docID);
+		return docs.containsKey(docID);
 	}
 	
 	
