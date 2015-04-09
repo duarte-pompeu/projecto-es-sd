@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import pt.ulisboa.tecnico.sdis.store.exceptions.StorageCapacityException;
-
 public class UserCollection {
 	
 	private TreeMap<String, byte[]> docs;
@@ -40,7 +38,7 @@ public class UserCollection {
 	}
 	
 	
-	public void setContent(String docID, byte[] newContent) throws StorageCapacityException{
+	public void setContent(String docID, byte[] newContent) throws CapacityExceeded_Exception{
 		/* Business rule: we must not exceed the collection capacity size.
 		 */
 		
@@ -54,7 +52,10 @@ public class UserCollection {
 		 */
 		int new_capacity = this.usedCapacity + new_size - old_size;
 		if(new_capacity > maxCapacity){
-			throw new StorageCapacityException();
+			CapacityExceeded cap = new CapacityExceeded();
+			cap.setCurrentSize(new_capacity);
+			cap.setAllowedCapacity(maxCapacity);
+			throw new CapacityExceeded_Exception("Capacity exceeded", cap);
 		}
 		
 		/* If all is good:

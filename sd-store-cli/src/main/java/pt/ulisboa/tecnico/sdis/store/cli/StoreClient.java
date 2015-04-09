@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.sdis.store.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class StoreClient{
 		
 		createDoc("duarte", "tutanota email");
 		listDocs("duarte");
-		storeDoc("duarte", "tutanova email", "test".getBytes());
+		storeDoc("duarte", "tutanova email", "test".getBytes("UTF-8"));
 		loadDoc("duarte", "tutanova email");
 	}
 	
@@ -76,6 +77,8 @@ public class StoreClient{
 			content = _port.load(dup);
 		} catch (Exception e) { System.out.println(e.getMessage()); }
 		
-		System.out.println(String.valueOf(content));
+		try{
+			System.out.println(new String(content, "UTF-8"));
+		} catch (UnsupportedEncodingException e) { System.out.println(e.getMessage()); }
 	}
 }
