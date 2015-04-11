@@ -8,6 +8,10 @@ import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
 
+import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
+import pt.ulisboa.tecnico.sdis.store.cli.service.ListDocsService;
+import pt.ulisboa.tecnico.sdis.store.cli.service.LoadDocService;
+import pt.ulisboa.tecnico.sdis.store.cli.service.StoreDocService;
 import pt.ulisboa.tecnico.sdis.store.ws.DocUserPair;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore_Service;
@@ -26,57 +30,66 @@ public class StoreClient{
 		System.out.println(requestContext.get(ENDPOINT_ADDRESS_PROPERTY));
 		
 		createDoc("duarte", "tutanota email");
-		storeDoc("duarte", "tutanova email", string2bytes("teste"));
-		loadDoc("duarte", "tutanova email");
+		storeDoc("duarte", "tutanota email", "teste");
+		loadDoc("duarte", "tutanota email");
 		listDocs("duarte");
 	}
 	
 	
 	public static void createDoc(String userID, String docID){
-		DocUserPair dup = new DocUserPair();
-		dup.setUserId(userID);
-		dup.setDocumentId(docID);
+		CreateDocService service = new CreateDocService(userID, docID, _port);
 		
 		try{
-			_port.createDoc(dup);
-		} catch (Exception e) { System.out.println(e.getMessage()); }
+			service.dispatch();
+			System.out.printf("Created doc '%d'.\n", docID);
+		}
+		
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	
 	public static void listDocs(String userID){
-		List<String> docs = null;
-		
+		ListDocsService service = new ListDocsService(userID, _port);
+				
 		try{
-			docs = _port.listDocs(userID);
+			service.dispatch();
+					
 		} catch (Exception e) { System.out.println(e.getMessage()); }
 		
 		System.out.printf("List of user '%s' docs.\n", userID);
+		List<String> docs = service.getResult();
 		
 		for(String s: docs){
 			System.out.println(s);
 		}
 	}
 	
-	public static void storeDoc(String userID, String docID, byte[] content){
-		DocUserPair dup = new DocUserPair();
-		dup.setUserId(userID);
-		dup.setDocumentId(docID);
+	public static void storeDoc(String userID, String docID, String strContent){
+		StoreDocService service;
+		byte[] content = string2bytes(strContent);
 		
 		try{
-			_port.store(dup, content);
+			service = new StoreDocService(userID, docID, content, _port);
+			service.dispatch();
+			
 		} catch (Exception e) { System.out.println(e.getMessage()); }
+		
+		System.out.printf("Stored %d bytes in doc '%s'.\n", content.length, docID);
 	}
 	
 	public static void loadDoc(String userID, String docID){
-		DocUserPair dup = new DocUserPair();
-		dup.setUserId(userID);
-		dup.setDocumentId(docID);
 		
 		byte content[] = null;
 		try{
-			content = _port.load(dup);
+			LoadDocService service = new LoadDocService(userID, docID, _port);
+			service.dispatch();
+			content = service.getResult();
+			
 		} catch (Exception e) { System.out.println(e.getMessage()); }
 		
+		System.out.printf("Loaded %d bytes from doc '%s':\n", content.length, docID);
 		System.out.println(bytes2string(content));
 	}
 	
