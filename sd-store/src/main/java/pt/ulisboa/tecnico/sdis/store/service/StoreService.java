@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserCollection;
@@ -18,7 +20,7 @@ public class StoreService {
 		this.content = content;
 	}
 	
-	public void dispatch() throws UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void dispatch() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		Storage storage = SDStoreMain.getStorage();
 		
 		UserCollection collection = storage.getCollection(userID);
@@ -31,7 +33,9 @@ public class StoreService {
 		}
 		
 		if(!collection.contains(docID)){
-			//doc does not exist
+			DocDoesNotExist fault = new DocDoesNotExist();
+			fault.setDocId(docID);
+			throw new DocDoesNotExist_Exception("Doc does not exist!", fault);
 		}
 		
 		try{

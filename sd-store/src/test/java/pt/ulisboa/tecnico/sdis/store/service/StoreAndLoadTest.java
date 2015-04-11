@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
@@ -51,7 +52,7 @@ public class StoreAndLoadTest {
 	}
 	
 	@Test
-	public void storeSuccess() throws UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void storeSuccess() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		StoreService service1 = new StoreService(U1, U1D1, string2bytes(U1D1C1));
 		service1.dispatch();
 		
@@ -70,14 +71,21 @@ public class StoreAndLoadTest {
 	}
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
-	public void noUser() throws UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void noUser() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		StoreService service1 = new StoreService("anonymous", U1D1, string2bytes(U1D1C1));
 		service1.dispatch();
 	}
 	
 	
+	@Test (expected = DocDoesNotExist_Exception.class)
+	public void noDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+		StoreService service = new StoreService(U1, "the doc doesnt exist but I'm gonna stuff content there anyway", string2bytes(U1D1C1));
+		service.dispatch();
+	}
+	
+	
 	@Test (expected = CapacityExceeded_Exception.class)
-	public void longDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void longDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
 		
 		for(int i = 0; i < 1000; i++){
@@ -90,7 +98,7 @@ public class StoreAndLoadTest {
 	
 	
 	@Test (expected = CapacityExceeded_Exception.class)
-	public void docGetsIncrementallyBigger() throws UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void docGetsIncrementallyBigger() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
 		
 		for(int i = 0; i < 1000; i++){
@@ -103,7 +111,7 @@ public class StoreAndLoadTest {
 	
 	
 	@Test
-	public void storeLoadRepeat()throws UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void storeLoadRepeat()throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		String[] email_edits = { "ola", "oi", "boas", "boa tarde", "não sei como começar o email, vou guardar como rascunho" };
 		
 		StoreService store;
