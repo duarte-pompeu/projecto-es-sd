@@ -4,7 +4,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 
-public class CreateDocService extends SDStoreService {
+public class CreateDocService {
 	String userID;
 	String docID;
 	

@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.xml.ws.Endpoint;
 
 public class SDStoreMain{
@@ -69,5 +71,23 @@ public class SDStoreMain{
 		storage.createCollection("carla");
 		storage.createCollection("duarte");
 		storage.createCollection("eduardo");
+	}
+	
+	
+	public static byte[] string2bytes(String s){
+		try {
+			return s.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	}
+	
+	
+	public static String bytes2string(byte[] bytes){
+		try {
+			return new String(bytes, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 }

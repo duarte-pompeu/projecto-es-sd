@@ -31,6 +31,10 @@ public class ListDocsTest{
 		storage = SDStoreMain.getStorage();
 		ArrayList<CreateDocService> services = new ArrayList<CreateDocService>();
 		
+		storage.createCollection(U1);
+		storage.createCollection(U2);
+		storage.createCollection(U3);
+		
 		services.add(new CreateDocService(U1, U1D1));
 		services.add(new CreateDocService(U2, U2D1));
 		services.add(new CreateDocService(U2, U2D2));
@@ -50,11 +54,13 @@ public class ListDocsTest{
 		storage.init();
 	}
 	
+	
 	@Test
 	public void populateSuccess(){
 		assertEquals(3, storage.getUsers().size());
 		assertEquals(4, storage.getAllDocs().size());
 	}
+	
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void noUser() throws UserDoesNotExist_Exception {
@@ -62,6 +68,7 @@ public class ListDocsTest{
 		ListDocsService service = new ListDocsService(badUser);
 		service.dispatch();
 	}
+	
 	
 	@Test
 	public void listDocs()

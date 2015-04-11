@@ -26,9 +26,9 @@ public class StoreClient{
 		System.out.println(requestContext.get(ENDPOINT_ADDRESS_PROPERTY));
 		
 		createDoc("duarte", "tutanota email");
-		listDocs("duarte");
-		storeDoc("duarte", "tutanova email", "test".getBytes("UTF-8"));
+		storeDoc("duarte", "tutanova email", string2bytes("teste"));
 		loadDoc("duarte", "tutanova email");
+		listDocs("duarte");
 	}
 	
 	
@@ -77,8 +77,23 @@ public class StoreClient{
 			content = _port.load(dup);
 		} catch (Exception e) { System.out.println(e.getMessage()); }
 		
-		try{
-			System.out.println(new String(content, "UTF-8"));
-		} catch (UnsupportedEncodingException e) { System.out.println(e.getMessage()); }
+		System.out.println(bytes2string(content));
+	}
+	
+	public static byte[] string2bytes(String s){
+		try {
+			return s.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	}
+	
+	
+	public static String bytes2string(byte[] bytes){
+		try {
+			return new String(bytes, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 }

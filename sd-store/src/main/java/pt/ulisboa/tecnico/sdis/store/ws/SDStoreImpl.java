@@ -56,7 +56,7 @@ public class SDStoreImpl implements SDStore{
 		List<String> result = service.getResult();
 		
 		if(DEBUG){
-			System.out.printf("User '%s' is listed his collection of '%d' docs.\n", userID, result.size());
+			System.out.printf("User '%s' listed his collection of '%d' docs.\n", userID, result.size());
 		}
 		
 		return result;
