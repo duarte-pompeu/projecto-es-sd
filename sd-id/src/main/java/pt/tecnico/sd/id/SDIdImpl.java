@@ -22,6 +22,12 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 )
 public class SDIdImpl implements SDId {
 
+	UserTable usertable;
+	
+	public SDIdImpl() {
+		this.usertable = new UserTable();
+	}
+	
 	@Override
 	public void createUser(String userId, String emailAddress)
 			throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
