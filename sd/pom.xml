@@ -16,8 +16,8 @@
   <name>SD Remote Services</name>
 
   <modules>
-    <module>sd-id</module>
-    <!-- <module>sd-store</module> -->
+    <module>../sd-id</module>
+    <!-- <module>../sd-store</module> -->
   </modules>
 
   <properties>
