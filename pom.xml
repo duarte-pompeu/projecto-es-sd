@@ -1,55 +1,55 @@
 ﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pt.tecnico.ulisboa.essd</groupId>
-    <artifactId>bubbledocs</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>Bubble Docs</name>
+  <groupId>pt.tecnico.ulisboa.essd</groupId>
+  <artifactId>bubbledocs</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Bubble Docs</name>
 
-    <modules>
-        <module>bubbledocs-appserver</module>
-        <!-- <module>sd</module> -->
-    </modules>
+  <modules>
+    <module>bubbledocs-appserver</module>
+    <!-- <module>sd</module> -->
+  </modules>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-       <version.junit>4.11</version.junit>
-       <version.java>1.8</version.java>
-       <version.jmockit>1.16</version.jmockit>
-    </properties>
-    
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.1</version>
-          <configuration>
-             <source>${version.java}</source>
-             <target>${version.java}</target>
-             <verbose>true</verbose>
-             <fork>true</fork>
-          </configuration> 
-        </plugin>
-      </plugins> 
-    </build>
-    
-    <dependencies>
-      <dependency>
-       <groupId>org.jmockit</groupId> 
-       <artifactId>jmockit</artifactId>
-       <version>${version.jmockit}</version>
-       <scope>test</scope>
-      </dependency>
-      <dependency>
-       <groupId>junit</groupId> 
-       <artifactId>junit</artifactId>
-       <version>${version.junit}</version>
-       <scope>test</scope>
-      </dependency>
-    </dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <version.junit>4.11</version.junit>
+    <version.java>1.8</version.java>
+    <version.jmockit>1.16</version.jmockit>
+  </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>${version.java}</source>
+          <target>${version.java}</target>
+          <verbose>true</verbose>
+          <fork>true</fork>
+        </configuration> 
+      </plugin>
+    </plugins> 
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.jmockit</groupId> 
+      <artifactId>jmockit</artifactId>
+      <version>${version.jmockit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId> 
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>
