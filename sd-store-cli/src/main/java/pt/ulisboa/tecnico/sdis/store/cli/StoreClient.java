@@ -12,7 +12,6 @@ import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.cli.service.ListDocsService;
 import pt.ulisboa.tecnico.sdis.store.cli.service.LoadDocService;
 import pt.ulisboa.tecnico.sdis.store.cli.service.StoreDocService;
-import pt.ulisboa.tecnico.sdis.store.ws.DocUserPair;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore_Service;
 
