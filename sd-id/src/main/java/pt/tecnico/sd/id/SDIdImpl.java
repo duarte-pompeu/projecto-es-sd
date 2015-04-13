@@ -51,6 +51,7 @@ public class SDIdImpl implements SDId {
 	//to be used in the sd-id tests
 	protected SDIdImpl(UserTable users) throws Exception {
 		this.userTable = users;
+		this.rng = new SecureRandom();
 		this.populateForTest(userTable);
 	}
 	
