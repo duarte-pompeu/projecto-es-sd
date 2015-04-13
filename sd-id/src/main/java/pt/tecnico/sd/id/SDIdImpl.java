@@ -3,6 +3,7 @@ package pt.tecnico.sd.id;
 //This class implements the service
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import javax.jws.*;
 
@@ -116,13 +117,7 @@ public class SDIdImpl implements SDId {
 			UserDoesNotExist fault = new UserDoesNotExist();
 			fault.setUserId(userId);
 			throw new UserDoesNotExist_Exception(userId + " doesnt exist", fault);
-		}
-		
-		if(getUserByUsername(userId)==null){
-			UserDoesNotExist fault = new UserDoesNotExist();
-			fault.setUserId(userId);
-			throw new UserDoesNotExist_Exception(userId + " doesnt exist", fault);
-		}
+		}		
 		
 		userTable.removeUser(userId);
 		
@@ -138,13 +133,15 @@ public class SDIdImpl implements SDId {
 			throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
 		}
 		
-		if(getUserByUsername(userId)==null){
+		byte[] password = userTable.getPassword(userId);
+		
+		if(password==null){
 			AuthReqFailed fault = new AuthReqFailed();
 			fault.setReserved(reserved);
 			throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
 		}
 		
-		if(!getUserByUsername(userId).password.equals(reserved)){
+		if(Arrays.equals(password, reserved)){
 			AuthReqFailed fault = new AuthReqFailed();
 			fault.setReserved(reserved);
 			throw new AuthReqFailed_Exception(userId + " wrong password", fault);
