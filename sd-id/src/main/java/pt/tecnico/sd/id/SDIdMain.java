@@ -3,6 +3,8 @@ package pt.tecnico.sd.id;
 import javax.xml.ws.Endpoint;
 
 import example.ws.uddi.*;
+import javax.xml.registry.JAXRException;
+import java.io.IOException;
 
 //This class implements the server
 
@@ -39,11 +41,18 @@ public class SDIdMain {
             System.out.println("Press enter to shutdown");
             System.in.read();
 
-        } catch(Exception e) {
+        } catch(JAXRException e) {
             System.out.printf("Caught exception: %s%n", e);
             e.printStackTrace();
 
-        } finally {
+        }
+        catch(IOException e) {
+            System.out.printf("Caught exception: %s%n", e);
+            e.printStackTrace();
+
+        }
+        
+        finally {
             try {
                 if (endpoint != null) {
                     // stop endpoint

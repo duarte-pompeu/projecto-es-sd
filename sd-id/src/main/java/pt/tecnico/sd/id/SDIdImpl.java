@@ -89,13 +89,12 @@ public class SDIdImpl implements SDId {
 			throw new InvalidUser_Exception(userId + " is invalid", fault);
 		}
 		
-		else if(!emailIsValid(emailAddress)){
+
+		if(!emailIsValid(emailAddress)){
 			InvalidEmail fault = new InvalidEmail();
 			fault.setEmailAddress(emailAddress);
 			throw new InvalidEmail_Exception(emailAddress + " is invalid", fault);
 		}
-		userTable.throwIfEmailAlreadyExists(emailAddress);
-		userTable.throwIfUserAlreadyExists(userId);
 		
 		userTable.addUser(userId,emailAddress, generateRandomPassword());
 		

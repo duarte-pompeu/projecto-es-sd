@@ -9,9 +9,11 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+import javax.xml.registry.JAXRException;
+import mockit.Mock;
+import mockit.MockUp;
 import pt.ulisboa.tecnico.sdis.id.ws.*;
-
+import example.ws.uddi.*;
 /**
  * This is a unit test in the local perspective.
  * All tests are run in the same process as the server class.
@@ -38,6 +40,22 @@ public class SdIdLocalUnitTest {
 	private final String repeatedEmail = "carla@tecnico.pt";
 	private final String invalidEmail = "invalidemail";
 
+	//Mock class simulating a failing behaviour at the uddi naming service
+	public static class MockUDDINamingFails extends MockUp<UDDINaming>
+	{
+		   @Mock
+		   public void $init() {}
+
+		   @Mock
+		   public void rebind(String name, String url) throws JAXRException
+		   {
+		      throw new JAXRException();
+		   }
+		}
+		
+	
+	
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		//Maybe empty
