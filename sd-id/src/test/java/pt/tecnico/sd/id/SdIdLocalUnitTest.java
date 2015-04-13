@@ -36,7 +36,7 @@ public class SdIdLocalUnitTest {
 	private final String email1 = "a@t";
 	private final String email2 = "b@t";
 	private final String repeatedEmail = "carla@tecnico.pt";
-	
+	private final String invalidEmail = "invalidemail";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
