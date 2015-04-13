@@ -38,10 +38,12 @@ public class SDIdImpl implements SDId {
 	private final String email4 = "duarte@tecnico.pt";
 	private final String email5 = "eduardo@tecnico.pt";
 	
-	UserTable userTable;
+	private UserTable userTable;
+	private PasswordGenerator rng;
 	
 	public SDIdImpl() {
 		this.userTable = new UserTable();
+		this.rng = new PasswordGenerator();
 	}
 	
 	//to be used in the sd-id tests
@@ -88,7 +90,7 @@ public class SDIdImpl implements SDId {
 	}
 	
 	private byte[] generateRandomPassword() {
-		return null;
+		return rng.generatePassword();
 	}
 
 }
