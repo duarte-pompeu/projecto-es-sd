@@ -37,6 +37,7 @@ public class StoreConnectionTest  extends ClientStoreServicesTest{
 	
 	
 	@Test
+	// requires a successful connection with the storage server
 	public void populateSuccess() throws UserDoesNotExist_Exception, InvalidAttributeValueException{
 		ListDocsService service = new ListDocsService(USER, getPort());
 		service.dispatch();

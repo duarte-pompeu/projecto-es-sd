@@ -44,6 +44,7 @@ public class StoreClient{
 		
 		catch (Exception e){
 			System.out.println(e.getMessage());
+			return;
 		}
 	}
 	
@@ -54,7 +55,10 @@ public class StoreClient{
 		try{
 			service.dispatch();
 					
-		} catch (Exception e) { System.out.println(e.getMessage()); }
+		} catch (Exception e) { 
+			System.out.println(e.getMessage());
+			return;
+		}
 		
 		System.out.printf("List of user '%s' docs.\n", userID);
 		List<String> docs = service.getResult();
@@ -72,7 +76,10 @@ public class StoreClient{
 			service = new StoreDocService(userID, docID, content, _port);
 			service.dispatch();
 			
-		} catch (Exception e) { System.out.println(e.getMessage()); }
+		} catch (Exception e) { 
+			System.out.println(e.getMessage());
+			return; 
+		}
 		
 		System.out.printf("Stored %d bytes in doc '%s'.\n", content.length, docID);
 	}
@@ -84,8 +91,11 @@ public class StoreClient{
 			LoadDocService service = new LoadDocService(userID, docID, _port);
 			service.dispatch();
 			content = service.getResult();
-			
-		} catch (Exception e) { System.out.println(e.getMessage()); }
+		} 
+		catch (Exception e) { 
+			System.out.println(e.getMessage()); 
+			return;
+		}
 		
 		System.out.printf("Loaded %d bytes from doc '%s':\n", content.length, docID);
 		System.out.println(bytes2string(content));
