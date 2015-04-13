@@ -20,8 +20,7 @@ public class StoreClient{
 	static SDStore _port;
 	
 	public static void main(String[] args) throws Exception{
-		SDStore_Service service = new SDStore_Service();
-		_port = service.getSDStoreImplPort();
+		_port = initPort();
 		
 		BindingProvider bindingProvider = (BindingProvider) _port;
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
@@ -108,5 +107,10 @@ public class StoreClient{
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
+	}
+	
+	public static SDStore initPort(){
+		SDStore_Service service = new SDStore_Service();
+		return service.getSDStoreImplPort();
 	}
 }
