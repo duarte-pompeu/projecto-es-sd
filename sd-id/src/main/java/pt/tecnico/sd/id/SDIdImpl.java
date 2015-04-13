@@ -9,7 +9,9 @@ import javax.jws.*;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId;
 import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
@@ -64,12 +66,38 @@ public class SDIdImpl implements SDId {
 	}
 	
 	
+	public boolean emailIsValid(String email){
+		String []emailTokens=email.split("@");
+		if(emailTokens.length!=2)
+			return false;
+		else if(emailTokens[0]=="" || emailTokens[1]=="")
+			return false;
+		else if(email.endsWith("@") || email.startsWith("@"))
+			return false;
+		
+		return true;
+	}
+	
 	//here the password is generated automatically
 	@Override
-	public void createUser(String userId, String emailAddress)
-			throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
+	public void createUser(String userId, String emailAddress) throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
 			InvalidUser_Exception, UserAlreadyExists_Exception {
-		// TODO Auto-generated method stub
+		
+		if(userId==null || userId.equals("")){
+			InvalidUser fault = new InvalidUser();
+			fault.setUserId(userId);
+			throw new InvalidUser_Exception(userId + " is invalid", fault);
+		}
+		
+		else if(!emailIsValid(emailAddress)){
+			InvalidEmail fault = new InvalidEmail();
+			fault.setEmailAddress(emailAddress);
+			throw new InvalidEmail_Exception(emailAddress + " is invalid", fault);
+		}
+		userTable.throwIfEmailAlreadyExists(emailAddress);
+		userTable.throwIfUserAlreadyExists(userId);
+		
+		userTable.addUser(userId,emailAddress, generateRandomPassword());
 		
 	}
 

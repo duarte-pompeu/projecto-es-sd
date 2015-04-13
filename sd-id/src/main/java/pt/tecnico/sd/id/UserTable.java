@@ -111,7 +111,7 @@ public class UserTable {
 		}
 	}
 
-	private void throwIfEmailAlreadyExists(String email)
+	public void throwIfEmailAlreadyExists(String email)
 			throws EmailAlreadyExists_Exception {
 		if (emailMap.containsKey(email)) {
 			EmailAlreadyExists fault = new EmailAlreadyExists();
@@ -120,7 +120,7 @@ public class UserTable {
 		}
 	}
 
-	private void throwIfUserAlreadyExists(String username)
+	public void throwIfUserAlreadyExists(String username)
 			throws UserAlreadyExists_Exception {
 		if (usernameMap.containsKey(username)) {
 			UserAlreadyExists fault = new UserAlreadyExists();
@@ -141,4 +141,7 @@ class User {
 		this.email = email;
 		this.password = password;
 	}
+	
+	public String getEmail(){ return email; }
+	public String getUserName(){ return username;}
 }
