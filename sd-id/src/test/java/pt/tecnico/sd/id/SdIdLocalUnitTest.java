@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.ulisboa.tecnico.sdis.id.ws.*;
+
 /**
  * This is a unit test in the local perspective.
  * All tests are run in the same process as the server class.
@@ -20,7 +22,7 @@ import org.junit.Test;
  
 public class SdIdLocalUnitTest {
 
-	private final SDIdImpl sdIdService;
+	private SDIdImpl sdIdService;
 	private final String userName1 = "user1";
 	private final String userName2 = "user2";
 	private final String repeatedUserName = "carla";
@@ -42,7 +44,7 @@ public class SdIdLocalUnitTest {
 
 	@Before
 	public void setUp() throws Exception {
-		users=new UserTable();
+		this.sdIdService = new SDIdImpl();
 	}
 
 	@After
@@ -50,20 +52,20 @@ public class SdIdLocalUnitTest {
 		//Maybe empty
 	}
 
-	//the standart scenario
+	//the standard scenario
 	@Test
-	public void testCreateUser() {
+	public void testCreateUser() throws Exception {
 		sdIdService.createUser(userName1, email1);
 		sdIdService.createUser(userName2, email2);
 	}
 	
 	@Test(expected=EmailAlreadyExists_Exception.class)
-	public void testCreateUser() {
+	public void testCreateUserEmailAlreadyExists() throws Exception {
 		sdIdService.createUser(userName1, repeatedEmail);
 	}
 	
-	@Test(expected=UserNameAlreadyExists.class)
-	public void testCreateUser() {
+	@Test(expected=UserAlreadyExists_Exception.class)
+	public void testCreateUserUsernameAlreadyExists() throws Exception {
 		sdIdService.createUser(userName1, repeatedEmail);
 	}
 

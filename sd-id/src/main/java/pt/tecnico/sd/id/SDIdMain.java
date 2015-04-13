@@ -2,7 +2,7 @@ package pt.tecnico.sd.id;
 
 import javax.xml.ws.Endpoint;
 
-import example.ws.uddi.UDDINaming;
+import example.ws.uddi.*;
 
 //This class implements the server
 
