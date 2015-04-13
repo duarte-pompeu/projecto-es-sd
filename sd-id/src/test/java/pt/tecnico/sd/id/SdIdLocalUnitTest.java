@@ -85,6 +85,11 @@ public class SdIdLocalUnitTest {
 		assertEquals("email cannot be changed", alice.email, email);
 		assertEquals("strange, username cannot change", alice.username, userName);
 	}
+	
+	@Test(expected = UserDoesNotExist_Exception.class)
+	public void testRenewPasswordDoesNotExist() throws Exception {
+		sdIdService.renewPassword("spock");
+	}
 
 	@Test
 	public void testRemoveUser() {
