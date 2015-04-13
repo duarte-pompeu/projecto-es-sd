@@ -2,6 +2,8 @@ package pt.tecnico.sd.id;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -79,7 +81,7 @@ public class SdIdLocalUnitTest {
 				
 		User alice = sdIdService.getUserByUsername(userName);
 		//Password must be different because generated passwords have 8 characters.
-		assertNotEquals("password must be different", alice.password, password);
+		assertFalse("password must be different", Arrays.equals(alice.password, password));
 		assertEquals("email cannot be changed", alice.email, email);
 		assertEquals("strange, username cannot change", alice.username, userName);
 	}
