@@ -1,4 +1,4 @@
-package example.ws.impl;
+package pt.tecnico.sd.id;
 
 import javax.xml.ws.Endpoint;
 
