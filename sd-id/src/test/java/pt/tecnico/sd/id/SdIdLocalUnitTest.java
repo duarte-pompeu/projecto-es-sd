@@ -134,8 +134,7 @@ public class SdIdLocalUnitTest {
 	}
 
 	@Test
-	public void testRemoveUser() throws UserDoesNotExist_Exception, InvalidUser_Exception, EmailAlreadyExists_Exception, InvalidEmail_Exception, UserAlreadyExists_Exception {
-		//populating 
+	public void testRemoveUser() throws UserDoesNotExist_Exception, EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
 		sdIdService.createUser(userName1, email1);
 		sdIdService.createUser(userName2, email2);
 		 
@@ -157,13 +156,13 @@ public class SdIdLocalUnitTest {
 	}
 	
 	//trying to remove a user with an invalid user name
-	@Test(expected=InvalidUser_Exception.class)
+	@Test(expected=UserDoesNotExist_Exception.class)
 	public void testRemoveUserInvalidUserName1() throws Exception {
 		sdIdService.removeUser(null);
 	}
 		
 	//trying to remove a user with an invalid user name
-	@Test(expected=InvalidUser_Exception.class)
+	@Test(expected=UserDoesNotExist_Exception.class)
 	public void testRemoveUserInvalidUserName2() throws Exception {
 		sdIdService.removeUser("");
 	}

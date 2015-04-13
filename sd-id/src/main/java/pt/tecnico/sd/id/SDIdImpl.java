@@ -108,12 +108,12 @@ public class SDIdImpl implements SDId {
 	}
 
 	@Override
-	public void removeUser(String userId) throws UserDoesNotExist_Exception, InvalidUser_Exception  {
+	public void removeUser(String userId) throws UserDoesNotExist_Exception  {
 		
 		if(userId==null || userId.equals("")){
-			InvalidUser fault = new InvalidUser();
+			UserDoesNotExist fault = new UserDoesNotExist();
 			fault.setUserId(userId);
-			throw new InvalidUser_Exception(userId + " is invalid", fault);
+			throw new UserDoesNotExist_Exception(userId + " doesnt exist", fault);
 		}
 		
 		if(getUserByUsername(userId)==null){
