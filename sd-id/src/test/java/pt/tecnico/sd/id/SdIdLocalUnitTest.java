@@ -20,23 +20,14 @@ import org.junit.Test;
  
 public class SdIdLocalUnitTest {
 
-	private final UserTable users;
 	private final SDIdImpl sdIdService;
-	private final String userName1 = "alice";
-	private final String userName2 = "bruno";
-	private final String userName3 = "carla";
-	private final String userName4 = "duarte";
-	private final String userName5 = "eduardo";
-	private final byte[] password1 = "Aaa1".getBytes();
-	private final byte[] password2 = "Bbb2".getBytes();
-	private final byte[] password3 = "Ccc3".getBytes();
-	private final byte[] password4 = "Ddd4".getBytes();
-	private final byte[] password5 = "Eee5".getBytes();
-	private final String email = "alice@tecnico.pt";
-	private final String email = "bruno@tecnico.pt";
-	private final String email = "carla@tecnico.pt";
-	private final String email = "duarte@tecnico.pt";
-	private final String email = "eduardo@tecnico.pt";
+	private final String userName1 = "user1";
+	private final String userName2 = "user2";
+	private final String repeatedUserName = "carla";
+	private final String email1 = "a@t";
+	private final String email2 = "b@t";
+	private final String repeatedEmail = "carla@tecnico.pt";
+	
 	
 
 	@BeforeClass
@@ -52,7 +43,6 @@ public class SdIdLocalUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		users=new UserTable();
-		sdIdService=new SDIdImpl(users);
 	}
 
 	@After
@@ -65,15 +55,16 @@ public class SdIdLocalUnitTest {
 	public void testCreateUser() {
 		sdIdService.createUser(userName1, email1);
 		sdIdService.createUser(userName2, email2);
-		sdIdService.createUser(userName3, email3);
-		sdIdService.createUser(userName4, email4);
-		sdIdService.createUser(userName5, email5);
 	}
 	
-	@Test(expected=EmailAlreadyExists.class)
+	@Test(expected=EmailAlreadyExists_Exception.class)
 	public void testCreateUser() {
-		sdIdService.createUser(userName1, email);
-		sdIdService.createUser(userName, email);
+		sdIdService.createUser(userName1, repeatedEmail);
+	}
+	
+	@Test(expected=UserNameAlreadyExists.class)
+	public void testCreateUser() {
+		sdIdService.createUser(userName1, repeatedEmail);
 	}
 
 	@Test
