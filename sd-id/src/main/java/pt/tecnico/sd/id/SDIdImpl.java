@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 
 import javax.jws.*;
 
+import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
@@ -130,8 +131,27 @@ public class SDIdImpl implements SDId {
 	@Override
 	public byte[] requestAuthentication(String userId, byte[] reserved)
 			throws AuthReqFailed_Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(userId==null || userId.equals("")){
+			AuthReqFailed fault = new AuthReqFailed();
+			fault.setReserved(reserved);
+			throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
+		}
+		
+		if(getUserByUsername(userId)==null){
+			AuthReqFailed fault = new AuthReqFailed();
+			fault.setReserved(reserved);
+			throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
+		}
+		
+		if(!getUserByUsername(userId).password.equals(reserved)){
+			AuthReqFailed fault = new AuthReqFailed();
+			fault.setReserved(reserved);
+			throw new AuthReqFailed_Exception(userId + " wrong password", fault);
+		}
+		
+		
+		return "1".getBytes();
 	}
 	
 	private byte[] generateRandomPassword() {
