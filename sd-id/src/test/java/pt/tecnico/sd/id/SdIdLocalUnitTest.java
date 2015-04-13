@@ -23,13 +23,17 @@ import pt.ulisboa.tecnico.sdis.id.ws.*;
 public class SdIdLocalUnitTest {
 
 	private SDIdImpl sdIdService;
+	
+	private final String userName = "alice";
+	private final String email = "alice@tecnico.pt";
+	private final byte[] password = "Aaa1".getBytes();
+	
 	private final String userName1 = "user1";
 	private final String userName2 = "user2";
 	private final String repeatedUserName = "carla";
 	private final String email1 = "a@t";
 	private final String email2 = "b@t";
 	private final String repeatedEmail = "carla@tecnico.pt";
-	
 	
 
 	@BeforeClass
@@ -70,8 +74,14 @@ public class SdIdLocalUnitTest {
 	}
 
 	@Test
-	public void testRenewPassword() {
-		fail("Not yet implemented"); //TODO
+	public void testRenewPassword() throws Exception {
+		sdIdService.renewPassword(userName);
+				
+		User alice = sdIdService.getUserByUsername(userName);
+		//Password must be different because generated passwords have 8 characters.
+		assertNotEquals("password must be different", alice.password, password);
+		assertEquals("email cannot be changed", alice.email, email);
+		assertEquals("strange, username cannot change", alice.username, userName);
 	}
 
 	@Test

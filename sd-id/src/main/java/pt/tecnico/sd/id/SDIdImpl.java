@@ -109,5 +109,9 @@ public class SDIdImpl implements SDId {
 	protected UserTable getTable() {
 		return userTable;
 	}
+	
+	protected User getUserByUsername(String username) {
+		return userTable.getUserByUsername(username);
+	}
 
 }

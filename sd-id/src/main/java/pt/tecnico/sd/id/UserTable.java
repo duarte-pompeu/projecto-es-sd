@@ -82,6 +82,11 @@ public class UserTable {
 		User user = usernameMap.get(username);
 		user.password = newPassword;
 	}
+	
+	//Returns a User - to be used in tests. Returns null if the user does not exist.
+	protected User getUserByUsername(String username) {
+		return this.usernameMap.get(username);
+	}
 
 	/**
 	 * Returns the password of the user with given username. 
