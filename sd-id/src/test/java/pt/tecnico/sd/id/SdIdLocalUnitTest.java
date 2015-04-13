@@ -9,7 +9,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import javax.xml.registry.JAXRException;
+
 import mockit.Mock;
 import mockit.MockUp;
 import pt.ulisboa.tecnico.sdis.id.ws.*;
@@ -29,6 +31,7 @@ public class SdIdLocalUnitTest {
 	private SDIdImpl sdIdService;
 	
 	private final String userName = "alice";
+	private final String invalidUserName = "who am i";
 	private final String email = "alice@tecnico.pt";
 	private final byte[] password = "Aaa1".getBytes();
 	
@@ -131,10 +134,38 @@ public class SdIdLocalUnitTest {
 	}
 
 	@Test
-	public void testRemoveUser() {
-		fail("Not yet implemented"); //TODO
+	public void testRemoveUser() throws UserDoesNotExist_Exception, InvalidUser_Exception, EmailAlreadyExists_Exception, InvalidEmail_Exception, UserAlreadyExists_Exception {
+		//populating 
+		sdIdService.createUser(userName1, email1);
+		sdIdService.createUser(userName2, email2);
+		 
+		//time 2 remove
+		sdIdService.removeUser(userName1);
+		sdIdService.removeUser(userName2);
+		
+		if ((sdIdService.getUserByUsername(userName1))!=null)
+				fail();
+			
 	}
-
+	
+	//trying to remove a user with an invalid user name
+	@Test(expected=UserDoesNotExist_Exception.class)
+	public void testRemoveUserInexistent() throws Exception {
+		sdIdService.removeUser(invalidUserName);
+	}
+	
+	//trying to remove a user with an invalid user name
+	@Test(expected=InvalidUser_Exception.class)
+	public void testRemoveUserInvalidUserName1() throws Exception {
+		sdIdService.removeUser(null);
+	}
+		
+	//trying to remove a user with an invalid user name
+	@Test(expected=InvalidUser_Exception.class)
+	public void testRemoveUserInvalidUserName2() throws Exception {
+		sdIdService.removeUser("");
+	}
+	
 	@Test
 	public void testRequestAuthentication() {
 		fail("Not yet implemented"); //TODO
