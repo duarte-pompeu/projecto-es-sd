@@ -86,6 +86,9 @@ public class SDIdImpl implements SDId {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	private byte[] generateRandomPassword() {
+		return null;
+	}
 
 }
