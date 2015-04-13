@@ -16,11 +16,12 @@
   <name>SD Remote Services</name>
 
   <modules>
+	<module>../sd-juddi</module>
     <module>../sd-id</module>
-    <!-- <module>../sd-store</module> -->
-    <!-- <module>../sd-id-cli</module> -->
-    <!-- <module>../sd-store-cli</module> -->
-    <module>../sd-juddi</module>
+    <module>../sd-store</module>
+    <module>../sd-id-cli</module>
+    <module>../sd-store-cli</module>
+    
   </modules>
 
   <properties>

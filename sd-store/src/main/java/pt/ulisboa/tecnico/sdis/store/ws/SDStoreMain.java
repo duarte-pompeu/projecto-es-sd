@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 
 import javax.xml.ws.Endpoint;
 
+import pt.ulisboa.tecnico.sdis.store.UDDINaming;
+
 public class SDStoreMain{
 	public static final int STORAGE_CAP = 10 * 1024;
 	private static Storage storage;
@@ -18,16 +20,23 @@ public class SDStoreMain{
 		for(String user: storage.getUsers()){
 			System.out.println(user);
 		}
-		
+		String uddiURL = "http://localhost:8081";
+        String name = "SDStore";
 		String url = "http://localhost:8080/store-ws/endpoint";
-		Endpoint endpoint = null;
 		
+		Endpoint endpoint = null;
+		UDDINaming uddiNaming = null;
 		try{
 			endpoint = Endpoint.create(new SDStoreImpl(debug_mode));
 			
-			// publish endpoint
+			// publish endpoint (no uddi)
 			System.out.println("Starting " + url);
 			endpoint.publish(url);
+			
+			// publish to UDDI
+//            System.out.printf("Publishing '%s' to UDDI at %s%n", name, uddiURL);
+//            uddiNaming = new UDDINaming(uddiURL);
+//            uddiNaming.rebind(name, url);
 			
 			// wait
 			System.out.println("Awaiting connections");
@@ -49,6 +58,16 @@ public class SDStoreMain{
 			} catch (Exception e){
 				System.out.println(e);
 			}
+			
+			try {
+                if (uddiNaming != null) {
+                    // delete from UDDI
+                    uddiNaming.unbind(name);
+                    System.out.printf("Deleted '%s' from UDDI%n", name);
+                }
+            } catch(Exception e) {
+                System.out.printf("Caught exception when deleting: %s%n", e);
+            }
 		}
 	}
 	
