@@ -34,6 +34,7 @@ public class SdIdLocalUnitTest {
 	private final String invalidUserName = "who am i";
 	private final String email = "alice@tecnico.pt";
 	private final byte[] password = "Aaa1".getBytes();
+	private final byte[] invalidPassword = "imBad".getBytes();
 	
 	private final String userName1 = "user1";
 	private final String userName2 = "user2";
@@ -168,8 +169,37 @@ public class SdIdLocalUnitTest {
 	}
 	
 	@Test
-	public void testRequestAuthentication() {
-		fail("Not yet implemented"); //TODO
+	public void testRequestAuthentication() throws AuthReqFailed_Exception {
+		User alice = sdIdService.getUserByUsername(userName);
+		sdIdService.requestAuthentication(userName, password);
+		if ((sdIdService.getUserByUsername(userName))==null)
+			fail();
+		if(!Arrays.equals(alice.password, password))
+			fail();
+	}
+	
+	//trying to authenticate a user with an invalid user name
+	@Test(expected=AuthReqFailed_Exception.class)
+	public void testRequestAuthenticationUserInexistent() throws Exception {
+		sdIdService.requestAuthentication(invalidUserName, password);
+	}
+	
+	//trying to authenticate a user with an invalid user name
+	@Test(expected=AuthReqFailed_Exception.class)
+	public void testRequestAuthenticationUserInvalidUserName1() throws Exception {
+		sdIdService.requestAuthentication(null, password);
+	}
+		
+	//trying to authenticate a user with an invalid user name
+	@Test(expected=AuthReqFailed_Exception.class)
+	public void testRequestAuthenticationUserInvalidUserName2() throws Exception {
+		sdIdService.requestAuthentication("", password);
+	}
+	
+	//trying to authenticate a user with an invalid password
+	@Test(expected=AuthReqFailed_Exception.class)
+	public void testRequestAuthenticationUserInvalidPassword() throws Exception {
+		sdIdService.requestAuthentication(userName, invalidPassword);
 	}
 
 }
