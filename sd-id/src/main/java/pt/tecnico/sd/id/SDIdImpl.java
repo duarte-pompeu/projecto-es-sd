@@ -20,6 +20,7 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
     targetNamespace="urn:pt:ulisboa:tecnico:sdis:id:ws",
     serviceName="SDId"
 )
+public class SDIdImpl implements SDId {
 
 	private final String userName1 = "alice";
 	private final String userName2 = "bruno";
@@ -36,11 +37,7 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 	private final String email3 = "carla@tecnico.pt";
 	private final String email4 = "duarte@tecnico.pt";
 	private final String email5 = "eduardo@tecnico.pt";
-
-
-
-public class SDIdImpl implements SDId {
-
+	
 	UserTable userTable;
 	
 	public SDIdImpl() {
@@ -48,17 +45,17 @@ public class SDIdImpl implements SDId {
 	}
 	
 	//to be used in the sd-id tests
-	protected SDIdImpl(UserTable users) {
+	protected SDIdImpl(UserTable users) throws Exception {
 		this.userTable = users;
 		this.populateForTest(userTable);
 	}
 	
-	private void populateForTest(UserTable userTable){
-		userTable.add(userName1, email1, password1);
-		userTable.add(userName2, email2, password2);
-		userTable.add(userName3, email3, password3);
-		userTable.add(userName4, email4, password4);
-		userTable.add(userName5, email5, password5);
+	private void populateForTest(UserTable userTable) throws Exception {
+		userTable.addUser(userName1, email1, password1);
+		userTable.addUser(userName2, email2, password2);
+		userTable.addUser(userName3, email3, password3);
+		userTable.addUser(userName4, email4, password4);
+		userTable.addUser(userName5, email5, password5);
 	}
 	
 	
@@ -70,17 +67,6 @@ public class SDIdImpl implements SDId {
 		// TODO Auto-generated method stub
 		
 	}
-
-	//here the password is supplied
-	@Override
-	public void createUser(String userId, String emailAddress, byte[] password)
-			throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
-			InvalidUser_Exception, UserAlreadyExists_Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 	@Override
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
