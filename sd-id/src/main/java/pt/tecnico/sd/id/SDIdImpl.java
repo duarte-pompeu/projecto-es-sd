@@ -2,6 +2,8 @@ package pt.tecnico.sd.id;
 
 //This class implements the service
 
+import java.security.SecureRandom;
+
 import javax.jws.*;
 
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
@@ -39,11 +41,11 @@ public class SDIdImpl implements SDId {
 	private final String email5 = "eduardo@tecnico.pt";
 	
 	private UserTable userTable;
-	private PasswordGenerator rng;
+	private SecureRandom rng;
 	
 	public SDIdImpl() {
 		this.userTable = new UserTable();
-		this.rng = new PasswordGenerator();
+		this.rng = new SecureRandom();
 	}
 	
 	//to be used in the sd-id tests
@@ -90,7 +92,22 @@ public class SDIdImpl implements SDId {
 	}
 	
 	private byte[] generateRandomPassword() {
-		return rng.generatePassword();
+		StringBuilder builder = new StringBuilder();
+		
+		//ten digits and 52 letters, both upper and lower case.
+		//Java 8 streams and lambdas for the win!
+		rng.ints(0, 62).limit(8)
+		               .map(x -> {
+			if      (x < 10)            return '0'+x;
+			else if (x >= 10 && x < 36) return 'a'+x-10;
+			else                        return 'A'+x-36;
+		}).forEach(x -> builder.append((char) x));
+		
+		return builder.toString().getBytes();
+	}
+	
+	protected UserTable getTable() {
+		return userTable;
 	}
 
 }
