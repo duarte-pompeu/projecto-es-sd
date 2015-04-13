@@ -20,14 +20,49 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
     targetNamespace="urn:pt:ulisboa:tecnico:sdis:id:ws",
     serviceName="SDId"
 )
+
+	private final String userName1 = "alice";
+	private final String userName2 = "bruno";
+	private final String userName3 = "carla";
+	private final String userName4 = "duarte";
+	private final String userName5 = "eduardo";
+	private final byte[] password1 = "Aaa1".getBytes();
+	private final byte[] password2 = "Bbb2".getBytes();
+	private final byte[] password3 = "Ccc3".getBytes();
+	private final byte[] password4 = "Ddd4".getBytes();
+	private final byte[] password5 = "Eee5".getBytes();
+	private final String email1 = "alice@tecnico.pt";
+	private final String email2 = "bruno@tecnico.pt";
+	private final String email3 = "carla@tecnico.pt";
+	private final String email4 = "duarte@tecnico.pt";
+	private final String email5 = "eduardo@tecnico.pt";
+
+
+
 public class SDIdImpl implements SDId {
 
-	UserTable usertable;
+	UserTable userTable;
 	
 	public SDIdImpl() {
-		this.usertable = new UserTable();
+		this.userTable = new UserTable();
 	}
 	
+	//to be used in the sd-id tests
+	protected SDIdImpl(UserTable users) {
+		this.userTable = users;
+		this.populateForTest(userTable);
+	}
+	
+	private void populateForTest(UserTable userTable){
+		userTable.add(userName1, email1, password1);
+		userTable.add(userName2, email2, password2);
+		userTable.add(userName3, email3, password3);
+		userTable.add(userName4, email4, password4);
+		userTable.add(userName5, email5, password5);
+	}
+	
+	
+	//here the password is generated automatically
 	@Override
 	public void createUser(String userId, String emailAddress)
 			throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
@@ -35,6 +70,17 @@ public class SDIdImpl implements SDId {
 		// TODO Auto-generated method stub
 		
 	}
+
+	//here the password is supplied
+	@Override
+	public void createUser(String userId, String emailAddress, byte[] password)
+			throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
+			InvalidUser_Exception, UserAlreadyExists_Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 	@Override
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {

@@ -16,8 +16,28 @@ import org.junit.Test;
  * because they could be useful in designing this test.
  * They can be left empty or removed.
  */
-
+ 
+ 
 public class SdIdLocalUnitTest {
+
+	private final UserTable users;
+	private final SDIdImpl sdIdService;
+	private final String userName1 = "alice";
+	private final String userName2 = "bruno";
+	private final String userName3 = "carla";
+	private final String userName4 = "duarte";
+	private final String userName5 = "eduardo";
+	private final byte[] password1 = "Aaa1".getBytes();
+	private final byte[] password2 = "Bbb2".getBytes();
+	private final byte[] password3 = "Ccc3".getBytes();
+	private final byte[] password4 = "Ddd4".getBytes();
+	private final byte[] password5 = "Eee5".getBytes();
+	private final String email = "alice@tecnico.pt";
+	private final String email = "bruno@tecnico.pt";
+	private final String email = "carla@tecnico.pt";
+	private final String email = "duarte@tecnico.pt";
+	private final String email = "eduardo@tecnico.pt";
+	
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -31,7 +51,8 @@ public class SdIdLocalUnitTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//Maybe empty
+		users=new UserTable();
+		sdIdService=new SDIdImpl(users);
 	}
 
 	@After
@@ -39,9 +60,20 @@ public class SdIdLocalUnitTest {
 		//Maybe empty
 	}
 
+	//the standart scenario
 	@Test
 	public void testCreateUser() {
-		fail("Not yet implemented"); //TODO
+		sdIdService.createUser(userName1, email1);
+		sdIdService.createUser(userName2, email2);
+		sdIdService.createUser(userName3, email3);
+		sdIdService.createUser(userName4, email4);
+		sdIdService.createUser(userName5, email5);
+	}
+	
+	@Test(expected=EmailAlreadyExists.class)
+	public void testCreateUser() {
+		sdIdService.createUser(userName1, email);
+		sdIdService.createUser(userName, email);
 	}
 
 	@Test
