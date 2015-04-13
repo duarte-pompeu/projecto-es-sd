@@ -105,6 +105,7 @@ public class SDIdImpl implements SDId {
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
 		byte[] newPassword = generateRandomPassword();
 		userTable.changePassword(userId, newPassword);
+		System.out.println("Renewed password for " + userId + " :: " + new String(newPassword));
 	}
 
 	@Override
@@ -138,8 +139,9 @@ public class SDIdImpl implements SDId {
 		
 		//ten digits and 52 letters, both upper and lower case.
 		//Java 8 streams and lambdas for the win!
-		rng.ints(0, 62).limit(8)
-		               .map(x -> {
+		rng.ints(0, 62)
+		   .limit(8)
+		   .map(x -> {
 			if      (x < 10)            return '0'+x;
 			else if (x >= 10 && x < 36) return 'a'+x-10;
 			else                        return 'A'+x-36;
