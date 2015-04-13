@@ -20,6 +20,7 @@
     <!-- <module>../sd-store</module> -->
     <!-- <module>../sd-id-cli</module> -->
     <!-- <module>../sd-store-cli</module> -->
+    <module>../sd-juddi</module>
   </modules>
 
   <properties>
