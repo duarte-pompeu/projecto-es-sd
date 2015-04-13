@@ -17,12 +17,22 @@
       <artifactId>jaxws-rt</artifactId>
       <version>2.2.10</version>
     </dependency>
+    
+     <dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>${version.junit}</version>
+		<scope>test</scope>
+	</dependency>
+    
   </dependencies>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mainclass>pt.ulisboa.tecnico.sdis.store.cli.StoreClient</mainclass>
-
+	
+	 <version.java>1.7</version.java>
+	<version.junit>4.11</version.junit>
     <ws.name>sd-store</ws.name>
     <ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>
   </properties>
@@ -65,6 +75,7 @@
             <artifactId>jaxws-tools</artifactId>
             <version>2.2.10</version>
           </dependency>
+          
         </dependencies>
       </plugin>
       <plugin>
