@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.cli.service;
 
+import javax.naming.directory.InvalidAttributeValueException;
+
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocUserPair;
@@ -19,7 +21,12 @@ public class StoreDocService {
 		this.port = port;
 	}
 	
-	public void dispatch() throws CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+	public void dispatch() throws CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception, InvalidAttributeValueException{
+		
+		if(port == null ){
+			throw new InvalidAttributeValueException("Port is null");
+		}
+		
 		DocUserPair dup = new DocUserPair();
 		dup.setUserId(userID);
 		dup.setDocumentId(docID);

@@ -2,6 +2,8 @@ package pt.ulisboa.tecnico.sdis.store.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import javax.naming.directory.InvalidAttributeValueException;
+
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
@@ -28,14 +30,14 @@ public class StoreConnectionTest  extends ClientStoreServicesTest{
 		CreateDocService service = new CreateDocService(USER, DOC_STORED, getPort());
 		try {
 			service.dispatch();
-		} catch (DocAlreadyExists_Exception e) {
+		} catch (Exception e) {
 			return;
 		}
 	}
 	
 	
 	@Test
-	public void populateSuccess() throws UserDoesNotExist_Exception{
+	public void populateSuccess() throws UserDoesNotExist_Exception, InvalidAttributeValueException{
 		ListDocsService service = new ListDocsService(USER, getPort());
 		service.dispatch();
 		
@@ -43,29 +45,29 @@ public class StoreConnectionTest  extends ClientStoreServicesTest{
 	}
 	
 	
-	@Test
-	public void createNullPort() throws DocAlreadyExists_Exception{
+	@Test (expected=InvalidAttributeValueException.class)
+	public void createNullPort() throws DocAlreadyExists_Exception, InvalidAttributeValueException{
 		CreateDocService service = new CreateDocService(USER, DOC_NOT_STORED, null);
 		service.dispatch();
 	}
 	
 	
-	@Test
-	public void listNullPort() throws UserDoesNotExist_Exception{
+	@Test (expected=InvalidAttributeValueException.class)
+	public void listNullPort() throws UserDoesNotExist_Exception, InvalidAttributeValueException{
 		ListDocsService service = new ListDocsService(USER, null);
 		service.dispatch();
 	}
 	
 	
-	@Test
-	public void storeNullPort() throws CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+	@Test (expected=InvalidAttributeValueException.class)
+	public void storeNullPort() throws CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception, InvalidAttributeValueException{
 		StoreDocService service = new StoreDocService(USER, DOC_STORED, string2bytes(CONTENT), null);
 		service.dispatch();
 	}
 	
 	
-	@Test
-	public void loadNullPort() throws DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+	@Test (expected=InvalidAttributeValueException.class)
+	public void loadNullPort() throws DocDoesNotExist_Exception, UserDoesNotExist_Exception, InvalidAttributeValueException{
 		LoadDocService service = new LoadDocService(USER, DOC_STORED, null);
 		service.dispatch();
 	}
