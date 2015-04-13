@@ -1,4 +1,4 @@
-package example.ws.uddi;
+package pt.ulisboa.tecnico.sdis.juddi;
 
 import java.net.PasswordAuthentication;
 import java.util.*;
