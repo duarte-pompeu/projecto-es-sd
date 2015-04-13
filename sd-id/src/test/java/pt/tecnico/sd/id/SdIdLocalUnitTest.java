@@ -64,17 +64,33 @@ public class SdIdLocalUnitTest {
 		sdIdService.createUser(userName1, email1);
 		sdIdService.createUser(userName2, email2);
 	}
-	
+	//trying to add a user with an email that already exists
 	@Test(expected=EmailAlreadyExists_Exception.class)
 	public void testCreateUserEmailAlreadyExists() throws Exception {
 		sdIdService.createUser(userName1, repeatedEmail);
 	}
-	
+	//trying to add a user with a user name that already exists
 	@Test(expected=UserAlreadyExists_Exception.class)
 	public void testCreateUserUsernameAlreadyExists() throws Exception {
-		sdIdService.createUser(userName1, repeatedEmail);
+		sdIdService.createUser(repeatedUserName, email1);
 	}
-
+	//trying to add a user with an invalid email
+	@Test(expected=InvalidEmail_Exception.class)
+	public void testCreateUserInvalidEmail() throws Exception {
+		sdIdService.createUser(userName1, invalidEmail);
+	}
+	//trying to add a user with an invalid user name
+	@Test(expected=InvalidUser_Exception.class)
+	public void testCreateUserInvalidUserName1() throws Exception {
+		sdIdService.createUser(null, email1);
+	}
+	
+	//trying to add a user with an invalid user name
+	@Test(expected=InvalidUser_Exception.class)
+	public void testCreateUserInvalidUserName2() throws Exception {
+		sdIdService.createUser("", email1);
+	}
+	
 	@Test
 	public void testRenewPassword() throws Exception {
 		sdIdService.renewPassword(userName);
