@@ -75,8 +75,8 @@ public class SDIdImpl implements SDId {
 
 	@Override
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
-		// TODO Auto-generated method stub
-		
+		byte[] newPassword = generateRandomPassword();
+		userTable.changePassword(userId, newPassword);
 	}
 
 	@Override
