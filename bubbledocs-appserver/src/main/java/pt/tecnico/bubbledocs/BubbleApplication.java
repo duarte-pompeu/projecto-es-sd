@@ -14,13 +14,10 @@ import org.jdom2.output.XMLOutputter;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
-import pt.tecnico.bubbledocs.dml.Add;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Div;
-import pt.tecnico.bubbledocs.dml.Literal;
-import pt.tecnico.bubbledocs.dml.Reference;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.service.*;
 
 
 /**
@@ -39,60 +36,11 @@ public class BubbleApplication {
 		boolean committed = false;
 
 		try {
+		
 			tm.begin();
-			//ponto 1 do enunciado
 			populateDomain();
 			tm.commit();
 
-			tm.begin();
-			//ponto 2 do enunciado
-			getAllPeople();
-			tm.commit();
-
-			tm.begin();
-			// ponto 3 do enunciado
-			User[] users = new User[2];
-			users[0] = getUser(BubbleDocs.getInstance(), "pf");
-			users[1] = getUser(BubbleDocs.getInstance(), "ra");
-			for(User u: users){
-				System.out.println("Calcsheets created by " + u.getName() + ":");
-				for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-					System.out.println(cs.getName());
-				}
-				System.out.println("END");
-			}
-			tm.commit();
-
-			tm.begin();
-			// ponto 4 do enunciado
-			ArrayList<org.jdom2.Document> doc=new ArrayList<org.jdom2.Document>();
-			doc=printAllCalcSheetsFromUser("pf",doc);
-			tm.commit();
-
-			tm.begin();
-			// ponto 5 do enunciado
-			removeCalcSheet("Notas Es","pf"); 
-			tm.commit();
-
-			tm.begin();
-			// ponto 6 do enunciado
-			getThisUsersCalcSheets("pf");
-			tm.commit();
-
-			tm.begin();
-			// ponto 7 do enunciado
-			recoverFromBackup(doc.get(0));
-			tm.commit();
-
-			tm.begin();
-			// ponto 8 do enunciado
-			getThisUsersCalcSheets("pf");
-			tm.commit();
-
-			tm.begin();
-			// ponto 9 do enunciado
-			doc=printAllCalcSheetsFromUser("pf",doc);
-			tm.commit();
 
 			committed = true;
 
@@ -124,9 +72,7 @@ public class BubbleApplication {
 			System.out.println(s);
 		}
 		System.out.println("END");	
-		
-		
-		
+
 	}
 	
 	
@@ -140,10 +86,10 @@ public class BubbleApplication {
 	 */
 	private static void removeCalcSheet(String name, String user) {
 	    		
-	    		BubbleDocs pb = BubbleDocs.getInstance();
-	    		pb.removeCalcSheet(name, user);
+	    BubbleDocs pb = BubbleDocs.getInstance();
+	    pb.removeCalcSheet(name, user);
 	    		
-	    }
+	}
 	
 	/**
 	 * This method will convert all the calcSheet from a user into XML.
@@ -175,7 +121,7 @@ public class BubbleApplication {
 		a.importFromXML(jdomDoc.getRootElement());
 		
 		BubbleDocs.getInstance().getCalcSheetSet().add(a);
-	    }
+	}
 	
 	
 	/**
@@ -189,38 +135,44 @@ public class BubbleApplication {
 		if (!pb.getUserSet().isEmpty() )
 		    return;
 		
-		// setup the initial state if BubbleDocs is empty
+		String root_token, pf_token;
+		LoginUser login;
+		int sheet_id;
 
-		User user1 = new User("pf","Paul Door","sub");
-	 	pb.addUser(user1);
-	 	User user2 = new User("ra","Step Rabbit","cor");
-	 	pb.addUser(user2);
+		//criar o root e colocá-lo em sessão
+		BubbleDocs.getInstance().addUser("root", "Super User", "rootroot");
+		login = new LoginUser("root", "rootroot");
+		login.execute();
+		root_token = login.getUserToken();
+		
+		new CreateUser(root_token, "pf", "sub", "Paul Door").execute();
 
-	 	CalcSheet c1 = user1.createCalcSheet("Notas Es", 300, 20);
+		new CreateUser(root_token, "ra", "cor", "Step Rabbit").execute();		
 
-	 	c1.getCell(3, 4).setContent(new Literal(5));
-	 	c1.getCell(1,1).setContent(new Reference(c1.getCell(5,6)));
-	 	c1.getCell(5,6).setContent(new Add ( new Literal (2), new Reference(c1.getCell(3,4)) ));
-	 	c1.getCell(2,2).setContent(new Div ( new Reference(c1.getCell(1,1)), new Reference(c1.getCell(3,4)) ));
-	 	pb.addCalcSheet(c1);
+		login = new LoginUser("pf", "sub");
+		login.execute();
+		pf_token = login.getUserToken();
+		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, "Notas ES", 300, 20);
+		spread.execute();
+		sheet_id = spread.getResult();
+
+		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
+		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
 	 	
-}
+	}
 
 	
-	
-	
-	
-	    /**
-	     * This method will print information about each of the users stored in the database.
-	     */
-	    static void getAllPeople(){
-	   
-		 BubbleDocs pb = BubbleDocs.getInstance();
-		 	for (User p : pb.getUserSet()) {
-		 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
-		 	}
-		 	
-	    }
+    /**
+     * This method will print information about each of the users stored in the database.
+     */
+    static void getAllPeople(){
+   
+	 BubbleDocs pb = BubbleDocs.getInstance();
+	 	for (User p : pb.getUserSet()) {
+	 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
+	 	}
+	 	
+    }
 	 	
 	 
 	/**
@@ -230,35 +182,33 @@ public class BubbleApplication {
 	 */
 	public static User getUser(BubbleDocs bd, String username) {
 			
-			return bd.getUser(username);
-		}
+		return bd.getUser(username);
+	}
 	
 		
-	  	/**
-	  	 * This method converts a calcSheet into a XML document.
-	  	 * @param c The calcSheet which will be converted
-	  	 * @return The resulting XML document.
-	  	 */
-	    public static org.jdom2.Document convertToXML(CalcSheet c) {
-		 
-	  		
+  	/**
+  	 * This method converts a calcSheet into a XML document.
+  	 * @param c The calcSheet which will be converted
+  	 * @return The resulting XML document.
+  	 */
+    public static org.jdom2.Document convertToXML(CalcSheet c) {
+	 
+  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 
-	  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-	
-	  		jdomDoc.setRootElement(c.exportToXML());
+  		jdomDoc.setRootElement(c.exportToXML());
 
-		return jdomDoc;
-	    }
+  		return jdomDoc;
+    }
 
-	    /**
-	     * This method take a XML jdomDoc object, convert it into a String and print the result to stdout.
-	     * @param jdomDoc The document which will be converted and printed to stdout.
-	     */
-	    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
+    /**
+     * This method take a XML jdomDoc object, convert it into a String and print the result to stdout.
+     * @param jdomDoc The document which will be converted and printed to stdout.
+     */
+    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
 		XMLOutputter xml = new XMLOutputter();
 		xml.setFormat(Format.getPrettyFormat());
 		System.out.println(xml.outputString(jdomDoc));
-	    }
+    }
 
 }
 

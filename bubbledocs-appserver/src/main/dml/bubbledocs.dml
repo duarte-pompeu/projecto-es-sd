@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.dml;
+package pt.tecnico.bubbledocs.domain;
 
 class BubbleDocs {
     Integer idCounter;
@@ -8,6 +8,7 @@ class User{
 	String userName;
 	String name;
 	String password;
+	String email;
 }
 
 class SuperUser extends User;
@@ -25,7 +26,6 @@ class Cell {
   Integer line;
   Integer column;
   Boolean protect;
-  String contentRepresentation;
 }
 
 class Session {
@@ -36,12 +36,17 @@ class Session {
 
 class Content;
 
-class FunctionArgument extends Content;
+class FunctionArgument;
 
+class ReferenceArgument extends FunctionArgument;
 
-class Reference extends FunctionArgument;
+class LiteralArgument extends FunctionArgument{
+  Integer val;
+}
 
-class Literal extends FunctionArgument{
+class Reference extends Content;
+
+class Literal extends Content {
   Integer val;
 }
 
@@ -71,21 +76,27 @@ relation DomainRootHasBubbleDocsApplication {
 }
 
 relation BubbleDocsHasUsers {
-  BubbleDocs playsRole bubbleDocs;
+  BubbleDocs playsRole bubbleDocs {
+    multiplicity 1;
+  }
   User playsRole user {
     multiplicity *;
   }
 }
 
 relation BubbleDocsHasCalcSheets {
-  BubbleDocs playsRole bubbleDocs;
+  BubbleDocs playsRole bubbleDocs {
+    multiplicity 1;
+  }
   CalcSheet playsRole calcSheet {
     multiplicity *;
   }
 }
 
 relation BubbleDocsHasSessions {
-  BubbleDocs playsRole bubbleDocs;
+  BubbleDocs playsRole bubbleDocs {
+    multiplicity 1;
+  }
   Session playsRole session {
     multiplicity *;
   }
@@ -95,11 +106,15 @@ relation UserCreatesCalcSheet {
   CalcSheet playsRole createdCalcSheet{
     multiplicity *;
   }
-  User playsRole creator;
+  User playsRole creator {
+    multiplicity 1;
+  }
 }
 
 relation UserIsInSession {
-  Session playsRole session;
+  Session playsRole session {
+    multiplicity 1;
+  }
   User playsRole user;
 }
 
@@ -122,14 +137,18 @@ relation CalcSheetHasWritePermitionsAboutUsers {
 }
 
 relation CalcSheetOwnsCells {
-  CalcSheet playsRole calcSheet;
+  CalcSheet playsRole calcSheet {
+    multiplicity 1;
+  }
   Cell playsRole cell {
     multiplicity *;
   }
 }
 
 relation CellOwnsContent {
-	Cell playsRole cell;
+	Cell playsRole cell {
+	  multiplicity 1;
+	}
 	Content playsRole content;
 }
 
@@ -137,40 +156,74 @@ relation ReferencePointsToCell{
 	Reference playsRole reference{
 		multiplicity *;
 	}
-	Cell playsRole pointedCell;
+	Cell playsRole pointedCell {
+		multiplicity 1;
+	}
+}
+
+relation ReferenceArgumentPointsToCell {
+ 	ReferenceArgument playsRole referenceArgument {
+ 		multiplicity *;
+ 	}
+ 	Cell playsRole pointedCell {
+ 		multiplicity 1;
+ 	}
 }
 
 
 relation BinaryFunctionHasArgument1{
-	BinaryFunction playsRole binaryFunction_;
-	FunctionArgument playsRole argument1;
+	BinaryFunction playsRole binaryFunction_ {
+		multiplicity 1;
+	}
+	FunctionArgument playsRole argument1 {
+		multiplicity 1;
+	}
 }
 
 relation BinaryFunctionHasArgument2{
-	BinaryFunction playsRole binaryFunction;
-	FunctionArgument playsRole argument2;
+	BinaryFunction playsRole binaryFunction {
+		multiplicity 1;
+	}
+	FunctionArgument playsRole argument2 {
+		multiplicity 1;
+	}
 }
 
 relation RangeFunctionHasRange{
-	RangeFunction playsRole rangeFunction;
-	Range playsRole range;
+	RangeFunction playsRole rangeFunction {
+		multiplicity 1;
+	}
+	Range playsRole range {
+		multiplicity 1;
+	}
 }
 
 relation RangeHasLeftUpLimit{
-	Range playsRole range;
-	Cell playsRole leftUpCell;
+	Range playsRole range {
+		multiplicity *;
+	}
+	Cell playsRole leftUpCell {
+		multiplicity 1;
+	}
+	
 }	
 
 relation RangeHasRightDownLimit{
-	Range playsRole range_;
-	Cell playsRole RightDownCell;
+	Range playsRole range_ {
+		multiplicity *;
+	}
+	Cell playsRole RightDownCell {
+		multiplicity 1;
+	}
 }	
 
 relation RangePointsToCalcSheet{
 	Range playsRole range{
 		multiplicity *;
 		}
-	CalcSheet playsRole calcSheet;
+	CalcSheet playsRole calcSheet {
+		multiplicity 1;
+	}
 }
 
 

@@ -1,11 +1,10 @@
 package pt.tecnico.bubbledocs.service;
 
-// add needed import declarations
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Cell;
-import pt.tecnico.bubbledocs.dml.Literal;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
@@ -18,9 +17,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     private int docId;
     private String cellId;
     String literal;
-
     
-    //TODO: revert method signature to example signature?
     public AssignLiteralCell(String accessToken, int docId, String cellId, String literal) {
     	
     	this.accessToken = accessToken;
@@ -29,8 +26,6 @@ public class AssignLiteralCell extends BubbleDocsService{
     	this.literal = literal;
     }
     
-    // TODO:AssignLiteralCell: finish service
-    // TODO:AssignLiteralCell: TEST TEST TEST
     @Override
     public void dispatch() throws InvalidFormatException, NotFoundException, 
     	LoginException, PermissionException {
@@ -68,9 +63,9 @@ public class AssignLiteralCell extends BubbleDocsService{
     	
     	
 //    	//TODO: check if user has write access
-//    	if(!cs.allowedToWrite(user)){
-//    		throw new PermissionException();
-//    	}
+    	if(!user.canWrite(cs)){
+    		throw new PermissionException();
+    	}
     	
     	// check if cell exists
     	if(!cs.hasCell(cellId)){
@@ -84,6 +79,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     	}
     	
     	cs.setContent(user, new Literal(literal_val), cellId);
+    	result = cs.getContent(user, cellId).toString();
     }
 
     public String getResult() {

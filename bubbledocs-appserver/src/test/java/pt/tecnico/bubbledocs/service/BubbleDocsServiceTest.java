@@ -3,15 +3,16 @@ package pt.tecnico.bubbledocs.service;
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.CalcSheet;
-import pt.tecnico.bubbledocs.dml.Session;
-import pt.tecnico.bubbledocs.dml.User;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Session;
+import pt.tecnico.bubbledocs.domain.User;
 
 // add needed import declarations
 
@@ -44,8 +45,13 @@ public class BubbleDocsServiceTest {
 
     // auxiliary methods that access the domain layer and are needed in the test classes
     // for defining the inital state and checking that the service has the expected behavior
+    @Deprecated
     User createUser(String username, String password, String name) {
-    	return BubbleDocs.getInstance().addUser(username, name, password);
+    	return createUser(username, null, password, name);
+    }
+    
+    User createUser(String username, String email, String password, String name) {
+    	return BubbleDocs.getInstance().addUser(username, name, email, password);
     }
 
     public CalcSheet createSpreadSheet(User user, String name, int row,
@@ -76,7 +82,10 @@ public class BubbleDocsServiceTest {
 
     // remove a user from session given its token
     void removeUserFromSession(String token) {
-	// add code here
+    	Session session = getSessionFromToken(token);
+    	DateTime time = new DateTime();
+    	time = time.minusHours(1);
+    	session.setExpiration(time);
     }
 
     // return the user registered in session whose token is equal to token

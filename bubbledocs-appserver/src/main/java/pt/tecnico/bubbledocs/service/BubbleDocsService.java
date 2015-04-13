@@ -1,11 +1,11 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.ist.fenixframework.Atomic;
-import pt.tecnico.bubbledocs.dml.Session;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Session;
 
 public abstract class BubbleDocsService {
 

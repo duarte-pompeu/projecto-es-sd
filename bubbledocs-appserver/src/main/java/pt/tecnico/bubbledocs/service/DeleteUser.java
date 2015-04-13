@@ -1,17 +1,33 @@
 package pt.tecnico.bubbledocs.service;
 
-// add needed import declarations
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class DeleteUser extends BubbleDocsService {
-
-    public DeleteUser(String userToken, String toDeleteUsername) {
-	// add code here
+	private String token;
+	private String username; 
+	
+    	public DeleteUser(String userToken, String toDeleteUsername) {
+	token = userToken;
+	username = toDeleteUsername; 
     }
 
     @Override
     protected void dispatch() throws BubbleDocsException {
-	// add code here
+    	User user = this.getSessionFromToken(token).getUser();
+       
+    	try{
+    		IDRemoteServices id_service = new IDRemoteServices();
+    		id_service.removeUser(username);
+    	}
+    	 
+    	catch(BubbleDocsException e){
+    		throw e;
+    	}
+    
+        user.deleteUser(username);
     }
+    
 
 }

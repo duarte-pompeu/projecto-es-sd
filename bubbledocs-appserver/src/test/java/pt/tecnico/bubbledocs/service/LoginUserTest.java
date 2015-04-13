@@ -1,17 +1,25 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import mockit.Expectations;
+import mockit.Mocked;
 
-import org.junit.Test;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
+import org.junit.Test;
 
-import pt.tecnico.bubbledocs.dml.*;
+import pt.tecnico.bubbledocs.domain.Session;
+import pt.tecnico.bubbledocs.domain.SuperUser;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 // add needed import declarations
 public class LoginUserTest extends BubbleDocsServiceTest {
@@ -26,14 +34,24 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	private static final String PASSWORD = "hunter2";
 	private static final String DIFF_PASS = "toaster-repair";
 	private static final String ANY_PASS = "I-C-I-D";
+	
+	private static final String JUBI_UNAME = "jubi";
+	private static final String JUBI_PASS = "password";
+	private static final String JUBI_NAME = "Jubileu Mandafacas";
+	private static final String NO_CACHE = "Nocache";
 
+	@Mocked IDRemoteServices idRemoteMock;
+	
 	@Override
 	public void populate4Test() {
 		createUser(ROOT, ROOT_PASS, "Super User");
 		createUser(USERNAME, PASSWORD, "Marcos Pires");
 		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
+		createUser(JUBI_UNAME, JUBI_PASS, JUBI_NAME);
+		createUser(NO_CACHE, null, "No money");
 		manel = addUserToSession(LOGGED_IN);
 	}
+	
 
 	// returns the time of the last access for the user with token userToken.
 	// It must get this data from the session object of the application
@@ -106,7 +124,154 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = LoginException.class)
 	public void loginUserWithinWrongPassword() {
+		
+		// Remote Services aren't implemented in delivery 3, so we mock them.
+		// TODO: implement remote services
+		new Expectations(){{			
+			idRemoteMock.loginUser(USERNAME, DIFF_PASS);
+			result = new LoginException();
+		}};
+		
 		LoginUser service = new LoginUser(USERNAME, DIFF_PASS);
 		service.execute();
+	}
+	
+	
+	//////////////////////////
+	// TESTS FOR 2ND SPRINT //
+	//////////////////////////
+	
+	
+	/** A successful login with remote authentication.
+	 */
+	@Test
+	public void loginRemote(){
+		
+		//FIXME: assert login is remote and not cached
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		service.dispatch();
+		
+		User u = this.getUserFromUsername(JUBI_UNAME);
+		String utoken = u.getSession().getToken();
+		String stoken = service.getUserToken();
+		
+		assertNotNull(utoken);
+		assertNotNull(stoken);
+		assertEquals(stoken, utoken);
+	}
+	
+	
+	/** A successful login with local authentication.
+	 */
+	@Test
+	public void loginLocal(){
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+			result = new RemoteInvocationException();
+		}};
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		service.dispatch();
+		
+		User u = this.getUserFromUsername(JUBI_UNAME);
+		String utoken = u.getSession().getToken();
+		String stoken = service.getUserToken();
+		
+		assertNotNull(utoken);
+		assertNotNull(stoken);
+		assertEquals(stoken, utoken);
+	}
+	
+	
+	/** An unsuccessful login because remote authentication is down
+	 *  and there is no cached login.
+	 *  It should fail.
+	 */
+	@Test(expected = UnavailableServiceException.class)
+	public void noRemoteNoLocal(){
+		
+		new Expectations(){{
+			idRemoteMock.loginUser(NO_CACHE, "hunter2");
+			result = new RemoteInvocationException();
+		}};
+		
+		LoginUser service = new LoginUser(NO_CACHE, "hunter2");
+		service.dispatch();
+	}
+	
+	
+	/** Try to login after "cache is cleaned".
+	 *  Since we got rid of the cache concept, we just set user's stored password to null.
+	 *  The test should fail.
+	 */
+	@Test (expected = UnavailableServiceException.class)
+	public void loginAfterCleanLocal(){
+		String temp_username = "abcd123";
+		String temp_password = "abd123";
+		String temp_name = "abcd123";
+		
+		// simulate an exception with a mock
+		new Expectations(){{			
+			idRemoteMock.loginUser(temp_username, temp_password);
+			result = new RemoteInvocationException();
+		}};
+		
+		createUser(temp_username, temp_password, temp_name);
+		LoginUser service = new LoginUser(temp_username, temp_password);
+		service.dispatch();
+		
+		User u = this.getUserFromUsername(temp_username);
+		u.setPassword(null);
+		
+		service.dispatch();
+	}
+	
+	
+	/** A remote authentication attempt with a bad password.
+	 *  It should fail.
+	 */
+	@Test (expected = LoginException.class)
+	public void loginRemoteBadPass(){
+		String bad_pass = "Ah ah ah, you didn't say the magic word.";
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			result = new LoginException();
+		}};
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
+		service.dispatch();
+	}
+	
+	
+	/** A local authentication attempt with a bad password when
+	 *  remote authentication is down.
+	 *  It should fail.
+	 */
+	@Test(expected = UnavailableServiceException.class)
+	public void loginLocalBadPass(){
+		String bad_pass = "Ah ah ah, you didn't say the magic word.";
+		
+		new Expectations(){{			
+			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			result = new RemoteInvocationException();
+		}};
+		
+		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
+		service.dispatch();
+	}
+	
+	
+	/** A remote authentication attempt with a username that doesn't exist.
+	 *  It should fail.
+	 */
+	@Test(expected = LoginException.class)
+	public void loginRemoteBadUser(){
+		String bad_user = "I'm root, let me in.";
+		
+		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
+		service.dispatch();
 	}
 }

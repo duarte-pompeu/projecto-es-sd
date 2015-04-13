@@ -1,10 +1,12 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.dml.BubbleDocs;
-import pt.tecnico.bubbledocs.dml.User;
-import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class LoginUser extends BubbleDocsService {
 
@@ -18,25 +20,56 @@ public class LoginUser extends BubbleDocsService {
     }
 
     @Override
-    protected void dispatch() throws BubbleDocsException {
+    protected void dispatch() throws LoginException {
+    	BubbleDocs bd = BubbleDocs.getInstance();
+    	User user;
+    	
+    	bd.refreshSessions();
+		
+    	// must be able to get user
     	try {
-    		BubbleDocs bd = BubbleDocs.getInstance();
+    		user = bd.getUser(username); //search for a valid user
+    	}
+    	catch (NotFoundException e){
+    		throw new LoginException("Invalid username or password");
+    	}
+    	
+    	// try remote login
+    	try{
+    		IDRemoteServices remote = new IDRemoteServices();
+    		remote.loginUser(username, password);
+    	}
+    	
+    	// good connection but bad login input
+    	catch(LoginException e){
+    		throw e;
+    	}
+    	
+    	// connection failed, use local session
+    	catch(RemoteInvocationException e){
     		
-    		bd.refreshSessions();
-    		
-    		User user = bd.getUser(username); //search for a valid user
+    		/* code from earlier delivery
     		
     		if (!user.getPassword().equals(password)) //correct password?
-    			throw new LoginException("invalid password or username");
-    		
-    		userToken = bd.addSession(user);   		
+    			throw new LoginException("Login User Service: Invalid password");
     	
-    	} catch (NotFoundException e) {
-    		throw new LoginException("invalid password or username");
-    	}    	
+    		*/
+    		if (user.getPassword() == null || !user.getPassword().equals(password)) {
+    			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
+    		}
+    	}
+    	
+    	if (!password.equals(user.getPassword()))
+    		user.setPassword(password);
+    	
+		userToken = bd.addSession(user);   	
     }
 
     public final String getUserToken() {
 	return userToken;
+    }
+    
+    public String getResult(){
+    	return getUserToken();
     }
 }
