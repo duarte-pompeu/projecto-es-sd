@@ -14,6 +14,7 @@ import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId;
 import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 
 @WebService(
@@ -107,8 +108,21 @@ public class SDIdImpl implements SDId {
 	}
 
 	@Override
-	public void removeUser(String userId) throws UserDoesNotExist_Exception {
-		// TODO Auto-generated method stub
+	public void removeUser(String userId) throws UserDoesNotExist_Exception, InvalidUser_Exception  {
+		
+		if(userId==null || userId.equals("")){
+			InvalidUser fault = new InvalidUser();
+			fault.setUserId(userId);
+			throw new InvalidUser_Exception(userId + " is invalid", fault);
+		}
+		
+		if(getUserByUsername(userId)==null){
+			UserDoesNotExist fault = new UserDoesNotExist();
+			fault.setUserId(userId);
+			throw new UserDoesNotExist_Exception(userId + " doesnt exist", fault);
+		}
+		
+		userTable.removeUser(userId);
 		
 	}
 
