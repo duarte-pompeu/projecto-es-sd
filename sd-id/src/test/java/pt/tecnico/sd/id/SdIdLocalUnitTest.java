@@ -54,8 +54,6 @@ public class SdIdLocalUnitTest {
 		}
 		
 	
-	
-	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		//Maybe empty
@@ -79,8 +77,15 @@ public class SdIdLocalUnitTest {
 	//the standard scenario
 	@Test
 	public void testCreateUser() throws Exception {
+		User user1=null, user2=null;
 		sdIdService.createUser(userName1, email1);
 		sdIdService.createUser(userName2, email2);
+		
+		if((user1=sdIdService.getUserByUsername(userName1))==null || 
+			(user2=sdIdService.getUserByUsername(userName2))==null )
+			fail();
+		if(!user1.getEmail().equals(email1) || !user2.getEmail().equals(email2))
+			fail();
 	}
 	//trying to add a user with an email that already exists
 	@Test(expected=EmailAlreadyExists_Exception.class)
