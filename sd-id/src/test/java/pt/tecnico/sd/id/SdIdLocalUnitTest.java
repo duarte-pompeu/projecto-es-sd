@@ -146,6 +146,8 @@ public class SdIdLocalUnitTest {
 		if ((sdIdService.getUserByUsername(userName1))!=null)
 				fail();
 			
+		if ((sdIdService.getUserByUsername(userName2))!=null)
+			fail();
 	}
 	
 	//trying to remove a user with an invalid user name
