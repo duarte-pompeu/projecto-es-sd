@@ -141,7 +141,7 @@ public class SDIdImpl implements SDId {
 			throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
 		}
 		
-		if(Arrays.equals(password, reserved)){
+		if(!Arrays.equals(password, reserved)){
 			AuthReqFailed fault = new AuthReqFailed();
 			fault.setReserved(reserved);
 			throw new AuthReqFailed_Exception(userId + " wrong password", fault);
