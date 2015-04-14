@@ -1,3 +1,4 @@
+
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
@@ -9,6 +10,8 @@ import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.exception.DuplicateEmailException;
+import pt.tecnico.bubbledocs.exception.InvalidEmailException;
 
 
 public class CreateUserTest extends BubbleDocsServiceTest {
