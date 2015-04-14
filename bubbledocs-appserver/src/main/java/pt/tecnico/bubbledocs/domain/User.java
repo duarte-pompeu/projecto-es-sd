@@ -129,6 +129,10 @@ public class User extends User_Base {
     public boolean canWrite(CalcSheet sheet) {
     	return this.getWriteableCalcSheetSet().contains(sheet);
     }
+    
+    public boolean owns(CalcSheet sheet) {
+    	return this.getCreatedCalcSheetSet().contains(sheet);
+    }
 
     
   	Iterable<CalcSheet> getSheets(String substring){
