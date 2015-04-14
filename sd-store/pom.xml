@@ -52,6 +52,19 @@
 		<version>${version.junit}</version>
 		<scope>test</scope>
 		</dependency>
+		
+		<!-- JAX-WS -->
+	<dependency>
+      <groupId>com.sun.xml.ws</groupId>
+      <artifactId>jaxws-rt</artifactId>
+      <version>2.2.10</version>
+    </dependency>
+    <!--  JAX-R API  -->
+    <dependency>
+      <groupId>javax.xml.registry</groupId>
+      <artifactId>javax.xml.registry-api</artifactId>
+      <version>1.0.5</version>
+    </dependency>
     
   </dependencies>
   

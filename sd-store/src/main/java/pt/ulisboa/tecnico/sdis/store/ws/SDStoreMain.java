@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import javax.xml.ws.Endpoint;
 
-import pt.ulisboa.tecnico.sdis.store.UDDINaming;
+import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
 
 public class SDStoreMain{
 	public static final int STORAGE_CAP = 10 * 1024;
@@ -25,18 +25,18 @@ public class SDStoreMain{
 		String url = "http://localhost:8080/store-ws/endpoint";
 		
 		Endpoint endpoint = null;
-		//UDDINaming uddiNaming = null;
+		UDDINaming uddiNaming = null;
 		try{
 			endpoint = Endpoint.create(new SDStoreImpl(debug_mode));
 			
 			// publish endpoint (no uddi)
-			System.out.println("Starting " + url);
-			endpoint.publish(url);
+//			System.out.println("Starting " + url);
+//			endpoint.publish(url);
 			
 			// publish to UDDI
-//            System.out.printf("Publishing '%s' to UDDI at %s%n", name, uddiURL);
-//            uddiNaming = new UDDINaming(uddiURL);
-//            uddiNaming.rebind(name, url);
+            System.out.printf("Publishing '%s' to UDDI at %s%n", name, uddiURL);
+            uddiNaming = new UDDINaming(uddiURL);
+            uddiNaming.rebind(name, url);
 			
 			// wait
 			System.out.println("Awaiting connections");
