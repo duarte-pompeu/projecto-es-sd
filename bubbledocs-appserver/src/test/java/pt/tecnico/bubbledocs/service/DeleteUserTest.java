@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.service;
 import static org.junit.Assert.assertTrue;
 import mockit.Expectations;
 import mockit.Mocked;
+import mockit.Verifications;
 
 import org.junit.Test;
 
@@ -101,19 +102,28 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
         new DeleteUser(root, USERNAME_TO_DELETE).execute();
     }
-
+    
     @Test(expected = UserNotInSessionException.class)
-    public void notInSessionAndNotRoot() {
-        String user_token = addUserToSession(USERNAME);
+	public void expired() {
+    	String user_token = addUserToSession(USERNAME);
         removeUserFromSession(user_token);
-
-        new DeleteUser(user_token, USERNAME_TO_DELETE).execute();
-    }
-
-    @Test(expected = UserNotInSessionException.class)
-    public void accessUserDoesNotExist() {
-        new DeleteUser(ALT_USERNAME, USERNAME_TO_DELETE).execute();
-    }
+		DeleteUser service = new DeleteUser(root,USERNAME_TO_DELETE);
+		service.execute();
+		
+		new Verifications() {{ //verify the service was not called
+			remote.removeUser(USERNAME_TO_DELETE); times = 0;
+		}};
+	}
+	
+	@Test(expected = UserNotInSessionException.class)
+	public void invalid() {
+		DeleteUser service = new DeleteUser(root,"nooooo");
+		service.execute();
+		
+		new Verifications() {{ //verify the service was not called
+			remote.removeUser(USERNAME_TO_DELETE); times = 0;
+		}};
+	}
     
     @Test(expected = UnavailableServiceException.class)
 	public void unavailable() {
