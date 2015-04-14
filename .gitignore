@@ -5,3 +5,4 @@ sd-store/.gitignore
 sd-store/.project
 sd-store/.settings/
 sd-juddi/target
+derby.log
