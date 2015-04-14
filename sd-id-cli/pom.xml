@@ -1,0 +1,28 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>pt.tecnico.ulisboa.essd</groupId>
+    <artifactId>sd</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../sd/pom.xml</relativePath>
+  </parent>
+
+  <groupId>pt.tecnico.ulisboa.essd</groupId>
+  <artifactId>sd-id-cli</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>SD-ID Client</name>
+
+  <dependencies>
+    <!-- SD-ID -->
+    <!-- This is imported because of the wsdl code -->
+    <dependency>
+      <groupId>pt.tecnico.ulisboa.essd</groupId>
+      <artifactId>sd-id</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+</project>
