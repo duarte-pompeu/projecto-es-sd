@@ -88,7 +88,7 @@ public class StoreAndLoadTest {
 	public void longDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
 		
-		for(int i = 0; i < 1000; i++){
+		for(int i = 0; i < 1024; i++){
 			message += "dddddddddddddddddddddddd";
 		}
 		
@@ -101,7 +101,7 @@ public class StoreAndLoadTest {
 	public void docGetsIncrementallyBigger() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
 		
-		for(int i = 0; i < 1000; i++){
+		for(int i = 0; i < 1024; i++){
 			message += "dddddddddddddddddddddddd";
 			
 			StoreService service1 = new StoreService(U1, U1D1, string2bytes(message));

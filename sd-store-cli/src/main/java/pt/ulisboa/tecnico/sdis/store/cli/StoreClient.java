@@ -33,17 +33,12 @@ public class StoreClient{
 		// uddi connection
 		String uddiURL = "http://localhost:8081";
 		String uddiName ="SDStore";
-		uddiFind(uddiURL, uddiName);
+		findUddi(uddiURL, uddiName);
         
-		
-		createDoc("duarte", "tutanota email");
-		storeDoc("duarte", "tutanota email", "teste");
-		loadDoc("duarte", "tutanota email");
-		listDocs("duarte");
 	}
 	
 	
-	private static void uddiFind(String uddiURL, String uddiName) throws JAXRException {
+	public static void findUddi(String uddiURL, String uddiName) throws JAXRException {
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
         UDDINaming uddiNaming = new UDDINaming(uddiURL);
         

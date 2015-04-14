@@ -1,24 +1,25 @@
 package pt.ulisboa.tecnico.sdis.store.tests;
 
+import javax.xml.registry.JAXRException;
+
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 
-public class ClientStoreServicesTest {
+public class ClientTest {
 	protected SDStore _port;
 	
-	public ClientStoreServicesTest(){
+	public ClientTest() throws JAXRException{
 		_port = StoreClient.initPort();
+		//StoreClient.findUddi("http://localhost:8081", "SDStore");
 	}
 	
 	
 	@Before
 	public void populate4Test(){
-		_port = StoreClient.initPort();
+	
 	}
 	
 	
@@ -28,7 +29,7 @@ public class ClientStoreServicesTest {
 	}
 	
 	
-	public String bytes2String(byte[] bytes){
+	public String bytes2string(byte[] bytes){
 		return StoreClient.bytes2string(bytes);
 	}
 	
