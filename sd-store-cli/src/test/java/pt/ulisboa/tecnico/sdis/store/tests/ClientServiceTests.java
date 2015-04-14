@@ -75,19 +75,17 @@ public class ClientServiceTests extends ClientTest {
 		String content = "";
 		String tmpUser = "alice";
 		String tempDoc = "lista de compras";
+		int size = 10*1024;
 		
-		for(int i = 0; i < (10 * 1024); i++){
+		for(int i = 0; i < size; i++){
 			content += "d";
 		}
 		
 		byte [] bytes = string2bytes(content);
 		
-		assertEquals(10*1024, bytes.length);
+		assertEquals(size, bytes.length);
 		ListDocsService list = new ListDocsService(tmpUser, getPort());
 		list.dispatch();
-		
-		// make sure there are no other docs in the user repo
-		assertEquals(1, list.getResult().size());
 		
 		CreateDocService create = new CreateDocService(tmpUser, tempDoc, getPort());
 		StoreDocService store = new StoreDocService(tmpUser, tempDoc, string2bytes(content), getPort());
@@ -103,15 +101,33 @@ public class ClientServiceTests extends ClientTest {
 	}
 	
 	@Test (expected = CapacityExceeded_Exception.class)
-	public void longDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception, InvalidAttributeValueException{
-		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
+	public void aboveCapacity() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception, InvalidAttributeValueException{
+		String content = "";
+		String tmpUser = "alice";
+		String tempDoc = "lista de compras";
+		int size = (10*1024) + 1;
 		
-		for(int i = 0; i < 1024; i++){
-			message += "dddddddddddddddddddddddd";
+		for(int i = 0; i < size; i++){
+			content += "d";
 		}
 		
-		StoreDocService service = new StoreDocService(USER, DOC, string2bytes(message), getPort());
-		service.dispatch();
+		byte [] bytes = string2bytes(content);
+		
+		assertEquals(size, bytes.length);
+		ListDocsService list = new ListDocsService(tmpUser, getPort());
+		list.dispatch();
+		
+		CreateDocService create = new CreateDocService(tmpUser, tempDoc, getPort());
+		StoreDocService store = new StoreDocService(tmpUser, tempDoc, string2bytes(content), getPort());
+		
+		try {
+			create.dispatch();
+		} catch ( DocAlreadyExists_Exception e) {
+			//continue, its ok if doc already exists
+		}
+		
+		
+		store.dispatch();
 	}
 	
 	@Test (expected = DocDoesNotExist_Exception.class)
