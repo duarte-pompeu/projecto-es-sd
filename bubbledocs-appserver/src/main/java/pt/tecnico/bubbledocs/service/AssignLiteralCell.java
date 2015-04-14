@@ -41,44 +41,12 @@ public class AssignLiteralCell extends BubbleDocsService{
     	
     	// check if token is in session
     	BubbleDocs bd = BubbleDocs.getInstance();
-    	User user;
-    	try{
-    		user = getSessionFromToken(accessToken).getUser();
-    	}
-    	catch(BubbleDocsException e){
-    		throw e;
-    	}
+    	User user = getSessionFromToken(accessToken).getUser();
     	
-    	// check if doc exists	
-    	CalcSheet cs = null;
-    	for(CalcSheet tempCs: bd.getCalcSheetSet()){
-    		if(tempCs.getId() == docId){
-    			cs = tempCs;
-    		}
-    	}
-    	
-    	if(cs == null){
-    		throw new NotFoundException("can't find calcsheet with ID " + docId + ".");
-    	}
+    	CalcSheet cs = bd.getCalcSheetById(docId);
     	
     	
-//    	//TODO: check if user has write access
-    	if(!user.canWrite(cs)){
-    		throw new PermissionException();
-    	}
-    	
-    	// check if cell exists
-    	if(!cs.hasCell(cellId)){
-    		throw new NotFoundException("can't find cell with ID " + cellId + ".");
-    	}
-    	
-    	// check if cell is protected
-    	Cell cell = cs.getCell(cellId);
-    	if(cell.getProtect()){
-    		throw new PermissionException();
-    	}
-    	
-    	cs.setContent(user, new Literal(literal_val), cellId);
+        cs.setContent(user, new Literal(literal_val), cellId);
     	result = cs.getContent(user, cellId).toString();
     }
 
