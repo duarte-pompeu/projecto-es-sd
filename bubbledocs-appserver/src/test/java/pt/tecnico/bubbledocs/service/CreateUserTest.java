@@ -13,6 +13,9 @@ import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class CreateUserTest extends BubbleDocsServiceTest {
 
+    @Mocked
+    IDRemoteServices remote;	
+	
     // the tokens
     private String root_token;
     private String user_token;
@@ -85,5 +88,16 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     	CreateUser service = new CreateUser(root_token, long_name, "password", "name");
     	service.execute();
     }
+    
+    @Test(expected = UnavailableServiceException.class)
+	public void unavailable() {
+		new Expectations() {{
+			remote.createUser(USERNAME, MAIL); times = 1;
+			result = new RemoteInvocationException();
+		}};
+		
+		CreateUser service = new CreateUser(root_token, USERNAME, MAIL, NAME);
+		service.execute();
+	}
 
 }
