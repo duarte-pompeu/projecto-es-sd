@@ -1,13 +1,15 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
-import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 
+import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
+
+import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.cli.service.ListDocsService;
 import pt.ulisboa.tecnico.sdis.store.cli.service.LoadDocService;
@@ -19,13 +21,20 @@ public class StoreClient{
 	static SDStore _port;
 	
 	public static void main(String[] args) throws Exception{
-		_port = initPort();
+//		_port = initPort();
 		
-		BindingProvider bindingProvider = (BindingProvider) _port;
-		Map<String, Object> requestContext = bindingProvider.getRequestContext();
 		
-		System.out.println("Endpoint address:");
-		System.out.println(requestContext.get(ENDPOINT_ADDRESS_PROPERTY));
+		// normal connection
+//		System.out.println("Endpoint address:");
+//		System.out.println(requestContext.get(ENDPOINT_ADDRESS_PROPERTY));
+		
+		
+		
+		// uddi connection
+		String uddiURL = "http://localhost:8081";
+		String uddiName ="SDStore";
+		uddiFind(uddiURL, uddiName);
+        
 		
 		createDoc("duarte", "tutanota email");
 		storeDoc("duarte", "tutanota email", "teste");
@@ -34,6 +43,31 @@ public class StoreClient{
 	}
 	
 	
+	private static void uddiFind(String uddiURL, String uddiName) throws JAXRException {
+		System.out.printf("Contacting UDDI at %s%n", uddiURL);
+        UDDINaming uddiNaming = new UDDINaming(uddiURL);
+        
+        System.out.printf("Looking for '%s'%n", uddiName);
+        String endpointAddress = uddiNaming.lookup(uddiName);
+        
+        if (endpointAddress == null) {
+            System.out.println("Not found!");
+            return;
+        } else {
+            System.out.printf("Found %s%n", endpointAddress);
+        }
+        
+        System.out.println("Creating stub ...");
+        SDStore_Service service = new SDStore_Service();
+        _port = service.getSDStoreImplPort();
+        
+        System.out.println("Setting endpoint address ...");
+        BindingProvider bindingProvider = (BindingProvider) _port;
+        Map<String, Object> requestContext = bindingProvider.getRequestContext();
+        requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+	}
+
+
 	public static void createDoc(String userID, String docID){
 		CreateDocService service = new CreateDocService(userID, docID, _port);
 		
