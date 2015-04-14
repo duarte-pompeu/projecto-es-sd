@@ -32,70 +32,87 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
     private static final String USERNAME = "turtle";
     private static final String PASSWORD = "pizza";
-	private static final String NAME = "Franklin" ; 
+    private static final String EMAIL = "Nets@playoffs.com";
+	private static final String EMAIL_PRESENT = "Celtics@playoffs.com";
+	private static final String USERNAME_PRESENT = "rato";
+    private static final String NAME = "Franklin" ; 
     private static final String ROOT_USERNAME = "root";
-    private static final String ALT_USERNAME = "rato";
+
 
     @Override
     public void populate4Test() {
-		createUser(ROOT_USERNAME, PASSWORD, "Super User");
+		createUser(ROOT_USERNAME, "ROOT@ROOT.COM", PASSWORD, "Super User");
     	root_token = addUserToSession(ROOT_USERNAME);
-       createUser(USERNAME, PASSWORD, NAME);
+       createUser(USERNAME, EMAIL_PRESENT, PASSWORD, NAME);
         user_token = addUserToSession(USERNAME);
     }
 
     @Test
     public void success() {
-        CreateUser service = new CreateUser(root_token, ALT_USERNAME, "queijo",
-                "Sensei");
+        CreateUser service = new CreateUser(root_token, USERNAME, EMAIL, NAME);
         service.execute();
 
 	// User is the domain class that represents a User
-        User user = getUserFromUsername(ALT_USERNAME);
+        User user = getUserFromUsername(USERNAME);
 
-        assertEquals(ALT_USERNAME, user.getUserName());
+        assertEquals(USERNAME, user.getUserName());
         assertEquals("queijo", user.getPassword());
         assertEquals("Sensei", user.getName());
     }
 
     @Test(expected =  RepeatedIdentificationException.class)
     public void usernameExists() {
-        CreateUser service = new CreateUser(root_token, USERNAME, PASSWORD, NAME);
+        CreateUser service = new CreateUser(root_token, USERNAME_PRESENT, EMAIL, NAME);
         service.execute();
     }
 
     //TODO: empty username: InvalidValueException or InvalidUserNameException ???
     @Test(expected = InvalidUsernameException.class)
     public void emptyUsername() {
-        CreateUser service = new CreateUser(root_token, "", "queijo", "sensei");
+        CreateUser service = new CreateUser(root_token, USERNAME, EMAIL, NAME);
         service.execute();
     }
 
+	
+	    @Test(expected = InvalidUsernameException.class)
+    public void usernameTooLong(){
+    	String long_name = "Maria Teresa García Ramírez de Arroyo";
+    	CreateUser service = new CreateUser(root_token, long_name, EMAIL, "name");
+    	service.execute();
+    }
+	
+	
+    @Test(expected = InvalidUsernameException.class)
+    public void usernameTooShort(){
+    	CreateUser service = new CreateUser(root_token, "a", EMAIL, "name");
+    	service.execute();
+    }
+	
     @Test(expected = PermissionException.class)
     public void unauthorizedUserCreation() {
-        CreateUser service = new CreateUser(user_token, ALT_USERNAME, "queijo",
+        CreateUser service = new CreateUser(user_token, USERNAME, "queijo",
                 "Sensei");
         service.execute();
     }
 
     @Test(expected = UserNotInSessionException.class)
-    public void accessUsernameNotExist() {
+    public void NotInSession() {
         removeUserFromSession(root_token);
-        CreateUser service = new CreateUser(root_token, ALT_USERNAME, "queijo",
+        CreateUser service = new CreateUser(root_token, USERNAME, "queijo",
                 "Sensei");
         service.execute();
     }
     
-    @Test(expected = InvalidUsernameException.class)
-    public void usernameTooShort(){
-    	CreateUser service = new CreateUser(root_token, "a", "password", "name");
+    
+       @Test(expected = DuplicateEmailException.class)
+    public void DuplicateEmail(){
+    	CreateUser service = new CreateUser(root_token, USERNAME, EMAIL_PRESENT, NAME);
     	service.execute();
     }
-    
-    @Test(expected = InvalidUsernameException.class)
-    public void usernameTooLong(){
-    	String long_name = "Maria Teresa García Ramírez de Arroyo";
-    	CreateUser service = new CreateUser(root_token, long_name, "password", "name");
+	
+	    @Test(expected = InvalidEmailException.class)
+    public void InvalidEmail(){
+    	CreateUser service = new CreateUser(root_token, USERNAME, "This is not an email", NAME);
     	service.execute();
     }
     
