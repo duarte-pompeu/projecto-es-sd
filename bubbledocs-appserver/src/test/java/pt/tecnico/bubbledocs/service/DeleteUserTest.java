@@ -16,6 +16,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	
     private static final String USERNAME = "turtle";
     private static final String PASSWORD = "pizza";
+    private static final String EMAIL = "quack@patos.com";
 	private static final String NAME = "Franklin"; 
     private static final String ROOT_USERNAME = "root";
 	
@@ -27,11 +28,11 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
     @Override
     public void populate4Test() {
-        createUser(USERNAME, PASSWORD, NAME);
-        toDelete = createUser(USERNAME_TO_DELETE, "please", "john de lete");
+        createUser(USERNAME,EMAIL, PASSWORD, NAME);
+        toDelete = createUser(USERNAME_TO_DELETE, "me@example.lol", "please", "john de lete");
         createSpreadSheet(toDelete, USERNAME_TO_DELETE, 20, 20);
         
-       User rootUser = createUser(ROOT_USERNAME, "root", "root");
+       User rootUser = createUser(ROOT_USERNAME,"root@bigboss.com", "root", "root");
         BubbleDocs.getInstance().addUser(rootUser);
         root = addUserToSession(ROOT_USERNAME);
     };
@@ -103,4 +104,6 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
     public void accessUserDoesNotExist() {
         new DeleteUser(ALT_USERNAME, USERNAME_TO_DELETE).execute();
     }
+    
+    
 }
