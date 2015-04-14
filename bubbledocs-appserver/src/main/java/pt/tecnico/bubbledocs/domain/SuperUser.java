@@ -1,6 +1,11 @@
 package pt.tecnico.bubbledocs.domain;
 
 import java.util.Set;
+import pt.tecnico.bubbledocs.exceptions.DuplicateEmailException;
+import pt.tecnico.bubbledocs.exceptions.DuplicateUsernameException;
+import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
+import pt.tecnico.bubbledocs.exceptions.InvalidEmailException;
+import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 
 
 
@@ -42,11 +47,18 @@ public class SuperUser extends SuperUser_Base {
     	BubbleDocs bb = BubbleDocs.getInstance();
     	return bb.addUser(userName, name, password);
     }
-    
-    public User createUser(String userName, String name, String email, String password) {
+	
+    public User createUser(String userName, String name, String email, String password) throws InvalidUsernameException, DuplicateUsernameException, DuplicateEmailException, InvalidEmailException {
     	BubbleDocs bb = BubbleDocs.getInstance();
-    	return bb.addUser(userName, name, email, password);
-    }
+    
+		try {
+			User result = bb.addUser(userName, name, email, password);
+			return result;
+		}
+		catch (RepeatedIdentificationException e) { 
+			throw new DuplicateUsernameException();
+		}
+	}
     
     /* (non-Javadoc)
      * @see pt.tecnico.bubbledocs.dml.User#deleteUser(java.lang.String)

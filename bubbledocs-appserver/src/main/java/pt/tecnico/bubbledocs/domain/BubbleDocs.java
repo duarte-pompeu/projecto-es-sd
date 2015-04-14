@@ -8,6 +8,8 @@ import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.exceptions.InvalidEmailException;
+import pt.tecnico.bubbledocs.exceptions.DuplicateEmailException;
 
 /**
  * @author Diogo, Marcos, Tiago, Duarte
@@ -113,6 +115,14 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public boolean hasUser(String username) {
 		for (User user : this.getUserSet()) {
 			if (user.getUserName().equals(username)) return true;
+		}		
+		
+		return false;
+	}
+	
+	public boolean hasEmail(String email) {
+		for (User user : this.getUserSet()) {
+			if (user.getEmail().equals(email)) return true;
 		}		
 		
 		return false;
@@ -265,6 +275,20 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 		//if the user already exists, don't create a new one.		
 		if (hasUser(username)) throw new RepeatedIdentificationException();
+		
+		//verify if the email is valid
+		if(email.contains("@")) {
+			String[] parseEmail = email.split("@");
+			if(!(parseEmail[1].contains(".")))
+				throw new InvalidEmailException("Email should be in the format: aaaa@host.com");
+		}
+		else {
+			throw new InvalidEmailException("Email should be in the format: aaaa@host.com");
+		}
+		
+		//verify if the email is duplicated
+		if (hasEmail(email)) throw new DuplicateEmailException();
+		
 
 		User newuser;
 
