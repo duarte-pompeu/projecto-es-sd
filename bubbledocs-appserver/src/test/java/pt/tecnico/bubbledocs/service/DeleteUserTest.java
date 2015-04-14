@@ -52,6 +52,10 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
         service.execute();
 
+        new Verifications() {{ //verify the service was not called
+			remote.removeUser(USERNAME_TO_DELETE); times = 0;
+		}};
+        
         boolean caught = false;
         try {
         	this.getUserFromUsername(USERNAME_TO_DELETE);
