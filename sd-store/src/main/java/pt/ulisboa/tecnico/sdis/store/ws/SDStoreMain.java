@@ -29,9 +29,9 @@ public class SDStoreMain{
 		try{
 			endpoint = Endpoint.create(new SDStoreImpl(debug_mode));
 			
-			// publish endpoint (no uddi)
-//			System.out.println("Starting " + url);
-//			endpoint.publish(url);
+			// publish endpoint
+			System.out.println("Starting " + url);
+			endpoint.publish(url);
 			
 			// publish to UDDI
             System.out.printf("Publishing '%s' to UDDI at %s%n", name, uddiURL);
