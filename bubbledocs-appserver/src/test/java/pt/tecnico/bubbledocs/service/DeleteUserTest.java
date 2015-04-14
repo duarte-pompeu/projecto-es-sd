@@ -1,17 +1,27 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertTrue;
+import mockit.Expectations;
+import mockit.Mocked;
+
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 
 public class DeleteUserTest extends BubbleDocsServiceTest {
 
+	
+	@Mocked
+	IDRemoteServices remote;
+	
     private static final String USERNAME_TO_DELETE = "todelete";
 	
     private static final String USERNAME = "turtle";
@@ -105,5 +115,14 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         new DeleteUser(ALT_USERNAME, USERNAME_TO_DELETE).execute();
     }
     
-    
+    @Test(expected = UnavailableServiceException.class)
+	public void unavailable() {
+		new Expectations() {{
+			remote.removeUser(USERNAME_TO_DELETE); times = 1;
+			result = new RemoteInvocationException();
+		}};
+		
+		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.execute();
+	}
 }
