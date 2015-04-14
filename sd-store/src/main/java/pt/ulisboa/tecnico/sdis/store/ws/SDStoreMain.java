@@ -25,7 +25,7 @@ public class SDStoreMain{
 		String url = "http://localhost:8080/store-ws/endpoint";
 		
 		Endpoint endpoint = null;
-		UDDINaming uddiNaming = null;
+		//UDDINaming uddiNaming = null;
 		try{
 			endpoint = Endpoint.create(new SDStoreImpl(debug_mode));
 			
