@@ -43,8 +43,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     public void populate4Test() {
 		createUser(ROOT_USERNAME, "ROOT@ROOT.COM", PASSWORD, "Super User");
     	root_token = addUserToSession(ROOT_USERNAME);
-       createUser(USERNAME, EMAIL_PRESENT, PASSWORD, NAME);
-        user_token = addUserToSession(USERNAME);
+       createUser(USERNAME_PRESENT, EMAIL_PRESENT, PASSWORD, NAME);
+        user_token = addUserToSession(USERNAME_PRESENT);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
     @Test(expected =  RepeatedIdentificationException.class)
     public void usernameExists() {
-        CreateUser service = new CreateUser(root_token, USERNAME, EMAIL, NAME);
+        CreateUser service = new CreateUser(root_token, USERNAME_PRESENT, EMAIL, NAME);
         service.execute();
     }
 
