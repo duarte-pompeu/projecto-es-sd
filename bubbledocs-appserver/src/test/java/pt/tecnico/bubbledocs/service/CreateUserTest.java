@@ -2,16 +2,23 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import mockit.Expectations;
+import mockit.Mocked;
 
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
-import pt.tecnico.bubbledocs.exception.DuplicateEmailException;
-import pt.tecnico.bubbledocs.exception.InvalidEmailException;
+import pt.tecnico.bubbledocs.exceptions.DuplicateEmailException;
+import pt.tecnico.bubbledocs.exceptions.InvalidEmailException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
+
 
 
 public class CreateUserTest extends BubbleDocsServiceTest {
@@ -95,12 +102,13 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     @Test(expected = UnavailableServiceException.class)
 	public void unavailable() {
 		new Expectations() {{
-			remote.createUser(USERNAME, MAIL); times = 1;
+			//remote.createUser(USERNAME, MAIL); times = 1;
 			result = new RemoteInvocationException();
 		}};
 		
-		CreateUser service = new CreateUser(root_token, USERNAME, MAIL, NAME);
-		service.execute();
+		//CreateUser service = new CreateUser(root_token, USERNAME, MAIL, NAME);
+		//service.execute();
+		fail("FIXME");
 	}
 
 }
