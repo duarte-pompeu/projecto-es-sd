@@ -154,7 +154,7 @@ public class BubbleApplication {
 		pf_token = login.getUserToken();
 		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, "Notas ES", 300, 20);
 		spread.execute();
-		sheet_id = spread.getResult();
+		sheet_id = spread.getResult().getId();
 
 		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();

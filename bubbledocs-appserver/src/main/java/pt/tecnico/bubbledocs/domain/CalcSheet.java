@@ -7,7 +7,7 @@ import java.util.List;
 import org.jdom2.Element;
 import org.joda.time.LocalDate;
 
-
+import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
@@ -33,6 +33,20 @@ public class CalcSheet extends CalcSheet_Base {
      */
     public CalcSheet(String name, int lines, int columns) {
     	super();
+    	
+    	//check if name is null
+    	if (name.equals(null))
+    		throw new NullPointerException("CalcSheet name can't be null");
+    	
+    	//check if Row Value is greater then 0
+    	 if(lines < 1)
+    		 throw new InvalidValueException(lines + " isn't greater then zero.");
+    	
+    	//check if Column Value is greater then 0
+    	 if(columns < 1)
+    		 throw new InvalidValueException(columns + " isn't greater then zero.");
+    	
+    	
     	//get unique id
     	this.setId(BubbleDocs.getInstance().getUniqueId());
     	this.init(name, lines, columns);

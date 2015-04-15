@@ -9,7 +9,7 @@ import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
 public class CreateSpreadSheet extends BubbleDocsService {
-	 	private int result;
+	 	private CalcSheet result;
 	    private String accessToken;
 	    private String name;
 	    private int rows;
@@ -26,41 +26,16 @@ public class CreateSpreadSheet extends BubbleDocsService {
 
     @Override
     protected void dispatch() throws BubbleDocsException,UserNotInSessionException,InvalidFormatException, InvalidValueException {  
-	
     	// check if token is in session
-    	User user;
-    	try{
-    		user = getSessionFromToken(accessToken).getUser();
-    	}
-    	catch(BubbleDocsException e){
-    		throw e;
-    	}
-    	
-    	//check if name is null
-    	if (name.equals(null))
-    		throw new NullPointerException("CalcSheet name can't be null");
-    	
-    	//check if Row Value is greater then 0
-    	 if(rows < 1)
-    		 throw new InvalidValueException(rows + " isn't greater then zero.");
-    	
-    	//check if Column Value is greater then 0
-    	 if(columns < 1)
-    		 throw new InvalidValueException(columns + " isn't greater then zero.");
+    	User user = getSessionFromToken(accessToken).getUser();
     
-    	 //creates the calcsheet
-    	 CalcSheet sheet = user.createCalcSheet(name, rows, columns);
-    	 result = sheet.getId();
+    	result = user.createCalcSheet(name, rows, columns);
     }
 
     
     //GETTERS AND SETTERS
-	public int getResult() {
+	public CalcSheet getResult() {
 		return result;
-	}
-
-	public void setResult(int result) {
-		this.result = result;
 	}
 
 	public String getAccessToken() {
