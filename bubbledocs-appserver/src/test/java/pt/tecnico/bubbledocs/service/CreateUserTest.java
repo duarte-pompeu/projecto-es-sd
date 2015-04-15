@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import mockit.Expectations;
 import mockit.Mocked;
+import mockit.Verifications;
 
 import org.junit.Test;
 
@@ -55,6 +56,10 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	// User is the domain class that represents a User
         User user = getUserFromUsername(USERNAME);
 
+        new Verifications() {{ //verify the service was called
+			remote.createUser(USERNAME, EMAIL); times = 1;
+		}};
+        
         assertEquals(USERNAME, user.getUserName());
         assertEquals(EMAIL, user.getEmail());
         assertEquals(NAME, user.getName());
@@ -106,23 +111,25 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     
        @Test(expected = DuplicateEmailException.class)
     public void DuplicateEmail(){
-    	CreateUser service = new CreateUser(root_token, USERNAME, EMAIL_PRESENT, NAME);
-		service.execute();
-		
-		new Expectations() {{
-			remote.createUser(USERNAME, EMAIL); times = 1;
-		}};
+    	   new Expectations() {{
+   			remote.createUser(USERNAME,EMAIL); times = 1;
+   			result = new DuplicateEmailException();
+   		}};
+   		
+   		CreateUser service = new CreateUser(root_token, USERNAME, EMAIL, NAME);
+   		service.execute();
     }
 	
 	    @Test(expected = InvalidEmailException.class)
     public void InvalidEmail(){
 		
-    	CreateUser service = new CreateUser(root_token, USERNAME, "This is not an email", NAME);
-    	service.execute();
-		
-		new Expectations() {{
-			remote.createUser(USERNAME, EMAIL); times = 1;
-		}};
+	    	 new Expectations() {{
+	    			remote.createUser(USERNAME,EMAIL); times = 1;
+	    			result = new InvalidEmailException();
+	    		}};
+	    		
+	    		CreateUser service = new CreateUser(root_token, USERNAME, "im no mail", NAME);
+	    		service.execute();
 			
     }
     
