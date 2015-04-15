@@ -1,11 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.Cell;
-import pt.tecnico.bubbledocs.domain.Literal;
-import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.domain.Content;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
@@ -14,15 +10,15 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 public class AssignLiteralCell extends BubbleDocsService{
     private String result;
     private String accessToken;
-    private int docId;
-    private String cellId;
+    private int docID;
+    private String cellID;
     String literal;
     
-    public AssignLiteralCell(String accessToken, int docId, String cellId, String literal) {
+    public AssignLiteralCell(String accessToken, int docID, String cellID, String literal) {
     	
     	this.accessToken = accessToken;
-    	this.docId = docId;
-    	this.cellId = cellId;
+    	this.docID = docID;
+    	this.cellID = cellID;
     	this.literal = literal;
     }
     
@@ -30,7 +26,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     public void dispatch() throws InvalidFormatException, NotFoundException, 
     	LoginException, PermissionException {
     	
-    	// check if literal string translates to an int
+    	// parse string to integer
     	Integer literal_val;
     	try{
     		literal_val = Integer.valueOf(literal);
@@ -39,15 +35,10 @@ public class AssignLiteralCell extends BubbleDocsService{
     		throw new InvalidFormatException(literal + " isnt an integer.");
     	}
     	
-    	// check if token is in session
+    	
     	BubbleDocs bd = BubbleDocs.getInstance();
-    	User user = getSessionFromToken(accessToken).getUser();
-    	
-    	CalcSheet cs = bd.getCalcSheetById(docId);
-    	
-    	
-        cs.setContent(user, new Literal(literal_val), cellId);
-    	result = cs.getContent(user, cellId).toString();
+    	Content content = bd.assignLiteral(accessToken, docID, cellID, literal_val);
+    	this.result = content.toString();
     }
 
     public String getResult() {

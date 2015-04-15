@@ -15,6 +15,10 @@ import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
  * Contains the set of users and the set of calcSheets.
  * Generate unique an unique Id for each new calcSheet.
  */
+/**
+ * @author xumibeu
+ *
+ */
 public class BubbleDocs extends BubbleDocs_Base {
 	private static final int USERNAME_MIN_LEN = 3;
 	private static final int USERNAME_MAX_LEN = 8;
@@ -410,6 +414,15 @@ public class BubbleDocs extends BubbleDocs_Base {
 		this.getCalcSheetSet().remove(calcSheet);
 		calcSheet.deleteAllCells();
 
+	}
+	
+	
+	public Content assignLiteral(String accessToken, int docID, String cellID, Integer literalInteger){
+		User user = getSessionFromToken(accessToken).getUser();
+    	CalcSheet cs = this.getCalcSheetById(docID);
+
+        cs.setContent(user, new Literal(literalInteger), cellID);
+        return cs.getContent(user, cellID);
 	}
 	
 	
