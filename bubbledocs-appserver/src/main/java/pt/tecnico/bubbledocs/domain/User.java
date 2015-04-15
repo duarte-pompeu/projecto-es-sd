@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 /**
  * @author pc-w
@@ -147,5 +150,19 @@ public class User extends User_Base {
 
 	public void delete() {
 		deleteDomainObject();
+	}
+
+	public void renewPassword() {
+		String username = getUserName();
+		
+		try {
+			IDRemoteServices remote = new IDRemoteServices();
+			remote.renewPassword(username);
+		} catch (RemoteInvocationException e) {
+			throw new UnavailableServiceException();
+		}
+		
+		//Stored password must be removed.
+		setPassword(null);
 	}
 }
