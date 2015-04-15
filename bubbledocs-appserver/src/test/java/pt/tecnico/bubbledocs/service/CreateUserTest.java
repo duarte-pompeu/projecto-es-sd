@@ -56,8 +56,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
         User user = getUserFromUsername(USERNAME);
 
         assertEquals(USERNAME, user.getUserName());
-        assertEquals("queijo", user.getPassword());
-        assertEquals("Sensei", user.getName());
+        assertEquals(EMAIL, user.get.Email());
+        assertEquals(MAIL, user.getName());
     }
 
     @Test(expected =  RepeatedIdentificationException.class)
@@ -69,7 +69,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     //TODO: empty username: InvalidValueException or InvalidUserNameException ???
     @Test(expected = InvalidUsernameException.class)
     public void emptyUsername() {
-        CreateUser service = new CreateUser(root_token, USERNAME, EMAIL, NAME);
+        CreateUser service = new CreateUser(root_token, "", EMAIL, NAME);
         service.execute();
     }
 
