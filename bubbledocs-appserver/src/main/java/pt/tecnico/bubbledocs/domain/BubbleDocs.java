@@ -454,4 +454,24 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 	}
 	
+	public Content assignReference(String accessToken, int docID, String cellID, String refID){
+		User user = getSessionFromToken(accessToken).getUser();
+		CalcSheet calcsheet = getCalcSheetById(docID);
+		
+		Cell cell = calcsheet.getCell(cellID);
+		if (cell == null)
+			throw new NotFoundException("Cell out of bounds in " + cellID);
+
+		Cell refcell = calcsheet.getCell(refID);
+		if (refcell == null)
+			throw new NotFoundException("Reference out of bounds in " + refID);
+		
+		if(calcsheet.getCell(refID).getContent() == null)
+			throw new NullContentException(calcsheet.getCell(refID).getLine(), calcsheet.getCell(refID).getColumn());
+		
+		calcsheet.setContent(user, new Reference(calcsheet.getCell(refID)), cellID);
+		
+		return calcsheet.getContent(user, cellID);
+	}
+	
 }
