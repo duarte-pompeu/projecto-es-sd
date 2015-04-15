@@ -17,7 +17,7 @@ public class RenewPassword extends BubbleDocsService {
 	@Override
 	protected void dispatch() throws BubbleDocsException {
 		IDRemoteServices remote = new IDRemoteServices();
-		User user = getSessionFromToken(token).getUser();
+		User user = getUserFromToken(token);
 		String username = user.getUserName();
 		
 		try {

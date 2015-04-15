@@ -27,7 +27,7 @@ public class CreateSpreadSheet extends BubbleDocsService {
     @Override
     protected void dispatch() throws BubbleDocsException,UserNotInSessionException,InvalidFormatException, InvalidValueException {  
     	// check if token is in session
-    	User user = getSessionFromToken(accessToken).getUser();
+    	User user = getUserFromToken(accessToken);
     
     	result = user.createCalcSheet(name, rows, columns);
     }

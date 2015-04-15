@@ -30,7 +30,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     public void dispatch() throws InvalidFormatException, NotFoundException, 
     	LoginException, PermissionException {
     	
-    	User user = getSessionFromToken(accessToken).getUser();    	
+    	User user = getUserFromToken(accessToken);	
     	CalcSheet cs = BubbleDocs.getInstance().getCalcSheetById(docId);
         cs.setContent(user, new Literal(literal), cellId);
     	result = cs.getContent(user, cellId).toString();

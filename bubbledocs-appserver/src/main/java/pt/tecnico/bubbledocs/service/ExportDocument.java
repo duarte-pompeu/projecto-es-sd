@@ -43,7 +43,7 @@ public class ExportDocument extends BubbleDocsService {
 		StoreRemoteServices remoteService = new StoreRemoteServices();
 		
 		//getting the user from the token	
-    	user = getSessionFromToken(userToken).getUser();
+    	user = getUserFromToken(userToken);
    
     	//getting the username of the calcsheet owner
     	userName=user.getUserName();

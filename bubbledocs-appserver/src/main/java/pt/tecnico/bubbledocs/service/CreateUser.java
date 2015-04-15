@@ -26,7 +26,7 @@ public class CreateUser extends BubbleDocsService {
     
     @Override
     protected void dispatch() throws BubbleDocsException {
-    	User user = this.getSessionFromToken(token).getUser();
+    	User user = getUserFromToken(token);
     	this.result = user.createUser(username, name, email, null);
     }
     

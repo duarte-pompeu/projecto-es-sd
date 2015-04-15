@@ -6,6 +6,7 @@ import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Session;
+import pt.tecnico.bubbledocs.domain.User;
 
 public abstract class BubbleDocsService {
 
@@ -21,5 +22,9 @@ public abstract class BubbleDocsService {
     	Session session = BubbleDocs.getInstance().getSessionFromToken(token); 
     	session.touch();
     	return session;
+    }
+    
+    protected User getUserFromToken(String token) throws UserNotInSessionException {
+    	return getSessionFromToken(token).getUser();
     }
 }
