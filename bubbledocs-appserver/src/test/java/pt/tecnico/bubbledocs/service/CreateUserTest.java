@@ -54,7 +54,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
         service.execute();
 
 	// User is the domain class that represents a User
-        User user = getUserFromUsername(USERNAME);
+        User user = service.getResult();
 
         new Verifications() {{ //verify the service was called
 			remote.createUser(USERNAME, EMAIL); times = 1;
@@ -79,7 +79,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     }
 
 	
-	    @Test(expected = InvalidUsernameException.class)
+	@Test(expected = InvalidUsernameException.class)
     public void usernameTooLong(){
     	String long_name = "Maria Teresa García Ramírez de Arroyo";
     	CreateUser service = new CreateUser(root_token, long_name, EMAIL, "name");
@@ -109,7 +109,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     }
     
     
-       @Test(expected = DuplicateEmailException.class)
+    @Test(expected = DuplicateEmailException.class)
     public void DuplicateEmail(){
     	   new Expectations() {{
    			remote.createUser(USERNAME,EMAIL); times = 1;
@@ -120,7 +120,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
    		service.execute();
     }
 	
-	    @Test(expected = InvalidEmailException.class)
+	@Test(expected = InvalidEmailException.class)
     public void InvalidEmail(){
 		
 	    	 new Expectations() {{
