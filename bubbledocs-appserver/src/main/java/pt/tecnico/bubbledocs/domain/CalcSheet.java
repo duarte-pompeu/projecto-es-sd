@@ -3,10 +3,12 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.jdom2.Element;
 import org.joda.time.LocalDate;
 
+import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -81,7 +83,14 @@ public class CalcSheet extends CalcSheet_Base {
     }
 
     public Cell getCell(String id) {
-
+    	//check if it's a valid id.
+    	final String positiveNum = "[1-9](\\d)*";
+    	final String pattern = positiveNum + ";" + positiveNum;
+    	boolean matches = Pattern.compile(pattern).matcher(id).matches();
+    	if (!matches) {
+    		throw new NotFoundException("Invalid id format");
+    	}
+    	
     	for(Cell c : this.getCellSet()) {
     		if(c.getId().equals(id))
     			return c;

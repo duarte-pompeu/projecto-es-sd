@@ -76,10 +76,10 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
-	@Test(expected = InvalidFormatException.class)
+	@Test(expected = NotFoundException.class)
 	public void DocDoesntExist(){
 		int bad_cs_id = -9000; 
-		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_cs_id, CELL_ID0, REFF_ID0);
+		AssignReferenceCell service = new AssignReferenceCell(U_TOKEN, bad_cs_id, CELL_ID0, REFF_ID0);
 		service.execute();
 	}
 	
@@ -89,11 +89,11 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
-	@Test(expected = InvalidFormatException.class)
+	@Test(expected = NotFoundException.class)
 	public void CellDoesntExist(){
 		String bad_cell_id = "666";
 		
-		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, REFF_ID0);
+		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, bad_cell_id, REFF_ID0);
 		service.execute();
 	}
 	
