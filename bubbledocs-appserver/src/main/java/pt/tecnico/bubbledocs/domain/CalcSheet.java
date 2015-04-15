@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import org.jdom2.Element;
 import org.joda.time.LocalDate;
 
-import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.InvalidValueException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;

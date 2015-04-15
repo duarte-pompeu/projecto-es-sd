@@ -12,7 +12,6 @@ public class CreateUser extends BubbleDocsService {
 	private String username;
 	private String email;
 	private String name;
-	private String password;
 	private User result;
 	
     public CreateUser(String userToken, String newUsername,
@@ -21,7 +20,6 @@ public class CreateUser extends BubbleDocsService {
     	this.username = newUsername;
     	this.name = name;
     	this.email = email;
-    	this.password = null;
     }
     
     @Override
