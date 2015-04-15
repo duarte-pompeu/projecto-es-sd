@@ -102,7 +102,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	@Test
 	public void emptyCalcSheet() throws JDOMException, IOException{
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
-		service.dispatch();
+		service.execute();
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
@@ -152,7 +152,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		c.setContent(new Literal(7));
 		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
-		service.dispatch();
+		service.execute();
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
@@ -196,7 +196,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		c3.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
 		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
-		service.dispatch();
+		service.execute();
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
@@ -259,7 +259,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	@Test(expected= NotFoundException.class)
 	public void nonExistingCalcSheet() throws JDOMException, IOException{
 		ExportDocument service = new ExportDocument(U_TOKEN, -1);
-		service.dispatch();
+		service.execute();
 		
 		}
 		
@@ -268,7 +268,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void noLogin(){
 		String bad_session_token = "Bad session token";
 		ExportDocument service = new ExportDocument(bad_session_token, CS_ID);
-		service.dispatch();
+		service.execute();
 		}
 	
 	
@@ -279,7 +279,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void storeServiceUnavailable(){
 		new MockSDStoreUnavailableContext();
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
-		service.dispatch();
+		service.execute();
 		}
 	
 	//Testing the case of trying to export an existing spread sheet and SD-STORE being unable to store it
@@ -287,7 +287,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void storeServiceCantStore(){
 		new  MockSDStoreCannotStoreDocumentContext();
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
-		service.dispatch();
+		service.execute();
 		}
 		
 

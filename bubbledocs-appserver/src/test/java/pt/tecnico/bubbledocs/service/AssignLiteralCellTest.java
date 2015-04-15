@@ -48,7 +48,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	@Test
 	public void populateSuccess(){
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
-		service.dispatch();
+		service.execute();
 		
 		/* assertEquals indentation style might seem a little weird
 		 * but it does make the tests more legible IMO
@@ -88,7 +88,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String id = CS_LINES + ";" + CS_ROWS;
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, id, LIT0);
-		service.dispatch();
+		service.execute();
 		
 		assertEquals("Bad result",
 				CS_SHEET.getCell(id).getContent().toString(),
@@ -100,7 +100,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void noLogin(){
 		String bad_session_token = "Bad session token";
 		AssignLiteralCell service = new AssignLiteralCell(bad_session_token, CS_ID, CELL_ID0, LIT0);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -109,7 +109,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		int bad_doc_id = -123;
 		
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_doc_id, CELL_ID0, LIT0);
-		service.dispatch();
+		service.execute();
 	}
 
 	
@@ -119,7 +119,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String bad_cell_id = "123";
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, literal_str);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -128,7 +128,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String bad_cell_id = "0;0";
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
-		service.dispatch();
+		service.execute();
 	}
 
 	
@@ -140,7 +140,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String bad_cell_id = lines + ";1";
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, LIT0);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -148,7 +148,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void literalHasDecimals(){
 		String bad_literal = "1.5";
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, bad_literal);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -156,7 +156,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void literalIsText(){
 		String bad_literal = "One hundred";
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, bad_literal);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = PermissionException.class)
@@ -168,7 +168,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		cell.setProtect(true);
 		
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, CS_ID, CELL_ID0, LIT0);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -178,6 +178,6 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String spy_token = addUserToSession(data_spy.getUserName());
 		
 		AssignLiteralCell service = new AssignLiteralCell(spy_token, CS_ID, CELL_ID0, LIT0);
-		service.dispatch();
+		service.execute();
 	}
 }

@@ -49,7 +49,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	@Test
 	public void populateSuccess(){
 		AssignReferenceCell service = new AssignReferenceCell(U_TOKEN, CS_ID, CELL_ID0, REFF_ID0);
-		service.dispatch();
+		service.execute();
 		
 		assertEquals("Owner is NOT correct",
 				U_USERNAME, 
@@ -73,20 +73,20 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	public void NoSession(){
 		String bad_token = "RandomToken";
 		AssignReferenceCell service = new AssignReferenceCell(bad_token, CS_ID, CELL_ID0, REFF_ID0);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = InvalidFormatException.class)
 	public void DocDoesntExist(){
 		int bad_cs_id = -9000; 
 		AssignLiteralCell service = new AssignLiteralCell(U_TOKEN, bad_cs_id, CELL_ID0, REFF_ID0);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = NullContentException.class)
 	public void NullReference(){
 		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, CELL_ID0, REFF_ID1);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = InvalidFormatException.class)
@@ -94,7 +94,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String bad_cell_id = "666";
 		
 		AssignLiteralCell service = new AssignLiteralCell (U_TOKEN, CS_ID, bad_cell_id, REFF_ID0);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = NotFoundException.class)
@@ -102,7 +102,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String bad_reference_id = "999";
 		
 		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, CELL_ID0, bad_reference_id);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = PermissionException.class)
@@ -111,7 +111,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String new_token = addUserToSession(imqt.getUserName());
 		
 		AssignReferenceCell service = new AssignReferenceCell(new_token, CS_ID, CELL_ID0, REFF_ID0);
-		service.dispatch();
+		service.execute();
 	}
 }
 	

@@ -30,7 +30,7 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 	@Test
 	public void populateSuccess(){
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, CS_ROWS, CS_LINES);
-		service.dispatch();
+		service.execute();
 		CalcSheet calc = getSpreadSheet(CS_NAME);
 		
 		assertEquals("User isnt in session",
@@ -50,42 +50,42 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 	public void noLogin(){
 		String bad_session_token = "Bad session token";
 		CreateSpreadSheet service = new CreateSpreadSheet(bad_session_token, CS_NAME, CS_ROWS, CS_LINES);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = NullPointerException.class)
 	public void nullName(){
 		String bad_name = null;
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, bad_name, CS_ROWS, CS_LINES);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = InvalidValueException.class)
 	public void wrongRowValueFrontier(){
 		int bad_value = 0;
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, bad_value, CS_LINES);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = InvalidValueException.class)
 	public void wrongRowValue(){
 		int bad_value = -1;
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, bad_value, CS_LINES);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = InvalidValueException.class)
 	public void wrongColumnValueFrontier(){
 		int bad_value = 0;
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, CS_ROWS, bad_value);
-		service.dispatch();
+		service.execute();
 	}
 	
 	@Test(expected = InvalidValueException.class)
 	public void wrongColumnValue(){
 		int bad_value = -1;
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, CS_ROWS, bad_value);
-		service.dispatch();
+		service.execute();
 	}
 	
 }

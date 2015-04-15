@@ -150,7 +150,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		//FIXME: assert login is remote and not cached
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
-		service.dispatch();
+		service.execute();
 		
 		User u = this.getUserFromUsername(JUBI_UNAME);
 		String utoken = u.getSession().getToken();
@@ -173,7 +173,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		}};
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
-		service.dispatch();
+		service.execute();
 		
 		User u = this.getUserFromUsername(JUBI_UNAME);
 		String utoken = u.getSession().getToken();
@@ -198,7 +198,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		}};
 		
 		LoginUser service = new LoginUser(NO_CACHE, "hunter2");
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -220,12 +220,12 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		createUser(temp_username, temp_password, temp_name);
 		LoginUser service = new LoginUser(temp_username, temp_password);
-		service.dispatch();
+		service.execute();
 		
 		User u = this.getUserFromUsername(temp_username);
 		u.setPassword(null);
 		
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -242,7 +242,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		}};
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -260,7 +260,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		}};
 		
 		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
-		service.dispatch();
+		service.execute();
 	}
 	
 	
@@ -272,6 +272,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		String bad_user = "I'm root, let me in.";
 		
 		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
-		service.dispatch();
+		service.execute();
 	}
 }
