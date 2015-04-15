@@ -4,6 +4,7 @@ import java.util.Random;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -185,22 +186,41 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param password
 	 * @return
 	 */
-	public User login(String username, String password) throws NotFoundException {
-		User out = null;
-		try {
-			out = getUser(username); //throws exception se nao existir
+	public String login(String username, String password) throws NotFoundException {
+		this.refreshSessions();
+		User user;
+		
+		// must be able to get user
+    	try {
+    		user = this.getUser(username);
+    	}
+    	catch (NotFoundException e){
+    		throw new LoginException("Invalid username or password");
+    	}
+    	
+    	// try remote login
+    	try{
+    		IDRemoteServices remote = new IDRemoteServices();
+    		remote.loginUser(username, password);
+    		if (!password.equals(user.getPassword()))
+        		user.setPassword(password);
+    	}
+    	
+    	// good connection but bad login input
+    	catch(LoginException e){
+    		throw e;
+    	}
+    	
+    	// if connection fails, use local session
+    	catch(RemoteInvocationException e){
+    		
+    		if (user.getPassword() == null || !user.getPassword().equals(password)) {
+    			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
+    		}
+    	}
+		
 
-			if (!password.equals(out.getPassword())) {
-				throw new NotFoundException(); 
-			}
-			
-			
-			
-		} catch (NotFoundException e) {
-			throw new NotFoundException("Invalid username or password");
-		}
-
-		return out; 
+		return addSession(user); 
 
 	}
 	

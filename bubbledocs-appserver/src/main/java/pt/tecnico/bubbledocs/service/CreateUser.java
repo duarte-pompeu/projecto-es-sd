@@ -5,10 +5,6 @@ package pt.tecnico.bubbledocs.service;
 import pt.tecnico.bubbledocs.domain.*;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
-import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
-import pt.tecnico.bubbledocs.exceptions.PermissionException; //User doesnt have create permissions
-import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
-import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class CreateUser extends BubbleDocsService {
 
