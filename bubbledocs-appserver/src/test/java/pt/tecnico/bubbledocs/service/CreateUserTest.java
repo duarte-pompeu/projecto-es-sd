@@ -124,7 +124,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
     public void InvalidEmail(){
 		
 	    	 new Expectations() {{
-	    			remote.createUser(USERNAME,EMAIL); times = 1;
+	    			remote.createUser(USERNAME,"im no mail"); times = 1;
 	    			result = new InvalidEmailException();
 	    		}};
 	    		
