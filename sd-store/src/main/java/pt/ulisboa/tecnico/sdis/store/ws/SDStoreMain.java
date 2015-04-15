@@ -20,9 +20,24 @@ public class SDStoreMain{
 		for(String user: storage.getUsers()){
 			System.out.println(user);
 		}
+		
+		// default values
 		String uddiURL = "http://localhost:8081";
-        String name = "SDStore";
+        String name = "sd-store";
 		String url = "http://localhost:8080/store-ws/endpoint";
+		
+		// replace default values if passed to program
+		if(args.length >= 1){
+			uddiURL = args[0];
+		}
+		
+		if(args.length >= 2){
+			name = args[1];
+		}
+		
+		if(args.length >= 3){
+			url = args[2];
+		}
 		
 		Endpoint endpoint = null;
 		UDDINaming uddiNaming = null;

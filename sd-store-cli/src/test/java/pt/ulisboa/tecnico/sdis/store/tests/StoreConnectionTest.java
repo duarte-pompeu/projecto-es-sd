@@ -28,6 +28,7 @@ public class StoreConnectionTest  extends ClientTest{
 	
 	@Override
 	public void populate4Test(){
+		// make sure there's at least one doc in server
 		CreateDocService service = new CreateDocService(USER, DOC_STORED, getPort());
 		try {
 			service.dispatch();

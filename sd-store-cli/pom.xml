@@ -46,8 +46,10 @@
 	
 	 <version.java>1.7</version.java>
 	<version.junit>4.11</version.junit>
+    
+    <uddi.url>http://localhost:8081</uddi.url>
     <ws.name>sd-store</ws.name>
-    <ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>
+    
   </properties>
 
   <build>
@@ -106,7 +108,8 @@
             <killAfter>-1</killAfter><!-- to prevent deprecation warning -->
             <mainClass>${mainclass}</mainClass>
             <arguments>
-              <argument>${ws.url}</argument>
+	            <argument>${uddi.url}</argument>
+	            <argument>${ws.name}</argument>
             </arguments>
           </configuration>
       </plugin>

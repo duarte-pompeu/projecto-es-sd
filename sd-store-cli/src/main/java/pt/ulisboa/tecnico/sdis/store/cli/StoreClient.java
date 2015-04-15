@@ -20,25 +20,29 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStore_Service;
 public class StoreClient{
 	static SDStore _port;
 	
+	// default values
+	public static String uddiURL = "http://localhost:8081";
+	public static String uddiName ="sd-store";
+	
+	
 	public static void main(String[] args) throws Exception{
-//		_port = initPort();
+
+		if(args.length >= 1){
+			uddiURL = args[0];
+		}
+		
+		if(args.length >= 2){
+			uddiName = args[1];
+		}
 		
 		
-		// normal connection
-//		System.out.println("Endpoint address:");
-//		System.out.println(requestContext.get(ENDPOINT_ADDRESS_PROPERTY));
-		
-		
-		
-		// uddi connection
-		String uddiURL = "http://localhost:8081";
-		String uddiName ="SDStore";
-		findUddi(uddiURL, uddiName);
+		_port = findUddi(uddiURL, uddiName);
         
 	}
 	
 	
-	public static void findUddi(String uddiURL, String uddiName) throws JAXRException {
+	public static SDStore findUddi(String uddiURL, String uddiName) throws JAXRException {
+		SDStore port;
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
         UDDINaming uddiNaming = new UDDINaming(uddiURL);
         
@@ -47,19 +51,21 @@ public class StoreClient{
         
         if (endpointAddress == null) {
             System.out.println("Not found!");
-            return;
+            return null;
         } else {
             System.out.printf("Found %s%n", endpointAddress);
         }
         
         System.out.println("Creating stub ...");
         SDStore_Service service = new SDStore_Service();
-        _port = service.getSDStoreImplPort();
+        port = service.getSDStoreImplPort();
         
         System.out.println("Setting endpoint address ...");
-        BindingProvider bindingProvider = (BindingProvider) _port;
+        BindingProvider bindingProvider = (BindingProvider) port;
         Map<String, Object> requestContext = bindingProvider.getRequestContext();
         requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+        
+        return port;
 	}
 
 

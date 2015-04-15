@@ -4,19 +4,21 @@ import javax.xml.registry.JAXRException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 
 public class ClientTest {
-	protected SDStore _port;
+	protected static SDStore _port;
 	
 	public ClientTest() throws JAXRException{
-		_port = StoreClient.initPort();
-		//StoreClient.findUddi("http://localhost:8081", "SDStore");
 	}
 	
-	
+	@BeforeClass
+	public static void startPort() throws JAXRException{
+		_port = StoreClient.findUddi(StoreClient.uddiURL, StoreClient.uddiName);
+	}
 	@Before
 	public void populate4Test(){
 	
