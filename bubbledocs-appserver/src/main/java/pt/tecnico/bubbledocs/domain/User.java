@@ -110,8 +110,6 @@ public class User extends User_Base {
      */
   
     public void deleteUser(String userName) {
-    	BubbleDocs bb = BubbleDocs.getInstance();
-    	bb.getUser(userName);
     	throw new PermissionException("You don't have permission to do this action");
     }
     

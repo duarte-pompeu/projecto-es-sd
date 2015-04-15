@@ -300,6 +300,14 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * @param userName
 	 */
 	public void deleteUser(String username) {
+		// delete remotely first
+		try{
+    		IDRemoteServices id_service = new IDRemoteServices();
+    		id_service.removeUser(username);
+		} catch (RemoteInvocationException e) {
+			throw new UnavailableServiceException();
+		}
+		
 		User user = this.getUser(username);
 		for (CalcSheet sheet : user.getCreatedCalcSheetSet()) {
 			sheet.deleteAllCells();
