@@ -121,7 +121,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void invalid() {
-		DeleteUser service = new DeleteUser(root,"nooooo");
+		DeleteUser service =  new DeleteUser(ALT_USERNAME, USERNAME_TO_DELETE);
 		service.execute();
 		
 		new Verifications() {{ //verify the service was not called
