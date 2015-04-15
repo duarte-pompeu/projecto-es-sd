@@ -111,7 +111,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	public void expired() {
     	String user_token = addUserToSession(USERNAME);
         removeUserFromSession(user_token);
-		DeleteUser service = new DeleteUser(root,USERNAME_TO_DELETE);
+		DeleteUser service = new DeleteUser(user_token,USERNAME_TO_DELETE);
 		service.execute();
 		
 		new Verifications() {{ //verify the service was not called
