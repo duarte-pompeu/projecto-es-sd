@@ -7,8 +7,11 @@ import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 /**
  * @author Diogo, Marcos, Tiago, Duarte
@@ -267,6 +270,16 @@ public class BubbleDocs extends BubbleDocs_Base {
 			throw new InvalidUsernameException("Username " + username + " is too long. "
 					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
 		}
+		
+		// invoke remote services to create user
+		try{
+    		IDRemoteServices remote = new IDRemoteServices();
+    		remote.createUser(username, email);
+    	}
+		
+    	catch(RemoteInvocationException e) {
+    		throw new UnavailableServiceException();
+    	}
 
 		//if the user already exists, don't create a new one.		
 		if (hasUser(username)) throw new RepeatedIdentificationException();

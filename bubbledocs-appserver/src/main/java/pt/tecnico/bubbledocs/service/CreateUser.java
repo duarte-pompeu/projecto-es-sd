@@ -17,6 +17,7 @@ public class CreateUser extends BubbleDocsService {
 	private String email;
 	private String name;
 	private String password;
+	private User result;
 	
     public CreateUser(String userToken, String newUsername,
             String email, String name) {
@@ -30,22 +31,10 @@ public class CreateUser extends BubbleDocsService {
     @Override
     protected void dispatch() throws BubbleDocsException {
     	User user = this.getSessionFromToken(token).getUser();
-    	
-    	try{
-    		IDRemoteServices remote = new IDRemoteServices();
-    		remote.createUser(username, email);
-    	}
-    	
-    	catch(RemoteInvocationException e) {
-    		throw new UnavailableServiceException();
-    		
-    	}
-    	
-    	try{
-    		user.createUser(username, name, email, "randompass");
-    	}
-    	catch(PermissionException e) {
-    		throw new PermissionException("You have no permission to create an user");
-    	}
+    	this.result = user.createUser(username, name, email, null);
+    }
+    
+    public User getResult(){
+    	return this.result;
     }
 }
