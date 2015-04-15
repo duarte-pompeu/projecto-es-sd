@@ -56,8 +56,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
         User user = getUserFromUsername(USERNAME);
 
         assertEquals(USERNAME, user.getUserName());
-        assertEquals(EMAIL, user.get.Email());
-        assertEquals(MAIL, user.getName());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(NAME, user.getName());
     }
 
     @Test(expected =  RepeatedIdentificationException.class)
