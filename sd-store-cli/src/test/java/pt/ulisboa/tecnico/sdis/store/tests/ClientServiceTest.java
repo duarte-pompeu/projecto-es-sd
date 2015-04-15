@@ -16,13 +16,17 @@ import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
-
-public class ClientServiceTests extends ClientTest {
+/**
+ * @author Duarte Pompeu
+ * ClientServiceTests
+ * Most of these tests require a connection with a server. Preferably one with nothing stored on it beforehand.
+ */
+public class ClientServiceTest extends ClientTest {
 	String USER = "duarte";
 	String DOC = "SD-notes";
 	String CONTENT = "RPC, RMI and WS.";
 	
-	public ClientServiceTests() throws JAXRException{
+	public ClientServiceTest() throws JAXRException{
 		super();
 	}
 	
@@ -39,7 +43,7 @@ public class ClientServiceTests extends ClientTest {
 				| CapacityExceeded_Exception | DocDoesNotExist_Exception
 				| UserDoesNotExist_Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 			
 	}

@@ -16,7 +16,7 @@ public class ClientTest {
 	}
 	
 	@BeforeClass
-	public static void startPort() throws JAXRException{
+	public static void beforeClass() throws JAXRException{
 		_port = StoreClient.findUddi(StoreClient.uddiURL, StoreClient.uddiName);
 	}
 	@Before
