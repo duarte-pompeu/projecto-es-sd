@@ -107,25 +107,35 @@ public class CreateUserTest extends BubbleDocsServiceTest {
        @Test(expected = DuplicateEmailException.class)
     public void DuplicateEmail(){
     	CreateUser service = new CreateUser(root_token, USERNAME, EMAIL_PRESENT, NAME);
-    	service.execute();
+		service.execute();
+		
+		new Expectations() {{
+			remote.createUser(USERNAME, EMAIL); times = 1;
+		}};
     }
 	
 	    @Test(expected = InvalidEmailException.class)
     public void InvalidEmail(){
+		
     	CreateUser service = new CreateUser(root_token, USERNAME, "This is not an email", NAME);
     	service.execute();
+		
+		new Expectations() {{
+			remote.createUser(USERNAME, EMAIL); times = 1;
+		}};
+			
     }
     
     @Test(expected = UnavailableServiceException.class)
 	public void unavailable() {
 		new Expectations() {{
-			//remote.createUser(USERNAME, MAIL); times = 1;
+			remote.createUser(USERNAME, EMAIL); times = 1;
 			result = new RemoteInvocationException();
 		}};
 		
-		//CreateUser service = new CreateUser(root_token, USERNAME, MAIL, NAME);
-		//service.execute();
-		fail("FIXME");
+		CreateUser service = new CreateUser(root_token, USERNAME, EMAIL, NAME);
+		service.execute();
+		//fail("FIXME");
 	}
 
 }

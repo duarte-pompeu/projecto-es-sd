@@ -33,7 +33,7 @@ public class CreateUser extends BubbleDocsService {
     	
     	try{
     		IDRemoteServices remote = new IDRemoteServices();
-    		remote.removeUser(username);
+    		remote.createUser(username, email);
     	}
     	
     	catch(RemoteInvocationException e) {
