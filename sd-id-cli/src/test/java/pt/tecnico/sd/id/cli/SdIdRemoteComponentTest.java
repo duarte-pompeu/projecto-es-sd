@@ -102,7 +102,7 @@ public class SdIdRemoteComponentTest {
 		client.createUser(userName, email);
 		
 		//try to create user again 
-		//if an exception is thrown it means that the user was sucessfully created
+		//if an exception is thrown it means that the user was successfully created
 		
 		client.createUser(userName, email);
 			  
@@ -114,7 +114,7 @@ public class SdIdRemoteComponentTest {
 		client.createUser(userName, email);
 		
 		//try to create user again 
-		//if an exception is thrown it means that the user was sucessfully created
+		//if an exception is thrown it means that the user was successfully created
 		
 		client.createUser(ALTuserName, email);
 			  
@@ -156,11 +156,23 @@ public class SdIdRemoteComponentTest {
 		}
 	
 
-		@Test
-		public void testRenewPassword() {
-			fail("Not yet implemented"); // TODO
+		@Test(expected=AuthReqFailed_Exception.class)
+		public void testRenewPassword() throws UserDoesNotExist_Exception, AuthReqFailed_Exception {
+			SdIdClient client = new SdIdClient();
+			client.renewPassword(existingUserName);
+			
+			//user try to authenticate with old password
+			//if and exception is throw the password was successfully changed
+			client.requestAuthentication(existingUserName, password);
 		}
-	
+		
+		@Test(expected = UserDoesNotExist_Exception.class)
+		public void testRenewPasswordDoesNotExist() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.renewPassword(invalidUserName);
+		
+		}
+		
 		@Test(expected=UserDoesNotExist_Exception.class)
 		public void testRemoveUser() throws UserDoesNotExist_Exception {
 			SdIdClient client = new SdIdClient();
@@ -190,7 +202,7 @@ public class SdIdRemoteComponentTest {
 		public void testRequestAuthentication() throws AuthReqFailed_Exception {
 			SdIdClient client = new SdIdClient();
 			byte[] result = client.requestAuthentication(existingUserName, password);
-			assertArrayEquals("wrong password", password,result);
+			assertArrayEquals("wrong password", "1".getBytes(),result);
 	
 		}
 		
