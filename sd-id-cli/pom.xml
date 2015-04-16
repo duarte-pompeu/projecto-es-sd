@@ -15,19 +15,21 @@
 
   <name>SD-ID Client</name>
 
-  <plugins>
-    <plugin>
-      <groupID>org.apache.maven.plugins</groupID>
-      <artifactId>maven-surefire-plugin</artifactId>
-      <version>2.18.1</version>
-      <configuration>
-        <systemPropertyVariables>
-          <uddi.url>${uddi.url}</uddi.url>
-          <ws.name>SD-ID</ws.name> <!-- Nome do webservice -->
-        </systemPropertyVariables>
-      </configuration>
-    </plugin>
-  </plugins>
+  <build>
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.18.1</version>
+	<configuration>
+          <systemPropertyVariables>
+            <uddi.url>${uddi.url}</uddi.url>
+            <ws.name>SD-ID</ws.name> <!-- Nome do webservice -->
+          </systemPropertyVariables>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <dependencies>
     <!-- SD-ID -->
