@@ -51,7 +51,7 @@ public class BubbleDocsServiceTest {
     }
     
     User createUser(String username, String email, String password, String name) {
-    	return BubbleDocs.getInstance().addUser(username, name, email, password);
+    	return BubbleDocs.getInstance().addTestUser(username, name, email, password);
     }
 
     public CalcSheet createSpreadSheet(User user, String name, int row,

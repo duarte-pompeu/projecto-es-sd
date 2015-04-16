@@ -3,13 +3,13 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.Random;
 
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.exceptions.DuplicateUsernameException;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
-import pt.tecnico.bubbledocs.exceptions.RepeatedIdentificationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
@@ -277,7 +277,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 	public User addUser(String username, String name, String email, String password) {
 		//business constraint: length of username is restricted
-		//FIXME: check this in 1: (new User) or 2: (BubbleDocs.addUser()) ???
 		if(username.length() < USERNAME_MIN_LEN){
 			throw new InvalidUsernameException("Username " + username + " is too short. "
 					+ "Minimum length is " + USERNAME_MIN_LEN + ".");
@@ -286,19 +285,20 @@ public class BubbleDocs extends BubbleDocs_Base {
 			throw new InvalidUsernameException("Username " + username + " is too long. "
 					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
 		}
-		
+
 		// invoke remote services to create user
 		try{
-    		IDRemoteServices remote = new IDRemoteServices();
-    		remote.createUser(username, email);
-    	}
-		
-    	catch(RemoteInvocationException e) {
-    		throw new UnavailableServiceException();
-    	}
+			IDRemoteServices remote = new IDRemoteServices();
+			remote.createUser(username, email);
+		}
+
+		catch(RemoteInvocationException e) {
+			throw new UnavailableServiceException();
+		}
 
 		//if the user already exists, don't create a new one.		
-		if (hasUser(username)) throw new RepeatedIdentificationException();
+		//if (hasUser(username)) throw new RepeatedIdentificationException();
+		//^~~this is not necessary because Bubbledocs mirrors SD-ID.
 
 		User newuser;
 
@@ -311,6 +311,30 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return newuser;
 	}
 
+	//adds a user without using the remote service.
+	public User addTestUser(String username, String name, String email, String password) {
+		
+		if(username.length() < USERNAME_MIN_LEN){
+			throw new InvalidUsernameException("Username " + username + " is too short. "
+					+ "Minimum length is " + USERNAME_MIN_LEN + ".");
+		}
+		if(username.length() > USERNAME_MAX_LEN){
+			throw new InvalidUsernameException("Username " + username + " is too long. "
+					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
+		}
+		
+		if (hasUser(username)) throw new DuplicateUsernameException();
+		
+		User newuser;
+
+		if (username.equals("root"))
+			newuser = new SuperUser(username, name, email, password);
+		else
+			newuser = new User(username, name, email, password);
+
+		BubbleDocs.getInstance().addUser(newuser);
+		return newuser;
+	}
 
 	/**
 	 * @param userName
@@ -473,5 +497,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 		
 		return calcsheet.getContent(user, cellID);
 	}
+
 	
 }
