@@ -2,10 +2,20 @@ package pt.tecnico.sd.id;
 
 public class SdIdClient {
     private static SdIdClient instance = null;
-    //port etc etc
+    private SDId port;
 
     private SdIdClient() {
+    	// is it something like this that I'm supposed to do???
+    	SDIdImpl service = new SDIdImpl();
+        SDId port = service.getSDIdImplPort();
 
+        BindingProvider bindingProvider = (BindingProvider) port;
+        Map<String, Object> requestContext = bindingProvider.getRequestContext();
+
+        Object url = requestContext.get(ENDPOINT_ADDRESS_PROPERTY);
+        System.out.printf("Remote call to %s ...%n", url);
+
+     
     }
 
     public static SdIdClient getInstance() {
@@ -21,19 +31,20 @@ public class SdIdClient {
 	return instance;
     }
     
-    public void createUser() {
-
+    public void createUser(String userId, String emailAddress) throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
+	InvalidUser_Exception, UserAlreadyExists_Exception {
+    	port.createUser(userId, emailAddress);
     }
     
-    public void renewPassword() {
-
+    public void renewPassword(String userId) throws UserDoesNotExist_Exception {
+    	port.renewPassword(userId);
     }
     
-    public void removeUser() {
-
+    public void removeUser(String userId) throws UserDoesNotExist_Exception {
+    	port.removeUser(userId);
     }
     
-    public byte[] requestAuthentication() {
-	return null;
+    public byte[] requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception{
+    	return port.requestAuthentication( userId,reserved);
     }
 }
