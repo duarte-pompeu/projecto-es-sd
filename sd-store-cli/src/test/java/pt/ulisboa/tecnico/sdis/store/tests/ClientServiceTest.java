@@ -18,18 +18,19 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 /**
- * @author Duarte Pompeu
- * ClientServiceTests
- * Most of these tests require a connection with a server. Preferably one with nothing stored on it beforehand.
+ * Most of these tests require a connection with a server. Preferably one with a clean state - nothing stored in it.
  */
 public class ClientServiceTest extends ClientTest {
-	String USER = "duarte";
-	String DOC = "SD-notes";
-	String CONTENT = "RPC, RMI and WS.";
+	public static final String USER = "duarte";
+	public static final String DOC = "SD-notes";
+	public static final String CONTENT = "RPC, RMI and WS.";
+	public static final int DEFAULT_MAX_CAP = 10 * 1024;
+	
 	
 	public ClientServiceTest() throws JAXRException{
 		super();
 	}
+	
 	
 	@Before
 	public void populate4Test() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
@@ -50,6 +51,7 @@ public class ClientServiceTest extends ClientTest {
 		}
 	}
 	
+	
 	@Test
 	public void testPopulate() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		ListDocsService list = new ListDocsService(USER, getPort());
@@ -66,6 +68,7 @@ public class ClientServiceTest extends ClientTest {
 	public void repeatDoc() throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService create = new CreateDocService(USER, DOC, getPort());
 		create.dispatch();
+		create.dispatch();
 	}
 	
 	
@@ -76,12 +79,13 @@ public class ClientServiceTest extends ClientTest {
 		service.dispatch();
 	}
 	
+	
 	@Test
 	public void nearCapacityLimit() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception {
 		String content = "";
 		String tmpUser = "alice";
 		String tempDoc = "lista de compras";
-		int size = 10*1024;
+		int size = DEFAULT_MAX_CAP;
 		
 		for(int i = 0; i < size; i++){
 			content += "d";
@@ -106,12 +110,13 @@ public class ClientServiceTest extends ClientTest {
 		store.dispatch();
 	}
 	
+	
 	@Test (expected = CapacityExceeded_Exception.class)
 	public void aboveCapacity() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception, InvalidAttributeValueException{
 		String content = "";
 		String tmpUser = "alice";
 		String tempDoc = "lista de compras";
-		int size = (10*1024) + 1;
+		int size = DEFAULT_MAX_CAP + 1;
 		
 		for(int i = 0; i < size; i++){
 			content += "d";
@@ -135,6 +140,7 @@ public class ClientServiceTest extends ClientTest {
 		
 		store.dispatch();
 	}
+	
 	
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void storeInBadDoc() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{

@@ -28,19 +28,21 @@ public class StoreConnectionTest  extends ClientTest{
 	}
 	
 	@Before
-	public void populate4Test(){
+	public void populate4Test() throws InvalidAttributeValueException{
 		// make sure there's at least one doc in server
 		CreateDocService service = new CreateDocService(USER, DOC_STORED, getPort());
 		try {
 			service.dispatch();
-		} catch (Exception e) {
+		} catch (DocAlreadyExists_Exception e) {
 			return;
 		}
 	}
 	
 	
 	@Test
-	// requires a successful connection with the storage server
+	/**
+	 * Requires a successful connection with the storage server
+	 */
 	public void populateSuccess() throws UserDoesNotExist_Exception, InvalidAttributeValueException{
 		ListDocsService service = new ListDocsService(USER, getPort());
 		service.dispatch();
@@ -48,28 +50,39 @@ public class StoreConnectionTest  extends ClientTest{
 		assertTrue(service.getResult().contains(DOC_STORED));
 	}
 	
-	
+	/**
+	 * Uses a bad port. The test should fail.
+	 */
 	@Test (expected=InvalidAttributeValueException.class)
 	public void createNullPort() throws DocAlreadyExists_Exception, InvalidAttributeValueException{
 		CreateDocService service = new CreateDocService(USER, DOC_NOT_STORED, null);
 		service.dispatch();
 	}
 	
-	
+
+	/**
+	 * Uses a bad port. The test should fail.
+	 */
 	@Test (expected=InvalidAttributeValueException.class)
 	public void listNullPort() throws UserDoesNotExist_Exception, InvalidAttributeValueException{
 		ListDocsService service = new ListDocsService(USER, null);
 		service.dispatch();
 	}
 	
-	
+
+	/**
+	 * Uses a bad port. The test should fail.
+	 */
 	@Test (expected=InvalidAttributeValueException.class)
 	public void storeNullPort() throws CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception, InvalidAttributeValueException{
 		StoreDocService service = new StoreDocService(USER, DOC_STORED, string2bytes(CONTENT), null);
 		service.dispatch();
 	}
 	
-	
+
+	/**
+	 * Uses a bad port. The test should fail.
+	 */
 	@Test (expected=InvalidAttributeValueException.class)
 	public void loadNullPort() throws DocDoesNotExist_Exception, UserDoesNotExist_Exception, InvalidAttributeValueException{
 		LoadDocService service = new LoadDocService(USER, DOC_STORED, null);

@@ -6,7 +6,9 @@ import org.junit.BeforeClass;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
-
+/**
+ * This superclass has some useful initialisations and methods its subclasses can use without re-implementing.
+ */
 public class ClientTest {
 	protected static SDStore _port;
 	
