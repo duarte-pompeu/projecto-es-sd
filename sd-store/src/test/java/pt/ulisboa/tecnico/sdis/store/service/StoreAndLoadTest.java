@@ -15,10 +15,11 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class StoreAndLoadTest {
+public class StoreAndLoadTest extends ServerTest {
 	String U1 = "jubi";
 	String U1D1 = "tuta mail";
 	String U1D1C1 = "de: jubi\npara: leo\nboas, tudo bem?";
+	public static final int DEFAULT_MAX_CAP = 10*1024;
 	
 	Storage storage;
 	
@@ -51,6 +52,10 @@ public class StoreAndLoadTest {
 		assertEquals(1, storage.getAllDocs().size());
 	}
 	
+	/** 
+	 * storeSuccess() makes sure the storage initial status is what we expect.
+	 * If this test fails -> storage initial status is not ok -> other tests may fail (due to their exceptions on the initial status)
+	 */
 	@Test
 	public void storeSuccess() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		StoreService service1 = new StoreService(U1, U1D1, string2bytes(U1D1C1));
@@ -70,6 +75,11 @@ public class StoreAndLoadTest {
 		assertEquals(U1D1C1, bytes2string(service2.getResult()));
 	}
 	
+	
+	/** 
+	 * noUser tries to store content in a repo that doesn't exist.
+	 * It should raise an exception.
+	 */
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void noUser() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		StoreService service1 = new StoreService("anonymous", U1D1, string2bytes(U1D1C1));
@@ -77,6 +87,10 @@ public class StoreAndLoadTest {
 	}
 	
 	
+	/** 
+	 * noDoc() tries to store content on a good repo but bad doc (doc doesn't exist).
+	 * It should raise an exception.
+	 */
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void noDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		StoreService service = new StoreService(U1, "the doc doesnt exist but I'm gonna stuff content there anyway", string2bytes(U1D1C1));
@@ -84,12 +98,17 @@ public class StoreAndLoadTest {
 	}
 	
 	
-	@Test (expected = CapacityExceeded_Exception.class)
-	public void longDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
-		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
+	/**
+	 * edgeOfCapacity() tries to store content in a doc right at the limit (10*1024 bytes).
+	 * It should succeed with no exception.
+	 */
+	@Test
+	public void edgeOfCapacity() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+		String message = new String();
+		int size = DEFAULT_MAX_CAP;
 		
-		for(int i = 0; i < 1024; i++){
-			message += "dddddddddddddddddddddddd";
+		for(int i = 0; i < size; i++){
+			message += "d";
 		}
 		
 		StoreService service1 = new StoreService(U1, U1D1, string2bytes(message));
@@ -97,19 +116,75 @@ public class StoreAndLoadTest {
 	}
 	
 	
+	/**
+	 * longDoc() tries to store content in a doc right ABOVE the limit (10*1024 bytes).
+	 * It should raise an exception.
+	 */
 	@Test (expected = CapacityExceeded_Exception.class)
-	public void docGetsIncrementallyBigger() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
-		String message = "Hello. I'd like to buy a new keyboard, my 'd' key is broken. Look:\n";
+	public void longDoc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+		String message = new String();
+		int size = DEFAULT_MAX_CAP + 1;
 		
-		for(int i = 0; i < 1024; i++){
-			message += "dddddddddddddddddddddddd";
+		for(int i = 0; i < size; i++){
+			message += "d";
+		}
+		
+		StoreService service1 = new StoreService(U1, U1D1, string2bytes(message));
+		service1.dispatch();
+	}
+	
+	/**
+	 * edgeOfCapacityInc() will storage multiple times content incrementally longer.
+	 * The final content size will match exactly the default capacity size.
+	 * The test should succeed and not raise any exception.
+	 */
+	@Test
+	public void edgeOfCapacityInc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+		String message = new String();
+		int size = DEFAULT_MAX_CAP;
+		
+		for(int i = 0; i < size; i++){
+			message += "d";
 			
 			StoreService service1 = new StoreService(U1, U1D1, string2bytes(message));
 			service1.dispatch();
 		}
+		
+		assertEquals(size, message.length());
+		assertEquals(size, string2bytes(message).length);
+		
+	}
+	
+	/**
+	 * longDocInc() will storage multiple times content incrementally longer.
+	 * The final content size will be 1 byte above the limit.
+	 * The test should raise an exception.
+	 */
+	@Test (expected = CapacityExceeded_Exception.class)
+	public void longDocInc() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+		String message = new String();
+		int size = DEFAULT_MAX_CAP;
+		
+		for(int i = 0; i < size; i++){
+			message += "d";
+			
+			StoreService service1 = new StoreService(U1, U1D1, string2bytes(message));
+			service1.dispatch();
+		}
+		
+		assertEquals(size, message.length());
+		
+		message += "d";
+		StoreService service1 = new StoreService(U1, U1D1, string2bytes(message));
+		service1.dispatch();
 	}
 	
 	
+	/**
+	 * storeLoadRepeat() will store a document multiple times.
+	 * Each time, it will also load a document and check if the content is as expected.
+	 * The test should succeed.
+	 */
 	@Test
 	public void storeLoadRepeat()throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		String[] email_edits = { "ola", "oi", "boas", "boa tarde", "não sei como começar o email, vou guardar como rascunho" };
@@ -130,15 +205,5 @@ public class StoreAndLoadTest {
 		
 		assertEquals(1, storage.getUsers().size());
 		assertEquals(1, storage.getAllDocs().size());
-	}
-	
-	
-	public byte[] string2bytes(String s){
-		return SDStoreMain.string2bytes(s);
-	}
-	
-	
-	public String bytes2string(byte[] bytes){
-		return SDStoreMain.bytes2string(bytes);
 	}
 }

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
@@ -26,7 +27,7 @@ public class StoreConnectionTest  extends ClientTest{
 		super();
 	}
 	
-	@Override
+	@Before
 	public void populate4Test(){
 		// make sure there's at least one doc in server
 		CreateDocService service = new CreateDocService(USER, DOC_STORED, getPort());

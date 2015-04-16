@@ -11,12 +11,15 @@ public class UserCollection {
 	private int maxCapacity;
 	private int usedCapacity;
 	
+	
+	
 	public UserCollection(String owner, int capacity){
 		this.owner = owner;
 		docs = new TreeMap<String, byte[]>();
 		usedCapacity = 0;
 		maxCapacity = capacity;
 	}
+	
 	
 	public String getOwner(){
 		return this.owner;
@@ -39,16 +42,15 @@ public class UserCollection {
 	
 	
 	public void setContent(String docID, byte[] newContent) throws CapacityExceeded_Exception{
-		/* Business rule: we must not exceed the collection capacity size.
-		 */
+		// Business rule: we must not exceed the collection capacity size.
 		
-		/* Let's start by computing size of old content.
-		 */
+		// Let's start by computing size of old content.
 		byte[] old_content = getContent(docID);
 		int old_size = getSize(old_content);
 		int new_size = getSize(newContent);
 		
 		/* Throw exception if used_capacity above max allowed.
+		 * Reminder: capacity refers to the whole collection, not to a single doc.
 		 */
 		int new_capacity = this.usedCapacity + new_size - old_size;
 		if(new_capacity > maxCapacity){
@@ -58,10 +60,8 @@ public class UserCollection {
 			throw new CapacityExceeded_Exception("Capacity exceeded", cap);
 		}
 		
-		/* If all is good:
-		 * 1. update used capacity
-		 * 2. update document content
-		 */
+		// if we haven't returned or thrown an exception, it means all is good and the new content should be stored.
+		// reminder: update the used capacity
 		usedCapacity += new_size - old_size;
 		docs.put(docID, newContent);
 	}
@@ -72,6 +72,10 @@ public class UserCollection {
 	}
 	
 	
+	/**
+	 * This method allows checking an array size without worrying if its null or not.
+	 * If it's null? Return 0.
+	 */
 	public int getSize(byte[] content){
 		if(content == null){
 			return 0;

@@ -9,9 +9,12 @@ import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
 public class SDStoreMain{
 	public static final int STORAGE_CAP = 10 * 1024;
 	private static Storage storage;
+	// debug mode makes server more verbose, outputting status on calls
+	public static final boolean DEBUG_MODE = true;
+	
+	
 	
 	public static void main(String[] args){
-		boolean debug_mode = true;
 		
 		initStorage();
 		populateStorage();
@@ -42,7 +45,7 @@ public class SDStoreMain{
 		Endpoint endpoint = null;
 		UDDINaming uddiNaming = null;
 		try{
-			endpoint = Endpoint.create(new SDStoreImpl(debug_mode));
+			endpoint = Endpoint.create(new SDStoreImpl(DEBUG_MODE));
 			
 			// publish endpoint
 			System.out.println("Starting " + url);
@@ -87,6 +90,9 @@ public class SDStoreMain{
 	}
 	
 	
+	/**
+	 * A simple singleton like method.
+	 */
 	public static Storage getStorage(){
 		if(storage == null){
 			initStorage();
@@ -94,11 +100,15 @@ public class SDStoreMain{
 		return storage;
 	}
 	
-	
+
 	public static void initStorage(){
 		storage = new Storage(STORAGE_CAP);
 	}
 	
+	
+	/**
+	 * Populate storage as asked.
+	 */
 	public static void populateStorage(){
 		storage.createCollection("alice");
 		storage.createCollection("bruno");
@@ -108,6 +118,11 @@ public class SDStoreMain{
 	}
 	
 	
+	/**
+	 * Wraps how a string is converted to a byte array.
+	 * This leads to simpler code: other classes won't have to try and catch exceptions.
+	 * Which is good, because this exception is NEVER actually raised.
+	 */
 	public static byte[] string2bytes(String s){
 		try {
 			return s.getBytes("UTF-8");
@@ -117,6 +132,11 @@ public class SDStoreMain{
 	}
 	
 	
+	/**
+	 * Wraps how a byte array is converted to a String.
+	 * This leads to simpler code: other classes won't have to try and catch exceptions.
+	 * Which is good, because this exception is NEVER actually raised.
+	 */
 	public static String bytes2string(byte[] bytes){
 		try {
 			return new String(bytes, "UTF-8");

@@ -12,25 +12,36 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 
-public class CreateDocTest {
+public class CreateDocTest extends ServerTest {
 	Storage storage;
+	
 	
 	@Before
 	public void populate4Test(){
 		storage = SDStoreMain.getStorage();
 	}
 	
+	
 	@After
 	public void destroy(){
 		storage.init();
 	}
 	
+	
+	/**
+	 * Assert storage starts empty.
+	 */
 	@Test
 	public void startsEmpty(){
 		assertEquals(0, storage.getUsers().size());
 		assertEquals(0, storage.getAllDocs().size());
 	}
 	
+	
+	/**
+	 * Create some repositories and add some docs.
+	 * Finally, test if number of repos and number of docs is as expected.
+	 */
 	@Test
 	public void addDocs() throws DocAlreadyExists_Exception{
 		ArrayList<CreateDocService> services = new ArrayList<CreateDocService>();
@@ -51,6 +62,13 @@ public class CreateDocTest {
 		assertEquals(4, storage.getAllDocs().size());
 	}
 	
+	
+	/**
+	 * Try to add a doc twice and raise an exception.
+	 * This test doesn't depend on storage status:
+	 * 		If doc doesn't exist, exception is raised on 2nd dispatch.
+	 * 		If doc already exists, exception is raised on 1st dispatch.
+	 */
 	@Test (expected = DocAlreadyExists_Exception.class)
 	public void addRepeatedDoc() throws DocAlreadyExists_Exception{
 		storage.createCollection("jubi");
@@ -60,6 +78,5 @@ public class CreateDocTest {
 		
 		CreateDocService service2 = new CreateDocService("jubi", "emails");
 		service2.dispatch();
-		
 	}
 }

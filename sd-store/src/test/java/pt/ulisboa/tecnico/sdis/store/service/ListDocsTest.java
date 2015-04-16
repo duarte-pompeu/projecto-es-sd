@@ -13,7 +13,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class ListDocsTest{
+public class ListDocsTest extends ServerTest{
 	Storage storage;
 	
 	String U1 = "jubi";
@@ -54,7 +54,9 @@ public class ListDocsTest{
 		storage.init();
 	}
 	
-	
+	/**
+	 * Assert number of users and number of docs is as expected after populate.
+	 */
 	@Test
 	public void populateSuccess(){
 		assertEquals(3, storage.getUsers().size());
@@ -62,14 +64,21 @@ public class ListDocsTest{
 	}
 	
 	
+	/**
+	 * Try to list docs from a not registered user.
+	 */
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void noUser() throws UserDoesNotExist_Exception {
-		String badUser = "Hello, I'm root and I want all the documents.";
+		String badUser = "I dont have a repo but I wanna list my docs.";
 		ListDocsService service = new ListDocsService(badUser);
 		service.dispatch();
 	}
 	
 	
+	/**
+	 * List docs from existing users.
+	 * This test should pass.
+	 */
 	@Test
 	public void listDocs()
 		throws UserDoesNotExist_Exception{

@@ -2,8 +2,6 @@ package pt.ulisboa.tecnico.sdis.store.tests;
 
 import javax.xml.registry.JAXRException;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
@@ -18,16 +16,6 @@ public class ClientTest {
 	@BeforeClass
 	public static void beforeClass() throws JAXRException{
 		_port = StoreClient.findUddi(StoreClient.uddiURL, StoreClient.uddiName);
-	}
-	@Before
-	public void populate4Test(){
-	
-	}
-	
-	
-	@After
-	public void destroyAfterTest(){
-		
 	}
 	
 	

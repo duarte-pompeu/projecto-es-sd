@@ -8,13 +8,14 @@ import java.util.TreeMap;
 
 public class Storage {
 	private final int STORAGE_CAP;
-	
 	private TreeMap<String, UserCollection> collections;
 
+	
 	public Storage(int capacity){
 		init();
 		STORAGE_CAP = capacity;
 	}
+	
 	
 	public void init(){
 		collections = new TreeMap<String, UserCollection>();
@@ -52,6 +53,7 @@ public class Storage {
 		return new ArrayList<String>(key_set);
 	}
 	
+	
 	public List<String> getAllDocs(){
 		Collection<UserCollection> collections_set = collections.values();
 		
@@ -64,6 +66,7 @@ public class Storage {
 		return docs;
 	}
 	
+	
 	public UserCollection createCollection(String userID){
 		UserCollection col = new UserCollection(userID, STORAGE_CAP);
 		this.collections.put(userID, col);
@@ -72,7 +75,7 @@ public class Storage {
 	}
 	
 	
-	//FIXME: this should probably be thread-safe, it may not be atm
+	//FIXME: should this be thread safe?
 	public void addDoc(String user, String doc) throws DocAlreadyExists_Exception{
 		
 		/* Check if user has collection and get it.
@@ -82,13 +85,11 @@ public class Storage {
 		
 		if(collection == null){
 			collection = this.createCollection(user);
-			
 		}
 		
 		/* Check if doc exists - if it does, throw exception.
 		 */
 		if(collection.contains(doc)){
-			//FIXME: check if this is how you're supposed to throw
 			DocAlreadyExists dae = new DocAlreadyExists();
 			dae.setDocId(doc);
 			throw new DocAlreadyExists_Exception("Doc already exists", dae);
@@ -97,6 +98,7 @@ public class Storage {
 		collection.addDoc(doc);
 	}
 
+	
 	public boolean hasUser(String userID) {
 		for(String owner: this.collections.keySet()){
 			if(owner.equals(userID)){

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
@@ -30,22 +31,23 @@ public class ClientServiceTest extends ClientTest {
 		super();
 	}
 	
-	@Override
-	public void populate4Test(){
+	@Before
+	public void populate4Test() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+		
 		CreateDocService create = new CreateDocService(USER, DOC, getPort());
 		StoreDocService store = new StoreDocService(USER, DOC, string2bytes(CONTENT), getPort());
 		
 		try {
 			create.dispatch();
-			store.dispatch();
-		} 
-		catch (InvalidAttributeValueException | DocAlreadyExists_Exception
-				| CapacityExceeded_Exception | DocDoesNotExist_Exception
-				| UserDoesNotExist_Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-		}
 			
+		}
+		catch(DocAlreadyExists_Exception e){
+			// that's fine
+		}
+		
+		finally{
+			store.dispatch();
+		}
 	}
 	
 	@Test
