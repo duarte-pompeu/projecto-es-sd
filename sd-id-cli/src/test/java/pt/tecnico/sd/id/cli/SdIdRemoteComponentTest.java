@@ -90,7 +90,7 @@ public class SdIdRemoteComponentTest {
 
 	
 		@Test
-		public void testCreateUser() {
+		public void testCreateUser() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
 		SdIdClient client = new SdIdClient();
 		client.createUser(userName, email);
 		}
@@ -99,35 +99,35 @@ public class SdIdRemoteComponentTest {
 		@Test(expected=EmailAlreadyExists_Exception.class)
 		public void testCreateUserEmailAlreadyExists() throws Exception {
 			SdIdClient client = new SdIdClient();
-			service.client(userName, repeatedEmail);
+			client.createUser(userName, repeatedEmail);
 		}
 		
 		//trying to create a user with a user name that already exists
 		@Test(expected=UserAlreadyExists_Exception.class)
 		public void testCreateUserUsernameAlreadyExists() throws Exception {
 			SdIdClient client = new SdIdClient();
-			service.client(repeatedUserName, email);
+			client.createUser(repeatedUserName, email);
 		}
 		
 		//trying to add a user with an invalid email
 		@Test(expected=InvalidEmail_Exception.class)
 		public void testCreateUserInvalidEmail() throws Exception {
 			SdIdClient client = new SdIdClient();
-			service.client(userName, invalidEmail);
+			client.createUser(userName, invalidEmail);
 		}
 		
 		//trying to add a user with an invalid user name
 		@Test(expected=InvalidUser_Exception.class)
 		public void testCreateUserInvalidUserName1() throws Exception {
 			SdIdClient client = new SdIdClient();
-			service.client(null, email);
+			client.createUser(null, email);
 		}
 		
 		//trying to add a user with an invalid user name
 		@Test(expected=InvalidUser_Exception.class)
 		public void testCreateUserInvalidUserName2() throws Exception {
 			SdIdClient client = new SdIdClient();
-			service.client("", email);
+			client.createUser("", email);
 		}
 	
 
