@@ -93,6 +93,15 @@ public class SdIdRemoteComponentTest {
 		public void testCreateUser() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
 		SdIdClient client = new SdIdClient();
 		client.createUser(userName, email);
+		
+		//need feedback on this one pls
+		   try {
+			   client.createUser(userName, email);
+			   fail();
+		   } catch (UserAlreadyExists_Exception | EmailAlreadyExists_Exception e){
+			   //how to pass test?
+		   }
+		
 		}
 	
 		//trying to create a user with an email that already exists
