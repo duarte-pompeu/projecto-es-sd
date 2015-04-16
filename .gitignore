@@ -1,9 +1,5 @@
 .project
 .settings/
-sd-store/.classpath
-sd-store/.gitignore
-sd-store/.project
-sd-store/.settings/
-sd-store/target/
-sd-juddi/target
+.classpath
+*/target/
 derby.log
