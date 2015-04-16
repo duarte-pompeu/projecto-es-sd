@@ -2,11 +2,18 @@ package pt.tecnico.sd.id.cli;
 
 import static org.junit.Assert.*;
 import example.ws.uddi.UDDINaming;
+
 import java.util.Map;
+
 import javax.xml.ws.*;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import pt.ulisboa.tecnico.sdis.id.ws.SDId;
+import pt.ulisboa.tecnico.sdis.id.ws.SDId_Service;
+
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 /**
@@ -21,15 +28,27 @@ public class SdIdRemoteComponentTest {
 	public static void setUpBeforeClass() throws Exception {
 		//TODO
 		//Start the server in another process
-		//There should be a pipe between the test process and the server process.
-		//The server's System.in should the input side of the pipe and 
-		//the server's System.out should not be altered to be displayed in the
-		//test's environment console.
-	    System.out.printf("Contacting UDDI at %s%n", uddiURL);
-	    UDDINaming uddiNaming = new UDDINaming(uddiURL);
+		//There should be two pipes between the test process and the server.
+		//In one pipe, the server will send its stdout to the test process
+		//The test process is waiting to read this character
+		//       This character ---> '%'
+		//If the character isn't read, then the server didn't start properly.
+		//In another pipe, the test process will send a '\n' to end the server.
+		
+		//Start server process
+		
+		//Read output from server and send to this stdout
+		//Keep reading until you find '%'
+		//If it throws EOF then cancel the test.
+		
+		String uddiUrl = System.getProperty("uddi.url");
+		String wsName = System.getProperty("ws.name");
+		
+	    System.out.printf("Contacting UDDI at %s%n", uddiUrl);
+	    UDDINaming uddiNaming = new UDDINaming(uddiUrl);
 
-	    System.out.printf("Looking for '%s'%n", name);
-	    String endpointAddress = uddiNaming.lookup(name);
+	    System.out.printf("Looking for '%s'%n", wsName);
+	    String endpointAddress = uddiNaming.lookup(wsName);
 
 	    if (endpointAddress == null) {
 		System.out.println("Not found!");
@@ -39,8 +58,8 @@ public class SdIdRemoteComponentTest {
 	    }
 	
 	    System.out.println("Creating stub ...");
-	    HelloImplService service = new HelloImplService();
-	    port = service.getHelloImplPort();
+	    SDId_Service service = new SDId_Service(); 
+	    SDId port = service.getSDIdImplPort();
 	
 	    System.out.println("Setting endpoint address ...");
 	    BindingProvider bindingProvider = (BindingProvider) port;
