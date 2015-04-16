@@ -1,9 +1,5 @@
 package pt.ulisboa.tecnico.sdis.store.tests;
 
-import javax.xml.registry.JAXRException;
-
-import org.junit.BeforeClass;
-
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 /**

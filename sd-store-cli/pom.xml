@@ -19,6 +19,13 @@
     </dependency>
     
      <dependency>
+      <groupId>org.jmockit</groupId> 
+      <artifactId>jmockit</artifactId>
+      <version>${version.jmockit}</version>
+      <scope>test</scope>
+    </dependency>
+    
+     <dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>${version.junit}</version>
@@ -46,7 +53,7 @@
 	
 	 <version.java>1.7</version.java>
 	<version.junit>4.11</version.junit>
-    
+    <version.jmockit>1.16</version.jmockit>
     <uddi.url>http://localhost:8081</uddi.url>
     <ws.name>sd-store</ws.name>
     
