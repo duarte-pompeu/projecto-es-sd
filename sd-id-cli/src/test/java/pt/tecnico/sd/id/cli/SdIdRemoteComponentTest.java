@@ -18,6 +18,7 @@ import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId_Service;
 import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 /**
@@ -155,10 +156,30 @@ public class SdIdRemoteComponentTest {
 		fail("Not yet implemented"); // TODO
 	}
 
-	@Test
-	public void testRemoveUser() {
-		fail("Not yet implemented"); // TODO
+	@Test(expected=UserDoesNotExist_Exception.class)
+	public void testRemoveUser() throws UserDoesNotExist_Exception {
+		SdIdClient client = new SdIdClient();
+		client.removeUser(userName);
+		
+		//try to remove user again 
+		//if an exception is thrown it means that the user was sucessfully removed
+		
+		client.removeUser(userName);
 	}
+	
+	//trying to remove a user with an invalid user name
+		@Test(expected=UserDoesNotExist_Exception.class)
+		public void testRemoveUserInvalidUserName1() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.removeUser(null);
+		}
+			
+		//trying to remove a user with an invalid user name
+		@Test(expected=UserDoesNotExist_Exception.class)
+		public void testRemoveUserInvalidUserName2() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.removeUser("");
+		}
 
 	@Test
 	public void testRequestAuthentication() {
