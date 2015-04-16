@@ -29,6 +29,7 @@ import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 public class SdIdRemoteComponentTest {
 
 	private final String userName = "focas";
+	private final String ALTuserName = "quack";
 	private final String email = "datfocas@tecnico.pt";
 	private final String repeatedUserName = "carla";
 	private final String repeatedEmail = "carla@tecnico.pt";
@@ -88,20 +89,29 @@ public class SdIdRemoteComponentTest {
 		//(Does java have zombie processes?)
 	}
 
-	
-		@Test
-		public void testCreateUser() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
+		
+		@Test(expected=UserAlreadyExists_Exception.class)
+		public void testCreateUser1() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
 		SdIdClient client = new SdIdClient();
 		client.createUser(userName, email);
 		
-		//need feedback on this one pls
-		   try {
-			   client.createUser(userName, email);
-			   fail();
-		   } catch (UserAlreadyExists_Exception | EmailAlreadyExists_Exception e){
-			   //how to pass test?
-		   }
+		//try to create user again 
+		//if an exception is thrown it means that the user was sucessfully created
 		
+		client.createUser(userName, email);
+			  
+		}
+		
+		@Test(expected=EmailAlreadyExists_Exception.class)
+		public void testCreateUser2() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
+		SdIdClient client = new SdIdClient();
+		client.createUser(userName, email);
+		
+		//try to create user again 
+		//if an exception is thrown it means that the user was sucessfully created
+		
+		client.createUser(ALTuserName, email);
+			  
 		}
 	
 		//trying to create a user with an email that already exists
