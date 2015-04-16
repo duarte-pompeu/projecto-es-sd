@@ -1,10 +1,17 @@
 package pt.tecnico.sd.id;
 
+import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
+
 public class SdIdClient {
     private static SdIdClient instance = null;
     private SDId port;
 
-    private SdIdClient() {
+    public SdIdClient() {
     	// is it something like this that I'm supposed to do???
     	SDIdImpl service = new SDIdImpl();
         SDId port = service.getSDIdImplPort();
