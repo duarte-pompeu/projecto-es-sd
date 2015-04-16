@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.tecnico.sd.id.SdIdClient;
+import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser_Exception;
@@ -33,8 +34,12 @@ public class SdIdRemoteComponentTest {
 	private final String ALTuserName = "quack";
 	private final String email = "datfocas@tecnico.pt";
 	private final String repeatedUserName = "carla";
+	private final String invalidUserName = "who am i";
 	private final String repeatedEmail = "carla@tecnico.pt";
 	private final String invalidEmail = "invalidemail";
+	private final String existingUserName = "alice";
+	private final byte[] password = "Aaa1".getBytes();
+	private final byte[] invalidPassword = "imBad".getBytes();
 
 	
 	
@@ -151,39 +156,70 @@ public class SdIdRemoteComponentTest {
 		}
 	
 
-	@Test
-	public void testRenewPassword() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test(expected=UserDoesNotExist_Exception.class)
-	public void testRemoveUser() throws UserDoesNotExist_Exception {
-		SdIdClient client = new SdIdClient();
-		client.removeUser(userName);
-		
-		//try to remove user again 
-		//if an exception is thrown it means that the user was sucessfully removed
-		
-		client.removeUser(userName);
-	}
+		@Test
+		public void testRenewPassword() {
+			fail("Not yet implemented"); // TODO
+		}
 	
-	//trying to remove a user with an invalid user name
+		@Test(expected=UserDoesNotExist_Exception.class)
+		public void testRemoveUser() throws UserDoesNotExist_Exception {
+			SdIdClient client = new SdIdClient();
+			client.removeUser(userName);
+			
+			//try to remove user again 
+			//if an exception is thrown it means that the user was sucessfully removed
+			
+			client.removeUser(userName);
+		}
+		
+		//trying to remove a user with an invalid user name
 		@Test(expected=UserDoesNotExist_Exception.class)
 		public void testRemoveUserInvalidUserName1() throws Exception {
 			SdIdClient client = new SdIdClient();
 			client.removeUser(null);
 		}
-			
+				
 		//trying to remove a user with an invalid user name
 		@Test(expected=UserDoesNotExist_Exception.class)
 		public void testRemoveUserInvalidUserName2() throws Exception {
 			SdIdClient client = new SdIdClient();
 			client.removeUser("");
 		}
-
-	@Test
-	public void testRequestAuthentication() {
-		fail("Not yet implemented"); // TODO
-	}
+	
+		@Test
+		public void testRequestAuthentication() throws AuthReqFailed_Exception {
+			SdIdClient client = new SdIdClient();
+			byte[] result = client.requestAuthentication(existingUserName, password);
+			assertArrayEquals("wrong password", password,result);
+	
+		}
+		
+		//trying to authenticate a user with an invalid user name
+		@Test(expected=AuthReqFailed_Exception.class)
+		public void testRequestAuthenticationUserInexistent() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.requestAuthentication(invalidUserName, password);
+		}
+		
+		//trying to authenticate a user with an invalid user name
+		@Test(expected=AuthReqFailed_Exception.class)
+		public void testRequestAuthenticationUserInvalidUserName1() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.requestAuthentication(null, password);
+		}
+			
+		//trying to authenticate a user with an invalid user name
+		@Test(expected=AuthReqFailed_Exception.class)
+		public void testRequestAuthenticationUserInvalidUserName2() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.requestAuthentication("", password);
+		}
+		
+		//trying to authenticate a user with an invalid password
+		@Test(expected=AuthReqFailed_Exception.class)
+		public void testRequestAuthenticationUserInvalidPassword() throws Exception {
+			SdIdClient client = new SdIdClient();
+			client.requestAuthentication(existingUserName, invalidPassword);
+		}
 
 }
