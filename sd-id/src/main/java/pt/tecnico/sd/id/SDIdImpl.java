@@ -107,7 +107,7 @@ public class SDIdImpl implements SDId {
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
 		byte[] newPassword = generateRandomPassword();
 		userTable.changePassword(userId, newPassword);
-		System.out.println("Renewed password for " + userId + " :: " + new String(newPassword));
+		System.out.println("Renewed password for " + userId + " :: \"" + new String(newPassword) + "\"");
 	}
 
 	@Override
@@ -152,17 +152,31 @@ public class SDIdImpl implements SDId {
 	}
 	
 	private byte[] generateRandomPassword() {
+		final int PASSWORD_SIZE = 8;
+		
 		StringBuilder builder = new StringBuilder();
 		
 		//ten digits and 52 letters, both upper and lower case.
 		//Java 8 streams and lambdas for the win!
-		rng.ints(0, 62)
-		   .limit(8)
+		/*rng.ints(0, 62)
+		   .limit(PASSWORD_SIZE)
 		   .map(x -> {
 			if      (x < 10)            return '0'+x;
 			else if (x >= 10 && x < 36) return 'a'+x-10;
 			else                        return 'A'+x-36;
-		}).forEach(x -> builder.append((char) x));
+		}).forEach(x -> builder.append((char) x));*/
+		//Here be ugly 1.7 code instead
+		for (int i=0; i<PASSWORD_SIZE; ++i) {
+			int x = rng.nextInt(62);
+			int c;
+			
+			if      (x < 10)            c = '0'+x;
+			else if (x >= 10 && x < 36) c = 'a'+x-10;
+			else                        c = 'A'+x-36;
+			
+			builder.append((char) c);
+		}
+		
 		
 		return builder.toString().getBytes();
 	}
@@ -171,8 +185,8 @@ public class SDIdImpl implements SDId {
 		return userTable;
 	}
 	
+	//THIS IS ONLY USED IN TESTS
 	protected User getUserByUsername(String username) {
 		return userTable.getUserByUsername(username);
 	}
-
 }
