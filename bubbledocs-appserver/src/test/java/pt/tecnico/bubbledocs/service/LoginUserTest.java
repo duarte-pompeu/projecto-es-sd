@@ -27,7 +27,8 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	private String manel; // the token for user manel
 
 	private static final String ROOT = "root";
-	private static final String ROOT_PASS = "rute";	
+	private static final String ROOT_PASS = "rute";
+	private static final String ROOT_MAIL = "root@rootmail.com";
 	private static final String USERNAME = "danix";
 	private static final String NON_EXISTING = "spock";
 	private static final String LOGGED_IN = "manel";
@@ -44,11 +45,11 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test() {
-		createUser(ROOT, ROOT_PASS, "Super User");
-		createUser(USERNAME, PASSWORD, "Marcos Pires");
-		createUser(LOGGED_IN, PASSWORD, "Manuel da Silva");
-		createUser(JUBI_UNAME, JUBI_PASS, JUBI_NAME);
-		createUser(NO_CACHE, null, "No money");
+		createUser(ROOT, ROOT_MAIL, ROOT_PASS, "Super User");
+		createUser(USERNAME,  "user@example.com",PASSWORD, "Marcos Pires");
+		createUser(LOGGED_IN, "logged_in@example.com", PASSWORD, "Manuel da Silva");
+		createUser(JUBI_UNAME, "jubi@example.com", JUBI_PASS, JUBI_NAME);
+		createUser(NO_CACHE, "no_cache@example.com", null, "No money");
 		manel = addUserToSession(LOGGED_IN);
 	}
 	
@@ -211,6 +212,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		String temp_username = "abcd123";
 		String temp_password = "abd123";
 		String temp_name = "abcd123";
+		String temp_mail = "abc@def.ghi";
 		
 		// simulate an exception with a mock
 		new Expectations(){{			
@@ -218,7 +220,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		createUser(temp_username, temp_password, temp_name);
+		createUser(temp_username, temp_mail, temp_password, temp_name);
 		LoginUser service = new LoginUser(temp_username, temp_password);
 		service.execute();
 		

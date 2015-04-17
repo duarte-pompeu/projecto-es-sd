@@ -5,10 +5,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -18,6 +17,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	private final String U_USERNAME = "Maicou";
 	private final String U_PASS = "password";
 	private final String U_NAME = "Maicou Feupes";
+	private final String U_MAIL = "maicou_feupes@suimepule.com";
 	private String U_TOKEN;
 	
 	private User USER;
@@ -34,7 +34,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test(){
-		USER = createUser(U_USERNAME, U_PASS, U_NAME);
+		USER = createUser(U_USERNAME, U_MAIL, U_PASS, U_NAME);
 		U_TOKEN = addUserToSession(U_USERNAME);
 		
 		CS_SHEET = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
@@ -107,7 +107,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = PermissionException.class)
 	public void NoPermissions(){
-		User imqt = createUser("imqtpie", "easypass", "Cutie Pie");
+		User imqt = createUser("imqtpie", "qtpie@example.com", "easypass", "Cutie Pie");
 		String new_token = addUserToSession(imqt.getUserName());
 		
 		AssignReferenceCell service = new AssignReferenceCell(new_token, CS_ID, CELL_ID0, REFF_ID0);

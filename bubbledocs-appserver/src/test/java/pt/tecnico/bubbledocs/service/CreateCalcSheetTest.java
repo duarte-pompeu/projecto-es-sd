@@ -15,6 +15,7 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 	private final String U_USERNAME = "jubileu";
 	private final String U_PASS = "password";
 	private final String U_NAME = "Jubileu Mandafacas";
+	private final String U_MAIL = "jubi_m@nomail.com";
 	private String U_TOKEN;
 	private final String CS_NAME = "Cabulas ES";
 	private final int CS_ROWS = 10;
@@ -22,7 +23,7 @@ public class CreateCalcSheetTest extends  BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test(){
-		User USER = createUser(U_USERNAME, U_PASS, U_NAME);
+		User USER = createUser(U_USERNAME, U_MAIL, U_PASS, U_NAME);
 		U_TOKEN = addUserToSession(U_USERNAME);
 		createSpreadSheet(USER,CS_NAME,CS_ROWS,CS_LINES);
 	}

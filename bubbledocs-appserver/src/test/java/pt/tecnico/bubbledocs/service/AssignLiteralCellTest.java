@@ -19,6 +19,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	private final String U_USERNAME = "jubileu";
 	private final String U_PASS = "password";
 	private final String U_NAME = "Jubileu Mandafacas";
+	private final String U_MAIL = "jubi_m@nomail.com";
 	private String U_TOKEN;
 	
 	private User USER;
@@ -36,7 +37,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test(){
-		USER = createUser(U_USERNAME, U_PASS, U_NAME);
+		USER = createUser(U_USERNAME, U_MAIL, U_PASS, U_NAME);
 		U_TOKEN = addUserToSession(U_USERNAME);
 		
 		CS_SHEET = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
@@ -174,7 +175,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = PermissionException.class)
 	public void noWriteAccess(){
-		User data_spy = createUser("NSA", "password", "National Security Agency");
+		User data_spy = createUser("NSA", "spy@nsa.gov", "password", "National Security Agency");
 		String spy_token = addUserToSession(data_spy.getUserName());
 		
 		AssignLiteralCell service = new AssignLiteralCell(spy_token, CS_ID, CELL_ID0, LIT0);

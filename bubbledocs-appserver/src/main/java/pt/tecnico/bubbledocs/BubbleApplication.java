@@ -17,7 +17,11 @@ import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.service.*;
+import pt.tecnico.bubbledocs.service.AssignLiteralCell;
+import pt.tecnico.bubbledocs.service.AssignReferenceCell;
+import pt.tecnico.bubbledocs.service.CreateSpreadSheet;
+import pt.tecnico.bubbledocs.service.CreateUser;
+import pt.tecnico.bubbledocs.service.LoginUser;
 
 
 /**
@@ -140,7 +144,7 @@ public class BubbleApplication {
 		int sheet_id;
 
 		//criar o root e colocá-lo em sessão
-		BubbleDocs.getInstance().addUser("root", "Super User", "rootroot");
+		BubbleDocs.getInstance().addUser("root", "root@rootmail.root", "Super User", "rootroot");
 		login = new LoginUser("root", "rootroot");
 		login.execute();
 		root_token = login.getUserToken();

@@ -43,7 +43,6 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String U_TOKEN;
 	private String no_permission_token;
 	private User USER;
-	private User USER2;
 	private CalcSheet CS_EMPTY;
 	private int CS_ID;
 	private final String CS_NAME = "cs";
@@ -65,7 +64,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		USER = createUser(U_USERNAME, U_PASS, U_NAME, U_EMAIL);
 		U_TOKEN = addUserToSession(U_USERNAME);
 	
-		USER2 = createUser(U_USERNAME2, U_PASS, U_NAME, U_EMAIL2);
+		createUser(U_USERNAME2, U_PASS, U_NAME, U_EMAIL2);
 		no_permission_token = addUserToSession(U_USERNAME2);
 		
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
