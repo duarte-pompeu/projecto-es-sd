@@ -1,4 +1,4 @@
-package pt.tecnico.sd.id;
+package pt.tecnico.sd.id.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
@@ -21,7 +21,7 @@ public class SdIdClient {
     private static SdIdClient instance = null;
     private SDId port;
 
-    private SdIdClient() throws JAXRException {
+    protected SdIdClient() throws JAXRException {
     	String uddiUrl = System.getProperty("uddi.url");
 		String wsName = System.getProperty("ws.name");
 		

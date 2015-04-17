@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.tecnico.sd.id.SdIdClient;
+import pt.tecnico.sd.id.cli.SdIdClient;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
@@ -104,8 +104,8 @@ public class SdIdRemoteComponentTest {
 
 
         // Unit under test is exercised.
-        SdIdClient client = CLIENT;
-		client.createUser(usernames[3], emails[3]);
+        SdIdClient client = new SdIdClient();
+		client.createUser("someUsername", "some.email@example.com");
     }
     
     
@@ -133,7 +133,7 @@ public class SdIdRemoteComponentTest {
 
 
         // Unit under test is exercised.
-        SdIdClient client = CLIENT;
+        SdIdClient client = new SdIdClient();
 
         // first call to mocked server
         try {
