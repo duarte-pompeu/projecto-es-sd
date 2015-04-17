@@ -5,7 +5,7 @@
 
 Grupo de SD 33
 
-Diogo Bastos	 ...	...
+Diogo Bastos	65675 diogo.bastos@tecnico.ulisboa.pt 
 
 Tiago Nascimento 70493	ti_tyago@hotmail.com
 
