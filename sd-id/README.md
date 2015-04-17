@@ -7,7 +7,7 @@ Grupo de SD 33
 
 Diogo Bastos	 ...	...
 
-Tiago Nascimento ...	...
+Tiago Nascimento 70493	ti_tyago@hotmail.com
 
 Marcos Pires 	 72850	marcos.danix@gmail.com
 *(preencher com nome, número e email de membro do grupo)*
