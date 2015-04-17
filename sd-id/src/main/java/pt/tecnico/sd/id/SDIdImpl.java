@@ -101,13 +101,17 @@ public class SDIdImpl implements SDId {
 		
 		userTable.addUser(userId,emailAddress, generateRandomPassword());
 		
+		byte[] password = userTable.getPassword(userId);
+		System.out.println("Password of " + userId + ": \"" + new String(password) + "\"");
+		
+		
 	}
 
 	@Override
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
 		byte[] newPassword = generateRandomPassword();
 		userTable.changePassword(userId, newPassword);
-		System.out.println("Renewed password for " + userId + " :: \"" + new String(newPassword) + "\"");
+		System.out.println("Renewed password for " + userId + ": \"" + new String(newPassword) + "\"");
 	}
 
 	@Override
