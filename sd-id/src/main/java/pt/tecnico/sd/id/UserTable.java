@@ -142,6 +142,7 @@ class User {
 		this.password = password;
 	}
 	
-	public String getEmail(){ return email; }
 	public String getUserName(){ return username;}
+	public String getEmail(){ return email; }
+	public byte[] getPassword() {return password;}
 }

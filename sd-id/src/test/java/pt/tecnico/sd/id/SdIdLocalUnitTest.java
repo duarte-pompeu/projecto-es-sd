@@ -81,16 +81,36 @@ public class SdIdLocalUnitTest {
 	//the standard scenario
 	@Test
 	public void testCreateUser() throws Exception {
-		User user1=null, user2=null;
 		sdIdService.createUser(userName1, email1);
 		sdIdService.createUser(userName2, email2);
 		
-		if((user1=sdIdService.getUserByUsername(userName1))==null || 
-			(user2=sdIdService.getUserByUsername(userName2))==null )
-			fail();
-		if(!user1.getEmail().equals(email1) || !user2.getEmail().equals(email2))
-			fail();
+		User user1 = sdIdService.getUserByUsername(userName1);
+		User user2 = sdIdService.getUserByUsername(userName2);
+		
+		assertNotNull("user1 is null", user1);
+		assertNotNull("user2 is null", user2);
+		assertEquals("user1's username changed", userName1, user1.getUserName());
+		assertEquals("user2's username changed", userName2, user2.getUserName());
+		assertEquals("user1's email changed", email1, user1.getEmail());
+		assertEquals("user2's email changed", email2, user2.getEmail());
+		assertNotNull("user1's password is null", user1.getPassword());
+		assertNotNull("user2's password is null", user2.getPassword());
+		assertTrue("user1's password is empty", user1.getPassword().length > 0);
+		assertTrue("user2's password is empty", user2.getPassword().length > 0);		
+		assertTrue("user1's password is typeable", passwordIsTypeable(user1.getPassword()));
+		assertTrue("user2's password is typeable", passwordIsTypeable(user2.getPassword()));
+		//Very unlikely to fail
+		assertFalse("password is different", Arrays.equals(user1.getPassword(), user2.getPassword()));	
 	}
+	
+	//Typeable means it's an ASCII character between 0x20 (Space) and 0x7E (~ Tilde)
+	private boolean passwordIsTypeable(byte[] password) {
+		for (byte c : password) {
+			if (!(c >= 0x20 && c <= 0x7E)) return false;
+		}
+		return true;
+	}
+
 	//trying to add a user with an email that already exists
 	@Test(expected=EmailAlreadyExists_Exception.class)
 	public void testCreateUserEmailAlreadyExists() throws Exception {
@@ -143,11 +163,9 @@ public class SdIdLocalUnitTest {
 		sdIdService.removeUser(userName1);
 		sdIdService.removeUser(userName2);
 		
-		if ((sdIdService.getUserByUsername(userName1))!=null)
-				fail();
-			
-		if ((sdIdService.getUserByUsername(userName2))!=null)
-			fail();
+		assertNull("user1 was not removed", sdIdService.getUserByUsername(userName1));
+		assertNull("user2 was not removed", sdIdService.getUserByUsername(userName2));
+		
 	}
 	
 	//trying to remove a user with an invalid user name
