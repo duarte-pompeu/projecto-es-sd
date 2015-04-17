@@ -47,7 +47,7 @@ JUDDI:
 
 > cd sd-proj
 
-> git checkout tags/sd-store-p1
+> git checkout tags/SD-STORE_R_1
 
 
 [4] Construir e executar **servidor**
