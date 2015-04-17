@@ -4,13 +4,13 @@
       see sd-id/pom.xml how to import this POM
   -->
   <modelVersion>4.0.0</modelVersion>
-<!--
+
   <parent>
     <groupId>pt.tecnico.ulisboa.essd</groupId>
     <artifactId>bubbledocs</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
--->
+
   <groupId>pt.tecnico.ulisboa.essd</groupId>
   <artifactId>sd</artifactId>
   <version>1.0-SNAPSHOT</version>
