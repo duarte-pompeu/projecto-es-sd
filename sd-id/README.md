@@ -25,43 +25,44 @@ Repositório:
 *(Como colocar o projecto a funcionar numa máquina do laboratório)*
 
 [0] Inicie um sistema operativo GNU/Linux
-
+Na diretoria home
 
 [1] Iniciar servidores de apoio
 
-JUDDI:
-> startup.sh
+JUDDI: (assumindo que não está instalado)
+
+> curl -O http://disciplinas.tecnico.ulisboa.pt/leic-sod/2014-2015/download/juddi-3.2.1_tomcat-7.0.57_port-8081.zip
+> unzip juddi-3.2.1_tomcat-7.0.57_port-8081.zip
+> mv juddi-3.2.1_tomcat-7.0.57_port-8081 juddi-3.2.1 #encurtar o nome
+> export CATALINA_HOME=~/juddi-3.2.1
+> export PATH=$PATH:$CATALINA_HOME/bin
+> chmod +x $CATALINA_HOME/bin/*.sh
+> startup.sh  #pode ser necessário fazer sudo startup.sh
 
 [2] Criar pasta temporária
 
-> cd 
-> mkdir avaliacao-sd
+> mkdir git-temp
+> cd git-temp
 
 [3] Obter versão entregue
 
-> git clone https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git sd-proj
-
-> cd sd-proj
-
-> git checkout tags/SD-ID_R_1
-
-
+> git clone --depth 10 -b SD_ID_R1 https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git
 
 [4] Construir e executar **servidor**
 
-> cd sd-id/evaluation
+> cd A_31_33_44-project/sd-id
+> mvn clean package 
+> mvn exec:java
+>>>>>>> [SD-ID] Update README
 
 > chmod +x *.sh
 
 > ./install.sh
 
-> ./run_server.sh
 
+> cd A_31_33_44-project/sd-id-cli
+> mvn clean package -DskipTests
 
-
-[5] Construir **cliente**
-
-> (já construido devido ao install.sh)
 
 
 -------------------------------------------------------------------------------
@@ -72,8 +73,22 @@ JUDDI:
 
 [1] Executar **cliente de testes** ...
 
-> ./run_client.sh
 
+## Testes de unidade do servidor
+
+> cd A_31_33_44/sd-id
+> mvn test
+
+## Testes do cliente
+
+#1 - Executar o servidor - esperar até ser imprimido "Press enter to shutdown"
+> cd A_31_33_44-project/sd-id
+> mvn exec:java
+
+#2 - Executar os testes de cliente (noutra janela)
+
+> cd A_31_33_44-project/sd-id-cli
+> mvn test
 
 [2] Executar ...
 
