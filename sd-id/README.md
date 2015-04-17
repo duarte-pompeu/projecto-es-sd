@@ -49,7 +49,11 @@ JUDDI: (assumindo que não está instalado)
 
 [4] Construir e executar **servidor**
 
-    cd A_31_33_44-project/sd-id
+    cd A_31_33_44-project/
+    mvn -N install            # Instalar o pom bubbledocs
+    cs sd
+    mvn -N install            # Instalar o pom sd
+    cd ../sd-id
     mvn clean package 
     mvn exec:java
 
