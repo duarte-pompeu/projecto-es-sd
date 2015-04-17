@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# install juddi module
-mvn compile install -f ../sd-juddi/pom.xml
+#install bubbledocs
+mvn -N install -f ../pom.xml
+
+#install sd
+mvn -N install -f ../sd/pom.xml
 
 # compile sd-id
-mvn compile -f ./pom.xml		
+mvn package -f ./pom.xml
 
 # compile sd-id-cli			
-mvn compile -f ../sd-store-cli/pom.xml
+mvn package -DskipTests -f ../sd-id-cli/pom.xml
 
-# start tomcat
-startup.sh
