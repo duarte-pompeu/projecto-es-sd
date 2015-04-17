@@ -24,44 +24,39 @@ Repositório:
 ### Instruções de instalação 
 *(Como colocar o projecto a funcionar numa máquina do laboratório)*
 
-[0] Inicie um sistema operativo GNU/Linux
-Na diretoria home
+[0] Inicie um sistema operativo GNU/Linux na diretoria home
 
 [1] Iniciar servidores de apoio
 
 JUDDI: (assumindo que não está instalado)
 
-> curl -O http://disciplinas.tecnico.ulisboa.pt/leic-sod/2014-2015/download/juddi-3.2.1_tomcat-7.0.57_port-8081.zip
-> unzip juddi-3.2.1_tomcat-7.0.57_port-8081.zip
-> mv juddi-3.2.1_tomcat-7.0.57_port-8081 juddi-3.2.1 #encurtar o nome
-> export CATALINA_HOME=~/juddi-3.2.1
-> export PATH=$PATH:$CATALINA_HOME/bin
-> chmod +x $CATALINA_HOME/bin/*.sh
-> startup.sh  #pode ser necessário fazer sudo startup.sh
+   curl -O http://disciplinas.tecnico.ulisboa.pt/leic-sod/2014-2015/download/juddi-3.2.1_tomcat-7.0.57_port-8081.zip
+   unzip juddi-3.2.1_tomcat-7.0.57_port-8081.zip
+   mv juddi-3.2.1_tomcat-7.0.57_port-8081 juddi-3.2.1 #encurtar o nome
+   export CATALINA_HOME=~/juddi-3.2.1
+   export PATH=$PATH:$CATALINA_HOME/bin
+   chmod +x $CATALINA_HOME/bin/*.sh
+   startup.sh  #pode ser necessário fazer sudo startup.sh`
 
 [2] Criar pasta temporária
 
-> mkdir git-temp
-> cd git-temp
+   mkdir git-temp
+   cd git-temp
 
 [3] Obter versão entregue
 
-> git clone --depth 10 -b SD_ID_R1 https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git
+   git clone --depth 10 -b SD_ID_R1 https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git
 
 [4] Construir e executar **servidor**
 
-> cd A_31_33_44-project/sd-id
-> mvn clean package 
-> mvn exec:java
->>>>>>> [SD-ID] Update README
+   cd A_31_33_44-project/sd-id
+   mvn clean package 
+   mvn exec:java
 
-> chmod +x *.sh
-
-> ./install.sh
-
-
-> cd A_31_33_44-project/sd-id-cli
-> mvn clean package -DskipTests
+[5] Construir o **cliente**
+   
+   cd A_31_33_44-project/sd-id-cli 
+   mvn clean package -DskipTests
 
 
 
