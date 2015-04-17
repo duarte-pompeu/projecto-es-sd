@@ -52,7 +52,7 @@ JUDDI:
 
 [4] Construir e executar **servidor**
 
-> cd sd-proj/sd-store/evaluation
+> cd sd-store/evaluation
 
 > chmod +x *.sh
 
