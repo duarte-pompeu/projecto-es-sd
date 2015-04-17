@@ -38,20 +38,26 @@ JUDDI:
 [2] Criar pasta temporaria
 
 > cd
+
 > mkdir avaliacao-sd
 
 [3] Obter versao entregue
 
 > git clone https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git sd-proj
+
 > cd sd-proj
+
 > git checkout tags/sd-store-p1
 
 
 [4] Construir e executar **servidor**
 
 > cd sd-proj/sd-store/evaluation
+
 > chmod +x *.sh
+
 > ./install.sh
+
 > ./run_server.sh
 
 
