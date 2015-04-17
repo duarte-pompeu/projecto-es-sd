@@ -45,7 +45,7 @@ public class BubbleApplication {
 		
 			tm.begin();
 			populateDomain();
-			tm.commit();
+			//tm.commit();
 
 
 			committed = true;
