@@ -76,6 +76,7 @@ public class User extends User_Base {
     	this.addCreatedCalcSheet(sheet);
     	this.addReadableCalcSheet(sheet);
     	this.addWriteableCalcSheet(sheet);
+    	BubbleDocs.getInstance().addCalcSheet(sheet);
     	return sheet;
     }
     

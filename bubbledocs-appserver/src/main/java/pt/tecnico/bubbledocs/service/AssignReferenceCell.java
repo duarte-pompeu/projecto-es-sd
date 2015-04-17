@@ -4,6 +4,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Content;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException; //Is it a Reference?
 import pt.tecnico.bubbledocs.exceptions.NotFoundException; //incorrect Cell or Reference given
+import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException; //User doesnt have write permissions
 //token in session?
 //Content Null
@@ -30,7 +31,7 @@ public class AssignReferenceCell extends BubbleDocsService {
 		
 		try {
 		result = Integer.toString(content.getValue());
-		} catch (NullPointerException e) {
+		} catch (NullContentException e) {
 			result = "#VALUE";
 		}
 	}
