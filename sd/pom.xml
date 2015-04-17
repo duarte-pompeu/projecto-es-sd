@@ -31,6 +31,8 @@
   <properties>
     <!-- Both webservices use uddi -->
     <uddi.url>http://localhost:8081</uddi.url>
+    <!-- this has to compile in the lab -->
+    <java.version>1.7</java.version>
   </properties>
 
   <build>
