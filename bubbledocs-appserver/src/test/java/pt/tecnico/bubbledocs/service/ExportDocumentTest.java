@@ -66,7 +66,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		U_TOKEN = addUserToSession(U_USERNAME);
 	
 		USER2 = createUser(U_USERNAME2, U_PASS, U_NAME, U_EMAIL2);
-		no_permission_token = addUserToSession(U_USERNAME);
+		no_permission_token = addUserToSession(U_USERNAME2);
 		
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
 		CS_ID = CS_EMPTY.getId();
@@ -262,7 +262,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	}
 	
 	//Testing the case of trying to export a non existing spread sheet
-	@Test(expected= PermissionException.class)
+	@Test(expected= NotFoundException.class)
 	public void nonExistingCalcSheet() throws JDOMException, IOException{
 		ExportDocument service = new ExportDocument(U_TOKEN, -1);
 		service.execute();

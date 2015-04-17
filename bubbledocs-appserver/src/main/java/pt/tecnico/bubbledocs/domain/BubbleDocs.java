@@ -1,8 +1,13 @@
 package pt.tecnico.bubbledocs.domain;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Random;
 
+import org.jdom2.output.XMLOutputter;
+
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.BubbleApplication;
 import pt.tecnico.bubbledocs.exceptions.DuplicateUsernameException;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
@@ -13,6 +18,7 @@ import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
+import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 /**
  * @author Diogo, Marcos, Tiago, Duarte
@@ -463,7 +469,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 	//if the current user (author) isn't the file creator, or has write permissions
 	//he can't do permission related actions
-	public void checkAuthorsPermission(User author, CalcSheet sheet) {
+	private void checkAuthorsPermission(User author, CalcSheet sheet) {
 		if (!(author.getCreatedCalcSheetSet().contains(sheet) || author.getWriteableCalcSheetSet().contains(sheet))) {
 			throw new PermissionException(author.getUserName() + " doesn't have permission to complete this action.");
 		}		
@@ -496,6 +502,38 @@ public class BubbleDocs extends BubbleDocs_Base {
 		calcsheet.setContent(user, new Reference(calcsheet.getCell(refID)), cellID);
 		
 		return calcsheet.getContent(user, cellID);
+	}
+
+	public byte[] storeDocument(User user, int id) {
+		org.jdom2.Document document = null;
+		String userName = user.getUserName();
+		CalcSheet calcSheet = getCalcSheetById(id);		
+		StoreRemoteServices remoteService = new StoreRemoteServices();
+		byte[] docXML;
+
+		checkAuthorsPermission(user, calcSheet);
+
+		//Converting the calcsheet to a jdom doc and then to a byte array
+		document = BubbleApplication.convertToXML(calcSheet);
+
+		XMLOutputter xmlOut = new XMLOutputter();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			xmlOut.output(document, out);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		docXML = out.toByteArray();
+		
+		try {
+			remoteService.storeDocument(userName, calcSheet.getName(), docXML);
+		} catch (RemoteInvocationException e) {
+			throw new UnavailableServiceException();
+		}
+
+		return docXML;
 	}
 
 	
