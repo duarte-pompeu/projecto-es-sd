@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -33,10 +34,11 @@ public class BubbleApplication {
 	/**
 	 * @param args Not used at the moment.
 	 */
+	static TransactionManager tm;
 	public static void main(String args[]) {
 		System.out.println("Welcome to the BubbleDocs application!");
 
-		TransactionManager tm = FenixFramework.getTransactionManager();
+		tm = FenixFramework.getTransactionManager();
 		boolean committed = false;
 
 		try {
@@ -132,8 +134,15 @@ public class BubbleApplication {
 	 * This method will verify if the database is empty by verifying if it had any users.
 	 * In case the database is empty, it will then populate it.
 	 * If it isn't empty then it simply returns. 
+	 * @throws SystemException 
+	 * @throws HeuristicRollbackException 
+	 * @throws HeuristicMixedException 
+	 * @throws RollbackException 
+	 * @throws IllegalStateException 
+	 * @throws SecurityException 
+	 * @throws NotSupportedException 
 	 */
-	static void populateDomain() {
+	static void populateDomain() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException {
     		
 		BubbleDocs pb=BubbleDocs.getInstance();
 		if (!pb.getUserSet().isEmpty() )
@@ -149,17 +158,20 @@ public class BubbleApplication {
 		login.execute();
 		root_token = login.getUserToken();
 		
-		new CreateUser(root_token, "pf", "sub", "Paul Door").execute();
+		CreateUser createService = new CreateUser(root_token, "pf_abc", "sub", "Paul Door");
+		createService.execute();
+		
+		new CreateUser(root_token, "ra_abc", "cor", "Step Rabbit").execute();		
 
-		new CreateUser(root_token, "ra", "cor", "Step Rabbit").execute();		
-
-		login = new LoginUser("pf", "sub");
+		login = new LoginUser("pf_abc", "sub");
 		login.execute();
 		pf_token = login.getUserToken();
+		
 		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, "Notas ES", 300, 20);
 		spread.execute();
 		sheet_id = spread.getResult().getId();
-
+		
+		
 		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
 	 	
