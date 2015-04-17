@@ -45,7 +45,7 @@ JUDDI: (assumindo que não está instalado)
 
 [3] Obter versão entregue
 
-     git clone --depth 10 -b SD_ID_R1 https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git
+     git clone --depth 10 -b SD-ID_R_1 https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git
      cd A_31_33_44-project.git
 
 [4] Construir o **servidor** e **cliente**
