@@ -76,11 +76,11 @@ JUDDI: (assumindo que não está instalado)
 
 ## Testes do cliente
 
-#1 - Executar o servidor - esperar até ser imprimido "Press enter to shutdown"
+###1 - Executar o servidor - esperar até ser imprimido "Press enter to shutdown"
     cd A_31_33_44-project/sd-id
     mvn exec:java
 
-#2 - Executar os testes de cliente (noutra janela)
+###2 - Executar os testes de cliente (noutra janela)
 
     cd A_31_33_44-project/sd-id-cli  
     mvn test
