@@ -5,6 +5,7 @@ import example.ws.uddi.UDDINaming;
 
 import java.util.Map;
 
+import javax.xml.registry.JAXRException;
 import javax.xml.ws.*;
 
 import org.junit.AfterClass;
@@ -97,7 +98,7 @@ public class SdIdRemoteComponentTest {
 
 		
 		@Test(expected=UserAlreadyExists_Exception.class)
-		public void testCreateUser1() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
+		public void testCreateUser1() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception, JAXRException {
 		SdIdClient client = new SdIdClient();
 		client.createUser(userName, email);
 		
@@ -109,7 +110,7 @@ public class SdIdRemoteComponentTest {
 		}
 		
 		@Test(expected=EmailAlreadyExists_Exception.class)
-		public void testCreateUser2() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception {
+		public void testCreateUser2() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception, JAXRException {
 		SdIdClient client = new SdIdClient();
 		client.createUser(userName, email);
 		
@@ -157,7 +158,7 @@ public class SdIdRemoteComponentTest {
 	
 
 		@Test(expected=AuthReqFailed_Exception.class)
-		public void testRenewPassword() throws UserDoesNotExist_Exception, AuthReqFailed_Exception {
+		public void testRenewPassword() throws UserDoesNotExist_Exception, AuthReqFailed_Exception, JAXRException {
 			SdIdClient client = new SdIdClient();
 			client.renewPassword(existingUserName);
 			
@@ -174,7 +175,7 @@ public class SdIdRemoteComponentTest {
 		}
 		
 		@Test(expected=UserDoesNotExist_Exception.class)
-		public void testRemoveUser() throws UserDoesNotExist_Exception {
+		public void testRemoveUser() throws UserDoesNotExist_Exception, JAXRException {
 			SdIdClient client = new SdIdClient();
 			client.removeUser(userName);
 			
@@ -199,7 +200,7 @@ public class SdIdRemoteComponentTest {
 		}
 	
 		@Test
-		public void testRequestAuthentication() throws AuthReqFailed_Exception {
+		public void testRequestAuthentication() throws AuthReqFailed_Exception, JAXRException {
 			SdIdClient client = new SdIdClient();
 			byte[] result = client.requestAuthentication(existingUserName, password);
 			assertArrayEquals("wrong password", "1".getBytes(),result);

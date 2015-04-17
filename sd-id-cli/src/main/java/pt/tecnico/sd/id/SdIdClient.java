@@ -1,9 +1,19 @@
 package pt.tecnico.sd.id;
 
+import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
+
+import java.util.Map;
+
+import javax.xml.registry.JAXRException;
+import javax.xml.ws.BindingProvider;
+
+import example.ws.uddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidUser_Exception;
+import pt.ulisboa.tecnico.sdis.id.ws.SDId;
+import pt.ulisboa.tecnico.sdis.id.ws.SDId_Service;
 import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 
@@ -11,21 +21,37 @@ public class SdIdClient {
     private static SdIdClient instance = null;
     private SDId port;
 
-    public SdIdClient() {
+    public SdIdClient() throws JAXRException {
     	// is it something like this that I'm supposed to do???
-    	SDIdImpl service = new SDIdImpl();
-        SDId port = service.getSDIdImplPort();
+    	
+    	String uddiUrl = System.getProperty("uddi.url");
+		String wsName = System.getProperty("ws.name");
+		
+	    System.out.printf("Contacting UDDI at %s%n", uddiUrl);
+	    UDDINaming uddiNaming = new UDDINaming(uddiUrl);
 
-        BindingProvider bindingProvider = (BindingProvider) port;
-        Map<String, Object> requestContext = bindingProvider.getRequestContext();
+	    System.out.printf("Looking for '%s'%n", wsName);
+	    String endpointAddress = uddiNaming.lookup(wsName);
 
-        Object url = requestContext.get(ENDPOINT_ADDRESS_PROPERTY);
-        System.out.printf("Remote call to %s ...%n", url);
+	    if (endpointAddress == null) {
+		System.out.println("Not found!");
+		throw new RuntimeException("endpoint address not found");
+	    } else {
+		System.out.printf("Found %s%n", endpointAddress);
+	    }
+    	
+    	 SDId_Service service = new SDId_Service(); 
+ 	    SDId port = service.getSDIdImplPort();
+ 	
+ 	    System.out.println("Setting endpoint address ...");
+ 	    BindingProvider bindingProvider = (BindingProvider) port;
+ 	    Map<String, Object> requestContext = bindingProvider.getRequestContext();
+ 	    requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);	  
 
      
     }
 
-    public static SdIdClient getInstance() {
+    public static SdIdClient getInstance() throws Exception {
 	if (instance == null) {
 	    try {
 		instance = new SdIdClient();
