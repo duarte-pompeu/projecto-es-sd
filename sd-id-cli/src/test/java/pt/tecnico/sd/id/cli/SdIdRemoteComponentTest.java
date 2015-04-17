@@ -107,6 +107,52 @@ public class SdIdRemoteComponentTest {
         SdIdClient client = CLIENT;
 		client.createUser(usernames[3], emails[3]);
     }
+    
+    
+    /**
+     *  In this test the server is mocked to
+     *  simulate a communication exception on a second call.
+     */
+    @Test
+    public void testMockServerExceptionOnSecondCall(
+    	@Mocked final SDId_Service service,
+        @Mocked final SDId port)
+        throws Exception {
+
+        // an "expectation block"
+        // One or more invocations to mocked types, causing expectations to be recorded.
+        new Expectations() {{
+        	new SDId_Service(); 
+        	service.getSDIdImplPort(); result = port;
+            port.createUser(anyString, anyString);
+            // first call to sum returns the result
+            result = "ignoring this result";
+            // second call throws an exception
+            result = new WebServiceException("fabricated");
+        }};
+
+
+        // Unit under test is exercised.
+        SdIdClient client = CLIENT;
+
+        // first call to mocked server
+        try {
+        	client.createUser(usernames[3], emails[3]);
+        } catch(WebServiceException e) {
+            // exception is not expected
+            fail();
+        }
+
+        // second call to mocked server
+        try {
+        	client.createUser(usernames[3], emails[3]);
+            fail();
+        } catch(WebServiceException e) {
+            // exception is expected
+            assertEquals("fabricated", e.getMessage());
+        }
+    }
+    
 
 	public void testCreateUser() throws Exception {
 		SdIdClient client = CLIENT;
