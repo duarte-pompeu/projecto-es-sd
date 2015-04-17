@@ -61,7 +61,7 @@ JUDDI:
 
 [5] Construir **cliente**
 
-(já construido devido ao install.sh)
+> (já construido devido ao install.sh)
 
 
 -------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ JUDDI:
 
 [1] Executar **cliente de testes** ...
 
-> /run_client.sh
+> ./run_client.sh
 
 
 [2] Executar ...
