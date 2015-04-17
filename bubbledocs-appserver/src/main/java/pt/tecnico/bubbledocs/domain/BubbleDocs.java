@@ -463,7 +463,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 	//if the current user (author) isn't the file creator, or has write permissions
 	//he can't do permission related actions
-	private void checkAuthorsPermission(User author, CalcSheet sheet) {
+	public void checkAuthorsPermission(User author, CalcSheet sheet) {
 		if (!(author.getCreatedCalcSheetSet().contains(sheet) || author.getWriteableCalcSheetSet().contains(sheet))) {
 			throw new PermissionException(author.getUserName() + " doesn't have permission to complete this action.");
 		}		

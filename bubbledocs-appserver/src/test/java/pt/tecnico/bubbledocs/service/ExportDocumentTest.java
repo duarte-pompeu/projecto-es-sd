@@ -29,6 +29,7 @@ import pt.tecnico.bubbledocs.domain.ReferenceArgument;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.CannotStoreDocumentException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
@@ -36,12 +37,13 @@ import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 public class ExportDocumentTest extends BubbleDocsServiceTest {
 	
 	private final String U_USERNAME = "jubileu";
+	private final String U_USERNAME2 = "olivar";
 	private final String U_PASS = "password";
 	private final String U_NAME = "Jubileu Mandafacas";
 	private String U_TOKEN;
-	
+	private String no_permission_token;
 	private User USER;
-	
+	private User USER2;
 	private CalcSheet CS_EMPTY;
 	private int CS_ID;
 	private final String CS_NAME = "cs";
@@ -52,6 +54,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String CELL_ID1;
 	private String CELL_ID2;
 	private String U_EMAIL="email@email.com";
+	private String U_EMAIL2="email2@email.com";
 	//FIXME: values are never used, consider removing them
 //	private final int VAL0 = 0;
 //	private final String LIT0 = "0";
@@ -61,6 +64,9 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void populate4Test(){
 		USER = createUser(U_USERNAME, U_PASS, U_NAME, U_EMAIL);
 		U_TOKEN = addUserToSession(U_USERNAME);
+	
+		USER2 = createUser(U_USERNAME2, U_PASS, U_NAME, U_EMAIL2);
+		no_permission_token = addUserToSession(U_USERNAME);
 		
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
 		CS_ID = CS_EMPTY.getId();
@@ -256,7 +262,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	}
 	
 	//Testing the case of trying to export a non existing spread sheet
-	@Test(expected= NotFoundException.class)
+	@Test(expected= PermissionException.class)
 	public void nonExistingCalcSheet() throws JDOMException, IOException{
 		ExportDocument service = new ExportDocument(U_TOKEN, -1);
 		service.execute();
@@ -291,6 +297,15 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		}
 		
 
+	//Testing the case of trying to export an existing spread sheet with a user without permission
+	@Test(expected = PermissionException.class)
+		public void noPermission(){
+			ExportDocument service = new ExportDocument(no_permission_token, CS_ID);
+			service.execute();
+			}
+	
+	
+	
 	}
 
 

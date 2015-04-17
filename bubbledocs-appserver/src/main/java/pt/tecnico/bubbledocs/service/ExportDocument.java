@@ -55,6 +55,8 @@ public class ExportDocument extends BubbleDocsService {
     		}
     	}
     	
+    	pb.checkAuthorsPermission(user, c);
+    	
     	//Converting the calcsheet to a jdom doc and then to a byte array
     	if(c==null)
     		throw new NotFoundException();
