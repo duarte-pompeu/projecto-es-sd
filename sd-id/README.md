@@ -30,32 +30,38 @@ Repositório:
 [1] Iniciar servidores de apoio
 
 JUDDI:
-> ...
+> startup.sh
 
 [2] Criar pasta temporária
 
-> cd ...
-> mkdir ...
+> cd 
+> mkdir avaliacao-sd
 
 [3] Obter versão entregue
 
-> git clone ... 
-*(comandos git para obter a versão entregue - tag)*
+> git clone https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git sd-proj
+
+> cd sd-proj
+
+> git checkout tags/SD-ID_R_1
+
 
 
 [4] Construir e executar **servidor**
 
-> cd ...
-> mvn clean package 
-> mvn exec:java
+> cd sd-id/evaluation
+
+> chmod +x *.sh
+
+> ./install.sh
+
+> ./run_server.sh
+
 
 
 [5] Construir **cliente**
 
-> cd ...
-> mvn clean package
-
-...
+(já construido devido ao install.sh)
 
 
 -------------------------------------------------------------------------------
@@ -66,8 +72,7 @@ JUDDI:
 
 [1] Executar **cliente de testes** ...
 
-> cd ...
-> mvn test
+> /run_client.sh
 
 
 [2] Executar ...
