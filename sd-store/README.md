@@ -43,6 +43,7 @@ JUDDI:
 [3] Obter versao entregue
 
 > git clone https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git sd-proj
+> cd sd-proj
 > git checkout tags/sd-store-p1
 
 
