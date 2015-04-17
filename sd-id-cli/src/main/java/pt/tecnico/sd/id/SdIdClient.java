@@ -21,9 +21,7 @@ public class SdIdClient {
     private static SdIdClient instance = null;
     private SDId port;
 
-    public SdIdClient() throws JAXRException {
-    	// is it something like this that I'm supposed to do???
-    	
+    private SdIdClient() throws JAXRException {
     	String uddiUrl = System.getProperty("uddi.url");
 		String wsName = System.getProperty("ws.name");
 		
@@ -41,7 +39,7 @@ public class SdIdClient {
 	    }
     	
     	 SDId_Service service = new SDId_Service(); 
- 	    SDId port = service.getSDIdImplPort();
+ 	    this.port = service.getSDIdImplPort();
  	
  	    System.out.println("Setting endpoint address ...");
  	    BindingProvider bindingProvider = (BindingProvider) port;
@@ -52,14 +50,14 @@ public class SdIdClient {
     }
 
     public static SdIdClient getInstance() throws Exception {
-	if (instance == null) {
-	    try {
-		instance = new SdIdClient();
-	    } catch (/*Some*/Exception e) {
-		instance = null;
-		throw new /*Some*/Exception();
-	    }
-	}
+    	if (instance == null) {
+    		try {
+    			instance = new SdIdClient();
+    		} catch (/*Some*/Exception e) {
+    			instance = null;
+    			throw e;
+    		}
+    	}
 
 	return instance;
     }
