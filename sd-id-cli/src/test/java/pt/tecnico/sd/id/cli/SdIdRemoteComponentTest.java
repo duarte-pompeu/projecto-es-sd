@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.*;
 
+import mockit.*;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -70,7 +72,34 @@ public class SdIdRemoteComponentTest {
 		//(Does java have zombie processes?)
 	}
 
-		
+	/**
+     *  In this test the server is mocked to
+     *  simulate a communication exception.
+     */
+    @Test(expected=WebServiceException.class)
+    public void testMockServerException(
+        @Mocked final SDId_Service service,
+        @Mocked final SDId port)
+        throws Exception {
+
+        // an "expectation block"
+        // One or more invocations to mocked types, causing expectations to be recorded.
+        new Expectations() {{
+        	new SDId_Service(); 
+        	service.getSDIdImplPort(); result = port;
+            port.createUser(anyString, anyString);
+            result = new WebServiceException("fabricated");
+        }};
+
+
+        // Unit under test is exercised.
+        SdIdClient client = CLIENT;
+		client.createUser(userName, email);
+    }
+	
+	
+	
+	
 		@Test(expected=UserAlreadyExists_Exception.class)
 		public void testCreateUser1() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception, JAXRException {
 		SdIdClient client = CLIENT;
