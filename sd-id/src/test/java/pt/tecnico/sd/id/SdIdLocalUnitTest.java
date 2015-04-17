@@ -138,6 +138,16 @@ public class SdIdLocalUnitTest {
 		sdIdService.createUser("", email1);
 	}
 	
+	@Test(expected=InvalidEmail_Exception.class)
+	public void testCreateUserInvalidEmail1() throws Exception {
+		sdIdService.createUser(userName1, "");
+	}
+	
+	@Test(expected=InvalidEmail_Exception.class)
+	public void testCreateUserInvalidEmail2() throws Exception {
+		sdIdService.createUser(userName1, null);
+	}
+	
 	@Test
 	public void testRenewPassword() throws Exception {
 		sdIdService.renewPassword(userName);

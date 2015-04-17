@@ -99,7 +99,7 @@ public class SDIdImpl implements SDId {
 		}
 		
 
-		if(!emailIsValid(emailAddress)){
+		if(emailAddress == null || !emailIsValid(emailAddress)){
 			InvalidEmail fault = new InvalidEmail();
 			fault.setEmailAddress(emailAddress);
 			throw new InvalidEmail_Exception(emailAddress + " is invalid", fault);
