@@ -51,14 +51,20 @@ public class SDIdImpl implements SDId {
 	public SDIdImpl() {
 		this.userTable = new UserTable();
 		this.rng = new SecureRandom();
+		try {
+			this.populateForTest(userTable);
+		} catch (Exception e) {
+			throw new RuntimeException("the shit hit the fan", e);
+		}
 	}
 	
 	//to be used in the sd-id tests
+	/*
 	protected SDIdImpl(UserTable users) throws Exception {
 		this.userTable = users;
 		this.rng = new SecureRandom();
 		this.populateForTest(userTable);
-	}
+	}*/
 	
 	private void populateForTest(UserTable userTable) throws Exception {
 		userTable.addUser(userName1, email1, password1);

@@ -69,8 +69,8 @@ public class SdIdLocalUnitTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
-		this.sdIdService = new SDIdImpl(new UserTable());
+	public void setUp() {
+		this.sdIdService = new SDIdImpl();
 	}
 
 	@After

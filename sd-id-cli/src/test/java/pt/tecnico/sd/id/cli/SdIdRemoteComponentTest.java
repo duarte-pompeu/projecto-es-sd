@@ -1,9 +1,6 @@
 package pt.tecnico.sd.id.cli;
 
 import static org.junit.Assert.*;
-import example.ws.uddi.UDDINaming;
-
-import java.util.Map;
 
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.*;
@@ -23,7 +20,6 @@ import pt.ulisboa.tecnico.sdis.id.ws.SDId;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId_Service;
 import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
-import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 /**
  * This is a unit test in the remote perspective.
