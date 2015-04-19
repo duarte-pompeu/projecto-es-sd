@@ -496,8 +496,8 @@ public class BubbleDocs extends BubbleDocs_Base {
 		if (refcell == null)
 			throw new NotFoundException("Reference out of bounds in " + refID);
 		
-		if(calcsheet.getCell(refID).getContent() == null)
-			throw new NullContentException(calcsheet.getCell(refID).getLine(), calcsheet.getCell(refID).getColumn());
+//		if(calcsheet.getCell(refID).getContent() == null)
+//			throw new NullContentException(calcsheet.getCell(refID).getLine(), calcsheet.getCell(refID).getColumn());
 		
 		calcsheet.setContent(user, new Reference(calcsheet.getCell(refID)), cellID);
 		
