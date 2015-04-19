@@ -366,10 +366,27 @@ public class CalcSheet extends CalcSheet_Base {
     	return element;
     }
     
+    public String[][] getAllCells(){
+    	String [][] matrix = new String[this.getLines()][this.getColumns()];
+    	int l, c;
+    	
+    	for(Cell ce: getCellSet()){
+    		l = ce.getLine();
+    		c = ce.getColumn();
+    		
+    		matrix[l-1][c-1] = ce.contentString();
+    	}
+    	
+    	return matrix;
+    }
+    
+    
     public String markdownPrint(){
+    	String[][] cellsMatrix = this.getAllCells();
+    	
     	String mark = new String();
-    	int nLines = this.getLines();
-    	int nCols = this.getColumns();
+    	int nLines = cellsMatrix.length;
+    	int nCols = cellsMatrix[0].length;
     	int c, l;
     	
     	int cell_len = 5;

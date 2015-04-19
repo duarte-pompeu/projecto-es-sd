@@ -122,4 +122,13 @@ public class Cell extends Cell_Base {
     	
 	return element;
     }
+    
+    public String contentString(){
+    	
+    	if(this.getContent() == null){
+    		return "";
+    	}
+    	
+    	return this.getContent().toString();
+    }
 }

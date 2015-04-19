@@ -177,8 +177,6 @@ public class BubbleApplication {
 		
 		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
-		
-		System.out.println(pb.getCalcSheetById(sheet_id).markdownPrint());
 	}
 
 	
