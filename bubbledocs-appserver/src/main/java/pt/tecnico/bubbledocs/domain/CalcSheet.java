@@ -364,6 +364,69 @@ public class CalcSheet extends CalcSheet_Base {
     		
 	
     	return element;
+    }
+    
+    public String markdownPrint(){
+    	String mark = new String();
+    	int nLines = this.getLines();
+    	int nCols = this.getColumns();
+    	int c, l;
+    	
+    	int cell_len = 5;
+    	
+    	//header
+    	mark += "|";
+    	for(c = 1; c <= nCols; c++){
+    		mark += nChars(' ', cell_len);
+    		mark += "|";
     	}
+    	mark += "\n";
+    	
+    	// header-content division
+    	mark += "|";
+    	for(c = 1; c <= nCols; c++){
+    		mark += nChars('-', cell_len);
+    		mark += "|";
+    	}
+    	mark += "\n";
+    	
+    	
+    	// table content
+    	for(l = 1; l <= nLines; l++){
+    		mark += "|";
+    		
+    		for(c = 1; c <= nCols; c++){
+        		Content con = this.getCell(l, c).getContent();
+        		if (con == null){
+        			mark += nChars(' ', cell_len);
+        			mark += "|";
+        			continue;
+        		}
+        		
+        		String con_str = con.toString();
+        		if (con_str.length() > cell_len){
+        			con_str = con_str.substring(0, cell_len -2) + "..";
+        		}
+        		
+        		con_str += nChars(' ', cell_len - con_str.length());
+        		mark += con_str;
+        		mark += "|";
+        	}
+    		
+    		mark += "\n";
+    	}
+    	
+    	return mark;
+    }
+    
+    private static String nChars(char ch, int n){
+    	String out = new String();
+    	
+    	for(int i = 0; i < n; i++){
+    		out += ch;
+    	}
+    	
+    	return out;
+    }
     
 }

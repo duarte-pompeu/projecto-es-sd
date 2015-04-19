@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -31,6 +30,7 @@ import pt.tecnico.bubbledocs.service.LoginUser;
  *	It also contains several static methods that are used in main.
  */
 public class BubbleApplication {
+	private static final String DOC = "Notas ES";
 	/**
 	 * @param args Not used at the moment.
 	 */
@@ -145,8 +145,11 @@ public class BubbleApplication {
 	static void populateDomain() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException {
     		
 		BubbleDocs pb=BubbleDocs.getInstance();
-		if (!pb.getUserSet().isEmpty() )
-		    return;
+		if (!pb.getUserSet().isEmpty()){
+			System.out.println(pb.getCalcSheetByName(DOC).markdownPrint());
+			return;
+		}
+		    
 		
 		String root_token, pf_token;
 		LoginUser login;
@@ -167,14 +170,15 @@ public class BubbleApplication {
 		login.execute();
 		pf_token = login.getUserToken();
 		
-		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, "Notas ES", 300, 20);
+		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, DOC, 300, 20);
 		spread.execute();
 		sheet_id = spread.getResult().getId();
 		
 		
 		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
-	 	
+		
+		System.out.println(pb.getCalcSheetById(sheet_id).markdownPrint());
 	}
 
 	
