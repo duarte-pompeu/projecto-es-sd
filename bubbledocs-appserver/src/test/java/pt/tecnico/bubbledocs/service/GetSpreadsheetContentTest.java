@@ -5,10 +5,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	private static final String U_UNAME = "pompas";
@@ -25,10 +26,10 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	private final int CS_LINES = 11;
 	
 	
-	Literal L1 = new Literal(10);
-	Reference R1;
+	private static final String L1 = "5";
+	private Reference R1;
 	
-	String [][] RESULT;
+	private String [][] RESULT;
 	
 	@Override
 	public void populate4Test(){
@@ -41,11 +42,11 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 		CS = service.getResult();
 		CS_ID = CS.getId();
 		
-		AssignLiteralCell alc = new AssignLiteralCell(U_TOKEN, CS_ID, "1;1", L1.toString());
+		AssignLiteralCell alc = new AssignLiteralCell(U_TOKEN, CS_ID, CS.getCell(1, 1).getId(), L1);
 		alc.execute();
 		
-		R1 = new Reference(CS.getCell("1;1"));
-		AssignReferenceCell arc = new AssignReferenceCell(U_TOKEN, CS_ID, "2;2", R1.toString());
+		R1 = new Reference(CS.getCell(1,1));
+		AssignReferenceCell arc = new AssignReferenceCell(U_TOKEN, CS_ID, CS.getCell(2, 2).getId(), "1;1");
 		arc.dispatch();
 		
 		GetSpreadsheetContentService gscs = new GetSpreadsheetContentService(
@@ -59,14 +60,14 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	public void populateSuccess(){
 		assertEquals(L1.toString(), RESULT[0][0]);
 		assertEquals(R1.toString(), RESULT[1][1]);
-		assertEquals(RESULT.length, CS_COLUMNS);
-		assertEquals(RESULT[0].length, CS_LINES);
+		assertEquals(RESULT[0].length, CS_COLUMNS);
+		assertEquals(RESULT.length, CS_LINES);
 	}
 	
 	
 	@Test (expected=NotFoundException.class)
 	public void badID(){
-		String badID = "Ooops, this isnt a valid spreadsheet id.";
+		String badID = "987";
 		
 		GetSpreadsheetContentService gscs = new GetSpreadsheetContentService(
 				U_TOKEN, badID);
@@ -74,11 +75,23 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	}
 	
 	
+	@Test (expected=InvalidFormatException.class)
 	public void noID(){
 		String nullID = null;
 		
 		GetSpreadsheetContentService gscs = new GetSpreadsheetContentService(
 				U_TOKEN, nullID);
+		gscs.execute();
+	}
+	
+	
+	@Test (expected=PermissionException.class)
+	public void badAccess(){
+		createUser("temp", "temp@temporary.temp", "temppass", "TempName");
+		String tmpToken = addUserToSession("temp");
+		
+		GetSpreadsheetContentService gscs = new GetSpreadsheetContentService(
+				tmpToken, Integer.toString(CS_ID));
 		gscs.execute();
 	}
 }

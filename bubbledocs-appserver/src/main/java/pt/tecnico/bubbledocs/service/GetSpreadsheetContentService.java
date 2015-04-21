@@ -1,5 +1,10 @@
 package pt.tecnico.bubbledocs.service;
 
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
+import pt.tecnico.bubbledocs.exceptions.NullContentException;
+
 public class GetSpreadsheetContentService extends BubbleDocsService {
 	private String token;
 	private String sheet;
@@ -14,7 +19,19 @@ public class GetSpreadsheetContentService extends BubbleDocsService {
 	
 	@Override
 	public void dispatch(){
+		BubbleDocs bd = BubbleDocs.getInstance();
+		int docID;
 		
+		
+		try{
+			docID = Integer.parseInt(sheet);
+		}
+		catch(NumberFormatException e){
+			throw new InvalidFormatException(e.getMessage());
+		}
+		
+		User u = getUserFromToken(token);
+		result = bd.getCalcSheetById(docID).getCellsMatrix(u);
 	}
 	
 	

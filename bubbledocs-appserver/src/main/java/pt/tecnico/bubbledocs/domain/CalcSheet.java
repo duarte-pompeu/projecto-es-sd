@@ -366,7 +366,16 @@ public class CalcSheet extends CalcSheet_Base {
     	return element;
     }
     
-    public String[][] getAllCells(){
+    public String[][] getCellsMatrix(User u){
+    	if (!u.canRead(this)){
+    		throw new PermissionException();
+    	}
+    	
+    	return getCellsMatrix();
+    }
+    
+    
+    public String[][] getCellsMatrix(){
     	String [][] matrix = new String[this.getLines()][this.getColumns()];
     	int l, c;
     	
@@ -382,7 +391,7 @@ public class CalcSheet extends CalcSheet_Base {
     
     
     public String markdownPrint(){
-    	String[][] cellsMatrix = this.getAllCells();
+    	String[][] cellsMatrix = this.getCellsMatrix();
     	
     	String mark = new String();
     	int nLines = cellsMatrix.length;
