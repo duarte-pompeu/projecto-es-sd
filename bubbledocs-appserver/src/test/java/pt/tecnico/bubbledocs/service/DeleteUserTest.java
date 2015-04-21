@@ -7,7 +7,6 @@ import mockit.Verifications;
 
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -42,9 +41,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
         createUser(USERNAME,EMAIL, PASSWORD, NAME);
         toDelete = createUser(USERNAME_TO_DELETE, "me@example.lol", "please", "john de lete");
         createSpreadSheet(toDelete, USERNAME_TO_DELETE, 20, 20);
-        
-       User rootUser = createUser(ROOT_USERNAME,"root@bigboss.com", "root", "root");
-        BubbleDocs.getInstance().addUser(rootUser);
+
         root = addUserToSession(ROOT_USERNAME);
     };
 

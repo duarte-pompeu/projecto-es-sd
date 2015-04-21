@@ -3,9 +3,9 @@ package pt.tecnico.bubbledocs.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
 import mockit.Expectations;
 import mockit.Mocked;
 
@@ -28,7 +28,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	private static final String ROOT = "root";
 	private static final String ROOT_PASS = "rute";
-	private static final String ROOT_MAIL = "root@rootmail.com";
 	private static final String USERNAME = "danix";
 	private static final String NON_EXISTING = "spock";
 	private static final String LOGGED_IN = "manel";
@@ -45,7 +44,6 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Override
 	public void populate4Test() {
-		createUser(ROOT, ROOT_MAIL, ROOT_PASS, "Super User");
 		createUser(USERNAME,  "user@example.com",PASSWORD, "Marcos Pires");
 		createUser(LOGGED_IN, "logged_in@example.com", PASSWORD, "Manuel da Silva");
 		createUser(JUBI_UNAME, "jubi@example.com", JUBI_PASS, JUBI_NAME);
