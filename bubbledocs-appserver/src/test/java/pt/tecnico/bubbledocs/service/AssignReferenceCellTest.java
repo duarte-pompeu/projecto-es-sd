@@ -9,7 +9,6 @@ import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
@@ -26,7 +25,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	private int CS_ID;
 	private final String CS_NAME = "Teste Referencia";
 	private final int CS_ROWS = 10;
-	private final int CS_LINES = 10;
+	private final int CS_LINES = 11;
 	
 	private String CELL_ID0;
 	private String REFF_ID0;
@@ -83,12 +82,6 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
-	@Test(expected = NullContentException.class)
-	public void NullReference(){
-		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, CELL_ID0, REFF_ID1);
-		service.execute();
-	}
-	
 	@Test(expected = NotFoundException.class)
 	public void CellDoesntExist(){
 		String bad_cell_id = "666";
@@ -96,6 +89,24 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, bad_cell_id, REFF_ID0);
 		service.execute();
 	}
+	
+	@Test (expected = NotFoundException.class)
+	public void outOfBounds1(){
+		String cellID = "0;0";
+		
+		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, cellID, REFF_ID0);
+		service.execute();
+	}
+	
+	
+	@Test (expected = NotFoundException.class)
+	public void outOfBounds2(){
+		String cellID = Integer.toString(CS_LINES) + ";" + Integer.toString(CS_ROWS);
+		
+		AssignReferenceCell service = new AssignReferenceCell (U_TOKEN, CS_ID, cellID, REFF_ID0);
+		service.execute();
+	}
+	
 	
 	@Test(expected = NotFoundException.class)
 	public void BadReference() {
