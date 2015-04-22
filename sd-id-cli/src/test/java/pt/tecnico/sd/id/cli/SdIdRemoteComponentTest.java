@@ -102,7 +102,7 @@ public class SdIdRemoteComponentTest {
 	}
 
 	@Test(expected=EmailAlreadyExists_Exception.class)
-	public void testCreateUserWithSameEmail() throws EmailAlreadyExists_Exception, InvalidEmail_Exception, InvalidUser_Exception, UserAlreadyExists_Exception, JAXRException {
+	public void testCreateUserWithSameEmail() throws Exception {
 		SdIdClient client = CLIENT;
 		client.createUser(usernames[2], emails[2]);
 
@@ -214,7 +214,7 @@ public class SdIdRemoteComponentTest {
 	}
 
 	@Test
-	public void testRequestAuthentication() throws AuthReqFailed_Exception, JAXRException {
+	public void testRequestAuthentication() throws Exception {
 		SdIdClient client = CLIENT;
 		byte[] result = client.requestAuthentication(existingUsernames[4], password);
 		assertArrayEquals("wrong password", "1".getBytes(), result);

@@ -7,6 +7,7 @@ import java.util.logging.*;
 
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.WebServiceException;
 
 import example.ws.uddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
@@ -49,7 +50,7 @@ public class SdIdClient {
 			BindingProvider bindingProvider = (BindingProvider) port;
 			Map<String, Object> requestContext = bindingProvider.getRequestContext();
 			requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
-		} catch (JAXRException e) {
+		} catch (WebServiceException | JAXRException e) {
 			throw new SdIdRemoteException(e);
 		}
 	}
@@ -68,19 +69,35 @@ public class SdIdClient {
 	}
 
 	public void createUser(String userId, String emailAddress) throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
-	InvalidUser_Exception, UserAlreadyExists_Exception {
-		port.createUser(userId, emailAddress);
+	InvalidUser_Exception, UserAlreadyExists_Exception, SdIdRemoteException {
+		try {
+			port.createUser(userId, emailAddress);
+		} catch (WebServiceException e) {
+			throw new SdIdRemoteException(e);
+		}
 	}
 
-	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
-		port.renewPassword(userId);
+	public void renewPassword(String userId) throws UserDoesNotExist_Exception, SdIdRemoteException {
+		try {
+			port.renewPassword(userId);
+		} catch (WebServiceException e) {
+			throw new SdIdRemoteException(e);
+		}
 	}
 
-	public void removeUser(String userId) throws UserDoesNotExist_Exception {
-		port.removeUser(userId);
+	public void removeUser(String userId) throws UserDoesNotExist_Exception, SdIdRemoteException {
+		try {
+			port.removeUser(userId);
+		} catch (WebServiceException e) {
+			throw new SdIdRemoteException(e);
+		}
 	}
 
-	public byte[] requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception{
-		return port.requestAuthentication( userId,reserved);
+	public byte[] requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception, SdIdRemoteException {
+		try {
+			return port.requestAuthentication( userId,reserved);
+		} catch (WebServiceException e) {
+			throw new SdIdRemoteException(e);
+		}
 	}
 }
