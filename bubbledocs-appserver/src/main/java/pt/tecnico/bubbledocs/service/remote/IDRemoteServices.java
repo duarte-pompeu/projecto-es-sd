@@ -1,6 +1,8 @@
 package pt.tecnico.bubbledocs.service.remote;
 
 
+import java.util.Arrays;
+
 import pt.tecnico.bubbledocs.exceptions.DuplicateEmailException;
 import pt.tecnico.bubbledocs.exceptions.DuplicateUsernameException;
 import pt.tecnico.bubbledocs.exceptions.InvalidEmailException;
@@ -42,7 +44,10 @@ public class IDRemoteServices {
 		try {
 			
 			SdIdClient idRemote = getRemote();
-			idRemote.requestAuthentication(username, password.getBytes());
+			byte[] result = idRemote.requestAuthentication(username, password.getBytes());
+			if (!Arrays.equals(result, "1".getBytes())) {
+				throw new LoginException();
+			}
 			
 		} catch (SdIdRemoteException e) {
 			throw new RemoteInvocationException(e);
