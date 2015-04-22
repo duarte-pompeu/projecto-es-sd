@@ -38,7 +38,7 @@ public class SdIdClient {
 
 			if (endpointAddress == null) {
 				logger.severe("Endpoint not found!");
-				throw new RuntimeException("endpoint address not found");
+				throw new SdIdRemoteException("endpoint address not found");
 			} else {
 				logger.info("Found " + endpointAddress);
 			}
