@@ -41,8 +41,10 @@ public class BubbleDocs extends BubbleDocs_Base {
 		BubbleDocs pb;
 
 		pb = FenixFramework.getDomainRoot().getBubbleDocs();
-		if(pb==null)
-			pb = new BubbleDocs(); 
+		if(pb==null) {
+			pb = new BubbleDocs();
+			pb.addUser(new SuperUser("root", "Super User", "admin@bubbledocs.pt", "rootroot"));
+		}
 
 		return pb;
 	}
