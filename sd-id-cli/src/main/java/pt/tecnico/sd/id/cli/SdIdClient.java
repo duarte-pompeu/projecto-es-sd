@@ -19,67 +19,68 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 
 public class SdIdClient {
-    private static SdIdClient instance = null;
-    private SDId port;
+	private static SdIdClient instance = null;
+	private SDId port;
 
-    protected SdIdClient() throws JAXRException {
-    	String uddiUrl = System.getProperty("uddi.url");
-    	String wsName = System.getProperty("ws.name");
+	protected SdIdClient() throws SdIdRemoteException {
+		try {
+			String uddiUrl = System.getProperty("uddi.url");
+			String wsName = System.getProperty("ws.name");
 
-    	Logger logger = Logger.getLogger("pt.tecnico.ulisboa.essd.sd-id-cli");
-    	logger.addHandler(new ConsoleHandler());
+			Logger logger = Logger.getLogger("pt.tecnico.ulisboa.essd.sd-id-cli");
 
-    	logger.info("Contacting UDDI at " + uddiUrl);
-    	UDDINaming uddiNaming = new UDDINaming(uddiUrl);
+			logger.info("Contacting UDDI at " + uddiUrl);
+			UDDINaming uddiNaming = new UDDINaming(uddiUrl);
 
-    	logger.info("Looking for " + wsName);
-    	String endpointAddress = uddiNaming.lookup(wsName);
+			logger.info("Looking for " + wsName);
+			String endpointAddress = uddiNaming.lookup(wsName);
 
-    	if (endpointAddress == null) {
-    		logger.severe("Endpoint not found!");
-    		throw new RuntimeException("endpoint address not found");
-    	} else {
-    		logger.info("Found " + endpointAddress);
-    	}
+			if (endpointAddress == null) {
+				logger.severe("Endpoint not found!");
+				throw new RuntimeException("endpoint address not found");
+			} else {
+				logger.info("Found " + endpointAddress);
+			}
 
-    	SDId_Service service = new SDId_Service(); 
-    	this.port = service.getSDIdImplPort();
+			SDId_Service service = new SDId_Service(); 
+			this.port = service.getSDIdImplPort();
 
-    	logger.info("Setting endpoint address ...");
-    	BindingProvider bindingProvider = (BindingProvider) port;
-    	Map<String, Object> requestContext = bindingProvider.getRequestContext();
-    	requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);	  
+			logger.info("Setting endpoint address ...");
+			BindingProvider bindingProvider = (BindingProvider) port;
+			Map<String, Object> requestContext = bindingProvider.getRequestContext();
+			requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+		} catch (JAXRException e) {
+			throw new SdIdRemoteException(e);
+		}
+	}
 
+	public static SdIdClient getInstance() throws SdIdRemoteException {
+		if (instance == null) {
+			try {
+				instance = new SdIdClient();
+			} catch (SdIdRemoteException e) {
+				instance = null;
+				throw e;
+			}
+		}
 
-    }
+		return instance;
+	}
 
-    public static SdIdClient getInstance() throws Exception {
-    	if (instance == null) {
-    		try {
-    			instance = new SdIdClient();
-    		} catch (/*Some*/Exception e) {
-    			instance = null;
-    			throw e;
-    		}
-    	}
-
-	return instance;
-    }
-    
-    public void createUser(String userId, String emailAddress) throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
+	public void createUser(String userId, String emailAddress) throws EmailAlreadyExists_Exception, InvalidEmail_Exception,
 	InvalidUser_Exception, UserAlreadyExists_Exception {
-    	port.createUser(userId, emailAddress);
-    }
-    
-    public void renewPassword(String userId) throws UserDoesNotExist_Exception {
-    	port.renewPassword(userId);
-    }
-    
-    public void removeUser(String userId) throws UserDoesNotExist_Exception {
-    	port.removeUser(userId);
-    }
-    
-    public byte[] requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception{
-    	return port.requestAuthentication( userId,reserved);
-    }
+		port.createUser(userId, emailAddress);
+	}
+
+	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
+		port.renewPassword(userId);
+	}
+
+	public void removeUser(String userId) throws UserDoesNotExist_Exception {
+		port.removeUser(userId);
+	}
+
+	public byte[] requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception{
+		return port.requestAuthentication( userId,reserved);
+	}
 }
