@@ -3,6 +3,7 @@ package pt.tecnico.sd.id.cli;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.util.Map;
+import java.util.logging.*;
 
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
@@ -23,30 +24,33 @@ public class SdIdClient {
 
     protected SdIdClient() throws JAXRException {
     	String uddiUrl = System.getProperty("uddi.url");
-		String wsName = System.getProperty("ws.name");
-		
-	    System.out.printf("Contacting UDDI at %s%n", uddiUrl);
-	    UDDINaming uddiNaming = new UDDINaming(uddiUrl);
+    	String wsName = System.getProperty("ws.name");
 
-	    System.out.printf("Looking for '%s'%n", wsName);
-	    String endpointAddress = uddiNaming.lookup(wsName);
+    	Logger logger = Logger.getLogger("pt.tecnico.ulisboa.essd.sd-id-cli");
+    	logger.addHandler(new ConsoleHandler());
 
-	    if (endpointAddress == null) {
-		System.out.println("Not found!");
-		throw new RuntimeException("endpoint address not found");
-	    } else {
-		System.out.printf("Found %s%n", endpointAddress);
-	    }
-    	
-    	 SDId_Service service = new SDId_Service(); 
- 	    this.port = service.getSDIdImplPort();
- 	
- 	    System.out.println("Setting endpoint address ...");
- 	    BindingProvider bindingProvider = (BindingProvider) port;
- 	    Map<String, Object> requestContext = bindingProvider.getRequestContext();
- 	    requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);	  
+    	logger.info("Contacting UDDI at " + uddiUrl);
+    	UDDINaming uddiNaming = new UDDINaming(uddiUrl);
 
-     
+    	logger.info("Looking for " + wsName);
+    	String endpointAddress = uddiNaming.lookup(wsName);
+
+    	if (endpointAddress == null) {
+    		logger.severe("Endpoint not found!");
+    		throw new RuntimeException("endpoint address not found");
+    	} else {
+    		logger.info("Found " + endpointAddress);
+    	}
+
+    	SDId_Service service = new SDId_Service(); 
+    	this.port = service.getSDIdImplPort();
+
+    	logger.info("Setting endpoint address ...");
+    	BindingProvider bindingProvider = (BindingProvider) port;
+    	Map<String, Object> requestContext = bindingProvider.getRequestContext();
+    	requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);	  
+
+
     }
 
     public static SdIdClient getInstance() throws Exception {
