@@ -18,10 +18,13 @@ public class IDRemoteServices {
 			DuplicateEmailException, InvalidEmailException,
 			RemoteInvocationException {
 		
-		SdIdClient idRemote = getRemote();
-		
 		try {
+			
+			SdIdClient idRemote = getRemote();
 			idRemote.createUser(username, email);
+			
+		} catch(SdIdRemoteException e) {
+			throw new RemoteInvocationException(e);
 		} catch(InvalidUser_Exception e) {
 			throw new InvalidUsernameException(e);
 		} catch(UserAlreadyExists_Exception e) {
@@ -31,29 +34,53 @@ public class IDRemoteServices {
 		} catch(InvalidEmail_Exception e) {
 			throw new InvalidEmailException(e);
 		}
+		
 	}
 	
 	public void loginUser(String username, String password)
 			throws LoginException, RemoteInvocationException {
-		// TODO : the connection and invocation of the remote service
+		try {
+			
+			SdIdClient idRemote = getRemote();
+			idRemote.requestAuthentication(username, password.getBytes());
+			
+		} catch (SdIdRemoteException e) {
+			throw new RemoteInvocationException(e);
+		} catch (AuthReqFailed_Exception e) {
+			throw new LoginException(e);
+		}
 	}
 	
 	public void removeUser(String username)
 			throws LoginException, RemoteInvocationException {
-		// TODO : the connection and invocation of the remote service
+		try {
+			
+			SdIdClient idRemote = getRemote();
+			idRemote.removeUser(username);
+			
+		} catch (SdIdRemoteException e) {
+			throw new RemoteInvocationException(e);
+		} catch (UserDoesNotExist_Exception e) {
+			throw new LoginException(e);
+		} 
 	}
 	
 	public void renewPassword(String username)
 			throws LoginException, RemoteInvocationException {
-		// TODO : the connection and invocation of the remote service
+		try {
+			
+			SdIdClient idRemote = getRemote();
+			idRemote.renewPassword(username);
+			
+		} catch (SdIdRemoteException e) {
+			throw new RemoteInvocationException(e);
+		} catch (UserDoesNotExist_Exception e) {
+			throw new LoginException(e);
+		} 
 	}
 	
-	private SdIdClient getRemote() throws RemoteInvocationException {
-		try {
-			return SdIdClient.getInstance();
-		} catch (SdIdRemoteException e) {
-			throw new RemoteInvocationException();
-		}
+	private SdIdClient getRemote() throws SdIdRemoteException {
+		return SdIdClient.getInstance();
 	}
 	
 }
