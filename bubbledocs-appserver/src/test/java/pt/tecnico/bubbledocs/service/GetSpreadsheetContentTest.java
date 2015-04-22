@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Reference;
-import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -16,7 +15,6 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	private static final String U_MAIL = "pompas@mail";
 	private static final String U_NAME = "Duarte";
 	private static final String U_PASS = "password";
-	private static User USER;
 	private String U_TOKEN;
 	
 	private static CalcSheet CS;
@@ -27,7 +25,7 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	
 	
 	private static final String L1 = "5";
-	private Reference R1;
+	private static Reference R1;
 	
 	private String [][] RESULT;
 	
@@ -35,7 +33,6 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	public void populate4Test(){
 		createUser(U_UNAME, U_MAIL, U_PASS, U_NAME);
 		U_TOKEN = addUserToSession(U_UNAME);
-		USER = getUserFromUsername(U_UNAME);
 		
 		CreateSpreadSheet service = new CreateSpreadSheet(U_TOKEN, CS_NAME, CS_LINES, CS_COLUMNS);
 		service.execute();
@@ -58,10 +55,26 @@ public class GetSpreadsheetContentTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void populateSuccess(){
-		assertEquals(L1.toString(), RESULT[0][0]);
-		assertEquals(R1.toString(), RESULT[1][1]);
 		assertEquals(RESULT[0].length, CS_COLUMNS);
 		assertEquals(RESULT.length, CS_LINES);
+		
+		assertEquals(L1.toString(), RESULT[0][0]);
+		assertEquals(R1.toString(), RESULT[1][1]);
+		
+		// assert for each empty matrix cell
+		for(int l = 0; l < CS_LINES; l++){
+			for(int c = 0; c < CS_COLUMNS; c++){
+				
+				if(l == 0 && c == 0)
+					continue;
+				if(l == 1 && c == 1)
+					continue;
+					
+					
+				assertEquals("", RESULT[l][c]);
+			}
+		}
+		
 	}
 	
 	
