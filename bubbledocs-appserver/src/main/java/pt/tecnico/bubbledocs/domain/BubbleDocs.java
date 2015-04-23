@@ -537,6 +537,11 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 		return docXML;
 	}
+	
+	//Fix me: implement
+	public byte[] loadDocument(User user, int id) { return null; }
+	//Fix me: implement
+	public int createNewDocument(byte [] xmlDoc){ return 0; }
 
 	
 }
