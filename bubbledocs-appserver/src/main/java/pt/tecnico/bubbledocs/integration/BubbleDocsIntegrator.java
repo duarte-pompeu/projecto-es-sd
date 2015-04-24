@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.integration;
 
-import pt.ist.fenixframework.Atomic;
+
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
@@ -10,7 +10,6 @@ import pt.tecnico.bubbledocs.domain.User;
 
 public abstract class BubbleDocsIntegrator {
 
-    @Atomic
     public final void execute() throws BubbleDocsException {
         dispatch();
     }
