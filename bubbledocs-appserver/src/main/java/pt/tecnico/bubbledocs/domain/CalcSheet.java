@@ -180,33 +180,9 @@ public class CalcSheet extends CalcSheet_Base {
     	cell.setContent(content);
     }
     
-    /**
-     * Authors: Duarte
-     * Checks if user has writer permissions over referenced sheet.
-     * @param writer
-     * @return
-     */
-    /*
-    public boolean allowedToWrite(User user){
-    	for(CalcSheet cs: user.getWriteableCalcSheetSet()){
-    		if(cs.getId().equals(this.getId()))
-    			return true;
-    	}
-    	
-    	return false;
-    }
-    */
-    
-    //These methods are implemented in BubbleDocs because users are only supposed
-    //to get their own user.
-    
     /*
      * This adds another user to the list of users that can use this file.
      * The file permission can be read-only or read-write
-     */
-    /**
-     * @param author
-     * @param username
      */
     public void addReader(User author, String username) {
     	//PRECOND: author owns or can write this file
@@ -215,11 +191,6 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     
-
-	/**
-	 * @param author
-	 * @param username
-	 */
 	public void addWriter(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username MUST be able to read this file
@@ -230,40 +201,25 @@ public class CalcSheet extends CalcSheet_Base {
      * This removes a user that is in the list of users that can use 
      * a calcsheet.
      */
-    /**
-     * @param author
-     * @param username
-     */
     public void removeReader(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username can read this file and CANNOT write this file
     	BubbleDocs.getInstance().removeReader(author, username, this);
     }
     
-    /**
-     * @param author
-     * @param username
-     */
+    
     public void removeWriter(User author, String username) {
     	//PRECOND: author owns or can write this file
     	//PRECOND: username can read this file and CANNOT write this file
     	BubbleDocs.getInstance().removeWriter(author, username, this);
     }
     
-    /**
-     * @param line
-     * @param column
-     * @return
-     */
+    
     private boolean outsideBounds(int line, int column) {
     	return line < 1 || column < 1 || line > this.getLines() || column > this.getColumns();
     }
     
-    /**
-     * @param line
-     * @param column
-     * @return
-     */
+    
     private Cell getCellByIndex(int line, int column) {
     	if (outsideBounds(line, column)) {
     		throw new NotFoundException("" + line + ";" + column + " is out of bounds.");
@@ -277,9 +233,7 @@ public class CalcSheet extends CalcSheet_Base {
     	throw new RuntimeException("Error. Cell with position " + line + ";" + column + " does not exist when it should");
     }
     
-    /**
-     * @return
-     */
+    
     public void deleteAllCells() {
     	for (Cell cell : this.getCellSet()) {
     		cell.delete();
@@ -301,9 +255,7 @@ public class CalcSheet extends CalcSheet_Base {
     	deleteDomainObject();
     }
     
-    /**
-     * @param calcSheetElement
-     */
+    
     public void importFromXML(Element calcSheetElement) {
     	Iterator<User> it=BubbleDocs.getInstance().getUserSet().iterator();
     	User u;
@@ -342,9 +294,7 @@ public class CalcSheet extends CalcSheet_Base {
     	this.setBubbleDocs(BubbleDocs.getInstance());
     }
 
-    /**
-     * @return
-     */
+
     public Element exportToXML() {
     	Element element = new Element("calcSheet");
     	try{
@@ -366,16 +316,8 @@ public class CalcSheet extends CalcSheet_Base {
     	return element;
     }
     
-    public String[][] getCellsMatrix(User u){
-    	if (!u.canRead(this)){
-    		throw new PermissionException();
-    	}
-    	
-    	return getCellsMatrix();
-    }
-    
-    
-    public String[][] getCellsMatrix(){
+
+    protected String[][] getCellsMatrix(){
     	String [][] matrix = new String[this.getLines()][this.getColumns()];
     	int l, c;
     	
@@ -444,6 +386,7 @@ public class CalcSheet extends CalcSheet_Base {
     	
     	return mark;
     }
+
     
     private static String nChars(char ch, int n){
     	String out = new String();
