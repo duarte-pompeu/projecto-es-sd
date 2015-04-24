@@ -34,7 +34,7 @@ import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 
-public class ExportDocumentTest extends BubbleDocsServiceTest {
+public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	
 	private final String U_USERNAME = "jubileu";
 	private final String U_USERNAME2 = "olivar";
