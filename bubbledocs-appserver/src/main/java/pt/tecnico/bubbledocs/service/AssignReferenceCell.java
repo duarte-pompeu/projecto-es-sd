@@ -1,10 +1,8 @@
 package pt.tecnico.bubbledocs.service;
 //imports
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.Content;
+import pt.tecnico.bubbledocs.domain.API;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException; //Is it a Reference?
 import pt.tecnico.bubbledocs.exceptions.NotFoundException; //incorrect Cell or Reference given
-import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException; //User doesnt have write permissions
 //token in session?
 //Content Null
@@ -26,14 +24,7 @@ public class AssignReferenceCell extends BubbleDocsService {
 
 	@Override
 	protected void dispatch() throws InvalidFormatException, NotFoundException, PermissionException {
-		BubbleDocs bd = BubbleDocs.getInstance();
-		Content content = bd.assignReference(accessToken, docID, cellID, refID);
-		
-		try {
-		result = Integer.toString(content.getValue());
-		} catch (NullContentException e) {
-			result = "#VALUE";
-		}
+		result = API.onCSAssignReference(accessToken, docID, cellID, refID);
 	}
 
 	public final String getResult() {

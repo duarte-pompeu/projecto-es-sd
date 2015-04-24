@@ -146,7 +146,6 @@ public class BubbleApplication {
     		
 		BubbleDocs pb=BubbleDocs.getInstance();
 		if (!pb.getUserSet().isEmpty()){
-			System.out.println(pb.getCalcSheetByName(DOC).markdownPrint());
 			return;
 		}
 		    

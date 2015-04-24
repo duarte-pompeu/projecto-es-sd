@@ -29,7 +29,6 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	
 	private String CELL_ID0;
 	private String REFF_ID0;
-	private String REFF_ID1;
 	
 	@Override
 	public void populate4Test(){
@@ -40,7 +39,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		CS_ID = CS_SHEET.getId();
 		CELL_ID0 = CS_SHEET.getCell(1, 1).getId();
 		REFF_ID0 = CS_SHEET.getCell(2, 2).getId();
-		REFF_ID1 = CS_SHEET.getCell(3,3).getId();
+		CS_SHEET.getCell(3,3).getId();
 		Literal num1 = new Literal(5);
 		CS_SHEET.setContent(USER, num1, REFF_ID0);
 	}
@@ -63,8 +62,8 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		assertEquals("Reference is NOT correct", 
 				REFF_ID0, 
 				comp_ref.getPointedCell().getId());
-		assertEquals("Bad result",
-				CS_SHEET.getCell(REFF_ID0).getContent().toString(),
+		assertEquals("Bad result", 
+				"=2;2", 
 				service.getResult());
 	}
 	

@@ -332,7 +332,7 @@ public class CalcSheet extends CalcSheet_Base {
     }
     
     
-    public String markdownPrint(){
+    protected String markdownPrint(){
     	String[][] cellsMatrix = this.getCellsMatrix();
     	
     	String mark = new String();

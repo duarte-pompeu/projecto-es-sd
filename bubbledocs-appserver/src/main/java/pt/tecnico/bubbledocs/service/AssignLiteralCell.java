@@ -1,9 +1,6 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.Literal;
-import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.domain.API;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
@@ -28,10 +25,7 @@ public class AssignLiteralCell extends BubbleDocsService{
     public void dispatch() throws InvalidFormatException, NotFoundException, 
     	LoginException, PermissionException {
     	
-    	User user = getUserFromToken(accessToken);	
-    	CalcSheet cs = BubbleDocs.getInstance().getCalcSheetById(docId);
-        cs.setContent(user, new Literal(literal), cellId);
-    	result = cs.getContent(user, cellId).toString();
+    	result = API.onCSAssignLiteral(accessToken, docId, cellId, literal);
     }
 
     public String getResult() {
