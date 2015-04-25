@@ -1,27 +1,25 @@
 package pt.tecnico.bubbledocs.service;
 
-
-
 import pt.tecnico.bubbledocs.domain.*;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
-public class GetUserInfo extends BubbleDocsService {
+public class GetUsername4Token extends BubbleDocsService {
 
-	private String username;
-	private User result;
+	private String token;
+	private String result;
 	
-    public GetUserInfo(String userName) {
-    	this.username = userName;
+    public GetUsername4Token(String token) {
+    	this.token = token;
     }
     
     @Override
     protected void dispatch() throws BubbleDocsException {
-    	BubbleDocs bd = BubbleDocs.getInstance();
-    	this.result = bd.getUser(username);
+    	User user = getUserFromToken(token);
+    	this.result = user.getUserName();
     }
     
-    public User getResult(){
+    public String getResult(){
     	return this.result;
     }
 }
