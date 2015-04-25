@@ -9,4 +9,4 @@ Project planing and execution of first week:
 | João Martins     |    |    |  2 |  2 |    |    |    | #70, #71           |                  |
 | Filipe Morgado   |    |    |    |    |  2 |  2 |    | #75, #77           |                  |
 | Diogo Bastos     |    |    |  3 |  3 |    |    |    | #64, #65           |                  |
-| Tiago Nascimento |    |    |    |    |    |  3 |    | #66, #67, #68, #69 | #66, #67                 |
+| Tiago Nascimento |    |    |    |    |    |  3 |    | #66, #67, #68, #69 | #66, #67, #68, #69|
