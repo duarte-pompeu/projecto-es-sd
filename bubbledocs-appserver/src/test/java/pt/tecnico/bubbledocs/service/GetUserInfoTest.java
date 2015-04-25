@@ -67,12 +67,12 @@ public class GetUserInfoTest extends BubbleDocsServiceTest {
     	GetUserInfo service = new GetUserInfo(BAD_USERNAME);
         service.execute();
     }
-    /*
+    
     @Test(expected = NotFoundException.class)
     public void getInfoAfterRemove() {
     	removeUser(USERNAME_PRESENT);
     	GetUserInfo service = new GetUserInfo(USERNAME_PRESENT);
         service.execute();
-    }*/
+    }
 	
 }

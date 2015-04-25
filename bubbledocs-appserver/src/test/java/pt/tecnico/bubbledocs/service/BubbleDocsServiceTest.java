@@ -53,6 +53,10 @@ public class BubbleDocsServiceTest {
     User createUser(String username, String email, String password, String name) {
     	return BubbleDocs.getInstance().addTestUser(username, name, email, password);
     }
+    
+    void removeUser(String username) {
+    	BubbleDocs.getInstance().removeTestUser(username);
+    }
 
     public CalcSheet createSpreadSheet(User user, String name, int row,
             int column) {

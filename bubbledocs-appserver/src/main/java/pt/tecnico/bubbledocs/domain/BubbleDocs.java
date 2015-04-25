@@ -355,6 +355,37 @@ public class BubbleDocs extends BubbleDocs_Base {
 		BubbleDocs.getInstance().addUser(newuser);
 		return newuser;
 	}
+	
+	//adds a user without using the remote service for test purposes.
+	public void removeTestUser(String username) {
+		
+		User user = this.getUser(username);
+		for (CalcSheet sheet : user.getCreatedCalcSheetSet()) {
+			sheet.deleteAllCells();
+		}
+		
+		for (CalcSheet writing : user.getWriteableCalcSheetSet()) {
+			user.removeWriteableCalcSheet(writing);
+			writing.removeWritingUser(user);
+		}
+		
+		for (CalcSheet reading : user.getReadableCalcSheetSet()) {
+			user.removeReadableCalcSheet(reading);
+			reading.removeReadingUser(user);
+		}
+		
+		Session session = user.getSession();
+		if (session !=  null) {
+			session.setUser(null);
+			session.delete();
+		}
+		
+		user.setBubbleDocs(null);
+		
+		this.removeUser(user);
+		
+		user.delete();
+	}
 
 	/**
 	 * @param userName

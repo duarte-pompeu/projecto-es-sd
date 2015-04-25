@@ -23,6 +23,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	ExportDocumentTest.class,
 	LoginUserTest.class,
 	GetUserInfoTest.class,
+	GetUsername4TokenTest.class,
 	RenewPasswordServiceTest.class})
 public class ServiceTestSuite {
 
