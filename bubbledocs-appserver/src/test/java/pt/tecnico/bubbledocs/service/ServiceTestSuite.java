@@ -22,6 +22,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	DeleteUserTest.class,
 	ExportDocumentTest.class,
 	LoginUserTest.class,
+	GetUserInfoTest.class,
 	RenewPasswordServiceTest.class})
 public class ServiceTestSuite {
 

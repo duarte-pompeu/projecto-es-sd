@@ -16,6 +16,7 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
@@ -107,10 +108,22 @@ public class BubbleDocs extends BubbleDocs_Base {
 	/**
 	 * Searches the user set and returns the user with a specific user name.
 	 * @param name the user's user name
-	 * @return The desired user. If it is not found, a NotFoundException is thrown.
+	 * @return The desired user. If it is not found, a NotFoundException is thrown,
+	 * if null or empty username a InvalidUserNameException is thrown
 	 */
-	public User getUser(String username) throws NotFoundException {
+	public User getUser(String username) throws NotFoundException,InvalidUsernameException {
 
+		try {
+		
+		if(username.equals(null) || username.equals(""))
+			throw new InvalidUsernameException("InvalidUsernameException: "
+					+ "An username can´t be" + username );
+		} catch (NullPointerException e) {
+			throw new InvalidUsernameException("InvalidUsernameException: "
+					+ "An username can´t be" + username );
+		}
+		
+		
 		for(User tempUser: this.getUserSet()){
 			if (tempUser.getUserName().equals(username)){
 				return tempUser;
