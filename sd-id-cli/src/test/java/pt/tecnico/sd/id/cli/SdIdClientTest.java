@@ -21,11 +21,6 @@ public class SdIdClientTest {
 	SdIdConnector connector;
 	
 	private SdIdClient createSdIdClient() throws Exception {
-		new Expectations() {{
-			connector.connect(anyString, anyString);
-			connector.getPort();
-		}};
-		
 		return new SdIdClient();
 	}
 	
