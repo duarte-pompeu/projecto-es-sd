@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrationTest;
+import pt.tecnico.bubbledocs.integration.*;
 
 //To test this you can run:
 //    mvn test -Dtest=*Suite
@@ -20,7 +20,7 @@ import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrationTest;
 	AssignLiteralCellTest.class, 
 	AssignReferenceCellTest.class,
 	CreateCalcSheetTest.class,
-	CreateUserTest.class,
+	CreateUserIntegratorTest.class,
 	DeleteUserTest.class,
 	ExportDocumentTest.class,
 	LoginUserTest.class,
