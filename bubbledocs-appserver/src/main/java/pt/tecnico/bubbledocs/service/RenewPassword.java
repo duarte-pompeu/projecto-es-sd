@@ -12,8 +12,7 @@ public class RenewPassword extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws BubbleDocsException {
-		
+	protected void dispatch() throws BubbleDocsException {		
 		User user = getUserFromToken(token);
 		user.renewPassword();
 	}
