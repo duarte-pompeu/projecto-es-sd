@@ -4,6 +4,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrationTest;
+
 //To test this you can run:
 //    mvn test -Dtest=*Suite
 //
@@ -24,7 +26,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	LoginUserTest.class,
 	GetUserInfoTest.class,
 	GetUsername4TokenTest.class,
-	RenewPasswordServiceTest.class})
+	RenewPasswordIntegrationTest.class})
 public class ServiceTestSuite {
 
 }

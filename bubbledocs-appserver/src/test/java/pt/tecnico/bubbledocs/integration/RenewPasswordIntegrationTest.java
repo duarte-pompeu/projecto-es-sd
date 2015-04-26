@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration;
 
 import mockit.*;
 import static org.junit.Assert.*;
@@ -10,9 +10,10 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class RenewPasswordServiceTest extends BubbleDocsServiceTest {
+public class RenewPasswordIntegrationTest extends BubbleDocsServiceTest {
 
 	@Mocked
 	IDRemoteServices remote;
@@ -31,7 +32,7 @@ public class RenewPasswordServiceTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void success() {		
-		RenewPassword service = new RenewPassword(token);
+		RenewPasswordIntegrator service = new RenewPasswordIntegrator(token);
 		service.execute();
 		
 		User user = getUserFromUsername(USERNAME);
@@ -56,14 +57,14 @@ public class RenewPasswordServiceTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		RenewPassword service = new RenewPassword(token);
+		RenewPasswordIntegrator service = new RenewPasswordIntegrator(token);
 		service.execute();
 	}
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void expired() {
 		removeUserFromSession(token);
-		RenewPassword service = new RenewPassword(token);
+		RenewPasswordIntegrator service = new RenewPasswordIntegrator(token);
 		service.execute();
 		
 		new Verifications() {{ //verify the service was not called
@@ -73,7 +74,7 @@ public class RenewPasswordServiceTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void invalid() {
-		RenewPassword service = new RenewPassword("I am a silly token");
+		RenewPasswordIntegrator service = new RenewPasswordIntegrator("I am a silly token");
 		service.execute();
 		
 		new Verifications() {{ //verify the service was not called

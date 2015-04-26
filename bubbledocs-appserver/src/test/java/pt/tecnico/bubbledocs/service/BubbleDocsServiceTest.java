@@ -50,7 +50,7 @@ public class BubbleDocsServiceTest {
     	return createUser(username, null, password, name);
     }
     
-    User createUser(String username, String email, String password, String name) {
+    protected User createUser(String username, String email, String password, String name) {
     	return BubbleDocs.getInstance().addTestUser(username, name, email, password);
     }
     
@@ -74,18 +74,18 @@ public class BubbleDocsServiceTest {
     }
 
     // returns the user registered in the application whose username is equal to username
-    User getUserFromUsername(String username) {
+    protected User getUserFromUsername(String username) {
     	return BubbleDocs.getInstance().getUser(username);
     }
 
     // put a user into session and returns the token associated to it
-    String addUserToSession(String username) {
+    protected String addUserToSession(String username) {
     	User user = BubbleDocs.getInstance().getUser(username);
     	return BubbleDocs.getInstance().addSession(user);
     }
 
     // remove a user from session given its token
-    void removeUserFromSession(String token) {
+    protected void removeUserFromSession(String token) {
     	Session session = getSessionFromToken(token);
     	DateTime time = new DateTime();
     	time = time.minusHours(1);
@@ -97,7 +97,7 @@ public class BubbleDocsServiceTest {
     	return getSessionFromToken(token).getUser();
     }
 
-    Session getSessionFromToken(String token) {
+    protected Session getSessionFromToken(String token) {
     	return BubbleDocs.getInstance().getSessionFromToken(token);
     }
 
