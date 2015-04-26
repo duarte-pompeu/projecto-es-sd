@@ -24,7 +24,7 @@
 	<configuration>
           <systemPropertyVariables>
             <uddi.url>${uddi.url}</uddi.url>
-            <ws.name>SD-ID</ws.name> <!-- Nome do webservice -->
+            <sd.id.name>SD-ID</sd.id.name> <!-- Nome do webservice -->
           </systemPropertyVariables>
 	</configuration>
       </plugin>

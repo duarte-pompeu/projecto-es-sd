@@ -18,7 +18,7 @@ public class SdIdClient {
 	protected SdIdClient() throws SdIdRemoteException {
 		try {
 			String uddiUrl = System.getProperty("uddi.url");
-			String wsName = System.getProperty("ws.name");
+			String wsName = System.getProperty("sd.id.name");
 			
 			connector.connect(uddiUrl, wsName);			
 			this.port = connector.getPort();			

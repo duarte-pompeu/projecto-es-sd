@@ -173,6 +173,7 @@ public class SDIdImpl implements SDId {
 			throw e;
 		}
 		
+		log(userId + " authenticated with password \"" + new String(reserved) + "\"");
 		
 		return "1".getBytes();
 	}
