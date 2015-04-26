@@ -158,7 +158,7 @@ public class BubbleApplication {
 		BubbleDocs.getInstance().addUser("root", "root@rootmail.root", "Super User", "rootroot");
 		login = new LoginUser("root", "rootroot");
 		login.execute();
-		root_token = login.getUserToken();
+		root_token = login.getResult();
 		
 		CreateUser createService = new CreateUser(root_token, "pf_abc", "sub", "Paul Door");
 		createService.execute();
@@ -167,7 +167,7 @@ public class BubbleApplication {
 
 		login = new LoginUser("pf_abc", "sub");
 		login.execute();
-		pf_token = login.getUserToken();
+		pf_token = login.getResult();
 		
 		CreateSpreadSheet spread = new CreateSpreadSheet(pf_token, DOC, 300, 20);
 		spread.execute();

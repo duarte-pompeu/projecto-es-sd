@@ -67,7 +67,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		service.execute(); //it shouldn't explode here.
 		
 		DateTime currentTime = new DateTime();
-		String token = service.getUserToken();
+		String token = service.getResult();
 		User user = getUserFromSession(token);
 
 		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
@@ -86,7 +86,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LoginUser service = new LoginUser(LOGGED_IN, PASSWORD);
 
 		service.execute();
-		String token1 = service.getUserToken();
+		String token1 = service.getResult();
 		DateTime access1 = getLastAccessTimeInSession(token1);
 		
 		try {
@@ -95,7 +95,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		} catch (InterruptedException e) {/*good luck with that*/}
 
 		service.execute();
-		String token2 = service.getUserToken();
+		String token2 = service.getResult();
 		DateTime access2 = getLastAccessTimeInSession(token2);
 		
 		int difference = Seconds.secondsBetween(access1, access2).getSeconds();
@@ -110,7 +110,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LoginUser service = new LoginUser(ROOT, ROOT_PASS);
 		service.execute();
 		
-		User supah = getUserFromSession(service.getUserToken());
+		User supah = getUserFromSession(service.getResult());
 		
 		assertTrue("Root should be an instance of SuperUser", supah instanceof SuperUser);
 	}
@@ -153,7 +153,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		User u = this.getUserFromUsername(JUBI_UNAME);
 		String utoken = u.getSession().getToken();
-		String stoken = service.getUserToken();
+		String stoken = service.getResult();
 		
 		assertNotNull(utoken);
 		assertNotNull(stoken);
@@ -176,7 +176,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		User u = this.getUserFromUsername(JUBI_UNAME);
 		String utoken = u.getSession().getToken();
-		String stoken = service.getUserToken();
+		String stoken = service.getResult();
 		
 		assertNotNull(utoken);
 		assertNotNull(stoken);
