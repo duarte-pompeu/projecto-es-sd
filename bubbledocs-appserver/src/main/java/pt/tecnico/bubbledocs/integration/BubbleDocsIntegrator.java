@@ -10,11 +10,7 @@ import pt.tecnico.bubbledocs.domain.User;
 
 public abstract class BubbleDocsIntegrator {
 
-    public final void execute() throws BubbleDocsException {
-        dispatch();
-    }
-
-    protected abstract void dispatch() throws BubbleDocsException;
+    public abstract void execute() throws BubbleDocsException;
     
     //Almost every service depends on an active session.
     protected Session getSessionFromToken(String token) throws UserNotInSessionException {

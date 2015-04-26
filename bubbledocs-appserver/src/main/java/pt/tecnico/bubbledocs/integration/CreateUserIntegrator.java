@@ -23,7 +23,7 @@ public class CreateUserIntegrator extends BubbleDocsIntegrator {
     }
     
     @Override
-    protected void dispatch() throws BubbleDocsException {
+    public void execute() throws BubbleDocsException {
     	User user = getUserFromToken(token);
     	this.result = user.createUser(username, name, email, null);
 		
