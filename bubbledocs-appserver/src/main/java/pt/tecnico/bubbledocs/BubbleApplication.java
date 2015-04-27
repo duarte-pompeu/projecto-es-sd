@@ -62,73 +62,7 @@ public class BubbleApplication {
 			}
 		}
 	}
-	
-	
-	/**
-	 * This function prints to stdout information about the calcSheets of a specific user.
-	 * @param userName The user's user name.
-	 */
-	private static void getThisUsersCalcSheets(String userName){
-		
-		User u = getUser(BubbleDocs.getInstance(), userName);
-		System.out.println("Calcsheets created by " + u.getName() + ":");
-		for(CalcSheet cs: u.getCreatedCalcSheetSet()){
-			String s = "CalcSheet: name,ID=(" + cs.getName() + ","
-					+ cs.getId() + ")";
-			System.out.println(s);
-		}
-		System.out.println("END");	
 
-	}
-	
-	
-	
-	
-	/**
-	 * Given the name of the calcSheet and the user name of its owner, this method will remove the calcSheet
-	 * from the persistent state of the application
-	 * @param name the calcSheet's creator's name
-	 * @param user the name of the calcSheet which will be removed
-	 */
-	private static void removeCalcSheet(String name, String user) {
-	    		
-	    BubbleDocs pb = BubbleDocs.getInstance();
-	    pb.removeCalcSheet(name, user);
-	    		
-	}
-	
-	/**
-	 * This method will convert all the calcSheet from a user into XML.
-	 * It then prints the resulting XML to the stdout.
-	 * It also returns an ArrayList of the user's documents.
-	 * @param user the user name of the person whose calcSheets will be converted
-	 * @param doc the arrayList in which the converted calcSheets will be saved
-	 * @return the arrayList which contains all of the user's calcSheets in XML document format
-	 */
-	private static ArrayList<org.jdom2.Document> printAllCalcSheetsFromUser(String user, ArrayList<org.jdom2.Document> doc){
-
-		org.jdom2.Document d=null;
-		BubbleDocs pb = BubbleDocs.getInstance();
-		for(CalcSheet c: pb.getCalcSheetSet()){
-			if(c.getCreator().getUserName().compareTo(user)==0)
-				printDomainInXML(d=convertToXML(c));}
-		if(d!=null)
-			doc.add(d);
-		return doc;
-	}
-	
-	/**
-	 * This method will import a XML document, containing a CalcSheet into the application.
-	 * @param jdomDoc The XML document which will be imported.
-	 */
-	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
-		CalcSheet a=new CalcSheet();
-		
-		a.importFromXML(jdomDoc.getRootElement());
-		
-		BubbleDocs.getInstance().getCalcSheetSet().add(a);
-	}
-	
 	
 	/**
 	 * This method will verify if the database is empty by verifying if it had any users.
@@ -178,31 +112,6 @@ public class BubbleApplication {
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
 	}
 
-	
-    /**
-     * This method will print information about each of the users stored in the database.
-     */
-    static void getAllPeople(){
-   
-	 BubbleDocs pb = BubbleDocs.getInstance();
-	 	for (User p : pb.getUserSet()) {
-	 		System.out.println(p.getUserName() +" " + p.getName() + " " + p.getPassword() );
-	 	}
-	 	
-    }
-	 	
-	 
-	/**
-	 * @param u
-	 * @param substring
-	 * @return
-	 */
-	public static User getUser(BubbleDocs bd, String username) {
-			
-		return bd.getUser(username);
-	}
-	
-		
   	/**
   	 * This method converts a calcSheet into a XML document.
   	 * @param c The calcSheet which will be converted
@@ -215,16 +124,6 @@ public class BubbleApplication {
   		jdomDoc.setRootElement(c.exportToXML());
 
   		return jdomDoc;
-    }
-
-    /**
-     * This method take a XML jdomDoc object, convert it into a String and print the result to stdout.
-     * @param jdomDoc The document which will be converted and printed to stdout.
-     */
-    public static void printDomainInXML(org.jdom2.Document jdomDoc) {
-		XMLOutputter xml = new XMLOutputter();
-		xml.setFormat(Format.getPrettyFormat());
-		System.out.println(xml.outputString(jdomDoc));
     }
 
 }
