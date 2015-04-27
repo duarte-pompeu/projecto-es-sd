@@ -5,6 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import pt.tecnico.bubbledocs.integration.*;
+import pt.tecnico.bubbledocs.integration.component.CreateUserIntegratorTest;
+import pt.tecnico.bubbledocs.integration.component.RenewPasswordIntegrationTest;
 
 //To test this you can run:
 //    mvn test -Dtest=*Suite

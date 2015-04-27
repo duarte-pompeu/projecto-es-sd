@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.integration;
+package pt.tecnico.bubbledocs.integration.component;
 
 import mockit.*;
 import static org.junit.Assert.*;
@@ -10,6 +10,7 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
