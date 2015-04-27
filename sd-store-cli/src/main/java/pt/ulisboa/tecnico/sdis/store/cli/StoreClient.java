@@ -3,14 +3,24 @@ package pt.ulisboa.tecnico.sdis.store.cli;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
+import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
+import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
+import pt.ulisboa.tecnico.sdis.store.cli.service.ListDocsService;
+import pt.ulisboa.tecnico.sdis.store.cli.service.LoadDocService;
+import pt.ulisboa.tecnico.sdis.store.cli.service.StoreDocService;
+import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore_Service;
+import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
 public class StoreClient{
 	static SDStore _port;
@@ -20,23 +30,13 @@ public class StoreClient{
 	public static String uddiName ="sd-store";
 	
 	
-	public static void main(String[] args){
-
-		if(args.length >= 1){
-			uddiURL = args[0];
-		}
-		
-		if(args.length >= 2){
-			uddiName = args[1];
-		}
-		
-		
-		try {
-			_port = findUddi(uddiURL, uddiName);
-		} catch (JAXRException e) {
-			System.err.println("Connection failed: exception raised when checking UDDI.");
-			System.err.println(e.getMessage());
-		}
+	public StoreClient() throws JAXRException{
+		this(StoreClient.uddiURL, StoreClient.uddiName);
+	}
+	
+	
+	public StoreClient(String uddiUrl, String uddiName) throws JAXRException{
+		_port = findUddi(uddiURL, uddiName);
 	}
 	
 	
@@ -66,6 +66,36 @@ public class StoreClient{
         
         return port;
 	}
+	
+	
+	public static void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
+		initIfNoPort();
+		CreateDocService service = new CreateDocService(userID, docID, _port);
+		service.dispatch();
+	}
+	
+	
+	public static List<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
+		initIfNoPort();
+		ListDocsService service = new ListDocsService(userID, _port);
+		service.dispatch();
+		return service.getResult();
+	}
+	
+	
+	public static byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+		initIfNoPort();
+		LoadDocService service = new LoadDocService(userID, docID, _port);
+		service.dispatch();
+		return service.getResult();
+	}
+	
+	
+	public static void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+		initIfNoPort();
+		StoreDocService service = new StoreDocService(userID, docID, content, _port);
+		service.dispatch();
+	}
 
 	
 	public static byte[] string2bytes(String s){
@@ -85,8 +115,17 @@ public class StoreClient{
 		}
 	}
 	
+	
+	public static void initIfNoPort(){
+		if(_port == null){
+			_port = initPort();
+		}
+	}
+	
+	
 	public static SDStore initPort(){
 		SDStore_Service service = new SDStore_Service();
 		return service.getSDStoreImplPort();
 	}
+	
 }
