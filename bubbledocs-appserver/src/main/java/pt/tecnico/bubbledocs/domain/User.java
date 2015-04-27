@@ -153,15 +153,6 @@ public class User extends User_Base {
 		deleteDomainObject();
 	}
 
-	public void renewPassword(IDRemoteServices remote) {
-		String username = getUserName();
-		
-		try {
-			remote.renewPassword(username);
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException();
-		}
-	}
 
 	public void clearPassword() {
 		setPassword(null);

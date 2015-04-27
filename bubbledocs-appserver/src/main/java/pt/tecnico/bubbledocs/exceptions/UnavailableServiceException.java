@@ -11,4 +11,8 @@ public class UnavailableServiceException extends BubbleDocsException {
 	public UnavailableServiceException(String message){
 		super(message);
 	}
+	
+	public UnavailableServiceException(Throwable t) {
+		super(t);
+	}
 }
