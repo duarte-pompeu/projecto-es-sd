@@ -16,11 +16,13 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
+import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class LocalSystemTest {
 	
 		@Mocked
-		IDRemoteServices remote;
+		IDRemoteServices remoteID;
+		StoreRemoteServices remoteSTORE;
 		BubbleDocs bd;
 		static TransactionManager tm;
 		
