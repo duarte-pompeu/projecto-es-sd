@@ -586,5 +586,10 @@ public class BubbleDocs extends BubbleDocs_Base {
 	//Fix me: implement
 	public int createNewDocument(byte [] xmlDoc){ return 0; }
 
-	
+	public void deleteBubbleDocs(){
+		for (User user : this.getUserSet()) 
+			this.deleteUser(user.getUserName());
+		deleteDomainObject();
+		}
+		
 }
