@@ -10,15 +10,11 @@ import mockit.Mocked;
 import mockit.Verifications;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.ist.fenixframework.FenixFramework;
-import pt.ist.fenixframework.TransactionManager;
+
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
@@ -43,22 +39,11 @@ public class LocalSystemTest {
 		 private static final int CALCSHEET_COLUMNS = 50;
 		
 		 
-		@BeforeClass
-		public static void setUpBeforeClass() throws Exception {
-			bd = BubbleDocs.getInstance();
-			if (bd.getUserSet().size()!=1){
-				bd.deleteBubbleDocs();
-			}
-		}
-
-		@AfterClass
-		public static void tearDownAfterClass() throws Exception {
-			//Maybe empty
-			}
+		
 		 
 	    @Before
 	    public void setUp() throws Exception {
-	    	//maybe empty
+	    	bd = BubbleDocs.getInstance();
 	    }
 
 	    @After
