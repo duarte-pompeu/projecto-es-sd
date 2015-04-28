@@ -10,7 +10,9 @@ import mockit.Mocked;
 import mockit.Verifications;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.ist.fenixframework.FenixFramework;
@@ -29,7 +31,7 @@ public class LocalSystemTest {
 		IDRemoteServices remoteID;
 		@Mocked
 		StoreRemoteServices remoteSTORE;
-		BubbleDocs bd;
+		static BubbleDocs bd;
 		
 		 private String root_token;
 		 private String user_token;
@@ -40,15 +42,28 @@ public class LocalSystemTest {
 		 private static final int CALCSHEET_ROWS = 50;
 		 private static final int CALCSHEET_COLUMNS = 50;
 		
+		 
+		@BeforeClass
+		public static void setUpBeforeClass() throws Exception {
+			bd = BubbleDocs.getInstance();
+			if (bd.getUserSet().size()!=1){
+				bd.deleteBubbleDocs();
+			}
+		}
+
+		@AfterClass
+		public static void tearDownAfterClass() throws Exception {
+			//Maybe empty
+			}
+		 
 	    @Before
 	    public void setUp() throws Exception {
-	    	bd.deleteBubbleDocs();
-	    	bd = BubbleDocs.getInstance();
+	    	//maybe empty
 	    }
 
 	    @After
 	    public void tearDown() {
-	    //nothing needed here
+	    	bd.deleteBubbleDocs();
 	    }
 	    
 	    @Test
