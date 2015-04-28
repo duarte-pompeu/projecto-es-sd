@@ -1,8 +1,5 @@
 package pt.tecnico.bubbledocs.service.remote;
 
-import static org.junit.Assert.*;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class IDRemoteServicesRemoteTest {

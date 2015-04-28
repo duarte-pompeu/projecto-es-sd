@@ -11,6 +11,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
 public class StoreRemoteServices {
+	
 	public void storeDocument(String username, String docName, byte[] document)
 			throws CannotStoreDocumentException, RemoteInvocationException {
 		
