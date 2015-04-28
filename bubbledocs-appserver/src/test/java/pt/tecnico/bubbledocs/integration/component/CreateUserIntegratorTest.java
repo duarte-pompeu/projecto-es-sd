@@ -2,8 +2,7 @@
 package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
-import mockit.Mock;
-import mockit.MockUp;
+import mockit.*;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 import org.junit.Test;
@@ -24,7 +23,10 @@ import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
 
 public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
 
-    //tokens
+	@Mocked
+	IDRemoteServices remote;
+	
+	//tokens
     private String root_token;
     private String user_token;
 	//info for user creation
@@ -44,27 +46,17 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
     	createUser(USERNAME_PRESENT, EMAIL_PRESENT, PASSWORD, NAME);
         user_token = addUserToSession(USERNAME_PRESENT);
     }
-	
-	
-	//Mock class simulating an unavailable SD-ID service
-	public static class MockSDIdUnavailable extends MockUp<IDRemoteServices>
-	{
-	   @Mock
-	   public void $init() {}
-
-	   @Mock
-	   public void createUser(String username, String email) throws RemoteInvocationException
-	   {
-	      throw new RemoteInvocationException();
-	   }
-	}
-
+    
 	//success case
     @Test
     public void success() {
     	CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME, EMAIL, NAME);
         service.execute();
-
+        
+        new Verifications() {{ //verify the service was called		
+        	remote.createUser(USERNAME, EMAIL);	times =  1;
+        }};
+        
         User user = service.getResult();
         
         assertEquals(USERNAME, user.getUserName());
@@ -75,26 +67,37 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
     //null username case
     @Test(expected = InvalidUsernameException.class)
     public void emptyUsername() {
-        CreateUserIntegrator service = new CreateUserIntegrator(root_token, "", EMAIL, NAME);
+        new Expectations() {{
+        	remote.createUser("", EMAIL);
+        	result = new InvalidUsernameException();
+        }};
+    	
+    	CreateUserIntegrator service = new CreateUserIntegrator(root_token, "", EMAIL, NAME);
         service.execute();
-        
     }
     
     //duplicate username case
     @Test(expected =  DuplicateUsernameException.class)
     public void usernameExists() {
-        CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME_PRESENT, EMAIL, NAME);
-        service.execute();
-        
+    	new Expectations() {{
+        	remote.createUser(USERNAME_PRESENT, EMAIL);
+        	result = new DuplicateUsernameException();
+        }};
+    	
+    	CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME_PRESENT, EMAIL, NAME);
+        service.execute();        
     }
     
     //long username case
     @Test(expected = InvalidUsernameException.class)
     public void usernameTooLong(){
-    	String long_name = "Maria Teresa García Ramírez de Arroyo";
+    	String long_name = "Maria Teresa García Ramírez de Arroyo";    	
     	CreateUserIntegrator service = new CreateUserIntegrator(root_token, long_name, EMAIL, "name");
     	service.execute();
     	
+    	new Verifications() {{
+    		remote.createUser(anyString, anyString); times = 0;
+    	}};
     }
     
     //short username case
@@ -103,6 +106,9 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
     	CreateUserIntegrator service = new CreateUserIntegrator(root_token, "a", EMAIL, "name");
     	service.execute();
     	
+    	new Verifications() {{
+    		remote.createUser(anyString, anyString); times = 0;
+    	}};    	
     }
     
     //user with no permission case
@@ -112,6 +118,9 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
                 "Sensei");
         service.execute();
         
+        new Verifications() {{
+    		remote.createUser(anyString, anyString); times = 0;
+    	}};        
     }
     
     //root not in session case
@@ -122,27 +131,43 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
                 "Sensei");
         service.execute();
         
+        new Verifications() {{
+    		remote.createUser(anyString, anyString); times = 0;
+    	}};        
     }
     
     //duplicate username case
     @Test(expected = DuplicateEmailException.class)
     public void DuplicateEmail(){
-    	CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME, EMAIL, NAME);
+    	new Expectations() {{
+    		remote.createUser(USERNAME, EMAIL_PRESENT);
+    		result = new DuplicateEmailException();
+    	}};
+    	
+    	CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME, EMAIL_PRESENT, NAME);
     	service.execute();
     }
 
     //invalid email case
     @Test(expected = InvalidEmailException.class)
     public void InvalidEmail(){
+    	new Expectations() {{
+    		remote.createUser(USERNAME, "im no mail");
+    		result = new InvalidEmailException();
+    	}};
+    	
     	CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME, "im no mail", NAME);
     	service.execute();
-
     }
     
     //remote service exception case
     @Test(expected = UnavailableServiceException.class)
 	public void unavailable() {
-    	new MockSDIdUnavailable();
+    	new Expectations() {{
+    		remote.createUser(USERNAME, EMAIL);
+    		result = new RemoteInvocationException();
+    	}};
+    	
 		CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME, EMAIL, NAME);
 		service.execute();
 	}
