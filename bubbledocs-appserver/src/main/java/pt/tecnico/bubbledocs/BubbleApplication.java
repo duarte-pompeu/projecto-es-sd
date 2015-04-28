@@ -1,22 +1,16 @@
 package pt.tecnico.bubbledocs;
 
 
-import java.util.ArrayList;
-
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
-
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.service.AssignLiteralCell;
 import pt.tecnico.bubbledocs.service.AssignReferenceCell;
 import pt.tecnico.bubbledocs.service.CreateSpreadSheet;

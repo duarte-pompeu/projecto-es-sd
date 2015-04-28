@@ -16,7 +16,6 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
-import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
@@ -27,11 +26,9 @@ import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
  * Generate unique an unique Id for each new calcSheet.
  */
 public class BubbleDocs extends BubbleDocs_Base {
-	private static final int USERNAME_MIN_LEN = 3;
-	private static final int USERNAME_MAX_LEN = 8;
-	
-	
+		
 	Random rng;
+	
 	/**
 	 * This method makes a connection to the database, returning the instance of bubbledocs saved there.
 	 * If the database is empty then it creates a new instance.
@@ -296,15 +293,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 
 	public User addUser(String username, String name, String email, String password) {
-		//business constraint: length of username is restricted
-		if(username.length() < USERNAME_MIN_LEN){
-			throw new InvalidUsernameException("Username " + username + " is too short. "
-					+ "Minimum length is " + USERNAME_MIN_LEN + ".");
-		}
-		if(username.length() > USERNAME_MAX_LEN){
-			throw new InvalidUsernameException("Username " + username + " is too long. "
-					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
-		}
 
 		// invoke remote services to create user
 		try{
@@ -333,15 +321,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 	//adds a user without using the remote service.
 	public User addTestUser(String username, String name, String email, String password) {
-		
-		if(username.length() < USERNAME_MIN_LEN){
-			throw new InvalidUsernameException("Username " + username + " is too short. "
-					+ "Minimum length is " + USERNAME_MIN_LEN + ".");
-		}
-		if(username.length() > USERNAME_MAX_LEN){
-			throw new InvalidUsernameException("Username " + username + " is too long. "
-					+ "Maxmium length is " + USERNAME_MAX_LEN + ".");
-		}
 		
 		if (hasUser(username)) throw new DuplicateUsernameException();
 		
