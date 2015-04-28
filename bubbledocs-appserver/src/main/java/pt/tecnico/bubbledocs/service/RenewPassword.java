@@ -21,18 +21,4 @@ public class RenewPassword extends BubbleDocsService {
 		User user = getUserFromToken(token);
 		user.clearPassword();
 	}
-	
-	//What is this doing here? This is a non atomic method
-	//that invokes a remote service. The invocation logic
-	//is in User.
-	public void renewPassword(IDRemoteServices remote) {
-		GetUsername4Token service = new GetUsername4Token(this.token);
-		service.execute();
-		try {
-			remote.renewPassword(service.getResult());
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException(e);
-		}		
-	}
-
 }
