@@ -7,6 +7,8 @@ import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 public class RenewPassword extends BubbleDocsService {
 
 	private String token;
+	private String oldPass;
+	private User user;
 
 	public RenewPassword(String token) {
 		this.token = token;
@@ -18,7 +20,12 @@ public class RenewPassword extends BubbleDocsService {
 	//locally stored password.
 	@Override
 	protected void dispatch() throws BubbleDocsException {		
-		User user = getUserFromToken(token);
+		this.user = getUserFromToken(token);
+		this.oldPass = user.getPassword();
 		user.clearPassword();
+	}
+
+	public void compensate() {
+		user.setPassword(oldPass);		
 	}
 }

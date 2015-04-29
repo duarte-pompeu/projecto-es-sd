@@ -51,7 +51,7 @@ public class RenewPasswordIntegrationTest extends BubbleDocsServiceTest {
 		assertFalse("user should still be in session", session.isExpired());
 	}
 	
-	@Test(expected = UnavailableServiceException.class)
+	@Test
 	public void unavailable() {
 		new Expectations() {{
 			remote.renewPassword(USERNAME); times = 1;
@@ -59,7 +59,13 @@ public class RenewPasswordIntegrationTest extends BubbleDocsServiceTest {
 		}};
 		
 		RenewPasswordIntegrator service = new RenewPasswordIntegrator(token);
-		service.execute();
+		try {
+			service.execute();
+			fail("expected UnavailableServiceException");
+		} catch (UnavailableServiceException e) {
+			User user = this.getUserFromUsername(USERNAME);
+			assertNotNull("something", user.getPassword());
+		}
 	}
 	
 	@Test(expected = UserNotInSessionException.class)

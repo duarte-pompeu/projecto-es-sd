@@ -23,13 +23,14 @@ public class RenewPasswordIntegrator extends BubbleDocsIntegrator {
 		GetUsername4Token u4t = new GetUsername4Token(this.token);
 		u4t.execute();
 		
+		service.execute();
+		
 		try {
 			getIDRemoteServices().renewPassword(u4t.getResult());
 		} catch (RemoteInvocationException e) {
+			service.compensate();
 			throw new UnavailableServiceException(e);
 		} 
-		
-		service.execute();
 	}
 
 }
