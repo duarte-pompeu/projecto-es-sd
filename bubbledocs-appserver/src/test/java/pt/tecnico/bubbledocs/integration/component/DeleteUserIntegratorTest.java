@@ -1,6 +1,6 @@
 package pt.tecnico.bubbledocs.integration.component;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
@@ -22,16 +22,14 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 	
 	@Mocked
-	IDRemoteServices remote;
-	
+	IDRemoteServices remote;	
     private static final String USERNAME_TO_DELETE = "todelete";
-	
+    private static final String SPREADSHEET_TO_DELETE = "Not a cheat sheet";
     private static final String USERNAME = "turtle";
     private static final String PASSWORD = "pizza";
     private static final String EMAIL = "quack@patos.com";
 	private static final String NAME = "Franklin"; 
-    private static final String ROOT_USERNAME = "root";
-	
+    private static final String ROOT_USERNAME = "root";	
     private static final String ALT_USERNAME = "rato";
 
 	private User toDelete;
@@ -41,8 +39,8 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
     @Override
     public void populate4Test() {
         createUser(USERNAME,EMAIL, PASSWORD, NAME);
-        toDelete = createUser(USERNAME_TO_DELETE, "me@example.lol", "please", "john de lete");
-        createSpreadSheet(toDelete, USERNAME_TO_DELETE, 20, 20);
+        toDelete = createUser(USERNAME_TO_DELETE, "me@example.lol", "please", "John deLete");
+        createSpreadSheet(toDelete, SPREADSHEET_TO_DELETE, 20, 20);
 
         root = addUserToSession(ROOT_USERNAME);
     };
@@ -55,26 +53,31 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 			remote.removeUser(USERNAME_TO_DELETE); times = 1;
 		}};
         
-        boolean caught = false;
         try {
         	this.getUserFromUsername(USERNAME_TO_DELETE);
+        	fail("User should not exist");
         } catch (NotFoundException e) {
-        	caught = true; //cool
+        	//cool
+        } 
+        
+        try {
+        	this.getSpreadSheet(SPREADSHEET_TO_DELETE);
+        	fail("Spreadsheet should not exist");
+        } catch (NotFoundException e) {
+        	//double cool
         }        
-        
-        assertTrue("User should not exist", caught);
-        
-        caught = false;
-        try {
-        	this.getUserFromUsername(USERNAME_TO_DELETE);
-        } catch (NotFoundException e) {
-        	caught = true; //cool
-        }
-        
-        assertTrue("Spreadsheet should not exist", caught);
-
     }
-
+    
+    public void testCompensation() {
+    	//The user that was supposed to be deleted
+    	//Still exists;
+    	User user = this.getUserFromUsername(USERNAME_TO_DELETE);
+    	
+    	//Some sanity asserts
+    	assertEquals("Hum. Username is different?", user.getUserName(), USERNAME_TO_DELETE);
+    	assertEquals("Name is different", user.getName(), "John deLete");
+    	assertEquals("Email is different", user.getEmail(), "me@example.lol");
+    }
 	
     @Test
     public void successToDeleteIsNotInSession() {
@@ -90,45 +93,57 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void userToDeleteDoesNotExist() {
+        new Expectations() {{
+        	remote.removeUser(anyString); times = 0;
+        }};
+
         new DeleteUserIntegrator(root, ALT_USERNAME).execute();
     }
 
     @Test(expected = PermissionException.class)
     public void notRootUser() {
+        new Expectations() {{
+        	remote.removeUser(anyString); times = 0;
+        }};
+    	
         String user_token = addUserToSession(USERNAME);
         new DeleteUserIntegrator(user_token, USERNAME_TO_DELETE).execute();
     }
 
     @Test(expected = UserNotInSessionException.class)
     public void rootNotInSession() {
+        new Expectations() {{
+        	remote.removeUser(anyString); times = 0;
+        }};
+    	
         removeUserFromSession(root);
-
         new DeleteUserIntegrator(root, USERNAME_TO_DELETE).execute();
     }
     
     @Test(expected = UserNotInSessionException.class)
 	public void expired() {
+		new Expectations() {{ 
+			remote.removeUser(USERNAME_TO_DELETE); times = 0;
+		}};
+		
     	String user_token = addUserToSession(USERNAME);
         removeUserFromSession(user_token);
 		DeleteUserIntegrator service = new DeleteUserIntegrator(user_token,USERNAME_TO_DELETE);
 		service.execute();
-		
-		new Verifications() {{ //verify the service was not called
-			remote.removeUser(USERNAME_TO_DELETE); times = 0;
-		}};
+
 	}
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void invalid() {
-		DeleteUserIntegrator service =  new DeleteUserIntegrator(ALT_USERNAME, USERNAME_TO_DELETE);
-		service.execute();
-		
-		new Verifications() {{ //verify the service was not called
+		new Expectations() {{ 
 			remote.removeUser(USERNAME_TO_DELETE); times = 0;
 		}};
+		
+		DeleteUserIntegrator service =  new DeleteUserIntegrator("i am a silly token", USERNAME_TO_DELETE);
+		service.execute();
 	}
     
-    @Test(expected = UnavailableServiceException.class)
+    @Test
 	public void unavailable() {
 		new Expectations() {{
 			remote.removeUser(USERNAME_TO_DELETE); times = 1;
@@ -136,6 +151,11 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		}};
 		
 		DeleteUserIntegrator service = new DeleteUserIntegrator(root, USERNAME_TO_DELETE);
-		service.execute();
+		try {
+			service.execute();
+			fail("expected UnavailableServiceException");
+		} catch (UnavailableServiceException e) {
+			testCompensation();
+		}
 	}
 }
