@@ -60,8 +60,8 @@ public class LocalSystemTest {
 	    	
 	    	try {
 	    		bd.deleteBubbleDocs();
-	            FenixFramework.getTransactionManager().rollback();
-	        } catch (IllegalStateException | SecurityException | SystemException e) {
+	            FenixFramework.getTransactionManager().commit();
+	        } catch (IllegalStateException | SecurityException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
 	            e.printStackTrace();
 	        }
 	    }

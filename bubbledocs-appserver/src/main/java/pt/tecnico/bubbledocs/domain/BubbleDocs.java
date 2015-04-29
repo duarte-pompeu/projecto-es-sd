@@ -202,25 +202,22 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public String login(String username, String password) throws NotFoundException {
 		this.refreshSessions();
 		User user;
-		
+
 		// must be able to get user
-    	try {
-    		user = this.getUser(username);
-    	}
-    	catch (NotFoundException e){
-    		throw new LoginException("Invalid username or password");
-    	}
-    	
-    	
-    		
-    		if (user.getPassword() == null || !user.getPassword().equals(password)) {
-    			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
-    		}
-    	
-		
+		try {
+			user = this.getUser(username);
+		}
+		catch (NotFoundException e){
+			throw new LoginException("Invalid username or password");
+		}
+
+
+		if (user.getPassword() == null || !user.getPassword().equals(password)) {
+			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
+		}
+
 
 		return addSession(user); 
-
 	}
 	
 	
