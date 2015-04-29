@@ -24,4 +24,12 @@ public class GetUserInfo extends BubbleDocsService {
     public User getResult(){
     	return this.result;
     }
+
+	public String getEmail() {
+		return this.result.getEmail();
+	}
+
+	public String getName() {
+		return this.result.getName();
+	}
 }

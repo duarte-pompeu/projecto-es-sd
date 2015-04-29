@@ -44,7 +44,9 @@ public class GetUserInfoTest extends BubbleDocsServiceTest {
         //only this 3 fields are recuperated by User integrators
         assertEquals("wrong username",USERNAME_PRESENT, user.getUserName());
         assertEquals("wrong email",EMAIL_PRESENT, user.getEmail());
+        assertEquals("getEmail() is not working", EMAIL_PRESENT, service.getEmail());
         assertEquals("wrong name", NAME_PRESENT,user.getName());
+        assertEquals("getName() is not working", NAME_PRESENT, service.getName());
     }
 
 
