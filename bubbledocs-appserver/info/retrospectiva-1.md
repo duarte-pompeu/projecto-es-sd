@@ -9,4 +9,4 @@ Project planing and execution of second week:
 | João Martins     |  3 |    |    | 2  |    |    |    | #70, #71           |                  |
 | Filipe Morgado   |    |    |    | 2  |    |  2 |    | #75, #77           |                  |  
 | Diogo Bastos     |    |    |    |  2 |    |  2 |    | #64, #65           |                  |
-| Tiago Nascimento |  1 | 1  |  1 | 1  |    |    |    | #83, #81           |                  |
+| Tiago Nascimento |  1 | 2  |  2 | 1  |    |    |    | #83, #81, #82      |                  |
