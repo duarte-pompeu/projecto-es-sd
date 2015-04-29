@@ -211,26 +211,12 @@ public class BubbleDocs extends BubbleDocs_Base {
     		throw new LoginException("Invalid username or password");
     	}
     	
-    	// try remote login
-    	try{
-    		IDRemoteServices remote = new IDRemoteServices();
-    		remote.loginUser(username, password);
-    		if (!password.equals(user.getPassword()))
-        		user.setPassword(password);
-    	}
     	
-    	// good connection but bad login input
-    	catch(LoginException e){
-    		throw e;
-    	}
-    	
-    	// if connection fails, use local session
-    	catch(RemoteInvocationException e){
     		
     		if (user.getPassword() == null || !user.getPassword().equals(password)) {
     			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
     		}
-    	}
+    	
 		
 
 		return addSession(user); 
@@ -294,16 +280,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 
 	public User addUser(String username, String name, String email, String password) {
 
-		// invoke remote services to create user
-		try{
-			IDRemoteServices remote = new IDRemoteServices();
-			remote.createUser(username, email);
-		}
-
-		catch(RemoteInvocationException e) {
-			throw new UnavailableServiceException();
-		}
-
 		//if the user already exists, don't create a new one.		
 		//if (hasUser(username)) throw new RepeatedIdentificationException();
 		//^~~this is not necessary because Bubbledocs mirrors SD-ID.
@@ -319,64 +295,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return newuser;
 	}
 
-	//adds a user without using the remote service.
-	public User addTestUser(String username, String name, String email, String password) {
-		
-		if (hasUser(username)) throw new DuplicateUsernameException();
-		
-		User newuser;
-
-		if (username.equals("root"))
-			newuser = new SuperUser(username, name, email, password);
-		else
-			newuser = new User(username, name, email, password);
-
-		BubbleDocs.getInstance().addUser(newuser);
-		return newuser;
-	}
 	
-	//adds a user without using the remote service for test purposes.
-	public void removeTestUser(String username) {
-		
-		User user = this.getUser(username);
-		for (CalcSheet sheet : user.getCreatedCalcSheetSet()) {
-			sheet.deleteAllCells();
-		}
-		
-		for (CalcSheet writing : user.getWriteableCalcSheetSet()) {
-			user.removeWriteableCalcSheet(writing);
-			writing.removeWritingUser(user);
-		}
-		
-		for (CalcSheet reading : user.getReadableCalcSheetSet()) {
-			user.removeReadableCalcSheet(reading);
-			reading.removeReadingUser(user);
-		}
-		
-		Session session = user.getSession();
-		if (session !=  null) {
-			session.setUser(null);
-			session.delete();
-		}
-		
-		user.setBubbleDocs(null);
-		
-		this.removeUser(user);
-		
-		user.delete();
-	}
-
 	/**
 	 * @param userName
 	 */
 	public void deleteUser(String username) {
-		// delete remotely first
-		try{
-    		IDRemoteServices id_service = new IDRemoteServices();
-    		id_service.removeUser(username);
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException();
-		}
+		
 		
 		User user = this.getUser(username);
 		for (CalcSheet sheet : user.getCreatedCalcSheetSet()) {
