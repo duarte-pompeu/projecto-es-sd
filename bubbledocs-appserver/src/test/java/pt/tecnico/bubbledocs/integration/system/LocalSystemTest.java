@@ -14,6 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+
+
+import pt.ist.fenixframework.FenixFramework;
+import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
@@ -43,13 +47,25 @@ public class LocalSystemTest {
 		 
 	    @Before
 	    public void setUp() throws Exception {
-	    	bd = BubbleDocs.getInstance();
-	    }
+	    	   try {
+	               FenixFramework.getTransactionManager().begin(false);
+	               bd = BubbleDocs.getInstance();
+	           } catch (WriteOnReadError | NotSupportedException | SystemException e1) {
+	               e1.printStackTrace();
+	           }
+	       }
 
 	    @After
 	    public void tearDown() {
-	    	bd.deleteBubbleDocs();
+	    	
+	    	try {
+	    		bd.deleteBubbleDocs();
+	            FenixFramework.getTransactionManager().rollback();
+	        } catch (IllegalStateException | SecurityException | SystemException e) {
+	            e.printStackTrace();
+	        }
 	    }
+	    
 	    
 	    @Test
 		public void doSequence() throws Exception {
