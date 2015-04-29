@@ -6,7 +6,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import pt.tecnico.bubbledocs.integration.*;
 import pt.tecnico.bubbledocs.integration.component.CreateUserIntegratorTest;
-import pt.tecnico.bubbledocs.integration.component.RenewPasswordIntegrationTest;
+import pt.tecnico.bubbledocs.integration.component.DeleteUserIntegratorTest;
+import pt.tecnico.bubbledocs.integration.component.RenewPasswordIntegratorTest;
 
 //To test this you can run:
 //    mvn test -Dtest=*Suite
@@ -23,12 +24,12 @@ import pt.tecnico.bubbledocs.integration.component.RenewPasswordIntegrationTest;
 	AssignReferenceCellTest.class,
 	CreateCalcSheetTest.class,
 	CreateUserIntegratorTest.class,
-	DeleteUserTest.class,
+	DeleteUserIntegratorTest.class,
 	ExportDocumentTest.class,
 	LoginUserTest.class,
 	GetUserInfoTest.class,
 	GetUsername4TokenTest.class,
-	RenewPasswordIntegrationTest.class})
+	RenewPasswordIntegratorTest.class})
 public class ServiceTestSuite {
 
 }

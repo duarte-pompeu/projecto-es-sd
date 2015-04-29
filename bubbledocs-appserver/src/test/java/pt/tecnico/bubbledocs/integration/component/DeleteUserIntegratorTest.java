@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertTrue;
 import mockit.Expectations;
@@ -13,10 +13,12 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.integration.DeleteUserIntegrator;
+import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 
-public class DeleteUserTest extends BubbleDocsServiceTest {
+public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 	
 	@Mocked
@@ -46,7 +48,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
     };
 
     public void success() {
-        DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+        DeleteUserIntegrator service = new DeleteUserIntegrator(root, USERNAME_TO_DELETE);
         service.execute();
 
         new Verifications() {{ //verify the service was called
@@ -88,27 +90,27 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void userToDeleteDoesNotExist() {
-        new DeleteUser(root, ALT_USERNAME).execute();
+        new DeleteUserIntegrator(root, ALT_USERNAME).execute();
     }
 
     @Test(expected = PermissionException.class)
     public void notRootUser() {
         String user_token = addUserToSession(USERNAME);
-        new DeleteUser(user_token, USERNAME_TO_DELETE).execute();
+        new DeleteUserIntegrator(user_token, USERNAME_TO_DELETE).execute();
     }
 
     @Test(expected = UserNotInSessionException.class)
     public void rootNotInSession() {
         removeUserFromSession(root);
 
-        new DeleteUser(root, USERNAME_TO_DELETE).execute();
+        new DeleteUserIntegrator(root, USERNAME_TO_DELETE).execute();
     }
     
     @Test(expected = UserNotInSessionException.class)
 	public void expired() {
     	String user_token = addUserToSession(USERNAME);
         removeUserFromSession(user_token);
-		DeleteUser service = new DeleteUser(user_token,USERNAME_TO_DELETE);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(user_token,USERNAME_TO_DELETE);
 		service.execute();
 		
 		new Verifications() {{ //verify the service was not called
@@ -118,7 +120,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void invalid() {
-		DeleteUser service =  new DeleteUser(ALT_USERNAME, USERNAME_TO_DELETE);
+		DeleteUserIntegrator service =  new DeleteUserIntegrator(ALT_USERNAME, USERNAME_TO_DELETE);
 		service.execute();
 		
 		new Verifications() {{ //verify the service was not called
@@ -133,7 +135,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root, USERNAME_TO_DELETE);
 		service.execute();
 	}
 }

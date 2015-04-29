@@ -14,7 +14,7 @@ import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class RenewPasswordIntegrationTest extends BubbleDocsServiceTest {
+public class RenewPasswordIntegratorTest extends BubbleDocsServiceTest {
 
 	@Mocked
 	IDRemoteServices remote;

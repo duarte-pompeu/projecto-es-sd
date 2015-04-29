@@ -54,7 +54,7 @@ public class BubbleDocsServiceTest {
     	return BubbleDocs.getInstance().addUser(username, name, email, password);
     }
     
-    void removeUser(String username) {
+    protected void removeUser(String username) {
     	BubbleDocs.getInstance().deleteUser(username);
     }
 
@@ -93,7 +93,7 @@ public class BubbleDocsServiceTest {
     }
 
     // return the user registered in session whose token is equal to token
-    User getUserFromSession(String token) {
+    protected User getUserFromSession(String token) {
     	return getSessionFromToken(token).getUser();
     }
 
