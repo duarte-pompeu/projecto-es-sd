@@ -70,23 +70,23 @@ public class RenewPasswordIntegratorTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void expired() {
-		removeUserFromSession(token);
-		RenewPasswordIntegrator service = new RenewPasswordIntegrator(token);
-		service.execute();
-		
-		new Verifications() {{ //verify the service was not called
+		new Expectations() {{ //the service shouldn't be called
 			remote.renewPassword(anyString); times = 0;
 		}};
+		
+		removeUserFromSession(token);
+		RenewPasswordIntegrator service = new RenewPasswordIntegrator(token);
+		service.execute();		
 	}
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void invalid() {
-		RenewPasswordIntegrator service = new RenewPasswordIntegrator("I am a silly token");
-		service.execute();
-		
-		new Verifications() {{ //verify the service was not called
+		new Expectations() {{ //the service shouldn't be called
 			remote.renewPassword(anyString); times = 0;
 		}};
+		
+		RenewPasswordIntegrator service = new RenewPasswordIntegrator("I am a silly token");
+		service.execute();		
 	}
 
 }
