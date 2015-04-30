@@ -15,7 +15,7 @@ public class RenewPassword extends SessionService {
 	//happened to poofed its login micro-service and it's checking the
 	//locally stored password.
 	@Override
-	protected void doAfterSuperService() throws BubbleDocsException {
+	protected void dispatchAfterSuperService() throws BubbleDocsException {
 		this.oldPass = user.getPassword();
 		user.clearPassword();
 	}

@@ -4,6 +4,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.LoginException;
 
 public abstract class SessionService extends BubbleDocsService {
 	String token;
@@ -24,7 +25,7 @@ public abstract class SessionService extends BubbleDocsService {
 	@Override
 	public final void dispatch(){
 		this.user = confirmToken(token);
-		this.doAfterSuperService();
+		this.dispatchAfterSuperService();
 	}
 	
 	
@@ -33,12 +34,12 @@ public abstract class SessionService extends BubbleDocsService {
 		Session session = bd.getSessionFromToken(token);
 		
 		if(session == null){
-			//throw smth, although it seems getSession already throws
+			throw new LoginException();
 		}
 		
 		return session.getUser();
 	}
 	
 	
-	protected abstract void doAfterSuperService() throws BubbleDocsException;
+	protected abstract void dispatchAfterSuperService() throws BubbleDocsException;
 }

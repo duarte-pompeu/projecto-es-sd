@@ -14,7 +14,7 @@ public class GetSpreadsheetContentService extends SessionService {
 	
 	
 	@Override
-	public void doAfterSuperService(){
+	public void dispatchAfterSuperService(){
 		result = API.fromCSgetCellsMatrix(token, sheet);
 	}
 	

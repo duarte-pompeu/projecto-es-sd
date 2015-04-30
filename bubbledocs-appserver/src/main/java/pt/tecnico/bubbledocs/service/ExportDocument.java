@@ -19,7 +19,7 @@ public class ExportDocument extends SessionService {
     }
 
     @Override
-    protected void doAfterSuperService() throws BubbleDocsException { 	
+    protected void dispatchAfterSuperService() throws BubbleDocsException { 	
 		docXML = BubbleDocs.getInstance().storeDocument(super.user, docId);    	
     }
 }

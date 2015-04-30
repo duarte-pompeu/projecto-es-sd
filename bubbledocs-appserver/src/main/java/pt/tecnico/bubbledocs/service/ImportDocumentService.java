@@ -23,7 +23,7 @@ public class ImportDocumentService extends SessionService {
     }
 
     @Override
-    protected void doAfterSuperService() throws BubbleDocsException {   	
+    protected void dispatchAfterSuperService() throws BubbleDocsException {   	
 		docXML = BubbleDocs.getInstance().loadDocument(user, oldDocId);
 		newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
     }

@@ -24,7 +24,7 @@ public class AssignReferenceCell extends SessionService {
 	}
 
 	@Override
-	protected void doAfterSuperService() throws BubbleDocsException {
+	protected void dispatchAfterSuperService() throws BubbleDocsException {
 		result = API.onCSAssignReference(super.token, docID, cellID, refID);
 	}
 
