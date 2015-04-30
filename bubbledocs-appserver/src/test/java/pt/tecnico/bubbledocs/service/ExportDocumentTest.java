@@ -54,10 +54,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String CELL_ID2;
 	private String U_EMAIL="email@email.com";
 	private String U_EMAIL2="email2@email.com";
-	//FIXME: values are never used, consider removing them
-//	private final int VAL0 = 0;
-//	private final String LIT0 = "0";
-	
+
 	
 	@Override
 	public void populate4Test(){
@@ -149,8 +146,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 	}
 	
-	//copying a lot of code from above, not sure if i need to repeat the tests above, need to ask
-	//the teacher on Tuesday
+	
 	@Test
 	public void calcSheetWithOneCell() throws JDOMException, IOException{
 		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
