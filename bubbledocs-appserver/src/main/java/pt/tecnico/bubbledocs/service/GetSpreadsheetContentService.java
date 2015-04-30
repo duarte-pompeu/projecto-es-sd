@@ -2,20 +2,19 @@ package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.API;
 
-public class GetSpreadsheetContentService extends BubbleDocsService {
-	private String token;
+public class GetSpreadsheetContentService extends SessionService {
 	private String sheet;
 	private String [][] result = null;
 	
 	
 	public GetSpreadsheetContentService(String userToken, String sheetID){
-		token = userToken;
+		super(userToken);
 		sheet = sheetID;
 	}
 	
 	
 	@Override
-	public void dispatch(){
+	public void afterSuperAction(){
 		result = API.fromCSgetCellsMatrix(token, sheet);
 	}
 	

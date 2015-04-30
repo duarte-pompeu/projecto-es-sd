@@ -1,21 +1,19 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
-public class DeleteUser extends BubbleDocsService {
-	private String token;
+public class DeleteUser extends SessionService {
 	private String username; 
 
 	public DeleteUser(String token, String username) {
+		super(token);
+		
 		this.token = token;
 		this.username = username; 
 	}
 
 	@Override
-	protected void dispatch() throws BubbleDocsException {
-		User user = getUserFromToken(token);
-
-		user.deleteUser(username);
+	protected void afterSuperAction() throws BubbleDocsException {
+		super.user.deleteUser(username);
 	}
 }

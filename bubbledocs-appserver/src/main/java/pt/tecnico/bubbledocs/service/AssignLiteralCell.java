@@ -1,32 +1,27 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.API;
-import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
-import pt.tecnico.bubbledocs.exceptions.LoginException;
-import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
-public class AssignLiteralCell extends BubbleDocsService{
+public class AssignLiteralCell extends SessionService{
     private String result;
-    private String accessToken;
     private int docId;
     private String cellId;
     String literal;
     
     public AssignLiteralCell(String accessToken, int docId, String cellId, String literal) {
+    	super(accessToken);
     	
-    	this.accessToken = accessToken;
     	this.docId = docId;
     	this.cellId = cellId;
     	this.literal = literal;
     }
     
     @Override
-    public void dispatch() throws InvalidFormatException, NotFoundException, 
-    	LoginException, PermissionException {
-    	
-    	result = API.onCSAssignLiteral(accessToken, docId, cellId, literal);
+    protected void afterSuperAction() throws BubbleDocsException {
+    	result = API.onCSAssignLiteral(super.token, docId, cellId, literal);
     }
+    
 
     public String getResult() {
         return result;

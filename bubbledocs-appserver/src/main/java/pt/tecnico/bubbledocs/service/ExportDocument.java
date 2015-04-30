@@ -1,13 +1,11 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.User;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
-public class ExportDocument extends BubbleDocsService {
+public class ExportDocument extends SessionService {
     private byte[] docXML;
-    String userToken;
     int docId;    
     
     public byte[] getDocXML() {
@@ -15,13 +13,13 @@ public class ExportDocument extends BubbleDocsService {
     }
 
     public ExportDocument(String userToken, int docId) {
-    	this.userToken=userToken;
+    	super(userToken);
+    	
     	this.docId=docId;
     }
 
     @Override
-    protected void dispatch() throws BubbleDocsException {
-		User user = getUserFromToken(userToken);    	
-		docXML = BubbleDocs.getInstance().storeDocument(user, docId);    	
+    protected void afterSuperAction() throws BubbleDocsException { 	
+		docXML = BubbleDocs.getInstance().storeDocument(super.user, docId);    	
     }
 }

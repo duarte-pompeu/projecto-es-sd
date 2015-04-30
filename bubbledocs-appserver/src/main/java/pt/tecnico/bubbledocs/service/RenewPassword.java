@@ -1,17 +1,13 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exceptions.*;
-import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
+import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 
-public class RenewPassword extends BubbleDocsService {
+public class RenewPassword extends SessionService {
 
-	private String token;
 	private String oldPass;
-	private User user;
 
 	public RenewPassword(String token) {
-		this.token = token;
+		super(token);
 	}
 
 	//The only thing atomic about this service is clearing the password
@@ -19,8 +15,7 @@ public class RenewPassword extends BubbleDocsService {
 	//happened to poofed its login micro-service and it's checking the
 	//locally stored password.
 	@Override
-	protected void dispatch() throws BubbleDocsException {		
-		this.user = getUserFromToken(token);
+	protected void afterSuperAction() throws BubbleDocsException {
 		this.oldPass = user.getPassword();
 		user.clearPassword();
 	}
