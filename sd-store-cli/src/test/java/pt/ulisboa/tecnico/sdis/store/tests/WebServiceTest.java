@@ -3,8 +3,13 @@ package pt.ulisboa.tecnico.sdis.store.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 
@@ -28,7 +33,7 @@ public class WebServiceTest extends ClientTest {
 	static StoreClient client;
 	
 	@BeforeClass
-	public static void connect2server() throws JAXRException{
+	public static void connect2server() throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
 		client = new StoreClient();
 		_port = client.getPort();
 	}
@@ -39,21 +44,24 @@ public class WebServiceTest extends ClientTest {
 		
 		try {
 			client.createDoc(USER, DOC);
-			client.storeDoc(USER, DOC, string2bytes(CONTENT));
 		}
 		
 		catch(DocAlreadyExists_Exception e){
 			// that's fine
 		}
+		
+		client.storeDoc(USER, DOC, string2bytes(CONTENT));
 	}
 	
 	
 	@Test
-	public void testPopulate() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+	public void testPopulate() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, IllegalBlockSizeException, BadPaddingException{
 		List<String> result = client.listDocs(USER);
 		assertTrue(result.contains(DOC));
 		
-		String content = bytes2string(client.loadDoc(USER, DOC));
+		byte[] plainBytes = client.loadDoc(USER, DOC);
+		String content = bytes2string(plainBytes);
+		
 		assertEquals(CONTENT, content);
 	}
 	

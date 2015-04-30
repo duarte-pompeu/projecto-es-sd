@@ -17,13 +17,9 @@ public class StoreRemoteServices {
 	StoreClient client;
 	
 	public StoreRemoteServices(){
-		try {
-			client = ClientFrontEnd.getClientInstance();
-		} catch (JAXRException e) {
-			e.printStackTrace();
-			throw new UnavailableServiceException();
-		}
+		client = ClientFrontEnd.getClientInstance();
 	}
+	
 	public void storeDocument(String username, String docName, byte[] document)
 			throws CannotStoreDocumentException, RemoteInvocationException {
 		

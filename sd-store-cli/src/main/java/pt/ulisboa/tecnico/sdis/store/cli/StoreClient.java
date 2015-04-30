@@ -3,9 +3,17 @@ package pt.ulisboa.tecnico.sdis.store.cli;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
@@ -22,7 +30,11 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore_Service;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class StoreClient{	
+public class StoreClient{
+	
+	public static final boolean VERBOSE = true;
+	public static final boolean ENCRYPTION = true;
+	
 	// default values
 	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
 	public static final String DEFAULT_UDDI_NAME = "sd-store";
@@ -31,16 +43,21 @@ public class StoreClient{
 	public String uddiName;
 	private SDStore _port = null;
 	
+	private Key key;
+	public Cipher encrypter;
+	public Cipher decrypter;
 	
-	public StoreClient() throws JAXRException{
+	
+	public StoreClient() throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
 		this(DEFAULT_UDDI_URL, DEFAULT_UDDI_NAME);
 	}
 	
 	
-	public StoreClient(String uddiUrl, String uddiName) throws JAXRException{
+	public StoreClient(String uddiUrl, String uddiName) throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
 		this.uddiURL = uddiUrl;
 		this.uddiName = uddiName;
 		
+		initCrypto();
 		_port = findUddi(uddiURL, uddiName);
 	}
 	
@@ -93,6 +110,16 @@ public class StoreClient{
         return port;
 	}
 	
+	public void initCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException{
+		this.key = getKey();
+		
+		this.encrypter = Cipher.getInstance("DES/ECB/PKCS5Padding");
+		encrypter.init(Cipher.ENCRYPT_MODE, key);
+		
+		this.decrypter = Cipher.getInstance("DES/ECB/PKCS5Padding");
+		decrypter.init(Cipher.DECRYPT_MODE, key);
+	}
+	
 	
 	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
@@ -110,13 +137,48 @@ public class StoreClient{
 	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
 		service.dispatch();
-		return service.getResult();
+		
+		if(!ENCRYPTION){
+			return service.getResult();
+		}
+		
+		
+		byte[] ciphered = service.getResult();
+		byte[] plainBytes = null;
+		
+		try {
+			plainBytes = decrypter.doFinal(ciphered);
+		} 
+		catch (IllegalBlockSizeException | BadPaddingException e) {
+			e.printStackTrace();
+		}
+		
+		if(VERBOSE){
+			System.out.println("ENCRYPTED: " + bytes2string(ciphered));
+			System.out.println("DECRYPTED: " + bytes2string(plainBytes));
+		}
+		
+		return plainBytes;
 	}
 	
 	
 	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
-		StoreDocService service = new StoreDocService(userID, docID, content, _port);
+		byte[] bytes2upload = content;
+		
+		if(ENCRYPTION){
+			try {
+				bytes2upload = encrypter.doFinal(content);
+			} 
+			catch (IllegalBlockSizeException | BadPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		StoreDocService service = new StoreDocService(userID, docID, bytes2upload, _port);
 		service.dispatch();
+		
 	}
 
 	
@@ -135,5 +197,19 @@ public class StoreClient{
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
-	}	
+	}
+	
+	
+	public Key getKey(){
+		KeyGenerator keyGen = null;
+		
+		try {
+			keyGen = KeyGenerator.getInstance("DES");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		
+		keyGen.init(56);
+		return keyGen.generateKey();
+	}
 }

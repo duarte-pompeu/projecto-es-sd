@@ -2,6 +2,10 @@ package pt.ulisboa.tecnico.sdis.store.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 
@@ -27,7 +31,7 @@ public class ServerConnectionTest  extends ClientTest{
 	
 	
 	@BeforeClass
-	public static void connect2server() throws JAXRException{
+	public static void connect2server() throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
 		StoreClient cli = new StoreClient();
 		_port = cli.getPort();
 	}
