@@ -7,6 +7,37 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+import static org.junit.Assert.assertEquals;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.junit.Test;
+
+
+import pt.tecnico.bubbledocs.domain.Add;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.LiteralArgument;
+import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.ReferenceArgument;
+import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.CannotStoreDocumentException;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+
+
 public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	
 	private final String U_USERNAME = "jubileu";
@@ -18,7 +49,9 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	private User USER;
 	private CalcSheet CS_EMPTY;
 	private int CS_ID;
-	private final String CS_NAME = "cs";
+	private int CS_ID2;
+	private int CS_ID3;
+	private String CS_NAME = "cs";
 	private final int CS_ROWS = 3;
 	private final int CS_LINES = 3;
 	
@@ -29,7 +62,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	private String U_EMAIL2="email2@email.com";
 	
 	
-	
+	//NEED TO CREATE CALC SHEETS AND EXPORT THEM SO THAT THEY CAN BE IMPORTED IN THE TESTS
 	@Override
 	public void populate4Test(){
 		USER = createUser(U_USERNAME, U_PASS, U_NAME, U_EMAIL);
@@ -40,9 +73,43 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 		
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
 		CS_ID = CS_EMPTY.getId();
+
+		
+		//the document must first be exported
+		ExportDocument service1 = new ExportDocument(U_TOKEN, CS_ID);
+		service1.execute();
+		
+		CS_NAME="nome2";
+		CS_EMPTY = createSpreadSheet(USER, "nome2", CS_ROWS, CS_LINES);
+		CS_ID2 = CS_EMPTY.getId();
 		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
 		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
 		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
+		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
+		c.setContent(new Literal(7));
+		
+		service1 = new ExportDocument(U_TOKEN, CS_ID2);
+		service1.execute();
+		
+		CS_NAME="nome3";
+		CS_EMPTY = createSpreadSheet(USER, "nome3", CS_ROWS, CS_LINES);
+		CS_ID3 = CS_EMPTY.getId();
+		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
+		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
+		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
+		c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
+		c.setContent(new Literal(7));
+		
+		Cell c1=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
+		c1.setContent(new Literal(7));
+		Cell c2=this.getSpreadSheet(CS_NAME).getCell(CELL_ID1);
+		c2.setContent(new Reference(c1));
+		Cell c3=this.getSpreadSheet(CS_NAME).getCell(CELL_ID2);
+		c3.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
+		
+		service1 = new ExportDocument(U_TOKEN, CS_ID3);
+		service1.execute();
+		
 	}
 	
 	
@@ -76,9 +143,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void emptyCalcSheet() throws JDOMException, IOException{
-		//the document must first be exported
-		ExportDocument service1 = new ExportDocument(U_TOKEN, CS_ID);
-		service1.execute();
+	
 		
 		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID);
 		service2.execute();
@@ -127,13 +192,8 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void calcSheetWithOneCell() throws JDOMException, IOException{
-		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
-		c.setContent(new Literal(7));
-		
-		ExportDocument service1 = new ExportDocument(U_TOKEN, CS_ID);
-		service1.execute();
-		
-		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID);
+	
+		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID2);
 		service2.execute();
 		
 		//a local setup
@@ -170,15 +230,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void calcSheetWithMultipleCells() throws JDOMException, IOException{
-		Cell c1=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
-		c1.setContent(new Literal(7));
-		Cell c2=this.getSpreadSheet(CS_NAME).getCell(CELL_ID1);
-		c2.setContent(new Reference(c1));
-		Cell c3=this.getSpreadSheet(CS_NAME).getCell(CELL_ID2);
-		c3.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
-		service.execute();
 		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID);
 		service2.execute();
 		
