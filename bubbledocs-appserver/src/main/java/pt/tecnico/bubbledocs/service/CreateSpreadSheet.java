@@ -21,7 +21,7 @@ public class CreateSpreadSheet extends SessionService {
 
 
 	 	@Override
-	 	protected void afterSuperAction() throws BubbleDocsException {
+	 	protected void doAfterSuperService() throws BubbleDocsException {
 	 			
 	 		result = super.user.createCalcSheet(name, rows, columns);
 	 	}

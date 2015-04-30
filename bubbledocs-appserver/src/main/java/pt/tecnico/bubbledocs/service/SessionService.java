@@ -24,7 +24,7 @@ public abstract class SessionService extends BubbleDocsService {
 	@Override
 	public final void dispatch(){
 		this.user = confirmToken(token);
-		this.afterSuperAction();
+		this.doAfterSuperService();
 	}
 	
 	
@@ -40,5 +40,5 @@ public abstract class SessionService extends BubbleDocsService {
 	}
 	
 	
-	protected abstract void afterSuperAction() throws BubbleDocsException;
+	protected abstract void doAfterSuperService() throws BubbleDocsException;
 }

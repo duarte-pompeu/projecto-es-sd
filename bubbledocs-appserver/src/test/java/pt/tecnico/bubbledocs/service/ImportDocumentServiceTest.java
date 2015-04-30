@@ -1,38 +1,11 @@
 package pt.tecnico.bubbledocs.service;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
-
-import pt.tecnico.bubbledocs.service.remote.*;
 import mockit.Mock;
 import mockit.MockUp;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.junit.Test;
-
-import pt.tecnico.bubbledocs.domain.Add;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.Cell;
-import pt.tecnico.bubbledocs.domain.Literal;
-import pt.tecnico.bubbledocs.domain.LiteralArgument;
-import pt.tecnico.bubbledocs.domain.Reference;
-import pt.tecnico.bubbledocs.domain.ReferenceArgument;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exceptions.CannotStoreDocumentException;
-import pt.tecnico.bubbledocs.exceptions.NotFoundException;
-import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
-import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
-import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	

@@ -21,7 +21,7 @@ public class CreateUser extends SessionService {
     }
     
     @Override
-    protected void afterSuperAction() throws BubbleDocsException {
+    protected void doAfterSuperService() throws BubbleDocsException {
     	this.result = super.user.createUser(username, name, email, null);
     }
     

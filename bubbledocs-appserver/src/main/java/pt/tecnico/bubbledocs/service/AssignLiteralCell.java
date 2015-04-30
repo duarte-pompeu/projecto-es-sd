@@ -18,7 +18,7 @@ public class AssignLiteralCell extends SessionService{
     }
     
     @Override
-    protected void afterSuperAction() throws BubbleDocsException {
+    protected void doAfterSuperService() throws BubbleDocsException {
     	result = API.onCSAssignLiteral(super.token, docId, cellId, literal);
     }
     

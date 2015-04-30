@@ -13,7 +13,7 @@ public class DeleteUser extends SessionService {
 	}
 
 	@Override
-	protected void afterSuperAction() throws BubbleDocsException {
+	protected void doAfterSuperService() throws BubbleDocsException {
 		super.user.deleteUser(username);
 	}
 }
