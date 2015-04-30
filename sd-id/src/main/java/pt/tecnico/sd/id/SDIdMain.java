@@ -24,6 +24,9 @@ public class SDIdMain {
 
         Endpoint endpoint = null;
         UDDINaming uddiNaming = null;
+
+	printArt();
+	
         try {
             endpoint = Endpoint.create(new SDIdImpl());
 
@@ -73,6 +76,22 @@ public class SDIdMain {
             }
         }
 
+    }
+
+    private static void printArt() {
+	System.out.println("                        /\\_/\\____,");
+	System.out.println("              ,___/\\_/\\ \\  ~     /");
+	System.out.println("              \\     ~  \\ )   XXX");
+	System.out.println("                XXX     /    /\\_/\\___,");
+	System.out.println("                   \\o-o/-o-o/   ~    /");
+	System.out.println("                    ) /     \\    XXX");
+	System.out.println("                   _|    / \\ \\_/");
+	System.out.println("   %     `      ,-/   _  \\_/   \\           *");
+	System.out.println("    %&  %*    / (   /____,__|  )    %  `*");
+	System.out.println("  &%&#&&#&    (  |_ (    )  \\) _|  &#& &`*");
+	System.out.println(" &#&##&###&  _/ _)   \\   \\__/   (_  &##&#&&`");
+	System.out.println("&###&#%%&##&(,-(,(,(,/      \\,),),)&##&%#&#&");
+	System.out.println("======== KERBEROS == GUARDIAN OF HADES ========");
     }
 
 }

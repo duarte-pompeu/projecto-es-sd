@@ -1,0 +1,42 @@
+                        /\_/\____,
+              ,___/\_/\ \  ~     /  
+              \     ~  \ )   XXX
+                XXX     /    /\_/\___,
+                   \o-o/-o-o/   ~    /
+                    ) /     \    XXX
+                   _|    / \ \_/
+   %     `      ,-/   _  \_/   \           *
+    %&  %*    / (   /____,__|  )    %  `*
+  &%&#&&#&    (  |_ (    )  \) _|  &#& &`*
+ &#&##&###&  _/ _)   \   \__/   (_  &##&#&&`
+&###&#%%&##&(,-(,(,(,/      \,),),)&##&%#&#&
+======== KERBEROS == GUARDIAN OF HADES ========
+
+SD-ID e SD-ID-CLI
+
+Protocolo
+
+Cliente -> SD-ID:  requestAuthentication(username, reserved)
+			username - é o mesmo
+			reserved - nome do serviço + ':' + nonce string numérico 8 caracteres
+				ex: "SD-Store:38731707"
+SD-ID -> Cliente:  requestAuthenticationReply(credentials)
+			the body or the message is encrypted with Kc
+                        credentials - nonce + Kcs
+		   header:
+			ticket: XML encrypted with Ks
+		<ticket>				
+		  <user>username</user>
+		  <service>SD-Store</service>
+		  <since>TIMESTAMP</since>
+		  <expire>TIMESTAMP'</expire>
+		  <key>Base64{Kcs}</key>
+		</ticket>
+
+No SD-ID a tabela de utilizadores é mudado.
+Em vez de guardar a password é guardado o resumo da password com o algoritmo SHA-256.
+
+				
+			
+
+
