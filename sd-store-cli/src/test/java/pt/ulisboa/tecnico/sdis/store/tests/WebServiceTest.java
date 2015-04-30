@@ -3,6 +3,8 @@ package pt.ulisboa.tecnico.sdis.store.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 
@@ -11,10 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
-import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
-import pt.ulisboa.tecnico.sdis.store.cli.service.ListDocsService;
-import pt.ulisboa.tecnico.sdis.store.cli.service.LoadDocService;
-import pt.ulisboa.tecnico.sdis.store.cli.service.StoreDocService;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -27,60 +25,48 @@ public class WebServiceTest extends ClientTest {
 	public static final String DOC = "SD-notes";
 	public static final String CONTENT = "RPC, RMI and WS.";
 	public static final int DEFAULT_MAX_CAP = 10 * 1024;
-	
+	static StoreClient client;
 	
 	@BeforeClass
 	public static void connect2server() throws JAXRException{
-		StoreClient cli = new StoreClient();
-		_port = cli.getPort();
+		client = new StoreClient();
+		_port = client.getPort();
 	}
 	
 	
 	@Before
 	public void populate4Test() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		
-		CreateDocService create = new CreateDocService(USER, DOC, getPort());
-		StoreDocService store = new StoreDocService(USER, DOC, string2bytes(CONTENT), getPort());
-		
 		try {
-			create.dispatch();
-			
+			client.createDoc(USER, DOC);
+			client.storeDoc(USER, DOC, string2bytes(CONTENT));
 		}
+		
 		catch(DocAlreadyExists_Exception e){
 			// that's fine
-		}
-		
-		finally{
-			store.dispatch();
 		}
 	}
 	
 	
 	@Test
 	public void testPopulate() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
-		ListDocsService list = new ListDocsService(USER, getPort());
-		list.dispatch();
-		assertTrue(list.getResult().contains(DOC));
+		List<String> result = client.listDocs(USER);
+		assertTrue(result.contains(DOC));
 		
-		LoadDocService load = new LoadDocService(USER, DOC, getPort());
-		load.dispatch();
-		assertEquals(CONTENT, bytes2string(load.getResult()));
+		String content = bytes2string(client.loadDoc(USER, DOC));
+		assertEquals(CONTENT, content);
 	}
 	
 	
 	@Test (expected = DocAlreadyExists_Exception.class)
 	public void repeatDoc() throws InvalidAttributeValueException, DocAlreadyExists_Exception{
-		CreateDocService create = new CreateDocService(USER, DOC, getPort());
-		create.dispatch();
-		create.dispatch();
+		client.createDoc(USER, DOC);
 	}
 	
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void noUser() throws UserDoesNotExist_Exception, InvalidAttributeValueException {
-		String badUser = "Hello, I'm root and I want all the documents.";
-		ListDocsService service = new ListDocsService(badUser, getPort());
-		service.dispatch();
+		client.listDocs("Hello, I'm a hacker and I want all the documents.");
 	}
 	
 	
@@ -98,20 +84,15 @@ public class WebServiceTest extends ClientTest {
 		byte [] bytes = string2bytes(content);
 		
 		assertEquals(size, bytes.length);
-		ListDocsService list = new ListDocsService(tmpUser, getPort());
-		list.dispatch();
-		
-		CreateDocService create = new CreateDocService(tmpUser, tempDoc, getPort());
-		StoreDocService store = new StoreDocService(tmpUser, tempDoc, string2bytes(content), getPort());
+		client.listDocs(tmpUser);
 		
 		try {
-			create.dispatch();
+			client.createDoc(tmpUser, tempDoc);
 		} catch ( DocAlreadyExists_Exception e) {
 			//continue, its ok if doc already exists
 		}
 		
-		
-		store.dispatch();
+		client.storeDoc(tmpUser, tempDoc, string2bytes(content));
 	}
 	
 	
@@ -127,29 +108,23 @@ public class WebServiceTest extends ClientTest {
 		}
 		
 		byte [] bytes = string2bytes(content);
-		
 		assertEquals(size, bytes.length);
-		ListDocsService list = new ListDocsService(tmpUser, getPort());
-		list.dispatch();
-		
-		CreateDocService create = new CreateDocService(tmpUser, tempDoc, getPort());
-		StoreDocService store = new StoreDocService(tmpUser, tempDoc, string2bytes(content), getPort());
+		client.listDocs(tmpUser);
 		
 		try {
-			create.dispatch();
+			client.createDoc(tmpUser, tempDoc);
+			
 		} catch ( DocAlreadyExists_Exception e) {
 			//continue, its ok if doc already exists
 		}
 		
 		
-		store.dispatch();
+		client.storeDoc(tmpUser, tempDoc, string2bytes(content));
 	}
 	
 	
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void storeInBadDoc() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
-		StoreDocService service = new StoreDocService(USER, "the doc doesnt exist but I'm gonna stuff content there anyway", 
-				string2bytes(CONTENT), getPort());
-		service.dispatch();
+		client.storeDoc(USER, "the doc doesnt exist but I'm gonna stuff content there anyway", string2bytes(CONTENT));
 	}
 }

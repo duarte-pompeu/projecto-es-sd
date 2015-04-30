@@ -33,10 +33,7 @@ public class StoreClient{
 	
 	
 	public StoreClient() throws JAXRException{
-		this.uddiURL = DEFAULT_UDDI_URL;
-		this.uddiName = DEFAULT_UDDI_NAME;
-		
-		_port = findUddi(uddiURL, uddiName);
+		this(DEFAULT_UDDI_URL, DEFAULT_UDDI_NAME);
 	}
 	
 	
