@@ -31,7 +31,8 @@ public class WebServiceTest extends ClientTest {
 	
 	@BeforeClass
 	public static void connect2server() throws JAXRException{
-		_port = StoreClient.findUddi(StoreClient.uddiURL, StoreClient.uddiName);
+		StoreClient cli = new StoreClient();
+		_port = cli.getPort();
 	}
 	
 	

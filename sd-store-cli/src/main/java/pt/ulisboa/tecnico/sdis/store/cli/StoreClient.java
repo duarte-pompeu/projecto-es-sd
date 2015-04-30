@@ -22,25 +22,54 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore_Service;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class StoreClient{
-	static SDStore _port;
-	
+public class StoreClient{	
 	// default values
-	public static String uddiURL = "http://localhost:8081";
-	public static String uddiName ="sd-store";
+	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
+	public static final String DEFAULT_UDDI_NAME = "sd-store";
+	
+	public String uddiURL;
+	public String uddiName;
+	private SDStore _port = null;
 	
 	
 	public StoreClient() throws JAXRException{
-		this(StoreClient.uddiURL, StoreClient.uddiName);
-	}
-	
-	
-	public StoreClient(String uddiUrl, String uddiName) throws JAXRException{
+		this.uddiURL = DEFAULT_UDDI_URL;
+		this.uddiName = DEFAULT_UDDI_NAME;
+		
 		_port = findUddi(uddiURL, uddiName);
 	}
 	
 	
-	public static SDStore findUddi(String uddiURL, String uddiName) throws JAXRException {
+	public StoreClient(String uddiUrl, String uddiName) throws JAXRException{
+		this.uddiURL = uddiUrl;
+		this.uddiName = uddiName;
+		
+		_port = findUddi(uddiURL, uddiName);
+	}
+	
+	
+	public static SDStore createPort(){
+		SDStore_Service service = new SDStore_Service();
+		return service.getSDStoreImplPort();
+	}
+	
+	public SDStore getPort(){
+		return _port;
+	}
+	
+	
+	public void initIfNoPort(){
+		if(_port == null){
+			try {
+				_port = findUddi(uddiURL, uddiName);
+			} catch (JAXRException e) {
+				return;
+			}
+		}
+	}
+	
+	
+	public SDStore findUddi(String uddiURL, String uddiName) throws JAXRException {
 		SDStore port;
 		System.out.printf("Contacting UDDI at %s%n", uddiURL);
         UDDINaming uddiNaming = new UDDINaming(uddiURL);
@@ -68,31 +97,27 @@ public class StoreClient{
 	}
 	
 	
-	public static void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
-		initIfNoPort();
+	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
 		service.dispatch();
 	}
 	
 	
-	public static List<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
-		initIfNoPort();
+	public List<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
 		ListDocsService service = new ListDocsService(userID, _port);
 		service.dispatch();
 		return service.getResult();
 	}
 	
 	
-	public static byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
-		initIfNoPort();
+	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
 		service.dispatch();
 		return service.getResult();
 	}
 	
 	
-	public static void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
-		initIfNoPort();
+	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		StoreDocService service = new StoreDocService(userID, docID, content, _port);
 		service.dispatch();
 	}
@@ -113,19 +138,5 @@ public class StoreClient{
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
-	}
-	
-	
-	public static void initIfNoPort(){
-		if(_port == null){
-			_port = initPort();
-		}
-	}
-	
-	
-	public static SDStore initPort(){
-		SDStore_Service service = new SDStore_Service();
-		return service.getSDStoreImplPort();
-	}
-	
+	}	
 }
