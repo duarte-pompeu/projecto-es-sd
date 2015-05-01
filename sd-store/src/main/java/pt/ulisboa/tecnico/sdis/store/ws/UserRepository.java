@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class UserCollection {
+public class UserRepository {
 	
-	private TreeMap<String, byte[]> docs;
+	private TreeMap<String, Document> docs;
 	private String owner;
 	private int maxCapacity;
 	private int usedCapacity;
 	
 	
 	
-	public UserCollection(String owner, int capacity){
+	public UserRepository(String owner, int capacity){
 		this.owner = owner;
-		docs = new TreeMap<String, byte[]>();
+		docs = new TreeMap<String, Document>();
 		usedCapacity = 0;
 		maxCapacity = capacity;
 	}
@@ -27,7 +27,7 @@ public class UserCollection {
 	
 	
 	public void addDoc(String docID){
-		docs.put(docID, null);
+		docs.put(docID, new Document(docID));
 	}
 	
 	
@@ -37,7 +37,7 @@ public class UserCollection {
 	
 	
 	public byte[] getContent(String docID){
-		return docs.get(docID);
+		return docs.get(docID).getContent();
 	}
 	
 	
@@ -66,7 +66,7 @@ public class UserCollection {
 		// if we haven't returned or thrown an exception, it means all is good and the new content should be stored.
 		// reminder: update the used capacity
 		usedCapacity += new_size - old_size;
-		docs.put(docID, newContent);
+		docs.put(docID, new Document(docID, newContent));
 	}
 	
 	

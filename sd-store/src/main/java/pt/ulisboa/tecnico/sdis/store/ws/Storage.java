@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class Storage {
 	private final int STORAGE_CAP;
-	private TreeMap<String, UserCollection> collections;
+	private TreeMap<String, UserRepository> collections;
 
 	
 	public Storage(int capacity){
@@ -18,11 +18,11 @@ public class Storage {
 	
 	
 	public void init(){
-		collections = new TreeMap<String, UserCollection>();
+		collections = new TreeMap<String, UserRepository>();
 	}
 	
 	
-	public UserCollection getCollection(String userID){
+	public UserRepository getCollection(String userID){
 		return collections.get(userID);
 	}
 	
@@ -30,7 +30,7 @@ public class Storage {
 	public List<String> getUserDocs(String userID)
 		throws UserDoesNotExist_Exception{
 		
-		UserCollection collection = this.getCollection(userID);
+		UserRepository collection = this.getCollection(userID);
 		List<String> docs = null;
 		
 		if(collection != null){
@@ -55,11 +55,11 @@ public class Storage {
 	
 	
 	public List<String> getAllDocs(){
-		Collection<UserCollection> collections_set = collections.values();
+		Collection<UserRepository> collections_set = collections.values();
 		
 		ArrayList<String> docs = new ArrayList<String>();
 		
-		for(UserCollection col: collections_set){
+		for(UserRepository col: collections_set){
 			docs.addAll(col.getAllDocs());
 		}
 		
@@ -67,8 +67,8 @@ public class Storage {
 	}
 	
 	
-	public UserCollection createCollection(String userID){
-		UserCollection col = new UserCollection(userID, STORAGE_CAP);
+	public UserRepository createCollection(String userID){
+		UserRepository col = new UserRepository(userID, STORAGE_CAP);
 		this.collections.put(userID, col);
 		
 		return col;
@@ -81,7 +81,7 @@ public class Storage {
 		/* Check if user has collection and get it.
 		 * Create a new one otherwise.
 		 */
-		UserCollection collection = getCollection(user);
+		UserRepository collection = getCollection(user);
 		
 		if(collection == null){
 			collection = this.createCollection(user);

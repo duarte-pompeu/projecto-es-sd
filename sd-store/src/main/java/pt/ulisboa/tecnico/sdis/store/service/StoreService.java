@@ -5,7 +5,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
-import pt.ulisboa.tecnico.sdis.store.ws.UserCollection;
+import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
@@ -23,7 +23,7 @@ public class StoreService {
 	public void dispatch() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		Storage storage = SDStoreMain.getStorage();
 		
-		UserCollection collection = storage.getCollection(userID);
+		UserRepository collection = storage.getCollection(userID);
 		
 		if(collection == null){
 			UserDoesNotExist udneM = new UserDoesNotExist();
