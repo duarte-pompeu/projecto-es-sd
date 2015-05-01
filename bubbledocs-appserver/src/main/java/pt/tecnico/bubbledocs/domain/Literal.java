@@ -52,6 +52,10 @@ public class Literal extends Literal_Base {
 	public int getValue(){
 		return this.getVal();
 	}
+	
+	public void accept(CalcSheetExporter exporter) {
+		exporter.exportLiteral(this);
+	}
 
     /* (non-Javadoc)
      * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)

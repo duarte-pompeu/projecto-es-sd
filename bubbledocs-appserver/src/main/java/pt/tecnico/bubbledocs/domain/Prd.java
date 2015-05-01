@@ -55,5 +55,9 @@ public class Prd extends Prd_Base {
 	return element;
 	}
 
+	@Override
+	public String getName() {
+		return "prd";
+	}
 	
 }

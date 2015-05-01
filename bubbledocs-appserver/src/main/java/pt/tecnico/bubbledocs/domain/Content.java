@@ -33,6 +33,8 @@ public abstract class Content extends Content_Base {
 	 * @param c
 	 */
 	public abstract void importFromXML(Element c);
+	
+	public abstract void accept(CalcSheetExporter exporter);
 
 	public void delete() {
 		if(this.getCell() !=null)

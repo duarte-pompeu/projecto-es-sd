@@ -9,7 +9,7 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public class Function extends Function_Base {
+public abstract class Function extends Function_Base {
     
     /**
      * 
@@ -44,5 +44,7 @@ public class Function extends Function_Base {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public abstract String getName();
     
 }

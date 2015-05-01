@@ -56,6 +56,9 @@ public class Range extends Range_Base implements Iterable<Cell>{
 				this.getCellsSet().add(sheet.getCell(line, column));
 			}
 		}*/ 
+		
+		this.setLeftUpCell(sheet.getCell(firstLine, firstColumn));
+		this.setRightDownCell(sheet.getCell(lastLine, lastColumn));
 	}
 	
 	/*

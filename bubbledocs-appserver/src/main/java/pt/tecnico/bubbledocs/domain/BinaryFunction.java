@@ -18,7 +18,7 @@ import org.jdom2.Element;
  * @author pc-w
  *
  */
-public class BinaryFunction extends BinaryFunction_Base {
+public abstract class BinaryFunction extends BinaryFunction_Base {
     
     /**
      * 
@@ -64,6 +64,10 @@ public class BinaryFunction extends BinaryFunction_Base {
 		this.setCell(null);
 		this.deleteDomainObject();
 		
+	}
+	
+	public void accept(CalcSheetExporter exporter) {
+		exporter.exportBinaryFunction(this);
 	}
 	
 	/* (non-Javadoc)

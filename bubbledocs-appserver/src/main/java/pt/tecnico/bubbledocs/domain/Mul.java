@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 /**
@@ -47,5 +46,10 @@ public class Mul extends Mul_Base {
     	element.addContent(this.getArg1().exportToXML());
     	element.addContent(this.getArg2().exportToXML());
 	return element;
+	}
+
+	@Override
+	public String getName() {
+		return "mul";
 	}
 }

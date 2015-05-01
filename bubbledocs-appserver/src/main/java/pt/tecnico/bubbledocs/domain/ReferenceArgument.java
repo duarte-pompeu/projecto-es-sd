@@ -66,6 +66,11 @@ public class ReferenceArgument extends ReferenceArgument_Base {
 		return referenceElement;
 	}
 	
+	@Override
+	public void accept(CalcSheetExporter exporter) {
+		exporter.exportReferenceArgument(this);
+	}
+	
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)
 	 */

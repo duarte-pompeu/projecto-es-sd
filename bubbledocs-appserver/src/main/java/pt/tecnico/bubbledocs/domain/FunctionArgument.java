@@ -36,5 +36,7 @@ public abstract class FunctionArgument extends FunctionArgument_Base {
 	 */
 
 	public abstract void importFromXML(Element c);
+	
+	public abstract void accept(CalcSheetExporter exporter);
     
 }

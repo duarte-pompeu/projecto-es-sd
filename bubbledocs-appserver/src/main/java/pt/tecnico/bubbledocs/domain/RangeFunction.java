@@ -11,7 +11,7 @@ import org.jdom2.Element;
  * @author pc-w
  *
  */
-public class RangeFunction extends RangeFunction_Base {
+public abstract class RangeFunction extends RangeFunction_Base {
     
     /**
      * 
@@ -38,6 +38,10 @@ public class RangeFunction extends RangeFunction_Base {
 	 */
 	public Iterable<Cell> getRangeCells(){
 		return this.getRange();
+	}
+	
+	public void accept(CalcSheetExporter exporter) {
+		exporter.exportRangeFunction(this);
 	}
 	
 	/* (non-Javadoc)
