@@ -47,8 +47,7 @@ public class CalcSheetExporter {
 	
 	
 	/*
-	 * <!-- Assuming date to string is a timestamp -->
-	 * <calcSheet creator="alice" date="1430477108" id="123" name="Cábulas" lines="300" columns="10">
+	 * <calcSheet creator="alice" date="2015-05-01" id="123" name="Cábulas" lines="300" columns="10">
 	 *   <cell line="1" column="1" protect="false">
 	 *     ...
 	 *   </cell>
