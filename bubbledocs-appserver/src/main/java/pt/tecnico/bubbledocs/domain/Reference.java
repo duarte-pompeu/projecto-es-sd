@@ -74,15 +74,6 @@ public class Reference extends Reference_Base {
 	}
 	
 	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#exportToXML()
-	 */
-	public Element exportToXML(){
-		Element referenceElement=new Element("reference");
-		referenceElement.addContent(this.getPointedCell().exportToXML());
-		return referenceElement;
-	}
-	
-	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)
 	 */
 	public void importFromXML(Element element){

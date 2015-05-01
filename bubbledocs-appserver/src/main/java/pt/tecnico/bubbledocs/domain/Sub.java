@@ -38,17 +38,6 @@ public class Sub extends Sub_Base {
 		return val1 - val2;
 	}
 
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Function#exportToXML()
-	 */
-	@Override
-	public Element exportToXML() {
-		Element element = new Element("sub");
-    	element.addContent(this.getArg1().exportToXML());
-    	element.addContent(this.getArg2().exportToXML());
-	return element;
-	}
-
 
 	@Override
 	public String getName() {

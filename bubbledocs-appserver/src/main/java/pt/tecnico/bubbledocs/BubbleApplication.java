@@ -106,20 +106,6 @@ public class BubbleApplication {
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
 	}
 
-  	/**
-  	 * This method converts a calcSheet into a XML document.
-  	 * @param c The calcSheet which will be converted
-  	 * @return The resulting XML document.
-  	 */
-    public static org.jdom2.Document convertToXML(CalcSheet c) {
-	 
-  		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-
-  		jdomDoc.setRootElement(c.exportToXML());
-
-  		return jdomDoc;
-    }
-
 }
 
 

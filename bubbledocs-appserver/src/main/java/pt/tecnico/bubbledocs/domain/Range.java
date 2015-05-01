@@ -90,21 +90,6 @@ public class Range extends Range_Base implements Iterable<Cell>{
 		
 		return a.iterator();
 	}
-
-
-	/**
-	 * @return
-	 */
-	public Element exportToXML() {
-		Element element = new Element("range");
-    
-    	Cell c= this.getLeftUpCell();
-    	element.addContent(c.exportToXML());
-    	c=this.getRightDownCell();
-    	element.addContent(c.exportToXML());
-    	
-    	return element;
-	}
 	
 	/**
 	 * @param element

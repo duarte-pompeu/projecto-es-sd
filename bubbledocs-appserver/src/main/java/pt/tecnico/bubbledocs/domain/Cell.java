@@ -107,21 +107,6 @@ public class Cell extends Cell_Base {
     	this.setContent(content);
     
     }
-
-    /**
-     * @return
-     */
-    public Element exportToXML() {
-    	Element element = new Element("cell");
-    	element.setAttribute("id", this.getId());
-    	element.setAttribute("line", this.getLine().toString());
-    	element.setAttribute("column", this.getColumn().toString());
-    	element.setAttribute("protect", this.getProtect().toString());
-    	if(this.getContent()!=null)
-    		element.addContent(this.getContent().exportToXML());
-    	
-	return element;
-    }
     
     public String contentString(){
     	

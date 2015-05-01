@@ -45,16 +45,6 @@ public class Prd extends Prd_Base {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Function#exportToXML()
-	 */
-	@Override
-	public Element exportToXML() {
-		Element element = new Element("prd");
-    	element.addContent(this.getRange().exportToXML());
-	return element;
-	}
-
 	@Override
 	public String getName() {
 		return "prd";

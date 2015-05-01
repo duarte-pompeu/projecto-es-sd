@@ -293,28 +293,6 @@ public class CalcSheet extends CalcSheet_Base {
     	
     	this.setBubbleDocs(BubbleDocs.getInstance());
     }
-
-
-    public Element exportToXML() {
-    	Element element = new Element("calcSheet");
-    	try{
-    	element.setAttribute("creator", this.getCreator().getUserName());
-    	element.setAttribute("date", this.getDate().toString());
-    	element.setAttribute("id", this.getId().toString());
-    	element.setAttribute("name", this.getName().toString());
-    	element.setAttribute("lines", this.getLines().toString());
-    	element.setAttribute("columns", this.getColumns().toString());
-    	
-    	}catch(Exception e){System.out.println(e.toString());}
-    	
-    	for(Cell c: this.getCellSet()){
-    		if(c.getContent()!=null)
-    			element.addContent(c.exportToXML());
-    	}
-    		
-	
-    	return element;
-    }
     
 
     protected String[][] getCellsMatrix(){

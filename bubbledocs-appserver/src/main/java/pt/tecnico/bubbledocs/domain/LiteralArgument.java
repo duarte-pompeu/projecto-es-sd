@@ -39,12 +39,5 @@ public class LiteralArgument extends LiteralArgument_Base {
 		int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
     	init(value);
 	}
-	
-	@Override
-	public Element exportToXML() {
-		Element element = new Element("literalArgument");
-    	element.setAttribute("val", this.getVal().toString());
-	return element;
-	}
     
 }

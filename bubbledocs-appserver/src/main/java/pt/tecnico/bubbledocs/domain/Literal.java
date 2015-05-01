@@ -64,15 +64,6 @@ public class Literal extends Literal_Base {
     	int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
     	init(value);
     }
-
-    /* (non-Javadoc)
-     * @see pt.tecnico.bubbledocs.dml.FunctionArgument#exportToXML()
-     */
-    public Element exportToXML() {
-    	Element element = new Element("literal");
-    	element.setAttribute("val", this.getVal().toString());
-	return element;
-    }
     
     /* (non-Javadoc)
      * @see pt.ist.fenixframework.backend.jvstmojb.pstm.AbstractDomainObject#toString()

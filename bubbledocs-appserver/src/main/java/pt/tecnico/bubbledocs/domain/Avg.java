@@ -40,16 +40,6 @@ public class Avg extends Avg_Base {
 		
 		return total / n;
 	}
-
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Function#exportToXML()
-	 */
-	@Override
-	public Element exportToXML() {
-		Element element = new Element("avg");
-    	element.addContent(this.getRange().exportToXML());
-	return element;
-	}
 	
 	@Override
 	public String getName() {

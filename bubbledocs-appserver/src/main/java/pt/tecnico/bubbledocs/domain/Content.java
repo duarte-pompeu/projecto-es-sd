@@ -17,11 +17,6 @@ public abstract class Content extends Content_Base {
     public Content() {
         super();
     }
-
-	/**
-	 * @return
-	 */
-	public abstract Element exportToXML();
 	
 
 	/**

@@ -19,15 +19,6 @@ public abstract class Function extends Function_Base {
     }
 
 	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Content#exportToXML()
-	 */
-	@Override
-	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Content#getValue()
 	 */
 	@Override
