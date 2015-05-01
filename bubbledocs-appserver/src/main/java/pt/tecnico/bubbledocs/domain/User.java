@@ -111,7 +111,8 @@ public class User extends User_Base {
     }
     
     public boolean canWrite(CalcSheet sheet) {
-    	return this.getWriteableCalcSheetSet().contains(sheet);
+    	return this.getWriteableCalcSheetSet().contains(sheet) ||
+    		   this.getCreatedCalcSheetSet().contains(sheet);
     }
     
     public boolean owns(CalcSheet sheet) {

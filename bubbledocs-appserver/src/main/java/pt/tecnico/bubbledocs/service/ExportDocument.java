@@ -5,6 +5,7 @@ import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.CalcSheetExporter;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class ExportDocument extends SessionService {
     private byte[] docXML;
@@ -23,6 +24,7 @@ public class ExportDocument extends SessionService {
     @Override
     protected void dispatchAfterSuperService() throws BubbleDocsException { 	
 		CalcSheet sheet = BubbleDocs.getInstance().getCalcSheetById(docId);
+    	if (!super.user.canWrite(sheet)) throw new PermissionException();
     	docXML = new CalcSheetExporter().exportToXmlData(sheet);    	
     }
     
