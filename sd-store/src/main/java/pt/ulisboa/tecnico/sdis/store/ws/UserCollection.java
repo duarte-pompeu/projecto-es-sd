@@ -57,7 +57,10 @@ public class UserCollection {
 			CapacityExceeded cap = new CapacityExceeded();
 			cap.setCurrentSize(new_capacity);
 			cap.setAllowedCapacity(maxCapacity);
-			throw new CapacityExceeded_Exception("Capacity exceeded", cap);
+			
+			String except_msg = "You tried to store " + new_capacity + " bytes. ";
+			except_msg += "Max capacity allowed is "+ maxCapacity +" bytes . ";
+			throw new CapacityExceeded_Exception(except_msg, cap);
 		}
 		
 		// if we haven't returned or thrown an exception, it means all is good and the new content should be stored.
