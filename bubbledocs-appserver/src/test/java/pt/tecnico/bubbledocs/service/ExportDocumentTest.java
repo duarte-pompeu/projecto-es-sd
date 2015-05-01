@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import pt.tecnico.bubbledocs.service.remote.*;
-import mockit.Mock;
-import mockit.MockUp;
+import mockit.*;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -21,6 +20,7 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.Add;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.CalcSheetExporter;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.LiteralArgument;
@@ -54,8 +54,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String CELL_ID2;
 	private String U_EMAIL="email@email.com";
 	private String U_EMAIL2="email2@email.com";
+	private byte[] EXPORTED;
 
-	
+	@Mocked
+	StoreRemoteServices remote;
+		
 	@Override
 	public void populate4Test(){
 		USER = createUser(U_USERNAME, U_PASS, U_NAME, U_EMAIL);
@@ -69,40 +72,18 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
 		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
 		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
-	}
-	
-	
-	
-	//Mock class simulating an unavailable SD-STORE service
-	public static class MockSDStoreUnavailableContext extends MockUp<StoreRemoteServices>
-	{
-	   @Mock
-	   public void $init() {}
-
-	   @Mock
-	   public void storeDocument(String username, String docName, byte[] document) throws RemoteInvocationException
-	   {
-	      throw new RemoteInvocationException();
-	   }
-	}
-	
-
-	//Mock class simulating a context where SD-STORE cannot store a specific document
-	public static class MockSDStoreCannotStoreDocumentContext extends MockUp<StoreRemoteServices>
-	{
-	   @Mock
-	   public void $init() {}
-
-	   @Mock
-	   public void storeDocument(String username, String docName, byte[] document) throws CannotStoreDocumentException
-	   {
-	      throw new CannotStoreDocumentException();
-	   }
+		EXPORTED = new CalcSheetExporter().exportToXmlData(CS_EMPTY);
 	}
 	
 	
 	@Test
-	public void emptyCalcSheet() throws JDOMException, IOException{
+	public void emptyCalcSheet() throws JDOMException, IOException{		
+		
+		
+		new Expectations() {{
+			remote.storeDocument(U_USERNAME, CS_NAME, EXPORTED); times = 1;
+		}};
+		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.execute();
 		
@@ -151,6 +132,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void calcSheetWithOneCell() throws JDOMException, IOException{
 		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
 		c.setContent(new Literal(7));
+		byte[] exported = new CalcSheetExporter().exportToXmlData(CS_EMPTY);
+		
+		new Expectations() {{
+			remote.storeDocument(U_USERNAME, CS_NAME, exported); times = 1;
+		}};
 		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.execute();
@@ -195,6 +181,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		c2.setContent(new Reference(c1));
 		Cell c3=this.getSpreadSheet(CS_NAME).getCell(CELL_ID2);
 		c3.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
+		byte[] exported = new CalcSheetExporter().exportToXmlData(CS_EMPTY);
+		
+		new Expectations() {{
+			remote.storeDocument(U_USERNAME, CS_NAME, exported); times = 1;
+		}};
 		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.execute();
@@ -259,18 +250,25 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	//Testing the case of trying to export a non existing spread sheet
 	@Test(expected= NotFoundException.class)
 	public void nonExistingCalcSheet() throws JDOMException, IOException{
+		new Expectations() {{
+			remote.storeDocument(anyString, anyString, (byte[]) any); times = 0;
+		}};
+		
 		ExportDocument service = new ExportDocument(U_TOKEN, -1);
 		service.execute();
-		
-		}
+	}
 		
 	//Testing the case of trying to export an existing spread sheet with an invalid login token
 	@Test(expected = UserNotInSessionException.class)
 	public void noLogin(){
+		new Expectations() {{
+			remote.storeDocument(anyString, anyString, (byte[]) any); times = 0;
+		}};
+		
 		String bad_session_token = "Bad session token";
 		ExportDocument service = new ExportDocument(bad_session_token, CS_ID);
 		service.execute();
-		}
+	}
 	
 	
 
@@ -278,26 +276,38 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	//Testing the case of trying to export an existing spread sheet and SD-STORE being unavailable
 	@Test(expected = UnavailableServiceException.class)
 	public void storeServiceUnavailable(){
-		new MockSDStoreUnavailableContext();
+		new Expectations() {{
+			remote.storeDocument(U_USERNAME, CS_NAME, EXPORTED); times = 1;
+			result = new RemoteInvocationException();
+		}};
+		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.execute();
-		}
+	}
 	
 	//Testing the case of trying to export an existing spread sheet and SD-STORE being unable to store it
 	@Test(expected = CannotStoreDocumentException.class)
 	public void storeServiceCantStore(){
-		new  MockSDStoreCannotStoreDocumentContext();
+		new Expectations() {{
+			remote.storeDocument(U_USERNAME, CS_NAME, EXPORTED); times = 1;
+			result = new CannotStoreDocumentException();
+		}};
+		
 		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
 		service.execute();
-		}
+	}
 		
 
 	//Testing the case of trying to export an existing spread sheet with a user without permission
 	@Test(expected = PermissionException.class)
-		public void noPermission(){
-			ExportDocument service = new ExportDocument(no_permission_token, CS_ID);
-			service.execute();
-			}
+	public void noPermission(){
+		new Expectations() {{
+			remote.storeDocument(anyString, anyString, (byte[]) any); times = 0;
+		}};
+		
+		ExportDocument service = new ExportDocument(no_permission_token, CS_ID);
+		service.execute();
+	}
 	
 	
 	
