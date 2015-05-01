@@ -2,6 +2,7 @@ package pt.tecnico.sd;
 
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -37,13 +38,22 @@ public class SdCrypto {
 		System.out.println("Deciphered: " + new String(decrypt(key, encrypted)));
 	}
 	
-	public static byte[] digestPassword(byte[] password) throws Exception {
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
-		digest.update(password);
-		return digest.digest();
+	public static byte[] digestPassword(byte[] password) {
+		MessageDigest digest;
+		
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			digest.update(password);
+			return digest.digest();
+			
+		} catch (NoSuchAlgorithmException e) {
+			// This should never happen
+		}
+		
+		return null;
 	}
 	
-	public static SecretKey generateKey(byte[] digest) throws Exception {
+	public static SecretKey generateKey(byte[] digest) throws InvalidKeyException {
 		return new SecretKeySpec((new DESedeKeySpec(digest).getKey()), "DESede");
 	}
 	

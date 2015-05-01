@@ -4,20 +4,17 @@ import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 
+import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.store.cli.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.cli.service.ListDocsService;
@@ -43,10 +40,6 @@ public class StoreClient{
 	public String uddiName;
 	private SDStore _port = null;
 	
-	private Key key;
-	public Cipher encrypter;
-	public Cipher decrypter;
-	
 	
 	public StoreClient() throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
 		this(DEFAULT_UDDI_URL, DEFAULT_UDDI_NAME);
@@ -57,7 +50,6 @@ public class StoreClient{
 		this.uddiURL = uddiUrl;
 		this.uddiName = uddiName;
 		
-		initCrypto();
 		_port = findUddi(uddiURL, uddiName);
 	}
 	
@@ -110,16 +102,6 @@ public class StoreClient{
         return port;
 	}
 	
-	public void initCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException{
-		this.key = getKey();
-		
-		this.encrypter = Cipher.getInstance("DES/ECB/PKCS5Padding");
-		encrypter.init(Cipher.ENCRYPT_MODE, key);
-		
-		this.decrypter = Cipher.getInstance("DES/ECB/PKCS5Padding");
-		decrypter.init(Cipher.DECRYPT_MODE, key);
-	}
-	
 	
 	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
@@ -138,6 +120,8 @@ public class StoreClient{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
 		service.dispatch();
 		
+		
+		
 		if(!ENCRYPTION){
 			return service.getResult();
 		}
@@ -146,12 +130,15 @@ public class StoreClient{
 		byte[] ciphered = service.getResult();
 		byte[] plainBytes = null;
 		
+		SecretKey key = null;
+		
 		try {
-			plainBytes = decrypter.doFinal(ciphered);
-		} 
-		catch (IllegalBlockSizeException | BadPaddingException e) {
+			key = SdCrypto.generateKey(getDigest(userID));
+			plainBytes = SdCrypto.decrypt(key, ciphered);
+		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		}
+
 		
 		if(VERBOSE){
 			System.out.println("ENCRYPTED: " + bytes2string(ciphered));
@@ -165,20 +152,22 @@ public class StoreClient{
 	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		byte[] bytes2upload = content;
 		
+		
 		if(ENCRYPTION){
+			
+			SecretKey key = null;
+			
 			try {
-				bytes2upload = encrypter.doFinal(content);
+				key = SdCrypto.generateKey(getDigest(userID));
+				bytes2upload = SdCrypto.encrypt(key, content);
 			} 
-			catch (IllegalBlockSizeException | BadPaddingException e) {
-				// TODO Auto-generated catch block
+			catch (InvalidKeyException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		StoreDocService service = new StoreDocService(userID, docID, bytes2upload, _port);
 		service.dispatch();
-		
 	}
 
 	
@@ -200,16 +189,8 @@ public class StoreClient{
 	}
 	
 	
-	public Key getKey(){
-		KeyGenerator keyGen = null;
-		
-		try {
-			keyGen = KeyGenerator.getInstance("DES");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		
-		keyGen.init(56);
-		return keyGen.generateKey();
+	public byte[] getDigest(String userID){
+		//FIXME: doesnt actually use digest
+		 return SdCrypto.digestPassword(StoreClient.string2bytes(userID));
 	}
 }
