@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.*;
 import mockit.*;
 
@@ -33,6 +34,7 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.integration.ExportDocumentIntegrator;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
 	
@@ -84,12 +86,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			remote.storeDocument(U_USERNAME, CS_NAME, EXPORTED); times = 1;
 		}};
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		Document xmlDoc=b.build(new ByteArrayInputStream(EXPORTED));
 		
         XPathFactory xFactory = XPathFactory.instance();
 
@@ -138,12 +140,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			remote.storeDocument(U_USERNAME, CS_NAME, exported); times = 1;
 		}};
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		Document xmlDoc=b.build(new ByteArrayInputStream(exported));
 		
         XPathFactory xFactory = XPathFactory.instance();
 
@@ -187,12 +189,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			remote.storeDocument(U_USERNAME, CS_NAME, exported); times = 1;
 		}};
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		Document xmlDoc=b.build(new ByteArrayInputStream(exported));
 		
         XPathFactory xFactory = XPathFactory.instance();
 
@@ -254,7 +256,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			remote.storeDocument(anyString, anyString, (byte[]) any); times = 0;
 		}};
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, -1);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(U_TOKEN, -1);
 		service.execute();
 	}
 		
@@ -266,7 +268,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		}};
 		
 		String bad_session_token = "Bad session token";
-		ExportDocument service = new ExportDocument(bad_session_token, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(bad_session_token, CS_ID);
 		service.execute();
 	}
 	
@@ -281,7 +283,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 	}
 	
@@ -293,7 +295,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			result = new CannotStoreDocumentException();
 		}};
 		
-		ExportDocument service = new ExportDocument(U_TOKEN, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 	}
 		
@@ -305,7 +307,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			remote.storeDocument(anyString, anyString, (byte[]) any); times = 0;
 		}};
 		
-		ExportDocument service = new ExportDocument(no_permission_token, CS_ID);
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(no_permission_token, CS_ID);
 		service.execute();
 	}
 	
