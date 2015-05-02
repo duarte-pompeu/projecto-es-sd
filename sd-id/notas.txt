@@ -18,25 +18,41 @@ Protocolo
 
 Cliente -> SD-ID:  requestAuthentication(username, reserved)
 			username - é o mesmo
-			reserved - nome do serviço + ':' + nonce string numérico 8 caracteres
+			reserved - nome do serviço + ':' + nonce string numérico decimal 32 bits
 				ex: "SD-Store:38731707"
+		Comportamento adicional: Produzir um ticket novo e uma chave de sessão nova.
+		                         (E verificar que o nonce não é repetido, não é prioritário implementar
+		                          isto agora)
 SD-ID -> Cliente:  requestAuthenticationReply(credentials)
 			the body or the message is encrypted with Kc
-                        credentials - nonce + Kcs
+                        credentials - (4 bytes) nonce + Kcs
 		   header:
 			ticket: XML encrypted with Ks
 		<ticket>				
 		  <user>username</user>
 		  <service>SD-Store</service>
 		  <since>TIMESTAMP</since>
-		  <expire>TIMESTAMP'</expire>
+		  <expire>TIMESTAMP'</expire> <!-- Por exemplo 30 min depois de TIMESTAMP -->
 		  <key>Base64{Kcs}</key>
 		</ticket>
+        Comportamento adicional: Devolver à camada abaixo um objeto que é composto
+                                 pela chave de sessão e do blob do ticket.
+                                 Esse objeto deve ser usado com o cliente de SD-Store
 
 No SD-ID a tabela de utilizadores é mudado.
 Em vez de guardar a password é guardado o resumo da password com o algoritmo SHA-256.
 
-				
-			
 
+Para handlers existem dois handlers:
 
+Handler de bilhete
+Cliente -> SD-ID: Não faz nada
+SD-ID -> Cliente: No servidor é colocado o blob do ticket, cifrado com a chave de serviço, no header,
+                  no cliente é extraído o ticket para ser devolvido no SdIdClient.
+
+Handler de Criptografia
+Cliente -> SD-ID: Não faz nada
+SD-ID -> Cliente: No servidor é cifrado o envelope usando a chave do cliente,
+                  no cliente é decifrado usando a chave gerada pela password
+
+É de notar que a password não é enviada na rede.
