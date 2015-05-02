@@ -28,15 +28,14 @@
         <version.maven.build-helper-plugin>1.7</version.maven.build-helper-plugin>
         
         <uddi.url>http://localhost:8081</uddi.url>
-    	<ws.name>SDStore</ws.name>
-    	<ws.url>http://localhost:8080/hello-ws/endpoint</ws.url>
+    	<ws.name>sd-store</ws.name>
+		<ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>
     	<ws.altURLs>http://localhost:8078/hello-ws/endpoint,http://localhost:8079/hello-ws/endpoint</ws.altURLs>
         
 		<mainclass>pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain</mainclass>
 		
 
-		<ws.name>sd-store</ws.name>
-		<ws.url>http://localhost:8080/sd-store-ws/endpoint</ws.url>
+		
     </properties>
   
   <dependencies>
