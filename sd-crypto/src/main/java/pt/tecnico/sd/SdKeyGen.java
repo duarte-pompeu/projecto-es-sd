@@ -24,13 +24,27 @@ public class SdKeyGen {
         System.out.println("Finished generating 3DES key!");
         
         byte[] encoded = key.getEncoded();
-        System.out.printf("Key: \"%s\"%n", printHexBinary(encoded));
+        System.out.printf("Key: %s%n", printHexBinary(encoded));
         
-        System.out.println("Writing key to file");	
+        System.out.println("Writing key to files");	
+        
+        //This folder
         FileOutputStream out = new FileOutputStream("secret-key");
-        
-        out.write(encoded);
-        out.close();
+        //sd-id
+        FileOutputStream sdid = new FileOutputStream("../sd-id/secret-key");
+        //sd-store
+        FileOutputStream sdstore = new FileOutputStream("../sd-store/secret-key");
+
+        try {
+        	out.write(encoded);
+        	sdid.write(encoded);
+        	sdstore.write(encoded);
+        } catch (Exception e) {throw e;}
+        finally {
+        	out.close();
+        	sdid.close();
+        	sdstore.close();
+        }
         
         System.out.println("Done. Shh, keep a secret!");       
         
