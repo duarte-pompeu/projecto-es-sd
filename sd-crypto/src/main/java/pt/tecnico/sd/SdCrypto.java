@@ -64,8 +64,12 @@ public class SdCrypto {
 		}
 	}
 	
-	public static SecretKey generateKey(byte[] digest) throws InvalidKeyException {
-		return new SecretKeySpec((new DESedeKeySpec(digest).getKey()), "DESede");
+	public static SecretKey generateKey(byte[] digest)  {
+		try {
+			return new SecretKeySpec((new DESedeKeySpec(digest).getKey()), "DESede");
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static byte[] encrypt(SecretKey key, byte[] plaintext) {
