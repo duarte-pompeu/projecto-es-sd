@@ -67,7 +67,7 @@ public class SDIdImpl implements SDId {
 			byte[] keyData = new byte[24];
 			in.read(keyData);
 			this.secret = SdCrypto.generateKey(keyData);
-			log("Key: " + printHexBinary(this.secret.getEncoded()));
+			//log("Key: " + printHexBinary(this.secret.getEncoded()));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -120,11 +120,14 @@ public class SDIdImpl implements SDId {
 			throw new InvalidEmail_Exception(emailAddress + " is invalid", fault);
 		}
 		
-		userTable.addUser(userId,emailAddress, generateRandomPassword());
 		
-		byte[] password = userTable.getPassword(userId);
+		
+		byte[] password = generateRandomPassword();
 		log("Password of " + userId + ": \"" + new String(password) + "\"");
-		
+				
+		//Store the digested password instead.
+		userTable.addUser(userId,emailAddress, 
+				SdCrypto.digestPassword(password));
 		
 	}
 
@@ -132,8 +135,8 @@ public class SDIdImpl implements SDId {
 	@Override
 	public void renewPassword(String userId) throws UserDoesNotExist_Exception {
 		byte[] newPassword = generateRandomPassword();
-		userTable.changePassword(userId, newPassword);
 		log("Renewed password for " + userId + ": \"" + new String(newPassword) + "\"");
+		userTable.changePassword(userId, SdCrypto.digestPassword(newPassword));
 	}
 
 	@Override
@@ -155,7 +158,7 @@ public class SDIdImpl implements SDId {
 	public byte[] requestAuthentication(String userId, byte[] reserved)
 			throws AuthReqFailed_Exception {
 
-		try {
+		try {			
 			if(userId==null || userId.equals("")){
 				AuthReqFailed fault = new AuthReqFailed();
 				fault.setReserved(reserved);
@@ -198,16 +201,6 @@ public class SDIdImpl implements SDId {
 		
 		StringBuilder builder = new StringBuilder();
 		
-		//ten digits and 52 letters, both upper and lower case.
-		//Java 8 streams and lambdas for the win!
-		/*rng.ints(0, 62)
-		   .limit(PASSWORD_SIZE)
-		   .map(x -> {
-			if      (x < 10)            return '0'+x;
-			else if (x >= 10 && x < 36) return 'a'+x-10;
-			else                        return 'A'+x-36;
-		}).forEach(x -> builder.append((char) x));*/
-		//Here be ugly 1.7 code instead
 		for (int i=0; i<PASSWORD_SIZE; ++i) {
 			int x = rng.nextInt(62);
 			int c;
@@ -219,7 +212,8 @@ public class SDIdImpl implements SDId {
 			builder.append((char) c);
 		}
 		
-		
+		//generate the password digest instead
+				
 		return builder.toString().getBytes();
 	}
 	
