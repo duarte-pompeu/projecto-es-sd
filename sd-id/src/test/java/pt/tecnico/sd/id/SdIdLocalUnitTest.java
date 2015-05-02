@@ -10,10 +10,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.crypto.SecretKey;
 import javax.xml.registry.JAXRException;
 
 import mockit.Mock;
 import mockit.MockUp;
+import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.id.ws.*;
 import example.ws.uddi.*;
 /**
@@ -97,12 +99,13 @@ public class SdIdLocalUnitTest {
 		assertNotNull("user2's password is null", user2.getPassword());
 		assertTrue("user1's password is empty", user1.getPassword().length > 0);
 		assertTrue("user2's password is empty", user2.getPassword().length > 0);		
-		assertTrue("user1's password is typeable", passwordIsTypeable(user1.getPassword()));
-		assertTrue("user2's password is typeable", passwordIsTypeable(user2.getPassword()));
+		//assertTrue("user1's password is typeable", passwordIsTypeable(user1.getPassword()));
+		//assertTrue("user2's password is typeable", passwordIsTypeable(user2.getPassword()));
 		//Very unlikely to fail
 		assertFalse("password is different", Arrays.equals(user1.getPassword(), user2.getPassword()));	
 	}
 	
+	/*
 	//Typeable means it's an ASCII character between 0x20 (Space) and 0x7E (~ Tilde)
 	private boolean passwordIsTypeable(byte[] password) {
 		for (byte c : password) {
@@ -110,7 +113,8 @@ public class SdIdLocalUnitTest {
 		}
 		return true;
 	}
-
+	*/
+	
 	//trying to add a user with an email that already exists
 	@Test(expected=EmailAlreadyExists_Exception.class)
 	public void testCreateUserEmailAlreadyExists() throws Exception {
@@ -198,12 +202,16 @@ public class SdIdLocalUnitTest {
 	
 	@Test
 	public void testRequestAuthentication() throws AuthReqFailed_Exception {
+
 		User alice = sdIdService.getUserByUsername(userName);
-		sdIdService.requestAuthentication(userName, password);
-		if ((sdIdService.getUserByUsername(userName))==null)
-			fail();
-		if(!Arrays.equals(alice.password, password))
-			fail();
+		byte[] credentials = sdIdService.requestAuthentication(userName, "SD-Store:123456789".getBytes());
+		
+		//The last 4 bytes are the nonce, ignore them for the time being
+		credentials = Arrays.copyOf(credentials, credentials.length - 4);
+		
+		//The credentials are supposed to be a key, so this shouldn't explode
+		SdCrypto.generateKey(credentials);
+		
 	}
 	
 	//trying to authenticate a user with an invalid user name
