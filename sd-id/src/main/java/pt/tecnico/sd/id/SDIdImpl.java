@@ -2,10 +2,15 @@ package pt.tecnico.sd.id;
 
 //This class implements the service
 
+import java.io.FileInputStream;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+import javax.crypto.SecretKey;
 import javax.jws.*;
+
+import pt.tecnico.sd.SdCrypto;
+import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
@@ -47,6 +52,8 @@ public class SDIdImpl implements SDId {
 	
 	private UserTable userTable;
 	private SecureRandom rng;
+	private SecretKey secret = null; //This is the secret key shared between SD-ID and SD-STORE
+	
 	
 	public SDIdImpl() {
 		this.userTable = new UserTable();
@@ -54,7 +61,15 @@ public class SDIdImpl implements SDId {
 		try {
 			this.populateForTest(userTable);
 		} catch (Exception e) {
-			throw new RuntimeException("the shit hit the fan", e);
+			throw new RuntimeException(e);
+		}
+		try (FileInputStream in = new FileInputStream("secret-key")){
+			byte[] keyData = new byte[24];
+			in.read(keyData);
+			this.secret = SdCrypto.generateKey(keyData);
+			log("Key: " + printHexBinary(this.secret.getEncoded()));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 	
