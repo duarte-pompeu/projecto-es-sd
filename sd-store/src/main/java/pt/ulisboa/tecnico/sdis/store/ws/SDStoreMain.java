@@ -1,7 +1,9 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
+import javax.xml.registry.JAXRException;
 import javax.xml.ws.Endpoint;
 
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
@@ -42,19 +44,48 @@ public class SDStoreMain{
 			url = args[2];
 		}
 		
+		ArrayList<String> altEndpoints = new ArrayList<String>();
+		if(args.length >= 4){
+			
+			for(String altURL: args[3].split(",")){
+				altEndpoints.add(altURL);
+				System.out.println(altURL);
+			}
+		}
+		
+		try{
+			publish(url, uddiURL, name);
+		}
+		
+		// cant publish? endpoint address already taken? no worries, here's a pack of alternative endpoint addresses for 9.99$ only.
+		catch(Exception e1){
+			for (String altEP: altEndpoints){
+				try{
+					publish(altEP, uddiURL,name);
+					break;
+				}
+				catch(Exception e2){
+					// dont do anything
+				}
+			}
+		}
+	}
+	
+	
+	public static void publish(String endpointURL, String uddiURL, String uddiName) throws Exception{
 		Endpoint endpoint = null;
 		UDDINaming uddiNaming = null;
 		try{
 			endpoint = Endpoint.create(new SDStoreImpl(DEBUG_MODE));
 			
 			// publish endpoint
-			System.out.println("Starting " + url);
-			endpoint.publish(url);
+			System.out.println("Starting " + endpointURL);
+			endpoint.publish(endpointURL);
 			
 			// publish to UDDI
-            System.out.printf("Publishing '%s' to UDDI at %s%n", name, uddiURL);
+            System.out.printf("Publishing '%s' to UDDI at %s%n", uddiName, uddiURL);
             uddiNaming = new UDDINaming(uddiURL);
-            uddiNaming.rebind(name, url);
+            uddiNaming.rebind(uddiName, uddiURL);
 			
 			// wait
 			System.out.println("Awaiting connections");
@@ -63,15 +94,14 @@ public class SDStoreMain{
 		}
 		
 		catch(Exception e){
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			throw e;
 		}
 		
 		finally{
 			try{
 				if(endpoint != null){
 					endpoint.stop();
-					System.out.println("Stopped endpoint " + url);
+					System.out.println("Stopped endpoint " + uddiURL);
 				}
 			} catch (Exception e){
 				System.out.println(e);
@@ -80,8 +110,8 @@ public class SDStoreMain{
 			try {
                 if (uddiNaming != null) {
                     // delete from UDDI
-                    uddiNaming.unbind(name);
-                    System.out.printf("Deleted '%s' from UDDI%n", name);
+                    uddiNaming.unbind(uddiName);
+                    System.out.printf("Deleted '%s' from UDDI%n", uddiName);
                 }
             } catch(Exception e) {
                 System.out.printf("Caught exception when deleting: %s%n", e);

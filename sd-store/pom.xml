@@ -30,6 +30,7 @@
         <uddi.url>http://localhost:8081</uddi.url>
     	<ws.name>SDStore</ws.name>
     	<ws.url>http://localhost:8080/hello-ws/endpoint</ws.url>
+    	<ws.altURLs>http://localhost:8078/hello-ws/endpoint,http://localhost:8079/hello-ws/endpoint</ws.altURLs>
         
 		<mainclass>pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain</mainclass>
 		
@@ -134,6 +135,7 @@
 	            <argument>${uddi.url}</argument>
 	            <argument>${ws.name}</argument>
 	            <argument>${ws.url}</argument>
+	            <argument>${ws.altURLs}</argument>
             </arguments>
           </configuration>
       </plugin>
