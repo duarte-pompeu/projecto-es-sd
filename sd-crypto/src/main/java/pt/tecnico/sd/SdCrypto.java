@@ -3,10 +3,12 @@ package pt.tecnico.sd;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -48,9 +50,18 @@ public class SdCrypto {
 			
 		} catch (NoSuchAlgorithmException e) {
 			// This should never happen
+			throw new RuntimeException(e);
 		}
-		
-		return null;
+	}
+	
+	public static SecretKey generateRandomKey() {
+		try {
+			KeyGenerator keygen = KeyGenerator.getInstance("DESede");
+			keygen.init(168);
+			return keygen.generateKey();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static SecretKey generateKey(byte[] digest) throws InvalidKeyException {

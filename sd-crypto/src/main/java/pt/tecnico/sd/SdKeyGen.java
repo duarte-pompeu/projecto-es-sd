@@ -16,10 +16,8 @@ public class SdKeyGen {
 	//Generate a key for 3DES	
 	public static void main(String[] args) throws Exception {
 		System.out.println("Generating 3DES key ..." );
-        
-		KeyGenerator keygen = KeyGenerator.getInstance("DESede");
-        keygen.init(168);
-        Key key = keygen.generateKey();
+       
+        Key key = SdCrypto.generateRandomKey();
         
         System.out.println("Finished generating 3DES key!");
         
