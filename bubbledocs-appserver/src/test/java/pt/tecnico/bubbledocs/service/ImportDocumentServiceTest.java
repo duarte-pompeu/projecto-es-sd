@@ -30,7 +30,7 @@ import pt.tecnico.bubbledocs.domain.LiteralArgument;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.ReferenceArgument;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exceptions.CannotStoreDocumentException;
+import pt.tecnico.bubbledocs.exceptions.CannotLoadDocumentException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
@@ -290,6 +290,34 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 		assertEquals("non empty cells", counter, 3);
 		
 	}
+	
+
+
+	
+	//Testing the case of trying to import an existing spread sheet and SD-STORE being unavailable
+	@Test(expected = UnavailableServiceException.class)
+	public void storeServiceUnavailable(){
+		new MockSDStoreUnavailableContext();
+		ImportDocumentService service = new ImportDocumentService(U_TOKEN, CS_ID);
+		service.execute();
+		}
+	
+	//Testing the case of trying to import an existing spread sheet and SD-STORE being unable to load it
+	@Test(expected = CannotLoadDocumentException.class)
+	public void storeServiceCantLoad(){
+		new  MockSDStoreCannotImportDocumentContext();
+		ImportDocumentService service = new ImportDocumentService(U_TOKEN, CS_ID);
+		service.execute();
+		}
+		
+
+	//Testing the case of trying to import an existing spread sheet with a user without permission (not the owner)
+	@Test(expected = PermissionException.class)
+		public void noPermission(){
+			ImportDocumentService service = new ImportDocumentService(U_TOKEN, CS_ID);
+			service.execute();
+			}
+	
 	
 
 	
