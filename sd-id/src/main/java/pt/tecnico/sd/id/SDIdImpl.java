@@ -32,6 +32,7 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
     targetNamespace="urn:pt:ulisboa:tecnico:sdis:id:ws",
     serviceName="SDId"
 )
+@HandlerChain(file="/handler-chain.xml")
 public class SDIdImpl implements SDId {
 
 	private final String userName1 = "alice";
