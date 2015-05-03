@@ -209,13 +209,15 @@ public class BubbleDocs extends BubbleDocs_Base {
 			throw new LoginException("Invalid username or password");
 		}
 
-
 		if (user.getPassword() == null || !user.getPassword().equals(password)) {
-			throw new UnavailableServiceException("Can't login: fail on both remote and local login.");
+			throw new LoginException();
 		}
 
-
 		return addSession(user); 
+	}
+	
+	public void logout(String token) {
+		this.getSessionFromToken(token).delete();		
 	}
 	
 	

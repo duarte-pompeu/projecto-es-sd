@@ -42,7 +42,7 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	private static final String JUBI_NAME = "Jubileu Mandafacas";
 	private static final String NO_CACHE = "Nocache";
 
-	@Mocked IDRemoteServices idRemoteMock;
+	@Mocked IDRemoteServices remote;
 	
 	@Override
 	public void populate4Test() {
@@ -63,6 +63,10 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void successNewToken() {
+		new Expectations() {{
+			remote.loginUser(USERNAME, PASSWORD); times = 1;
+		}};
+		
 		assertNull("The user was not logged in", getUserFromUsername(USERNAME).getSession());
 		
 		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
@@ -85,6 +89,10 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void successLoginTwiceSameToken() {
+		new Expectations() {{
+			remote.loginUser(LOGGED_IN, PASSWORD); times = 2;
+		}};
+		
 		LoginUserIntegrator service = new LoginUserIntegrator(LOGGED_IN, PASSWORD);
 
 		service.execute();
@@ -109,6 +117,10 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void rootIsSuperUser() {
+		new Expectations() {{
+			remote.loginUser(ROOT, ROOT_PASS); times = 1;
+		}};
+		
 		LoginUserIntegrator service = new LoginUserIntegrator(ROOT, ROOT_PASS);
 		service.execute();
 		
@@ -119,17 +131,20 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 
 	@Test(expected = LoginException.class)
 	public void loginUnknownUser() {
+		new Expectations() {{
+			remote.loginUser(NON_EXISTING, ANY_PASS);
+			result = new LoginException();
+		}};
+		
 		LoginUserIntegrator service = new LoginUserIntegrator(NON_EXISTING, ANY_PASS);
 		service.execute();
 	}
 
 	@Test(expected = LoginException.class)
 	public void loginUserWithinWrongPassword() {
-		
-		// Remote Services aren't implemented in delivery 3, so we mock them.
-		// TODO: implement remote services
 		new Expectations(){{			
-			idRemoteMock.loginUser(USERNAME, DIFF_PASS);
+			remote.loginUser(USERNAME, DIFF_PASS);
+			times = 1;
 			result = new LoginException();
 		}};
 		
@@ -169,7 +184,7 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	public void loginLocal(){
 		
 		new Expectations(){{			
-			idRemoteMock.loginUser(JUBI_UNAME, JUBI_PASS);
+			remote.loginUser(JUBI_UNAME, JUBI_PASS);
 			result = new RemoteInvocationException();
 		}};
 		
@@ -194,7 +209,7 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	public void noRemoteNoLocal(){
 		
 		new Expectations(){{
-			idRemoteMock.loginUser(NO_CACHE, "hunter2");
+			remote.loginUser(NO_CACHE, "hunter2");
 			result = new RemoteInvocationException();
 		}};
 		
@@ -216,7 +231,7 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		
 		// simulate an exception with a mock
 		new Expectations(){{			
-			idRemoteMock.loginUser(temp_username, temp_password);
+			remote.loginUser(temp_username, temp_password);
 			result = new RemoteInvocationException();
 		}};
 		
@@ -239,7 +254,7 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		String bad_pass = "Ah ah ah, you didn't say the magic word.";
 		
 		new Expectations(){{			
-			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			remote.loginUser(JUBI_UNAME, bad_pass);
 			result = new LoginException();
 		}};
 		
@@ -257,7 +272,7 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		String bad_pass = "Ah ah ah, you didn't say the magic word.";
 		
 		new Expectations(){{			
-			idRemoteMock.loginUser(JUBI_UNAME, bad_pass);
+			remote.loginUser(JUBI_UNAME, bad_pass);
 			result = new RemoteInvocationException();
 		}};
 		
@@ -272,6 +287,11 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	@Test(expected = LoginException.class)
 	public void loginRemoteBadUser(){
 		String bad_user = "I'm root, let me in.";
+		
+		new Expectations() {{
+			remote.loginUser(bad_user, JUBI_PASS);
+			result = new LoginException();
+		}};
 		
 		LoginUserIntegrator service = new LoginUserIntegrator(bad_user, JUBI_PASS);
 		service.execute();
