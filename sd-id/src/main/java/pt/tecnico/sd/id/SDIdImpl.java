@@ -6,12 +6,16 @@ import java.io.FileInputStream;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+import javax.annotation.Resource;
 import javax.crypto.SecretKey;
 import javax.jws.*;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 import pt.tecnico.sd.SdCrypto;
+import pt.tecnico.sd.Ticket;
+import pt.tecnico.sd.id.handler.TicketHandler;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
-
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
@@ -53,8 +57,10 @@ public class SDIdImpl implements SDId {
 	
 	private UserTable userTable;
 	private SecureRandom rng;
-	private SecretKey secret = null; //This is the secret key shared between SD-ID and SD-STORE
+	private SecretKey serviceKey = null; //This is the secret key shared between SD-ID and SD-STORE
 	
+	@Resource
+	private WebServiceContext webServiceContext;
 	
 	public SDIdImpl() {
 		this.userTable = new UserTable();
@@ -67,7 +73,7 @@ public class SDIdImpl implements SDId {
 		try (FileInputStream in = new FileInputStream("secret-key")){
 			byte[] keyData = new byte[24];
 			in.read(keyData);
-			this.secret = SdCrypto.generateKey(keyData);
+			this.serviceKey = SdCrypto.generateKey(keyData);
 			//log("Key: " + printHexBinary(this.secret.getEncoded()));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -165,11 +171,17 @@ public class SDIdImpl implements SDId {
 			throw new AuthReqFailed_Exception("authentication error", fault);
 		}
 		
-		byte[] sessionKey = SdCrypto.generateRandomKey().getEncoded();		
-		byte[] credentials = new byte[4 + sessionKey.length];
-		for (int i=0; i<sessionKey.length; ++i) {
-			credentials[i+4] = sessionKey[i];
+		SecretKey sessionKey = SdCrypto.generateRandomKey();
+		byte[] sessionKeyData = sessionKey.getEncoded();		
+		byte[] credentials = new byte[4 + sessionKeyData.length];
+		for (int i=0; i<sessionKeyData.length; ++i) {
+			credentials[i+4] = sessionKeyData[i];
 		}
+				
+		String ticketBlob = new Ticket(userId, "SD-Store", sessionKey).getBlob(serviceKey);
+		
+		webServiceContext.getMessageContext().put(TicketHandler.TICKET_PROPERTY, ticketBlob);	
+		
 		return credentials;		
 	}
 	
