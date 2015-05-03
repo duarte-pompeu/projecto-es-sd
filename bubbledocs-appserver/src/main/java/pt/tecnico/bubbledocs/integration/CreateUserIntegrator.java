@@ -1,13 +1,17 @@
 package pt.tecnico.bubbledocs.integration;
 
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
-
 import pt.tecnico.bubbledocs.domain.*;
-// add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.CreateUser;
+import pt.tecnico.bubbledocs.service.DeleteUser;
 
 public class CreateUserIntegrator extends BubbleDocsIntegrator {
 
+	private CreateUser service;
+	private IDRemoteServices remote;
 	private String token;
 	private String username;
 	private String email;
@@ -18,27 +22,30 @@ public class CreateUserIntegrator extends BubbleDocsIntegrator {
             String email, String name) {
     	this.token = userToken;
     	this.username = newUsername;
-    	this.name = name;
     	this.email = email;
+		this.name = name;
+		this.service = new CreateUser(token, username, email, name);
+		this.remote = new IDRemoteServices();
     }
     
     @Override
     public void execute() throws BubbleDocsException {
-    	User user = getUserFromToken(token);
-    	this.result = user.createUser(username, name, email, null);
+    	service.execute();
+		this.result = service.getResult();
 		
-		try { 
-			IDRemoteServices remote = new IDRemoteServices();
+		try {
 			remote.createUser(username, email);
-		}
-		catch(BubbleDocsException e) {
-			user.deleteUser(username);
+		} catch (RemoteInvocationException e) {
+			DeleteUser DelUser = new DeleteUser(token,username);
+			DelUser.execute();
 			this.result = null;
-			throw e;
+			throw new UnavailableServiceException(e);
 		}
-    }
+	}
     
-    public User getResult(){
+    public User getResult() {
     	return this.result;
     }
 }
+	
+	
