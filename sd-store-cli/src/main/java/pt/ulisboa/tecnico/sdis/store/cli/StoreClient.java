@@ -132,12 +132,9 @@ public class StoreClient{
 		
 		SecretKey key = null;
 		
-		try {
-			key = SdCrypto.generateKey(getDigest(userID));
-			plainBytes = SdCrypto.decrypt(key, ciphered);
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		}
+		key = SdCrypto.generateKey(getDigest(userID));
+		plainBytes = SdCrypto.decrypt(key, ciphered);
+
 
 		
 		if(VERBOSE){
@@ -157,13 +154,10 @@ public class StoreClient{
 			
 			SecretKey key = null;
 			
-			try {
-				key = SdCrypto.generateKey(getDigest(userID));
-				bytes2upload = SdCrypto.encrypt(key, content);
-			} 
-			catch (InvalidKeyException e) {
-				e.printStackTrace();
-			}
+
+			key = SdCrypto.generateKey(getDigest(userID));
+			bytes2upload = SdCrypto.encrypt(key, content);
+
 		}
 		
 		StoreDocService service = new StoreDocService(userID, docID, bytes2upload, _port);
