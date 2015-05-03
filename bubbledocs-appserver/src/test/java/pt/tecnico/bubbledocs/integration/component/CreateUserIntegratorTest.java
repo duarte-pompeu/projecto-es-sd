@@ -2,7 +2,9 @@
 package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
-import mockit.*;
+import mockit.Mocked;
+import mockit.Expectations;
+import mockit.Verifications;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 import org.junit.Test;
