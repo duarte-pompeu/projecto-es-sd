@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,10 +19,12 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
+import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
 
 // add needed import declarations
-public class LoginUserTest extends BubbleDocsServiceTest {
+public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 
 	private String manel; // the token for user manel
 
@@ -63,7 +65,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	public void successNewToken() {
 		assertNull("The user was not logged in", getUserFromUsername(USERNAME).getSession());
 		
-		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
 		service.execute(); //it shouldn't explode here.
 		
 		DateTime currentTime = new DateTime();
@@ -83,7 +85,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void successLoginTwiceSameToken() {
-		LoginUser service = new LoginUser(LOGGED_IN, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(LOGGED_IN, PASSWORD);
 
 		service.execute();
 		String token1 = service.getResult();
@@ -107,7 +109,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void rootIsSuperUser() {
-		LoginUser service = new LoginUser(ROOT, ROOT_PASS);
+		LoginUserIntegrator service = new LoginUserIntegrator(ROOT, ROOT_PASS);
 		service.execute();
 		
 		User supah = getUserFromSession(service.getResult());
@@ -117,7 +119,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = LoginException.class)
 	public void loginUnknownUser() {
-		LoginUser service = new LoginUser(NON_EXISTING, ANY_PASS);
+		LoginUserIntegrator service = new LoginUserIntegrator(NON_EXISTING, ANY_PASS);
 		service.execute();
 	}
 
@@ -131,7 +133,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new LoginException();
 		}};
 		
-		LoginUser service = new LoginUser(USERNAME, DIFF_PASS);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, DIFF_PASS);
 		service.execute();
 	}
 	
@@ -148,7 +150,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		//FIXME: assert login is remote and not cached
 		
-		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		LoginUserIntegrator service = new LoginUserIntegrator(JUBI_UNAME, JUBI_PASS);
 		service.execute();
 		
 		User u = this.getUserFromUsername(JUBI_UNAME);
@@ -171,7 +173,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		LoginUser service = new LoginUser(JUBI_UNAME, JUBI_PASS);
+		LoginUserIntegrator service = new LoginUserIntegrator(JUBI_UNAME, JUBI_PASS);
 		service.execute();
 		
 		User u = this.getUserFromUsername(JUBI_UNAME);
@@ -196,7 +198,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		LoginUser service = new LoginUser(NO_CACHE, "hunter2");
+		LoginUserIntegrator service = new LoginUserIntegrator(NO_CACHE, "hunter2");
 		service.execute();
 	}
 	
@@ -219,7 +221,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		}};
 		
 		createUser(temp_username, temp_mail, temp_password, temp_name);
-		LoginUser service = new LoginUser(temp_username, temp_password);
+		LoginUserIntegrator service = new LoginUserIntegrator(temp_username, temp_password);
 		service.execute();
 		
 		User u = this.getUserFromUsername(temp_username);
@@ -241,7 +243,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new LoginException();
 		}};
 		
-		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
+		LoginUserIntegrator service = new LoginUserIntegrator(JUBI_UNAME, bad_pass);
 		service.execute();
 	}
 	
@@ -259,7 +261,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 			result = new RemoteInvocationException();
 		}};
 		
-		LoginUser service = new LoginUser(JUBI_UNAME, bad_pass);
+		LoginUserIntegrator service = new LoginUserIntegrator(JUBI_UNAME, bad_pass);
 		service.execute();
 	}
 	
@@ -271,7 +273,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	public void loginRemoteBadUser(){
 		String bad_user = "I'm root, let me in.";
 		
-		LoginUser service = new LoginUser(bad_user, JUBI_PASS);
+		LoginUserIntegrator service = new LoginUserIntegrator(bad_user, JUBI_PASS);
 		service.execute();
 	}
 }
