@@ -128,6 +128,10 @@ public class UserTable {
 			throw new UserAlreadyExists_Exception(username + " is unavailable", fault);
 		}
 	}
+
+	public boolean hasUser(String userId) {
+		return usernameMap.containsKey(userId);		
+	}
 }
 
 

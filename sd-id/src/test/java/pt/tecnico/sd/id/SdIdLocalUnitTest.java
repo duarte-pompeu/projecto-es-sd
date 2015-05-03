@@ -233,9 +233,14 @@ public class SdIdLocalUnitTest {
 	}
 	
 	//trying to authenticate a user with an invalid password
-	@Test(expected=AuthReqFailed_Exception.class)
+	//@Test(expected=AuthReqFailed_Exception.class)
+	//this test is obsolete because password is not passed
 	public void testRequestAuthenticationUserInvalidPassword() throws Exception {
 		sdIdService.requestAuthentication(userName, invalidPassword);
 	}
+	
+	//TODO
+	//@Test(expected=AuthReqFailed_Exception.class)
+	//public void testRequestAuthenticationRepeatedNonce() throws Exception {
 
 }

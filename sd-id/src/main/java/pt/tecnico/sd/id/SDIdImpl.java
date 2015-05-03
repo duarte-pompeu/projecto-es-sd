@@ -157,43 +157,19 @@ public class SDIdImpl implements SDId {
 	@Override
 	public byte[] requestAuthentication(String userId, byte[] reserved)
 			throws AuthReqFailed_Exception {
-
-		try {			
-			if(userId==null || userId.equals("")){
-				AuthReqFailed fault = new AuthReqFailed();
-				fault.setReserved(reserved);
-				throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
-			}
-
-			byte[] password = userTable.getPassword(userId);
-
-			if(password==null){
-				AuthReqFailed fault = new AuthReqFailed();
-				fault.setReserved(reserved);
-				throw new AuthReqFailed_Exception(userId + " doesnt exist", fault);
-			}
-
-			if(!Arrays.equals(password, reserved)){
-				AuthReqFailed fault = new AuthReqFailed();
-				fault.setReserved(reserved);
-				throw new AuthReqFailed_Exception(userId + " wrong password", fault);
-			}
-		} catch (AuthReqFailed_Exception e) {
-			if (userId == null && reserved == null) {
-				log("authenticate error: Username and password are both null");
-			} else if (userId != null && reserved == null) {
-				log("authenticate error: " + userId + " authenticated with null password");
-			} else if (userId == null && reserved != null) {
-				log("authenticate error: username is null");
-			} else {
-				log(userId + " authenticated with wrong password: \"" + new String(reserved) + "\"");
-			}			
-			throw e;
+		//If user doesn't exist, throw a AuthReqFailed_Exception
+		if (!this.userTable.hasUser(userId)) {
+			AuthReqFailed fault = new AuthReqFailed();
+			fault.setReserved(reserved);
+			throw new AuthReqFailed_Exception("authentication error", fault);
 		}
 		
-		log(userId + " authenticated with password \"" + new String(reserved) + "\"");
-		
-		return "1".getBytes();
+		byte[] sessionKey = SdCrypto.generateRandomKey().getEncoded();		
+		byte[] credentials = new byte[4 + sessionKey.length];
+		for (int i=0; i<sessionKey.length; ++i) {
+			credentials[i+4] = sessionKey[i];
+		}
+		return credentials;		
 	}
 	
 	private byte[] generateRandomPassword() {
