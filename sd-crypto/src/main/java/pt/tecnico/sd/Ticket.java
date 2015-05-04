@@ -63,9 +63,9 @@ public class Ticket {
         Element ticketElement=links.get(0);
 
         //DEBUG
-        XMLOutputter xmlOut = new XMLOutputter(Format.getPrettyFormat());
-        System.out.println("Produced from import");
-        try {xmlOut.output(xmlDoc, System.out);} catch (Exception e) {}
+        //XMLOutputter xmlOut = new XMLOutputter(Format.getPrettyFormat());
+        //System.out.println("Produced from import");
+        //try {xmlOut.output(xmlDoc, System.out);} catch (Exception e) {}
       		
         username=ticketElement.getChild("username").getValue();
         service=ticketElement.getChild("service").getValue();
@@ -115,15 +115,16 @@ public class Ticket {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
 		//DEBUG
-		XMLOutputter debugXmlOut = new XMLOutputter(Format.getPrettyFormat());
+		//XMLOutputter debugXmlOut = new XMLOutputter(Format.getPrettyFormat());
 		
 		try {
 			xmlOut.output(document, out);
 			
-			
+			/*
 			xmlOut.output(document, System.out);
 			System.out.println();
 			debugXmlOut.output(document, System.out);
+			*/
 			
 			out.close();
 		} catch (Exception e) {
