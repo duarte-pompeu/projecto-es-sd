@@ -85,7 +85,7 @@ public class SDStoreMain{
 			// publish to UDDI
             System.out.printf("Publishing '%s' to UDDI at %s%n", uddiName, uddiURL);
             uddiNaming = new UDDINaming(uddiURL);
-            uddiNaming.rebind(uddiName, uddiURL);
+            uddiNaming.rebind(uddiName, endpointURL);
 			
 			// wait
 			System.out.println("Awaiting connections");
