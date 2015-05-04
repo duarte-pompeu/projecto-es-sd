@@ -21,6 +21,7 @@ public class TicketHandler implements SOAPHandler<SOAPMessageContext> {
 		
 		if (outbound) {
 			String ticketBlob = (String) context.get(TICKET_PROPERTY);
+			if (ticketBlob == null) return true;
 			//put ticket blob in header
 			try {
 				SOAPMessage msg = context.getMessage();
