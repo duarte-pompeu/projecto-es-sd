@@ -16,5 +16,27 @@
   		<artifactId>jdom2</artifactId>
   		<version>2.0.5</version>
   	</dependency>
+	<dependency>
+		<groupId>jaxen</groupId>
+		<artifactId>jaxen</artifactId>
+		<version>1.1.1</version>
+	</dependency>
   </dependencies>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.1</version>
+  			<configuration>
+  				<source>${version.java}</source>
+				<target>${version.java}</target>
+  			</configuration>
+  			
+  		</plugin>
+  	</plugins>
+  </build>
+  <properties>
+  	<version.java>1.7</version.java>
+  </properties>
 </project>
