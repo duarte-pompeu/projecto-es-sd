@@ -56,6 +56,9 @@ public class Range extends Range_Base implements Iterable<Cell>{
 				this.getCellsSet().add(sheet.getCell(line, column));
 			}
 		}*/ 
+		
+		this.setLeftUpCell(sheet.getCell(firstLine, firstColumn));
+		this.setRightDownCell(sheet.getCell(lastLine, lastColumn));
 	}
 	
 	/*
@@ -86,21 +89,6 @@ public class Range extends Range_Base implements Iterable<Cell>{
 				a.add(this.getCalcSheet().getCell(i, j));
 		
 		return a.iterator();
-	}
-
-
-	/**
-	 * @return
-	 */
-	public Element exportToXML() {
-		Element element = new Element("range");
-    
-    	Cell c= this.getLeftUpCell();
-    	element.addContent(c.exportToXML());
-    	c=this.getRightDownCell();
-    	element.addContent(c.exportToXML());
-    	
-    	return element;
 	}
 	
 	/**

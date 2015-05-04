@@ -9,7 +9,7 @@ import pt.tecnico.bubbledocs.exceptions.NullContentException;
  * @author pc-w
  *
  */
-public class Function extends Function_Base {
+public abstract class Function extends Function_Base {
     
     /**
      * 
@@ -17,15 +17,6 @@ public class Function extends Function_Base {
     public Function() {
         super();
     }
-
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Content#exportToXML()
-	 */
-	@Override
-	public Element exportToXML() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Content#getValue()
@@ -44,5 +35,7 @@ public class Function extends Function_Base {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public abstract String getName();
     
 }

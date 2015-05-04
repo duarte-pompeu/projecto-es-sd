@@ -69,13 +69,8 @@ public class Reference extends Reference_Base {
 				+ ";" + this.getPointedCell().getLine();
 	}
 	
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#exportToXML()
-	 */
-	public Element exportToXML(){
-		Element referenceElement=new Element("reference");
-		referenceElement.addContent(this.getPointedCell().exportToXML());
-		return referenceElement;
+	public void accept(CalcSheetExporter exporter) {
+		exporter.exportReference(this);
 	}
 	
 	/* (non-Javadoc)

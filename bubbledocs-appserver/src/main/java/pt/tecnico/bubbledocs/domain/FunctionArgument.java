@@ -17,13 +17,6 @@ public abstract class FunctionArgument extends FunctionArgument_Base {
     public FunctionArgument() {
         super();
     }
-    
-
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Content#exportToXML()
-	 */
-	
-	public abstract Element exportToXML();
 
 	/* (non-Javadoc)
 	 * @see pt.tecnico.bubbledocs.dml.Content#getValue()
@@ -36,5 +29,7 @@ public abstract class FunctionArgument extends FunctionArgument_Base {
 	 */
 
 	public abstract void importFromXML(Element c);
+	
+	public abstract void accept(CalcSheetExporter exporter);
     
 }

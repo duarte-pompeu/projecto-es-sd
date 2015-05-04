@@ -28,19 +28,16 @@ public class LiteralArgument extends LiteralArgument_Base {
   	public int getValue(){
   		return this.getVal();
   	}
-
+  	
+  	@Override
+  	public void accept(CalcSheetExporter exporter) {
+  		exporter.exportLiteralArgument(this);
+  	}
 
 	@Override
 	public void importFromXML(Element literalElement) {
 		int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
     	init(value);
-	}
-	
-	@Override
-	public Element exportToXML() {
-		Element element = new Element("literalArgument");
-    	element.setAttribute("val", this.getVal().toString());
-	return element;
 	}
     
 }

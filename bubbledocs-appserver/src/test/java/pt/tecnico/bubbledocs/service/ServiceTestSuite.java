@@ -8,6 +8,7 @@ import pt.tecnico.bubbledocs.integration.*;
 import pt.tecnico.bubbledocs.integration.component.CreateUserIntegratorTest;
 import pt.tecnico.bubbledocs.integration.component.DeleteUserIntegratorTest;
 import pt.tecnico.bubbledocs.integration.component.LoginUserIntegratorTest;
+import pt.tecnico.bubbledocs.integration.component.ExportDocumentTest;
 import pt.tecnico.bubbledocs.integration.component.RenewPasswordIntegratorTest;
 
 //To test this you can run:

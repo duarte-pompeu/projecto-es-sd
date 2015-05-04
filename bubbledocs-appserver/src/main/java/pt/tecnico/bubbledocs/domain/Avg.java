@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 /**
@@ -41,15 +40,10 @@ public class Avg extends Avg_Base {
 		
 		return total / n;
 	}
-
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Function#exportToXML()
-	 */
+	
 	@Override
-	public Element exportToXML() {
-		Element element = new Element("avg");
-    	element.addContent(this.getRange().exportToXML());
-	return element;
+	public String getName() {
+		return "avg";
 	}
 
 	

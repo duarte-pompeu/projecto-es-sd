@@ -448,38 +448,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 		
 		return calcsheet.getContent(user, cellID);
 	}
-
-	public byte[] storeDocument(User user, int id) {
-		org.jdom2.Document document = null;
-		String userName = user.getUserName();
-		CalcSheet calcSheet = getCalcSheetById(id);		
-		StoreRemoteServices remoteService = new StoreRemoteServices();
-		byte[] docXML;
-
-		checkAuthorsPermission(user, calcSheet);
-
-		//Converting the calcsheet to a jdom doc and then to a byte array
-		document = BubbleApplication.convertToXML(calcSheet);
-
-		XMLOutputter xmlOut = new XMLOutputter();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			xmlOut.output(document, out);
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		docXML = out.toByteArray();
-		
-		try {
-			remoteService.storeDocument(userName, calcSheet.getName(), docXML);
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException();
-		}
-
-		return docXML;
-	}
 	
 	//Fix me: implement
 	public byte[] loadDocument(User user, int id) { return null; }

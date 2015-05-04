@@ -57,13 +57,9 @@ public class ReferenceArgument extends ReferenceArgument_Base {
 				+ ";" + this.getPointedCell().getLine();
 	}
 	
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#exportToXML()
-	 */
-	public Element exportToXML(){
-		Element referenceElement=new Element("referenceArgument");
-		referenceElement.addContent(this.getPointedCell().exportToXML());
-		return referenceElement;
+	@Override
+	public void accept(CalcSheetExporter exporter) {
+		exporter.exportReferenceArgument(this);
 	}
 	
 	/* (non-Javadoc)
