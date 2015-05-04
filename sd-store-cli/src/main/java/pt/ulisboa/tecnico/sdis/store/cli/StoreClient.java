@@ -50,7 +50,12 @@ public class StoreClient{
 		this.uddiURL = uddiUrl;
 		this.uddiName = uddiName;
 		
-		_port = findUddi(uddiURL, uddiName);
+		_port = findUddi(uddiURL, uddiName + "%");
+	}
+	
+	
+	public StoreClient(SDStore port){
+		this._port = port;
 	}
 	
 	
