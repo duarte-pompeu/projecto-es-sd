@@ -49,19 +49,20 @@ public class SDStoreMain{
 			
 			for(String altURL: args[3].split(",")){
 				altEndpoints.add(altURL);
-				System.out.println(altURL);
 			}
 		}
 		
 		try{
-			publish(url, uddiURL, name);
+			publish(url, uddiURL, name + "-0");
 		}
 		
 		// cant publish? endpoint address already taken? no worries, here's a pack of alternative endpoint addresses for 9.99$ only.
 		catch(Exception e1){
-			for (String altEP: altEndpoints){
+			for (int i = 0; i < altEndpoints.size(); i++){
+				String altEP = altEndpoints.get(i);
+				
 				try{
-					publish(altEP, uddiURL,name);
+					publish(altEP, uddiURL,name + "-" + (i+1));
 					break;
 				}
 				catch(Exception e2){
