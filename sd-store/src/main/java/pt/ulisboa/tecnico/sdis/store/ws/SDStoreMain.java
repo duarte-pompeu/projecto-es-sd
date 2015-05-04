@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import javax.xml.registry.JAXRException;
 import javax.xml.ws.Endpoint;
 
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
@@ -13,6 +12,7 @@ public class SDStoreMain{
 	private static Storage storage;
 	// debug mode makes server more verbose, outputting status on calls
 	public static final boolean DEBUG_MODE = true;
+	public static UDDINaming UDDI_NAMING = null;
 	
 	
 	
@@ -69,12 +69,18 @@ public class SDStoreMain{
 				}
 			}
 		}
+		
+		if(UDDI_NAMING == null){
+			System.out.println("UDDI error: either (1) multiple servers are publishing to UDDI at the same time"
+					+ " or (2) you've exhausted your number of endpoint URLs (see sd-store pom.xml <ws.altURLs>)");
+		}
+		
+		
 	}
 	
 	
 	public static void publish(String endpointURL, String uddiURL, String uddiName) throws Exception{
 		Endpoint endpoint = null;
-		UDDINaming uddiNaming = null;
 		try{
 			endpoint = Endpoint.create(new SDStoreImpl(DEBUG_MODE));
 			
@@ -84,10 +90,12 @@ public class SDStoreMain{
 			
 			// publish to UDDI
             System.out.printf("Publishing '%s' to UDDI at %s%n", uddiName, uddiURL);
-            uddiNaming = new UDDINaming(uddiURL);
-            uddiNaming.rebind(uddiName, endpointURL);
+            UDDI_NAMING = new UDDINaming(uddiURL);
+            UDDI_NAMING.rebind(uddiName, endpointURL);
 			
+           
 			// wait
+            System.out.println("FINAL ENDPOINT: " + endpointURL);
 			System.out.println("Awaiting connections");
             System.out.println("Press enter to shutdown");
             System.in.read();
@@ -108,9 +116,9 @@ public class SDStoreMain{
 			}
 			
 			try {
-                if (uddiNaming != null) {
+                if (UDDI_NAMING != null) {
                     // delete from UDDI
-                    uddiNaming.unbind(uddiName);
+                	UDDI_NAMING.unbind(uddiName);
                     System.out.printf("Deleted '%s' from UDDI%n", uddiName);
                 }
             } catch(Exception e) {

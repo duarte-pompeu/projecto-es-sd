@@ -30,7 +30,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 public class StoreClient{
 	
 	public static final boolean VERBOSE = true;
-	public static final boolean ENCRYPTION = true;
+	public static boolean ENCRYPTION = true;
 	
 	// default values
 	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
@@ -51,6 +51,11 @@ public class StoreClient{
 		this.uddiName = uddiName;
 		
 		_port = findUddi(uddiURL, uddiName);
+	}
+	
+	
+	public void setEncryption(boolean value){
+		ENCRYPTION = value;
 	}
 	
 	

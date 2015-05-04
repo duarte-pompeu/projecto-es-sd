@@ -80,6 +80,11 @@ public class WebServiceTest extends ClientTest {
 	
 	@Test
 	public void nearCapacityLimit() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception {
+		// encryption changes the doc size
+		// since we wanna test this, let's turn it off for a while
+		// please don't try to decrypt unencrypted docs later
+		client.setEncryption(false);
+		
 		String content = "";
 		String tmpUser = "alice";
 		String tempDoc = "lista de compras";
@@ -101,11 +106,18 @@ public class WebServiceTest extends ClientTest {
 		}
 		
 		client.storeDoc(tmpUser, tempDoc, string2bytes(content));
+		
+		client.setEncryption(true);
 	}
 	
 	
 	@Test (expected = CapacityExceeded_Exception.class)
 	public void aboveCapacity() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception, InvalidAttributeValueException{
+		// encryption changes the doc size
+		// since we wanna test this, let's turn it off for a while
+		// please don't try to decrypt unencrypted docs later
+		client.setEncryption(false);
+		
 		String content = "";
 		String tmpUser = "alice";
 		String tempDoc = "lista de compras";
@@ -128,6 +140,8 @@ public class WebServiceTest extends ClientTest {
 		
 		
 		client.storeDoc(tmpUser, tempDoc, string2bytes(content));
+		
+		client.setEncryption(true);
 	}
 	
 	
