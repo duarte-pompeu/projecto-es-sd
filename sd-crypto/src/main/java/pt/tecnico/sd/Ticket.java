@@ -9,6 +9,11 @@ import javax.crypto.SecretKey;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -35,8 +40,26 @@ public class Ticket {
 	
 	//Receives a base64 encoded blob and decrypts given the service key
 	public Ticket(String base64blob, SecretKey serviceKey) {
-		//TODO
-		throw new RuntimeException("Not implemented");
+		byte[] decryptedBlob;
+		byte[] encryptedBlob=parseBase64Binary(base64blob);
+		
+		Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, key);
+		decryptedBlob=cipher.doFinal(encryptedBlob);
+		
+		SAXBuilder b=new SAXBuilder();
+		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		
+        XPathFactory xFactory = XPathFactory.instance();
+
+        XPathExpression<Element> expr = xFactory.compile("/ticket", Filters.element());
+        List<Element> links = expr.evaluate(xmlDoc);
+        Element ticketElement=links.get(0);
+      		
+        username=ticketElement.getAttribute("username").getValue();
+        service=ticketElement.getAttribute("service").getValue();
+		since=DateTime.parse(ticketElement.getAttribute("since").getValue());
+		expire=DateTime.parse(ticketElement.getAttribute("expire").getValue());
 	}
 	
 	/*
@@ -124,3 +147,4 @@ public class Ticket {
 		System.out.println(blob);
 	}
 }
+
