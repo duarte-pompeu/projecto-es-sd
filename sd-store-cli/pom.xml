@@ -63,7 +63,7 @@
 	<version.junit>4.11</version.junit>
     <version.jmockit>1.16</version.jmockit>
     <uddi.url>http://localhost:8081</uddi.url>
-    <ws.name>sd-store</ws.name>
+    <ws.name>SD-STORE</ws.name>
     
   </properties>
 

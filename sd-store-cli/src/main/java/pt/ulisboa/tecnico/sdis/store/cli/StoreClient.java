@@ -34,7 +34,7 @@ public class StoreClient{
 	
 	// default values
 	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
-	public static final String DEFAULT_UDDI_NAME = "sd-store";
+	public static final String DEFAULT_UDDI_NAME = "SD-STORE";
 	
 	public String uddiURL;
 	public String uddiName;
