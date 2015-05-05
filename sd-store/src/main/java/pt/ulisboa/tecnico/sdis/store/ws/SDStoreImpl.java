@@ -57,6 +57,10 @@ public class SDStoreImpl implements SDStore{
 		
 		if(DEBUG){
 			System.out.printf("User '%s' listed his collection of '%d' docs.\n", userID, result.size());
+			
+			for(String doc: result){
+				System.out.println("   * " + doc);
+			}
 		}
 		
 		return result;

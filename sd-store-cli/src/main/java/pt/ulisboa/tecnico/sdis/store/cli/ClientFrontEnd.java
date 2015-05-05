@@ -124,6 +124,17 @@ public class ClientFrontEnd {
 		}
 	}
 	
+	public Collection<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception {
+		ArrayList<String> docs = new ArrayList<String>();
+		
+		for(StoreClient client: _clients){
+			// FIXME: this loop is stupid
+			docs = new ArrayList<String>(client.listDocs(userID));
+		}
+		
+		return docs;
+	}
+	
 	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception {
 		for(StoreClient client : _clients){
 			client.storeDoc(userID, docID, content);
@@ -135,8 +146,6 @@ public class ClientFrontEnd {
 		for(StoreClient client : _clients){
 			client.loadDoc(userID, docID);
 		}
-		
-		
 		return null;
 	}
 }
