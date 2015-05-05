@@ -39,7 +39,6 @@ public class ImportDocumentService extends SessionService {
     	StoreRemoteServices service=new StoreRemoteServices();
 		docXML = service.loadDocument(userName, sheetName);
 		
-		
 		newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
     }
 }

@@ -449,13 +449,11 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return calcsheet.getContent(user, cellID);
 	}
 	
-	//Fix me: implement
-	public byte[] loadDocument(User user, int id) { return null; }
+	
 	//Fix me: implement
 	public int createNewDocument(byte [] xmlDoc){ 
-		
-		
-		
+		CalcSheetImporter importer=new CalcSheetImporter();
+		return importer.importFromXml(xmlDoc).getId();	
 		
 	}
 
