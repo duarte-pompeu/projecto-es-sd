@@ -24,7 +24,22 @@ public class ImportDocumentService extends SessionService {
 
     @Override
     protected void dispatchAfterSuperService() throws BubbleDocsException {   	
-		docXML = BubbleDocs.getInstance().loadDocument(user, oldDocId);
+    	
+    	User user=this.confirmToken(userToken);
+    	
+    	
+    	CalcSheet c=BubbleDocs.getInstance().getCalcSheetById(oldDocId);
+    	String sheetName=c.getName();
+    	String creatorName=c.getCreator().getUserName();
+    	
+    	//if the token does not belong to the creator of the calcSheet, return an exception
+    	if(!creatorName.equals(user.getUserName()))
+    		throw new PermissionException();
+    	
+    	StoreRemoteServices service=new StoreRemoteServices();
+		docXML = service.loadDocument(userName, sheetName);
+		
+		
 		newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
     }
 }

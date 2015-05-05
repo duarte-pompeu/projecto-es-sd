@@ -17,7 +17,7 @@ public class CalcSheetImporter {
 	private void validateNumberOfChildren(Element element, int total) {
 		int num = element.getChildren().size();
 		if (num != total) {
-			throw new RuntimeException("Too much children");
+			throw new RuntimeException("Too many children");
 		}
 	}
 	
@@ -25,8 +25,10 @@ public class CalcSheetImporter {
 		validateNumberOfChildren(element, 1);
 	}
 	
-	public CalcSheet importFromXml(byte[] data) {
-		return importFromXml((Document) null);
+	public CalcSheet importFromXml(byte[] data) throws JDOMException, IOException{
+		SAXBuilder b=new SAXBuilder();
+		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		return importFromXml(xmlDoc);
 	}
 	
 	public CalcSheet importFromXml(Document document) {

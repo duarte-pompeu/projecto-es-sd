@@ -452,7 +452,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 	//Fix me: implement
 	public byte[] loadDocument(User user, int id) { return null; }
 	//Fix me: implement
-	public int createNewDocument(byte [] xmlDoc){ return 0; }
+	public int createNewDocument(byte [] xmlDoc){ 
+		
+		
+		
+		
+	}
 
 	public void deleteBubbleDocs(){
 		for (User user : this.getUserSet()) 
