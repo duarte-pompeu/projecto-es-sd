@@ -74,7 +74,8 @@ public class CalcSheetImporter {
 			Cell cell = this.sheet.getCell(line, column);
 			cell.setProtect(protect);
 			
-			Content content = this.importContent(cellElement.getChildren().get(0));	
+			Content content = this.importContent(cellElement.getChildren().get(0));
+			cell.setContent(content);
 		}
 		
 		
@@ -155,9 +156,13 @@ public class CalcSheetImporter {
 		TransactionManager tm = FenixFramework.getTransactionManager();
 		tm.begin();
 		
-		String example = "<calcSheet creator=\"alice\" date=\"2015-05-05\" id=\"1\" name=\"Cábulas\" lines=\"300\" columns=\"10\">\n"
+		String example = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" 
+				+ "<calcSheet creator=\"alice\" date=\"2015-05-05\" id=\"1\" name=\"Cábulas\" lines=\"300\" columns=\"10\">\n"
 		        + "  <cell line=\"1\" column=\"1\" protect=\"false\">\n"
 				+ "    <literal val=\"10\" />\n"
+				+ "  </cell>\n"
+				+ "  <cell line=\"1\" column=\"2\" protect=\"false\">\n"
+				+ "    <reference line=\"1\" column=\"1\" />\n"
 				+ "  </cell>\n"
 				+ "</calcSheet>\n";
 		System.out.println(example);
