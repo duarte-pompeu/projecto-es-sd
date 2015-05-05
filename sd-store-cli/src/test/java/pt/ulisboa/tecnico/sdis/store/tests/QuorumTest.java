@@ -39,8 +39,6 @@ public class QuorumTest {
 		Quorum q3 = new Quorum(3);
 		Quorum q4 = new Quorum(4);
 		
-		q1.addResponse(bcontent);
-		q1.addResponse(bcontent);
 		
 		assertEquals(new Integer(1), new Integer(q1.min4quorum()));
 		assertEquals(new Integer(2), new Integer(q3.min4quorum()));

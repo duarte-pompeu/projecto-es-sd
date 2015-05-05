@@ -15,7 +15,21 @@ public class Response {
 	
 
 	public boolean equals(Response r){
-		return this.TYPE == r.TYPE && this.docContent.equals(r.docContent);
+		return this.TYPE == r.TYPE && compareByteArrays(this.docContent, r.docContent);
+	}
+	
+	public boolean compareByteArrays(byte[] ba1, byte[] ba2){
+		if(ba1.length != ba2.length){
+			return false;
+		}
+		
+		for(int i = 0; i < ba1.length; i++){
+			if(ba1[i] != ba2[i]){
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 

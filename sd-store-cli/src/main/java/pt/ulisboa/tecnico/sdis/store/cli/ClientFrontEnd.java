@@ -116,8 +116,9 @@ public class ClientFrontEnd {
 	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception {
 		Quorum quorum = qFact.getNewquorum();
 		
+		byte[] res;
 		for(StoreClient client : _clients){
-			byte[] res = client.loadDoc(userID, docID);
+			res = client.loadDoc(userID, docID);
 			
 			quorum.addResponse(res);
 		}
