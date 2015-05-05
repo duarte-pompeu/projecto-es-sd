@@ -41,7 +41,7 @@ public class ClientFrontEnd {
 	
 	public void init() throws JAXRException{
 		if(VERBOSE){
-			System.out.println("ENDPOINT ADDRESSES ... START ...");
+			System.out.println("LOOKING FOR ENDPOINT ADDRESSES...");
 		}
 	
 		int n_servers = 0;
@@ -51,15 +51,11 @@ public class ClientFrontEnd {
 			n_servers++;
 			
 			if(VERBOSE){
-				System.out.println(endpointAddress);
+				System.out.println("   * " + endpointAddress);
 			}
 		}
 		
 		this.min4quorum = (n_servers/2);
-		
-		if(VERBOSE){
-			System.out.println("ENDPOINT ADDRESSES ... END ...");
-		}
 	}
 	
 	
