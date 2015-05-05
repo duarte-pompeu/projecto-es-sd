@@ -28,8 +28,7 @@ public class SDStoreMain{
 		
 		// default values
 		String uddiURL = "http://localhost:8081";
-        String name = "sd-store";
-		String url = "http://localhost:8080/store-ws/endpoint";
+        String name = "SD-STORE";
 		
 		// replace default values if passed to program
 		if(args.length >= 1){
@@ -40,40 +39,38 @@ public class SDStoreMain{
 			name = args[1];
 		}
 		
-		if(args.length >= 3){
-			url = args[2];
-		}
+		ArrayList<String> endPoints = new ArrayList<String>();
 		
-		ArrayList<String> altEndpoints = new ArrayList<String>();
-		if(args.length >= 4){
+		if(args.length >= 5){
+			String host = args[2];
+			int port = Integer.valueOf(args[3]);
+			String path = args[4];
+			int nReplicas = Integer.valueOf(args[5]);
 			
-			for(String altURL: args[3].split(",")){
-				altEndpoints.add(altURL);
+			for(int i = 0; i < nReplicas; i++){
+				
+				String newEndpoint = new String( host + (port-i) + path);
+				
+				endPoints.add(newEndpoint);
 			}
 		}
 		
-		try{
-			publish(url, uddiURL, name + "-0");
-		}
-		
 		// cant publish? endpoint address already taken? no worries, here's a pack of alternative endpoint addresses for 9.99$ only.
-		catch(Exception e1){
-			for (int i = 0; i < altEndpoints.size(); i++){
-				String altEP = altEndpoints.get(i);
-				
-				try{
-					publish(altEP, uddiURL,name + "-" + (i+1));
-					break;
-				}
-				catch(Exception e2){
-					// dont do anything
-				}
+		for (int i = 0; i < endPoints.size(); i++){
+			String altEP = endPoints.get(i);
+			
+			try{
+				publish(altEP, uddiURL,name + "-" + (i+1));
+				break;
+			}
+			catch(Exception e2){
+				// dont do anything
 			}
 		}
 		
 		if(UDDI_NAMING == null){
 			System.out.println("UDDI error: either (1) multiple servers are publishing to UDDI at the same time"
-					+ " or (2) you've exhausted your number of endpoint URLs (see sd-store pom.xml <ws.altURLs>)");
+					+ " or (2) you've exhausted your number of allowed replicas (see sd-store pom.xml <ws.nReplicas>)");
 		}
 		
 		

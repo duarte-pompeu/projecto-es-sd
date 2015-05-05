@@ -13,6 +13,7 @@ import org.junit.Test;
 import pt.ulisboa.tecnico.sdis.store.cli.ClientFrontEnd;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
@@ -25,10 +26,15 @@ public class FrontEndTest {
 	public static final String CONTENT = "Em SD, o importante é distribuir o jogo.";
 	
 	@BeforeClass
-	public static void populate() throws JAXRException, InvalidAttributeValueException{
+	public static void populate() throws JAXRException{
 		frontEnd = new ClientFrontEnd();
-		frontEnd.createDoc(USER, DOC_1);
-		frontEnd.createDoc(USER, DOC_2);
+		try {
+			frontEnd.createDoc(USER, DOC_1);
+			frontEnd.createDoc(USER, DOC_2);
+		} catch (InvalidAttributeValueException | DocAlreadyExists_Exception e) {
+			// lets not do anything
+		}
+		
 	}
 	
 	@Test

@@ -83,15 +83,10 @@ public class ClientFrontEnd {
 	}
 	
 
-	public void createDoc(String userID, String docID){
+	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		
 		for(StoreClient client : _clients){
-			try {
-				client.createDoc(userID, docID);
-			} catch (InvalidAttributeValueException
-					| DocAlreadyExists_Exception e) {
-				e.printStackTrace();
-			}
+			client.createDoc(userID, docID);
 		}
 	}
 	
