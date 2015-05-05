@@ -10,19 +10,27 @@ import static org.junit.Assert.*;
 public class QuorumTest {
 	static final int N_VOTERS = 3;
 	static final String CONTENT = "abcdefg";
+	static final String ALT_CONTENT1 = "abcdeff";
+	static final String ALT_CONTENT2 = "abc";
 	
 	static Quorum QUORUM;
 	static byte[] bcontent;
+	static byte[] altbcontent1;
+	static byte[] altbcontent2;
 	
 	@BeforeClass
 	public static void populate(){
 		QUORUM = new Quorum(N_VOTERS);
+		
 		bcontent = StoreClient.string2bytes(CONTENT);
+		altbcontent1 = StoreClient.string2bytes(ALT_CONTENT1);
+		altbcontent2 = StoreClient.string2bytes(ALT_CONTENT2);
 		
 		QUORUM.addResponse(bcontent);
 		QUORUM.addResponse(bcontent);
 		QUORUM.addResponse(bcontent);
 	}
+	
 	
 	@Test
 	public void populateSuccess(){
@@ -33,17 +41,21 @@ public class QuorumTest {
 		assertEquals(bcontent, QUORUM.getVerdict());
 	}
 	
+	
 	@Test
 	public void min4quorum(){
 		Quorum q1 = new Quorum(1);
 		Quorum q3 = new Quorum(3);
 		Quorum q4 = new Quorum(4);
+		Quorum q10k = new Quorum(10000);
 		
 		
 		assertEquals(new Integer(1), new Integer(q1.min4quorum()));
 		assertEquals(new Integer(2), new Integer(q3.min4quorum()));
 		assertEquals(new Integer(3), new Integer(q4.min4quorum()));
+		assertEquals(new Integer(5001), new Integer(q10k.min4quorum()));
 	}
+	
 	
 	@Test
 	public void singleQuorum(){
@@ -57,6 +69,7 @@ public class QuorumTest {
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 	
+	
 	@Test
 	public void notEnoughVotes(){
 		Quorum quorum = new Quorum(3);
@@ -66,12 +79,49 @@ public class QuorumTest {
 		assertNull(quorum.getVerdict());
 	}
 	
+	
 	@Test
-	public void not100butEnough(){
+	public void notAllVotesButPass(){
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
 		quorum.addResponse(bcontent);
+		
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	
+	@Test
+	public void notUnanimousButPass1(){
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addResponse(altbcontent1);
+		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent);
+		
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	
+	@Test
+	public void notUnanimousButPass2(){
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addResponse(bcontent);
+		quorum.addResponse(altbcontent1);
+		quorum.addResponse(bcontent);
+		
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	
+	@Test
+	public void notUnanimousButPass3(){
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent);
+		quorum.addResponse(altbcontent1);
 		
 		assertEquals(bcontent, quorum.getVerdict());
 	}
