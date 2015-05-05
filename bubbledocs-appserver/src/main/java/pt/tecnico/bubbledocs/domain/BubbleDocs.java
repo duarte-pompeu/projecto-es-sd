@@ -455,7 +455,9 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public void deleteBubbleDocs(){
 		for (User user : this.getUserSet()) 
 			this.deleteUser(user.getUserName());
+		this.getRoot().setBubbleDocs(null);
+		this.setRoot(null);
 		deleteDomainObject();
-		}
-		
+	}
+
 }
