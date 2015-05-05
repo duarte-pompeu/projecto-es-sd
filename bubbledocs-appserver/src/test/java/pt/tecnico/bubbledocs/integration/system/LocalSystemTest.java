@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.integration.system;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -20,13 +21,28 @@ import org.junit.Test;
 
 
 
+
+
+
+
+
+
+
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
+import pt.tecnico.bubbledocs.service.AssignLiteralCell;
+import pt.tecnico.bubbledocs.service.AssignReferenceCell;
+import pt.tecnico.bubbledocs.service.GetSpreadsheetContentService;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
@@ -40,6 +56,8 @@ public class LocalSystemTest {
 		
 		 private String root_token;
 		 private String user_token;
+		 private CalcSheet created_spread;
+		 private Reference reference;
 		 private static final String ROOT_USERNAME = "root";
 		 private static final String ROOT_PASSWORD = "rootroot";
 		 private static final String USERNAME = "jakim";
@@ -74,10 +92,13 @@ public class LocalSystemTest {
 	    }
 	    
 	    
+	    /* global test that uses all integrators by sequence,
+	     * after each integrator is executed, 
+	     * we verify if the database is updated with the new objects
+	     */
+	    
 	    @Test
 		public void doSequence() throws Exception {
-	    	
-	    	//integrators go here
 	    	
 				//root starts session
 	    		LoginUserIntegrator loginRoot = new LoginUserIntegrator(ROOT_USERNAME,ROOT_PASSWORD);
@@ -118,8 +139,36 @@ public class LocalSystemTest {
 	    		assertEquals("Password don't match", "some random password", login_user.getPassword());
 	    		assertEquals("Token doesn't match", user_token, login_user.getSession().getToken());
 	    		
-	    		//user has fun
+	    		//user creates empty calcsheet
 	    		CreateSpreadSheetIntegrator spread = new CreateSpreadSheetIntegrator(user_token,CALCSHEET_NAME,CALCSHEET_ROWS,CALCSHEET_COLUMNS);
+	    		spread.execute();
+	    		created_spread = spread.getResult();
+	    		int CALCSHEET_ID=created_spread.getId();
+	    		
+	    		CalcSheet calc = bd.getCalcSheetByName(created_spread.getName());
+	    		assertNotNull("calcsheet wasnt created", calc);
+	    		assertEquals("Invalid owner", USERNAME, calc.getCreator().getUserName());
+	    		assertEquals("Invalid calcsheet name", CALCSHEET_NAME, calc.getName());
+	    		assertEquals("Invalid calcsheet rows", CALCSHEET_COLUMNS, (int) calc.getColumns());
+	    		assertEquals("Invalid calcsheet lines", CALCSHEET_ROWS, (int) calc.getLines());
+	    				
+	    		//assert all the cells
+	    		for(int c = 1; c <= CALCSHEET_COLUMNS; c++){
+	    			for(int l = 1; l <= CALCSHEET_ROWS; l++){
+	    				Cell cell = calc.getCell(l,c);
+	    				assertEquals(new Integer(c), new Integer(cell.getColumn()));
+	    				assertEquals(new Integer(l), new Integer(cell.getLine()));
+	    			}
+	    		}
+	    		
+	    		//time 2 fill up my new calcsheet
+	    		
+	    		AssignLiteralCellIntegrator alc = new AssignLiteralCellIntegrator(user_token, CALCSHEET_ID, created_spread.getCell(1, 1).getId(), "5");
+	    		alc.execute();
+	    		reference = new Reference(created_spread.getCell(1,1));
+	    		AssignReferenceCell arc = new AssignReferenceCell(user_token, CALCSHEET_ID, created_spread.getCell(2, 2).getId(), "1;1");
+	    		arc.execute();
+	    		
 	    		
 	    }
 	    	
