@@ -6,6 +6,7 @@ import javax.xml.registry.JAXRException;
 import pt.tecnico.bubbledocs.exceptions.CannotLoadDocumentException;
 import pt.tecnico.bubbledocs.exceptions.CannotStoreDocumentException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.ulisboa.tecnico.sdis.store.cli.ClientFrontEnd;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -18,8 +19,8 @@ public class StoreRemoteServices {
 		try {
 			frontEnd = new ClientFrontEnd();
 		} catch (JAXRException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new UnavailableServiceException(e.getMessage());
 		}
 	}
 	

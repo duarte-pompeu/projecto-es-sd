@@ -2,13 +2,13 @@ package pt.tecnico.bubbledocs.integration;
 
 
 // add needed import declarations
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Session;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.Session;
-import pt.tecnico.bubbledocs.domain.User;
 
 public abstract class BubbleDocsIntegrator {
 
@@ -30,6 +30,6 @@ public abstract class BubbleDocsIntegrator {
     }
     
     protected final StoreRemoteServices getStoreRemoteServices() {
-    	return new StoreRemoteServices();
+		return new StoreRemoteServices();
     }
 }
