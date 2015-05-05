@@ -2,7 +2,16 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.joda.time.LocalDate;
+
+import pt.ist.fenixframework.FenixFramework;
+import pt.ist.fenixframework.TransactionManager;
 
 public class CalcSheetImporter {
 	
@@ -27,7 +36,7 @@ public class CalcSheetImporter {
 	
 	public CalcSheet importFromXml(byte[] data) throws JDOMException, IOException{
 		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
+		Document xmlDoc=b.build(new ByteArrayInputStream(data));
 		return importFromXml(xmlDoc);
 	}
 	
@@ -140,6 +149,24 @@ public class CalcSheetImporter {
 		
 		return prototype;
 		
+	}
+	
+	public static void main(String args[]) throws Exception {
+		TransactionManager tm = FenixFramework.getTransactionManager();
+		tm.begin();
+		
+		String example = "<calcSheet creator=\"alice\" date=\"2015-05-05\" id=\"1\" name=\"Cábulas\" lines=\"300\" columns=\"10\">\n"
+		        + "  <cell line=\"1\" column=\"1\" protect=\"false\">\n"
+				+ "    <literal val=\"10\" />\n"
+				+ "  </cell>\n"
+				+ "</calcSheet>\n";
+		System.out.println(example);
+		BubbleDocs.getInstance().addUser(new User("alice", "alice", "alice@alice", "eve"));
+		CalcSheet sheet = new CalcSheetImporter().importFromXml(example.getBytes());
+		
+		System.out.println(new String(new CalcSheetExporter().exportToPrettyXmlData(sheet)));
+		
+		tm.commit();
 	}
 
 	

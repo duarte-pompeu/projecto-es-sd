@@ -1,6 +1,9 @@
 package pt.tecnico.bubbledocs.domain;
 
 import java.util.Random;
+import java.io.IOException;
+
+import org.jdom2.JDOMException;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
@@ -443,7 +446,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	
 	//Fix me: implement
-	public int createNewDocument(byte [] xmlDoc){ 
+	public int createNewDocument(byte [] xmlDoc) throws IOException, JDOMException { 
 		CalcSheetImporter importer=new CalcSheetImporter();
 		return importer.importFromXml(xmlDoc).getId();	
 		

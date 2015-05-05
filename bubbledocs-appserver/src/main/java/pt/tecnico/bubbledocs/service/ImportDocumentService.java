@@ -1,8 +1,10 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.*;
+import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
+import pt.tecnico.bubbledocs.exceptions.PermissionException;
 
 public class ImportDocumentService extends SessionService {
 	private byte[] docXML;
@@ -25,8 +27,8 @@ public class ImportDocumentService extends SessionService {
     @Override
     protected void dispatchAfterSuperService() throws BubbleDocsException {   	
     	
-    	User user=this.confirmToken(userToken);
-    	
+    	User user= super.user;
+    	String userName = super.user.getUserName();
     	
     	CalcSheet c=BubbleDocs.getInstance().getCalcSheetById(oldDocId);
     	String sheetName=c.getName();
@@ -39,6 +41,6 @@ public class ImportDocumentService extends SessionService {
     	StoreRemoteServices service=new StoreRemoteServices();
 		docXML = service.loadDocument(userName, sheetName);
 		
-		newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
+		//newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
     }
 }
