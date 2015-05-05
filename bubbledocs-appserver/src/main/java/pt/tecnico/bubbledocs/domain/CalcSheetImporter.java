@@ -112,7 +112,7 @@ public class CalcSheetImporter {
 	private Content importBinaryFunction(Element contentElement, BinaryFunction prototype) {
 		validateNumberOfChildren(contentElement, 2);
 		prototype.setArgument1(this.importArgument(contentElement.getChildren().get(0)));
-		prototype.setArgument1(this.importArgument(contentElement.getChildren().get(1)));
+		prototype.setArgument2(this.importArgument(contentElement.getChildren().get(1)));
 		
 		return prototype;
 	}
@@ -164,6 +164,20 @@ public class CalcSheetImporter {
 				+ "  <cell line=\"1\" column=\"2\" protect=\"false\">\n"
 				+ "    <reference line=\"1\" column=\"1\" />\n"
 				+ "  </cell>\n"
+				+ "  <cell line=\"1\" column=\"3\" protect=\"false\">\n"
+				+ "    <add>\n"
+				+ "      <literal val=\"10\" />\n"
+				+ "      <reference line=\"1\" column=\"2\" />\n"
+				+ "    </add>\n"
+				+ "  </cell>\n"
+				+ "  <cell line=\"2\" column=\"1\" protect=\"false\">\n"
+				+ "    <prd>\n"
+				+ "      <range>\n"
+				+ "        <left-up line=\"1\" column=\"1\" />\n"
+				+ "        <right-down line=\"1\" column=\"3\" />\n"
+				+ "      </range>"
+				+ "    </prd>\n"
+				+ "  </cell>\n"
 				+ "</calcSheet>\n";
 		System.out.println(example);
 		BubbleDocs.getInstance().addUser(new User("alice", "alice", "alice@alice", "eve"));
@@ -171,7 +185,7 @@ public class CalcSheetImporter {
 		
 		System.out.println(new String(new CalcSheetExporter().exportToPrettyXmlData(sheet)));
 		
-		tm.commit();
+		tm.rollback();
 	}
 
 	
