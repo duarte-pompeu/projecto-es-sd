@@ -11,6 +11,8 @@
   <modules>
     <module>bubbledocs-appserver</module>
     <module>sd</module>
+    <module>sd-crypto</module>
+    <module>ws-handlers</module>
   </modules>
 
   <properties>
