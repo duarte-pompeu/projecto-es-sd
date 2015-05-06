@@ -2,6 +2,11 @@ package pt.ulisboa.tecnico.sdis.store.cli;
 
 import java.util.ArrayList;
 
+import javax.naming.directory.InvalidAttributeValueException;
+
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
+
 public class Quorum {
 	private final int _nVoters;
 	private final int _min4quorum;
@@ -21,9 +26,7 @@ public class Quorum {
 		}
 	}
 	
-	
-	public void addResponse(byte[] content){
-		Response r = new Response(content);
+	public void addResponse(Response r){
 		
 		_responses.add(r);
 		
@@ -98,5 +101,26 @@ public class Quorum {
 	
 	public int countUniqueResponses(){
 		return _uniqueResponses.size();
+	}
+	
+	public void addResponse(byte[] content){
+		Response r = new Response(content);
+		addResponse(r);
+	}
+
+	public void addException(InvalidAttributeValueException e) {
+		Response r = new Response(e);
+		addResponse(r);
+	}
+
+	public void addException(DocDoesNotExist_Exception e) {
+		Response r = new Response(e);
+		addResponse(r);
+		
+	}
+
+	public void addException(UserDoesNotExist_Exception e) {
+		Response r = new Response(e);
+		addResponse(r);
 	}
 }
