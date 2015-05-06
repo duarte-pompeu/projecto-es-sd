@@ -1,7 +1,12 @@
 package pt.tecnico.bubbledocs.integration.system;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotEquals;
+
+
+import static org.junit.Assert.assertNull;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -29,20 +34,29 @@ import org.junit.Test;
 
 
 
+
+
+
+
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
+import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
 import pt.tecnico.bubbledocs.service.AssignLiteralCell;
 import pt.tecnico.bubbledocs.service.AssignReferenceCell;
 import pt.tecnico.bubbledocs.service.GetSpreadsheetContentService;
+import pt.tecnico.bubbledocs.service.GetUserInfo;
+import pt.tecnico.bubbledocs.service.GetUsername4Token;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
@@ -121,7 +135,10 @@ public class LocalSystemTest {
 	    			remoteID.createUser(USERNAME,EMAIL); times = 1;
 	    		}};
 	    		
-	    		  User check_user = bd.getUser(USERNAME);
+	    		  GetUserInfo UserInfo = new GetUserInfo(USERNAME);
+	    		  UserInfo.execute();
+	    		  User check_user = UserInfo.getResult();
+	    		  
 	    		  assertEquals("Usernames don't match",USERNAME, check_user.getUserName());
 	    		  assertEquals("Usernames don't match",EMAIL, check_user.getEmail());
 	    		  assertEquals("Usernames don't match",NAME, check_user.getName());
@@ -134,10 +151,19 @@ public class LocalSystemTest {
 	    		}};
 	    		user_token = loginUser.getResult();
 	    		
-	    		User login_user = bd.getSessionFromToken(user_token).getUser();
-	    		assertEquals("Usernames don't match", USERNAME, login_user.getUserName());
-	    		assertEquals("Password don't match", "some random password", login_user.getPassword());
-	    		assertEquals("Token doesn't match", user_token, login_user.getSession().getToken());
+	    		GetUsername4Token Username4token = new GetUsername4Token(user_token);
+	    		Username4token.execute();
+	    		String username4token = Username4token.getResult();
+	    		Session session = bd.getSessionFromToken(user_token);
+	 
+	    		GetUserInfo UserInfo3 = new GetUserInfo(USERNAME);
+	    		UserInfo3.execute();
+	    		User after_login = UserInfo3.getResult();
+	   
+	    	
+	    		assertEquals("Usernames don't match", USERNAME, username4token);
+	    		assertEquals("Password don't match", "some random password", after_login.getPassword());
+	    		assertEquals("Token doesn't match", user_token, session.getToken());
 	    		
 	    		//user creates empty calcsheet
 	    		CreateSpreadSheetIntegrator spread = new CreateSpreadSheetIntegrator(user_token,CALCSHEET_NAME,CALCSHEET_ROWS,CALCSHEET_COLUMNS);
@@ -165,10 +191,38 @@ public class LocalSystemTest {
 	    		
 	    		AssignLiteralCellIntegrator alc = new AssignLiteralCellIntegrator(user_token, CALCSHEET_ID, created_spread.getCell(1, 1).getId(), "5");
 	    		alc.execute();
+	    		String lit_result = alc.getResult();
+	    		String cell_id=created_spread.getCell(1, 1).getId();
+	    		
+	    		assertEquals("Value is NOT correct", 5, calc.getCell(cell_id).getContent().getValue());
+	    		assertEquals("Bad result",calc.getCell(cell_id).getContent().toString(),lit_result);
+	    		
+	    		
 	    		reference = new Reference(created_spread.getCell(1,1));
 	    		AssignReferenceCell arc = new AssignReferenceCell(user_token, CALCSHEET_ID, created_spread.getCell(2, 2).getId(), "1;1");
 	    		arc.execute();
+	    		String ref_result = arc.getResult();
+	    		String ref_id = calc.getCell(2, 2).getId();
+	    		Reference comp_ref = new Reference (calc.getCell(ref_id));
 	    		
+	    		assertEquals("Reference is NOT correct", ref_id, comp_ref.getPointedCell().getId());
+	    		assertEquals("Bad result", "=1;1", ref_result);
+	    		
+	    		
+	    		//time 2 renew my password
+	    		
+	    		RenewPasswordIntegrator renewPass = new RenewPasswordIntegrator(user_token);
+	    		renewPass.execute();
+	    		
+	    		new Verifications() {{
+	    			remoteID.renewPassword(USERNAME); times = 1;
+	    		}};
+	    		
+	    		
+	    		GetUserInfo UserInfo2 = new GetUserInfo(USERNAME);
+	    		UserInfo2.execute();
+	    		User after_user = UserInfo2.getResult();
+	    		assertNull("password should be null",after_user.getPassword());
 	    		
 	    }
 	    	
