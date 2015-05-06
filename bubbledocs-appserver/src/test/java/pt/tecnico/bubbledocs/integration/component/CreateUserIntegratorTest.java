@@ -69,13 +69,13 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
     //null username case
     @Test(expected = InvalidUsernameException.class)
     public void emptyUsername() {
-        new Expectations() {{
-        	remote.createUser("", EMAIL);
-        	result = new InvalidUsernameException();
-        }};
+    	String long_name = "";    	
+    	CreateUserIntegrator service = new CreateUserIntegrator(root_token, long_name, EMAIL, "name");
+    	service.execute();
     	
-    	CreateUserIntegrator service = new CreateUserIntegrator(root_token, "", EMAIL, NAME);
-        service.execute();
+    	new Verifications() {{
+    		remote.createUser(anyString, anyString); times = 0;
+    	}};
     }
     
     //duplicate username case
