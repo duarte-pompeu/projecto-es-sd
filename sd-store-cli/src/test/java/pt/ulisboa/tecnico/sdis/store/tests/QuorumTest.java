@@ -197,6 +197,7 @@ public class QuorumTest {
 	}
 	
 	
+	@Test
 	public void lowThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3,1);
 		assertNull(quorum.getVerdict());
@@ -206,8 +207,9 @@ public class QuorumTest {
 	}
 	
 	
+	@Test
 	public void HighThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
-		Quorum quorum = new Quorum(3,1);
+		Quorum quorum = new Quorum(3,3);
 		assertNull(quorum.getVerdict());
 		
 		quorum.addResponse(bcontent);
