@@ -1,15 +1,17 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
+import pt.ulisboa.tecnico.sdis.store.ws.Document;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
-import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
 public class LoadService {
 	String userID;
 	String docID;
 	private byte[] result;
+	private String tag;
 	
 	public LoadService(String userID, String docID){
 		this.userID = userID;
@@ -32,11 +34,18 @@ public class LoadService {
 			//doc does not exist
 		}
 		
-		result = collection.getContent(docID);
+		Document doc = collection.getDoc(docID);
+		result = doc.getContent();
+		tag = doc.getTag();
 	}
 	
 	public byte[] getResult(){
 		
 		return this.result;
+	}
+
+	public String getTag() {
+		
+		return this.tag;
 	}
 }

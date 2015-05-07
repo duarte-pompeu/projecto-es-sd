@@ -86,4 +86,9 @@ public class UserRepository {
 		
 		else return content.length;
 	}
+
+
+	public Document getDoc(String docID) {
+		return docs.get(docID);
+	}
 }

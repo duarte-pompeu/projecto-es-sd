@@ -2,13 +2,17 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 import pt.ulisboa.tecnico.sdis.store.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.service.ListDocsService;
 import pt.ulisboa.tecnico.sdis.store.service.LoadService;
 import pt.ulisboa.tecnico.sdis.store.service.StoreService;
+import pt.ulisboa.tecnico.sdis.store.ws.handler.StoreHeaderHandler;
 
 @WebService(
 	endpointInterface="pt.ulisboa.tecnico.sdis.store.ws.SDStore",
@@ -20,6 +24,9 @@ import pt.ulisboa.tecnico.sdis.store.service.StoreService;
 )
 @HandlerChain(file="/handler-chain.xml")
 public class SDStoreImpl implements SDStore{
+	@Resource
+    private WebServiceContext webServiceContext;
+	
 	public final boolean DEBUG;
 	
 	public SDStoreImpl(){
@@ -50,7 +57,7 @@ public class SDStoreImpl implements SDStore{
 	@Override
 	public List<String> listDocs(String userID)
 			throws UserDoesNotExist_Exception {
-		
+	
 		ListDocsService service = new ListDocsService(userID);
 		service.dispatch();
 		
@@ -99,6 +106,8 @@ public class SDStoreImpl implements SDStore{
 			System.out.printf("User '%s' loaded '%d' bytes from doc '%s'.\n", userID, result.length, docID);
 		}
 		
+		MessageContext messageContext = webServiceContext.getMessageContext();
+		messageContext.put(StoreHeaderHandler.CONTEXT_PROPERTY, "test");//service.getTag());
 		return result;
 	}
 }
