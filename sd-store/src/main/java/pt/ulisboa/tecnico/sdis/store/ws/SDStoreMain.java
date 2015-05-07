@@ -64,7 +64,7 @@ public class SDStoreMain{
 				break;
 			}
 			catch(Exception e2){
-				// dont do anything
+				e2.printStackTrace();
 			}
 		}
 		

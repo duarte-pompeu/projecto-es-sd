@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.util.List;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
 
 import pt.ulisboa.tecnico.sdis.store.service.CreateDocService;
@@ -17,7 +18,7 @@ import pt.ulisboa.tecnico.sdis.store.service.StoreService;
 	targetNamespace="urn:pt:ulisboa:tecnico:sdis:store:ws",
 	serviceName="SDStore"
 )
-
+@HandlerChain(file="/handler-chain.xml")
 public class SDStoreImpl implements SDStore{
 	public final boolean DEBUG;
 	
