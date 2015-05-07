@@ -1,10 +1,16 @@
 package pt.ulisboa.tecnico.sdis.store.tests;
 
+import javax.naming.directory.InvalidAttributeValueException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.Quorum;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
+import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 import static org.junit.Assert.*;
 
 public class QuorumTest {
@@ -18,6 +24,9 @@ public class QuorumTest {
 	static byte[] altbcontent1;
 	static byte[] altbcontent2;
 	
+	static UserDoesNotExist_Exception UDNEex;
+	static DocDoesNotExist_Exception DDNEex;
+	
 	@BeforeClass
 	public static void populate(){
 		QUORUM = new Quorum(N_VOTERS);
@@ -29,11 +38,21 @@ public class QuorumTest {
 		QUORUM.addResponse(bcontent);
 		QUORUM.addResponse(bcontent);
 		QUORUM.addResponse(bcontent);
+		
+		String message = "ERROR!";
+		UserDoesNotExist uddne = new UserDoesNotExist();
+		uddne.setUserId("Manuel");
+		UDNEex = new UserDoesNotExist_Exception(message, uddne);
+		
+		DocDoesNotExist ddne = new DocDoesNotExist();
+		ddne.setDocId("123");
+		DDNEex = new DocDoesNotExist_Exception(message, ddne);
+		
 	}
 	
 	
 	@Test
-	public void populateSuccess(){
+	public void populateSuccess() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		assertEquals(new Integer(N_VOTERS), new Integer(QUORUM.countVotes()));
 		assertEquals(new Integer(N_VOTERS), new Integer(QUORUM.countResponses()));
 		assertEquals(new Integer(1), new Integer(QUORUM.countUniqueResponses()));
@@ -58,7 +77,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void singleQuorum(){
+	public void singleQuorum() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(1);
 		quorum.addResponse(bcontent);
 		
@@ -71,7 +90,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notEnoughVotes(){
+	public void notEnoughVotes() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -81,7 +100,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notAllVotesButPass(){
+	public void notAllVotesButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -92,7 +111,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notUnanimousButPass1(){
+	public void notUnanimousButPass1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(altbcontent1);
@@ -104,7 +123,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notUnanimousButPass2(){
+	public void notUnanimousButPass2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -116,13 +135,46 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notUnanimousButPass3(){
+	public void notUnanimousButPass3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
 		quorum.addResponse(bcontent);
 		quorum.addResponse(altbcontent1);
 		
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	@Test
+	public void oneExceptButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addException(UDNEex);
+		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent);
+			
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	@Test (expected = UserDoesNotExist_Exception.class)
+	public void twoExceptionsFail1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addException(UDNEex);
+		quorum.addException(UDNEex);
+		quorum.addResponse(bcontent);
+			
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	@Test (expected = DocDoesNotExist_Exception.class)
+	public void twoExceptionsFail2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addException(DDNEex);
+		quorum.addException(DDNEex);
+		quorum.addResponse(bcontent);
+			
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 }

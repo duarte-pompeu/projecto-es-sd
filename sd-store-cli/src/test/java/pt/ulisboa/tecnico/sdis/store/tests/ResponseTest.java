@@ -19,41 +19,41 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
 public class ResponseTest {
 	static byte[] CONTENT;
-	static byte[] CONTENT_REPLICA;
+	static byte[] CONTENT_COPY;
 	static byte[] CONTENT_ALT;
 	
 	static Exception GENERIC_EXCEPTION;
-	static Exception GENERIC_EXCEPTION_REPLICA;
+	static Exception GENERIC_EXCEPTION_COPY;
 	static Exception GENERIC_EXCEPTION_ALT;
 	
-	static InvalidAttributeValueException IAVEx;
-	static InvalidAttributeValueException IAVEx_REPLICA;
-	static InvalidAttributeValueException IAVEx_ALT;
+	static InvalidAttributeValueException IAVex;
+	static InvalidAttributeValueException IAVex_COPY;
+	static InvalidAttributeValueException IAVex_ALT;
 	
-	static DocDoesNotExist_Exception DDNEEx;
-	static DocDoesNotExist_Exception DDNEEx_REPLICA;
-	static DocDoesNotExist_Exception DDNEEx_ALT;
+	static DocDoesNotExist_Exception DDNEex;
+	static DocDoesNotExist_Exception DDNEex_COPY;
+	static DocDoesNotExist_Exception DDNEex_ALT;
 	
-	static UserDoesNotExist_Exception UDNEEx;
-	static UserDoesNotExist_Exception UDNEEx_REPLICA;
-	static UserDoesNotExist_Exception UDNEEx_ALT;
+	static UserDoesNotExist_Exception UDNEex;
+	static UserDoesNotExist_Exception UDNEex_COPY;
+	static UserDoesNotExist_Exception UDNEex_ALT;
 	
 	
 	@BeforeClass
 	public static void init(){
 		CONTENT = StoreClient.string2bytes("LOREM IPSUM");
-		CONTENT_REPLICA = StoreClient.string2bytes("LOREM IPSUM");
+		CONTENT_COPY = StoreClient.string2bytes("LOREM IPSUM");
 		CONTENT_ALT = StoreClient.string2bytes("IPSUM LOREM");
 		
 		
 		GENERIC_EXCEPTION = new RuntimeException("HELLO");
-		GENERIC_EXCEPTION_REPLICA = new RuntimeException("HELLO");
+		GENERIC_EXCEPTION_COPY = new RuntimeException("HELLO");
 		GENERIC_EXCEPTION_ALT = new RuntimeException("GOODBYE");
 		
 		
-		IAVEx = new InvalidAttributeValueException("no explanation");
-		IAVEx_REPLICA = new InvalidAttributeValueException("no explanation");
-		IAVEx_ALT = new InvalidAttributeValueException("cant explain this");
+		IAVex = new InvalidAttributeValueException("no explanation");
+		IAVex_COPY = new InvalidAttributeValueException("no explanation");
+		IAVex_ALT = new InvalidAttributeValueException("cant explain this");
 		
 		
 		String message = "no such thing";
@@ -66,9 +66,9 @@ public class ResponseTest {
 		ddne_copy.setDocId("123");
 		ddne_alt.setDocId("123456789");
 		
-		DDNEEx = new DocDoesNotExist_Exception(message, ddne);
-		DDNEEx_REPLICA = new DocDoesNotExist_Exception(message, ddne_copy);
-		DDNEEx_REPLICA = new DocDoesNotExist_Exception(message, ddne_alt);
+		DDNEex = new DocDoesNotExist_Exception(message, ddne);
+		DDNEex_COPY = new DocDoesNotExist_Exception(message, ddne_copy);
+		DDNEex_ALT = new DocDoesNotExist_Exception(message, ddne_alt);
 		
 		
 		message = "no such user";
@@ -81,9 +81,9 @@ public class ResponseTest {
 		uddne_copy.setUserId("Manuel");
 		uddne_alt.setUserId("Joaquim");
 		
-		UDNEEx = new UserDoesNotExist_Exception(message, uddne);
-		UDNEEx_REPLICA = new UserDoesNotExist_Exception(message, uddne_copy);
-		UDNEEx_ALT = new UserDoesNotExist_Exception(message, uddne_alt);
+		UDNEex = new UserDoesNotExist_Exception(message, uddne);
+		UDNEex_COPY = new UserDoesNotExist_Exception(message, uddne_copy);
+		UDNEex_ALT = new UserDoesNotExist_Exception(message, uddne_alt);
 	}
 	
 	
@@ -95,11 +95,11 @@ public class ResponseTest {
 		rlist.add(r1);
 		Response r2 = new Response(GENERIC_EXCEPTION); 
 		rlist.add(r2);
-		Response r3 = new Response(IAVEx); 
+		Response r3 = new Response(IAVex); 
 		rlist.add(r3);
-		Response r4 = new Response(DDNEEx); 
+		Response r4 = new Response(DDNEex); 
 		rlist.add(r4);
-		Response r5 = new Response(UDNEEx); 
+		Response r5 = new Response(UDNEex); 
 		rlist.add(r5);
 		
 		
@@ -121,7 +121,7 @@ public class ResponseTest {
 	@Test
 	public void contentEquals(){
 		Response r1 = new Response(CONTENT);
-		Response r2 = new Response(CONTENT_REPLICA);
+		Response r2 = new Response(CONTENT_COPY);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -136,12 +136,36 @@ public class ResponseTest {
 	}
 	
 	
-	@Test
+	@Test 
 	public void genericExceptionEquals(){
 		Response r1 = new Response(GENERIC_EXCEPTION);
-		Response r2 = new Response(GENERIC_EXCEPTION_REPLICA);
+		Response r2 = new Response(GENERIC_EXCEPTION_COPY);
 		
 		assertTrue(r1.equals(r2));
+	}
+	
+	
+	@Test (expected=Exception.class)
+	public void throwIAVException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Response r = new Response(IAVex);
+		
+		r.getContent();
+	}
+	
+	
+	@Test (expected=UserDoesNotExist_Exception.class)
+	public void throwUDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Response r = new Response(UDNEex);
+		
+		r.getContent();
+	}
+	
+	
+	@Test (expected=DocDoesNotExist_Exception.class)
+	public void throwDDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Response r = new Response(DDNEex);
+		
+		r.getContent();
 	}
 	
 	
@@ -156,8 +180,8 @@ public class ResponseTest {
 	
 	@Test
 	public void iavexEquals(){
-		Response r1 = new Response(IAVEx);
-		Response r2 = new Response(IAVEx_REPLICA);
+		Response r1 = new Response(IAVex);
+		Response r2 = new Response(IAVex_COPY);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -165,8 +189,8 @@ public class ResponseTest {
 	
 	@Test
 	public void iavExDiffers(){
-		Response r1 = new Response(IAVEx);
-		Response r2 = new Response(IAVEx_ALT);
+		Response r1 = new Response(IAVex);
+		Response r2 = new Response(IAVex_ALT);
 		
 		assertFalse(r1.equals(r2));
 	}
@@ -174,8 +198,8 @@ public class ResponseTest {
 	
 	@Test
 	public void ddneExEquals(){
-		Response r1 = new Response(DDNEEx);
-		Response r2 = new Response(DDNEEx_REPLICA);
+		Response r1 = new Response(DDNEex);
+		Response r2 = new Response(DDNEex_COPY);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -183,8 +207,8 @@ public class ResponseTest {
 	
 	@Test
 	public void ddneExDiffers(){
-		Response r1 = new Response(DDNEEx);
-		Response r2 = new Response(DDNEEx_ALT);
+		Response r1 = new Response(DDNEex);
+		Response r2 = new Response(DDNEex_ALT);
 		
 		assertFalse(r1.equals(r2));
 	}
@@ -192,8 +216,8 @@ public class ResponseTest {
 	
 	@Test
 	public void udneExEquals(){
-		Response r1 = new Response(UDNEEx);
-		Response r2 = new Response(UDNEEx_REPLICA);
+		Response r1 = new Response(UDNEex);
+		Response r2 = new Response(UDNEex_COPY);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -201,8 +225,8 @@ public class ResponseTest {
 	
 	@Test
 	public void udneExDiffers(){
-		Response r1 = new Response(UDNEEx);
-		Response r2 = new Response(UDNEEx_ALT);
+		Response r1 = new Response(UDNEex);
+		Response r2 = new Response(UDNEex_ALT);
 		
 		assertFalse(r1.equals(r2));
 	}

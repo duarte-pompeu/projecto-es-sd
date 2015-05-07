@@ -96,9 +96,47 @@ public class Response {
 		return e1.getMessage().equals(e2.getMessage())
 				&& e1.getFaultInfo().getUserId().equals(e2.getFaultInfo().getUserId());
 	}
+	
+	
+	public boolean rEquals(DocDoesNotExist_Exception e1, DocDoesNotExist_Exception e2){
+		if(e1 == null || e2 == null){
+			return (e1 == null && e2 == null);
+		}
+		
+		return e1.getMessage().equals(e2.getMessage())
+				&& e1.getFaultInfo().getDocId().equals(e2.getFaultInfo().getDocId());
+	}
 
 
-	public byte[] getContent() {
+	public byte[] getContent() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception {
+		int type = this.TYPE;
+		
+		switch(type){
+//		case GENERIC_EXCEPTION:
+//			if(except == null)
+//				return null;
+//			
+//			throw except;
+			
+		case IAV_EXCEPTION:
+			if(iaevEx == null)
+				return null;
+			
+			throw iaevEx;
+		
+		case DDNE_EXCEPTION:
+			if(ddneEx == null)
+				return null;
+		
+			throw ddneEx;
+		
+		case UDNE_EXCEPTION:
+			if(udneEx == null)
+				return null;
+			
+			throw udneEx;
+		}
+		
 		return docContent;
 	}
 }

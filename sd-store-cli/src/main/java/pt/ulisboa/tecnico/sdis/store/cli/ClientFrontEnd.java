@@ -108,7 +108,7 @@ public class ClientFrontEnd {
 	}
 	
 
-	public byte[] loadDoc(String userID, String docID){
+	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = qFact.getNewquorum();
 		
 		byte[] res;

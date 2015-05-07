@@ -50,7 +50,7 @@ public class Quorum {
 	}
 
 	
-	public byte[] getVerdict() {
+	public byte[] getVerdict() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception {
 		
 		for(int i = 0; i < votes.size(); i++){
 			if(votes.get(i) >= _min4quorum){
