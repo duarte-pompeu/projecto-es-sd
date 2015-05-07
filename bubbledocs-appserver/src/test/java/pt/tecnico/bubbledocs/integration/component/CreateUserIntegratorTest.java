@@ -19,6 +19,7 @@ import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 import pt.tecnico.bubbledocs.exceptions.DuplicateEmailException;
 import pt.tecnico.bubbledocs.exceptions.InvalidEmailException;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
 
 
@@ -162,8 +163,19 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
     	service.execute();
     }
     
+	public void Compensation() {
+    	//The user that was supposed to be created
+    	//Doesn't exist;
+    	try {
+        	this.getUserFromUsername(USERNAME);
+        	fail("User should not exist");
+        } catch (NotFoundException e) {} 
+    	
+    }
+	
+	
     //remote service exception case
-    @Test(expected = UnavailableServiceException.class)
+    @Test
 	public void unavailable() {
     	new Expectations() {{
     		remote.createUser(USERNAME, EMAIL);
@@ -171,7 +183,13 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
     	}};
     	
 		CreateUserIntegrator service = new CreateUserIntegrator(root_token, USERNAME, EMAIL, NAME);
-		service.execute();
+		//service.execute();
+		try {
+			service.execute();
+			fail("expected UnavailableServiceException");
+		} catch (UnavailableServiceException e) {
+			Compensation();
+		}
 	}
     
 
