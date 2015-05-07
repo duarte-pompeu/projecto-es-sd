@@ -2,15 +2,18 @@ package pt.ulisboa.tecnico.sdis.store.cli;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
+import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
 public class Response {
+	private static final int SUCCESS = 0;
 	private static final int CONTENT = 100;
 	private static final int GENERIC_EXCEPTION = 200;
 	private static final int IAV_EXCEPTION = 201;
 	private static final int DDNE_EXCEPTION = 202;
 	private static final int UDNE_EXCEPTION = 203;
+	private static final int CE_EXCEPTION = 204;
 	
 	public final int TYPE;
 	private byte[] docContent = null;
@@ -18,13 +21,19 @@ public class Response {
 	private InvalidAttributeValueException iaevEx = null;
 	private DocDoesNotExist_Exception ddneEx = null;
 	private UserDoesNotExist_Exception udneEx = null;
+	private CapacityExceeded_Exception ceEx = null;
 	
+	
+	public Response() {
+		TYPE = SUCCESS;
+	}
 	
 	
 	public Response(byte[] content){
 		TYPE = CONTENT;
 		docContent = content;
 	}
+	
 	
 	public Response(Exception e){
 		TYPE = GENERIC_EXCEPTION;
@@ -50,13 +59,19 @@ public class Response {
 	}
 
 
+	public Response(CapacityExceeded_Exception e){
+		TYPE = CE_EXCEPTION;
+		this.ceEx = e;
+	}
+
 	public boolean equals(Response r){
 		return this.TYPE == r.TYPE 
 				&& rEquals(this.docContent, r.docContent)
 				&& rEquals(this.except, r.except)
 				&& rEquals(this.iaevEx, r.iaevEx)
 				&& rEquals(this.ddneEx, r.ddneEx)
-				&& rEquals(this.udneEx, r.udneEx);
+				&& rEquals(this.udneEx, r.udneEx)
+				&& rEquals(this.ceEx, r.ceEx);
 	}
 	
 	
@@ -108,7 +123,7 @@ public class Response {
 	}
 
 
-	public byte[] getContent() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception {
+	public byte[] getContent() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
 		int type = this.TYPE;
 		
 		switch(type){
@@ -135,7 +150,15 @@ public class Response {
 				return null;
 			
 			throw udneEx;
+			
+		case CE_EXCEPTION:
+			if(ceEx == null)
+				return null;
+			
+			throw ceEx;
 		}
+		
+		
 		
 		return docContent;
 	}

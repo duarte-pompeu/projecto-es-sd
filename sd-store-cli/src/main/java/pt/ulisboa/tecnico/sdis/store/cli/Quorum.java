@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
+import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
@@ -55,7 +56,7 @@ public class Quorum {
 	}
 
 	
-	public byte[] getVerdict() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception {
+	public byte[] getVerdict() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
 		
 		for(int i = 0; i < votes.size(); i++){
 			if(votes.get(i) >= _min4quorum){
@@ -127,5 +128,17 @@ public class Quorum {
 	public void addException(UserDoesNotExist_Exception e) {
 		Response r = new Response(e);
 		addResponse(r);
+	}
+
+	public void addSuccess() {
+		Response r = new Response();
+		addResponse(r);
+		
+	}
+
+	public void addException(CapacityExceeded_Exception e) {
+		Response r = new Response(e);
+		addResponse(r);
+		
 	}
 }

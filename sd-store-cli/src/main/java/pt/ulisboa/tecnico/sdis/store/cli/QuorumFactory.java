@@ -7,7 +7,14 @@ public class QuorumFactory {
 	
 	
 	public QuorumFactory(int numberOfVoters){
+		this(numberOfVoters, -1, -1);
+	}
+	
+	
+	public QuorumFactory(int numberOfVoters, int readThreshold, int writeThreshold){
 		_nVoters = numberOfVoters;
+		_RT = readThreshold;
+		_WT = writeThreshold;
 	}
 	
 	
@@ -17,11 +24,18 @@ public class QuorumFactory {
 	
 	
 	public Quorum getNewWriteQuorum(){
+		if(_WT == -1){
+			return new Quorum(_nVoters);
+		}
+		
 		return new Quorum(_nVoters, _WT);
 	}
 	
 	
 	public Quorum getNewReadQuorum(){
+		if(_RT == -1){
+			return new Quorum(_nVoters);
+		}
 		return new Quorum(_nVoters, _RT);
 	}
 }

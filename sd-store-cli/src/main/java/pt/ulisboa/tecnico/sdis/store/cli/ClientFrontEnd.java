@@ -31,10 +31,19 @@ public class ClientFrontEnd {
 	public ClientFrontEnd(String uddiName) throws JAXRException{
 		this._uddiName = uddiName;
 		init();
+		
+		int n_servers = _clients.size();
+		qFact = new QuorumFactory(n_servers);
 	}
 	
 	public ClientFrontEnd() throws JAXRException{
 		this(DEFAULT_UDDI_NAME);
+	}
+	
+	public void setThresholds(int rt, int wt){
+		
+		int nVoters = _clients.size();
+		this.qFact = new QuorumFactory(nVoters, rt, wt);
 	}
 	
 	
@@ -42,19 +51,14 @@ public class ClientFrontEnd {
 		if(VERBOSE){
 			System.out.println("LOOKING FOR ENDPOINT ADDRESSES...");
 		}
-	
-		int n_servers = 0;
 		
 		for(String endpointAddress: listEndpoints()){
 			_clients.add(initClient(endpointAddress));
-			n_servers++;
 			
 			if(VERBOSE){
 				System.out.println("   * " + endpointAddress);
 			}
 		}
-		
-		qFact = new QuorumFactory(n_servers);
 	}
 	
 	
@@ -101,15 +105,32 @@ public class ClientFrontEnd {
 		return docs;
 	}
 	
-	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception {
+	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
+		Quorum quorum = qFact.getNewWriteQuorum();
+		
 		for(StoreClient client : _clients){
-			client.storeDoc(userID, docID, content);
+			
+			try {
+				client.storeDoc(userID, docID, content);
+				quorum.addSuccess();
+				
+			} catch (InvalidAttributeValueException e) {
+				quorum.addException(e);
+			} catch (CapacityExceeded_Exception e) {
+				quorum.addException(e);
+			} catch (DocDoesNotExist_Exception e) {
+				quorum.addException(e);
+			} catch (UserDoesNotExist_Exception e) {
+				quorum.addException(e);
+			}
 		}
+		
+		quorum.getVerdict();
 	}
 	
 
-	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
-		Quorum quorum = qFact.getNewQuorum();
+	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Quorum quorum = qFact.getNewReadQuorum();
 		
 		byte[] res;
 		for(StoreClient client : _clients){

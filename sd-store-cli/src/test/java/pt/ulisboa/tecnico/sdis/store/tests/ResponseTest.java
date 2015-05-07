@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.Response;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
+import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
@@ -146,7 +147,7 @@ public class ResponseTest {
 	
 	
 	@Test (expected=Exception.class)
-	public void throwIAVException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+	public void throwIAVException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
 		Response r = new Response(IAVex);
 		
 		r.getContent();
@@ -154,7 +155,7 @@ public class ResponseTest {
 	
 	
 	@Test (expected=UserDoesNotExist_Exception.class)
-	public void throwUDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+	public void throwUDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
 		Response r = new Response(UDNEex);
 		
 		r.getContent();
@@ -162,7 +163,7 @@ public class ResponseTest {
 	
 	
 	@Test (expected=DocDoesNotExist_Exception.class)
-	public void throwDDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+	public void throwDDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
 		Response r = new Response(DDNEex);
 		
 		r.getContent();
