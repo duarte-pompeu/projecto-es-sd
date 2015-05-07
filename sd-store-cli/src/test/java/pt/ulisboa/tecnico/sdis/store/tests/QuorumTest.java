@@ -26,6 +26,7 @@ public class QuorumTest {
 	
 	static UserDoesNotExist_Exception UDNEex;
 	static DocDoesNotExist_Exception DDNEex;
+	static InvalidAttributeValueException IAVex;
 	
 	@BeforeClass
 	public static void populate(){
@@ -47,6 +48,8 @@ public class QuorumTest {
 		DocDoesNotExist ddne = new DocDoesNotExist();
 		ddne.setDocId("123");
 		DDNEex = new DocDoesNotExist_Exception(message, ddne);
+		
+		IAVex = new InvalidAttributeValueException("no explanation");
 		
 	}
 	
@@ -145,6 +148,7 @@ public class QuorumTest {
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 	
+	
 	@Test
 	public void oneExceptButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
@@ -155,6 +159,7 @@ public class QuorumTest {
 			
 		assertEquals(bcontent, quorum.getVerdict());
 	}
+	
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void twoExceptionsFail1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
@@ -167,6 +172,7 @@ public class QuorumTest {
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 	
+	
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void twoExceptionsFail2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
 		Quorum quorum = new Quorum(3);
@@ -175,6 +181,42 @@ public class QuorumTest {
 		quorum.addException(DDNEex);
 		quorum.addResponse(bcontent);
 			
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	
+	@Test (expected = InvalidAttributeValueException.class)
+	public void twoExceptionsFail3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addException(IAVex);
+		quorum.addException(IAVex);
+		quorum.addResponse(bcontent);
+			
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	
+	public void lowThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Quorum quorum = new Quorum(3,1);
+		assertNull(quorum.getVerdict());
+		
+		quorum.addResponse(bcontent);
+		assertEquals(bcontent, quorum.getVerdict());
+	}
+	
+	
+	public void HighThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception{
+		Quorum quorum = new Quorum(3,1);
+		assertNull(quorum.getVerdict());
+		
+		quorum.addResponse(bcontent);
+		assertNull(quorum.getVerdict());
+		
+		quorum.addResponse(bcontent);
+		assertNull(quorum.getVerdict());
+		
+		quorum.addResponse(bcontent);
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 }

@@ -26,6 +26,11 @@ public class Quorum {
 		}
 	}
 	
+	public Quorum(int nVoters, int threshold){
+		_nVoters = nVoters;
+		_min4quorum = threshold;
+	}
+	
 	public void addResponse(Response r){
 		
 		_responses.add(r);
