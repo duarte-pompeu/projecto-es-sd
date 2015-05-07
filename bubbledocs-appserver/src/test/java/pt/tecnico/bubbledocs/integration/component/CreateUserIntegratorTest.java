@@ -2,6 +2,7 @@
 package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import mockit.Mocked;
 import mockit.Expectations;
 import mockit.Verifications;
