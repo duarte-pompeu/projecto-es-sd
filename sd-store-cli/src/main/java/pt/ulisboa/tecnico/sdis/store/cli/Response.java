@@ -15,9 +15,9 @@ public class Response {
 	public final int TYPE;
 	private byte[] docContent = null;
 	private Exception except = null;
-	private InvalidAttributeValueException iaeve = null;
-	private DocDoesNotExist_Exception ddnee = null;
-	private UserDoesNotExist_Exception udnee = null;
+	private InvalidAttributeValueException iaevEx = null;
+	private DocDoesNotExist_Exception ddneEx = null;
+	private UserDoesNotExist_Exception udneEx = null;
 	
 	
 	
@@ -34,26 +34,29 @@ public class Response {
 
 	public Response(InvalidAttributeValueException e) {
 		TYPE = IAV_EXCEPTION;
-		this.iaeve = e;
+		this.iaevEx = e;
 	}
 
 
 	public Response(DocDoesNotExist_Exception e) {
 		TYPE = DDNE_EXCEPTION;
-		this.ddnee = e;
+		this.ddneEx = e;
 	}
 
 
 	public Response(UserDoesNotExist_Exception e) {
 		TYPE = UDNE_EXCEPTION;
-		this.udnee = e;
+		this.udneEx = e;
 	}
 
 
 	public boolean equals(Response r){
 		return this.TYPE == r.TYPE 
 				&& rEquals(this.docContent, r.docContent)
-				&& rEquals(this.except, r.except);
+				&& rEquals(this.except, r.except)
+				&& rEquals(this.iaevEx, r.iaevEx)
+				&& rEquals(this.ddneEx, r.ddneEx)
+				&& rEquals(this.udneEx, r.udneEx);
 	}
 	
 	
@@ -82,6 +85,16 @@ public class Response {
 		}
 		
 		return e1.getMessage().equals(e2.getMessage());
+	}
+	
+	
+	public boolean rEquals(UserDoesNotExist_Exception e1, UserDoesNotExist_Exception e2){
+		if(e1 == null || e2 == null){
+			return (e1 == null && e2 == null);
+		}
+		
+		return e1.getMessage().equals(e2.getMessage())
+				&& e1.getFaultInfo().getUserId().equals(e2.getFaultInfo().getUserId());
 	}
 
 
