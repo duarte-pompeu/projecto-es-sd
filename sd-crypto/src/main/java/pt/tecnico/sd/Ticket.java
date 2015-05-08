@@ -3,7 +3,6 @@ package pt.tecnico.sd;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
@@ -14,10 +13,7 @@ import javax.crypto.SecretKey;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -44,33 +40,30 @@ public class Ticket {
 	
 	//Receives a base64 encoded blob and decrypts given the service key
 	public Ticket(String base64blob, SecretKey serviceKey) {
-		byte[] encryptedBlob=parseBase64Binary(base64blob);
-		byte[] decryptedBlob = SdCrypto.decrypt(serviceKey, encryptedBlob);	
-		
-		
-		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc;
+		byte[] encryptedBlob= parseBase64Binary(base64blob);
+		byte[] decryptedBlob = SdCrypto.decrypt(serviceKey, encryptedBlob);
+
+		SAXBuilder b= new SAXBuilder();
+		Document xmlDoc = null;
 		try {
 			xmlDoc = b.build(new ByteArrayInputStream(decryptedBlob));
 		} catch (JDOMException | IOException e) {
 			throw new RuntimeException(e);
 		}
+
+		/*DEBUG
+		XMLOutputter xmlOut = new XMLOutputter(Format.getPrettyFormat());
+		System.out.println("Produced from import");
+		try {xmlOut.output(xmlDoc, System.out);} catch (Exception e) {}
+		*/
 		
-        XPathFactory xFactory = XPathFactory.instance();
-
-        XPathExpression<Element> expr = xFactory.compile("/ticket", Filters.element());
-        List<Element> links = expr.evaluate(xmlDoc);
-        Element ticketElement=links.get(0);
-
-        //DEBUG
-        //XMLOutputter xmlOut = new XMLOutputter(Format.getPrettyFormat());
-        //System.out.println("Produced from import");
-        //try {xmlOut.output(xmlDoc, System.out);} catch (Exception e) {}
-      		
-        username=ticketElement.getChild("username").getValue();
-        service=ticketElement.getChild("service").getValue();
-		since=DateTime.parse(ticketElement.getChild("since").getValue());
-		expire=DateTime.parse(ticketElement.getChild("expire").getValue());
+		Element ticketElement = xmlDoc.getRootElement();
+		
+		username = ticketElement.getChild("username").getValue();
+		service = ticketElement.getChild("service").getValue();
+		since = DateTime.parse(ticketElement.getChild("since").getValue());
+		expire = DateTime.parse(ticketElement.getChild("expire").getValue());
+		sessionKey = SdCrypto.generateKey(parseBase64Binary(ticketElement.getChild("sessionKey").getValue()));
 	}
 	
 	/*
@@ -160,8 +153,7 @@ public class Ticket {
 		
 		System.out.println();
 		Ticket recovered = new Ticket(blob, serviceKey);
-		ticket.getBlob(serviceKey);
-		
+		recovered.getBlob(serviceKey);
 	}
 }
 
