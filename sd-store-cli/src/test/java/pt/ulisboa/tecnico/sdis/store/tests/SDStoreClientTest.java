@@ -9,12 +9,12 @@ public class SDStoreClientTest {
 	protected static SDStore _port;
 
 	
-	public String bytes2string(byte[] bytes){
+	public static String bytes2string(byte[] bytes){
 		return StoreClient.bytes2string(bytes);
 	}
 	
 	
-	public byte[] string2bytes(String s){
+	public static byte[] string2bytes(String s){
 		return StoreClient.string2bytes(s);
 	}
 	

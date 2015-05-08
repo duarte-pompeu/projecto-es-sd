@@ -36,6 +36,13 @@ public class ClientFrontEnd {
 		qFact = new QuorumFactory(n_servers);
 	}
 	
+	public ClientFrontEnd(Collection<StoreClient> clients){
+		_clients = clients;
+		
+		int n_servers = _clients.size();
+		qFact = new QuorumFactory(n_servers);
+	}
+	
 	public ClientFrontEnd() throws JAXRException{
 		this(DEFAULT_UDDI_NAME);
 	}
