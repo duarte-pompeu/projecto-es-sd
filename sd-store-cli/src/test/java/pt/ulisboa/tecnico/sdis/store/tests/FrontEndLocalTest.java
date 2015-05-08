@@ -178,4 +178,60 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 		
 		_fe.loadDoc(USER, DOC);
 	}
+	
+	@Test
+	public void writeBack1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		new Expectations() {{
+			mockCli1.loadDoc(USER, DOC);
+			result = CONTENT;
+		}};
+		
+		new Expectations() {{
+			mockCli2.loadDoc(USER, DOC);
+			result = string2bytes("WRONG CONTENT");
+		}};	
+		
+		new Expectations() {{
+			mockCli3.loadDoc(USER, DOC);
+			result = CONTENT;
+		}};
+		
+		new Expectations() {{
+			mockCli2.storeDoc(USER, DOC, CONTENT);
+		}};
+		
+		byte[] result = _fe.loadDoc(USER, DOC);
+		
+		assertEquals(result, CONTENT);
+	}
+	
+	@Test
+	public void writeBack2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		String message = "ERROR!";
+		UserDoesNotExist uddne = new UserDoesNotExist();
+		uddne.setUserId("Manuel");
+		final UserDoesNotExist_Exception UDNEex = new UserDoesNotExist_Exception(message, uddne);
+		
+		new Expectations() {{
+			mockCli1.loadDoc(USER, DOC);
+			result = UDNEex;
+		}};
+		
+		new Expectations() {{
+			mockCli2.loadDoc(USER, DOC);
+			result = CONTENT;
+		}};	
+		
+		new Expectations() {{
+			mockCli3.loadDoc(USER, DOC);
+			result = CONTENT;
+		}};
+		
+		new Expectations() {{
+			mockCli1.storeDoc(USER, DOC, CONTENT);
+		}};
+		
+		byte[] result = _fe.loadDoc(USER, DOC);
+		assertEquals(result, CONTENT);
+	}
 }

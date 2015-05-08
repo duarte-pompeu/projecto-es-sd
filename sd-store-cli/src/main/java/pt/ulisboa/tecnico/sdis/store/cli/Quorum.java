@@ -16,6 +16,8 @@ public class Quorum {
 	private ArrayList<Response> _uniqueResponses = new ArrayList<Response>();
 	private ArrayList<Integer> votes = new ArrayList<Integer>();
 	
+	private boolean totalConsensus = false;
+	
 	
 	public Quorum(int nVoters){
 		_nVoters = nVoters;
@@ -64,6 +66,11 @@ public class Quorum {
 			int n_votes = votes.get(i);
 			
 			if(n_votes >= _min4quorum){
+				
+				if(n_votes == _responses.size()){
+					totalConsensus = true;
+				}
+				
 				return _uniqueResponses.get(i).getContent();
 			}
 			
@@ -155,5 +162,9 @@ public class Quorum {
 		Response r = new Response(e, ID);
 		addResponse(r);
 		
+	}
+
+	public boolean isTotalConsensus() {
+		return totalConsensus;
 	}
 }
