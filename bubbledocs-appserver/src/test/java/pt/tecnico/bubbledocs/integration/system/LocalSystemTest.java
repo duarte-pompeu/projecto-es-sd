@@ -39,6 +39,7 @@ import org.junit.Test;
 
 
 
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
@@ -50,6 +51,7 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
+import pt.tecnico.bubbledocs.integration.GetSpreadsheetContentIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
 import pt.tecnico.bubbledocs.service.AssignLiteralCell;
@@ -224,6 +226,15 @@ public class LocalSystemTest {
 	    		User after_user = UserInfo2.getResult();
 	    		assertNull("password should be null",after_user.getPassword());
 	    		
+	    		
+	    		GetSpreadsheetContentIntegrator gscs = new GetSpreadsheetContentIntegrator(user_token, Integer.toString(CALCSHEET_ID));
+	    		gscs.execute();
+	    		String [][] content = gscs.getResult();
+	    		
+	    		assertEquals(content[0].length, CALCSHEET_COLUMNS);
+	    		assertEquals(content.length, CALCSHEET_ROWS);
+	    		assertEquals("5", content[0][0]);
+	    		assertEquals(reference.toString(), content[1][1]);
 	    }
 	    	
 	

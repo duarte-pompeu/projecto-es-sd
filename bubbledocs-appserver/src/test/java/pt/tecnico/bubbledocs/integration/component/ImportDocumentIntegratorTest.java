@@ -1,17 +1,20 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import mockit.Mock;
 import mockit.MockUp;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
+import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
+import pt.tecnico.bubbledocs.service.ExportDocument;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+
 import static org.junit.Assert.assertEquals;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -20,7 +23,6 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.junit.Test;
-
 
 import pt.tecnico.bubbledocs.domain.Add;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
@@ -36,9 +38,10 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exceptions.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
+import pt.tecnico.bubbledocs.integration.ImportDocumentIntegrator;
 
 
-public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
+public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	
 	private final String U_USERNAME = "jubileu";
 	private final String U_USERNAME2 = "olivar";
@@ -145,7 +148,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	public void emptyCalcSheet() throws JDOMException, IOException{
 	
 		
-		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID);
+		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service2.execute();
 		
 		//a local setup
@@ -193,7 +196,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	@Test
 	public void calcSheetWithOneCell() throws JDOMException, IOException{
 	
-		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID2);
+		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID2);
 		service2.execute();
 		
 		//a local setup
@@ -231,7 +234,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	@Test
 	public void calcSheetWithMultipleCells() throws JDOMException, IOException{
 		
-		ImportDocumentService service2 = new ImportDocumentService(U_TOKEN, CS_ID);
+		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service2.execute();
 		
 		//a local setup
@@ -298,7 +301,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	@Test(expected = UnavailableServiceException.class)
 	public void storeServiceUnavailable(){
 		new MockSDStoreUnavailableContext();
-		ImportDocumentService service = new ImportDocumentService(U_TOKEN, CS_ID);
+		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 		}
 	
@@ -306,7 +309,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	@Test(expected = CannotLoadDocumentException.class)
 	public void storeServiceCantLoad(){
 		new  MockSDStoreCannotImportDocumentContext();
-		ImportDocumentService service = new ImportDocumentService(U_TOKEN, CS_ID);
+		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
 		}
 		
@@ -314,7 +317,7 @@ public class ImportDocumentServiceTest extends BubbleDocsServiceTest {
 	//Testing the case of trying to import an existing spread sheet with a user without permission (not the owner)
 	@Test(expected = PermissionException.class)
 		public void noPermission(){
-			ImportDocumentService service = new ImportDocumentService(U_TOKEN, CS_ID);
+			ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 			service.execute();
 			}
 	

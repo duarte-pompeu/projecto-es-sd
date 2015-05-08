@@ -16,6 +16,12 @@ public class ImportDocumentIntegrator extends BubbleDocsIntegrator {
 		service.execute();
 	}
 	
+	
+    
+    public byte[] getDocXML() {
+	return service.getDocXML();
+    }
+	
     public int getOldDocId(){ 
     	return service.getOldDocId(); 
     }
