@@ -63,8 +63,11 @@ public class SDStoreMain{
 				publish(altEP, uddiURL,name + "-" + (i+1));
 				break;
 			}
-			catch(Exception e2){
-				e2.printStackTrace();
+			catch(com.sun.xml.ws.server.ServerRtException e){
+				continue;
+			}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 		}
 		
