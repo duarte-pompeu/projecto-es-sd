@@ -24,8 +24,8 @@ import pt.ulisboa.tecnico.sdis.store.ws.handler.StoreHeaderHandler;
 )
 //@HandlerChain(file="/handler-chain.xml")
 public class SDStoreImpl implements SDStore{
-	@Resource
-    private WebServiceContext webServiceContext;
+//	@Resource
+//    private WebServiceContext webServiceContext;
 	
 	public final boolean DEBUG;
 	
@@ -106,8 +106,8 @@ public class SDStoreImpl implements SDStore{
 			System.out.printf("User '%s' loaded '%d' bytes from doc '%s'.\n", userID, result.length, docID);
 		}
 		
-		MessageContext messageContext = webServiceContext.getMessageContext();
-		messageContext.put(StoreHeaderHandler.CONTEXT_PROPERTY, "test");//service.getTag());
+//		MessageContext messageContext = webServiceContext.getMessageContext();
+//		messageContext.put(StoreHeaderHandler.CONTEXT_PROPERTY, "test");//service.getTag());
 		return result;
 	}
 }

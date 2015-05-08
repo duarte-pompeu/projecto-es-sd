@@ -154,6 +154,21 @@ public class SDStoreMain{
 		storage.createCollection("carla");
 		storage.createCollection("duarte");
 		storage.createCollection("eduardo");
+		
+		try {
+			
+			storage.addDoc("alice", "a1");
+			storage.addDoc("alice", "a2");
+			storage.getCollection("alice").getDoc("a1").setContent(string2bytes("AAAAAAAAAA"));
+			storage.getCollection("alice").getDoc("a2").setContent(string2bytes("aaaaaaaaaa"));
+			
+			storage.addDoc("bruno", "b1");
+			storage.getCollection("bruno").getDoc("b1").setContent(string2bytes("BBBBBBBBBBBBBBBBBBBB"));
+			
+		} catch (DocAlreadyExists_Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
