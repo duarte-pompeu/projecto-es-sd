@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotEquals;
 
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.junit.Test;
 
 
 
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
@@ -43,9 +45,11 @@ import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
 import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
+import pt.tecnico.bubbledocs.integration.DeleteUserIntegrator;
 import pt.tecnico.bubbledocs.integration.ExportDocumentIntegrator;
 import pt.tecnico.bubbledocs.integration.GetSpreadsheetContentIntegrator;
 import pt.tecnico.bubbledocs.integration.ImportDocumentIntegrator;
@@ -275,7 +279,7 @@ public class LocalSystemTest {
 	    		assertEquals("Owner is NOT correct", USERNAME, nameReadFromDocument);
 	    		assertEquals("ID is NOT correct",calc.getId().intValue(), spreadSheetId );
 	    		assertEquals("Creation date is NOT correct", calc.getDate().toString(), spreadSheetDate );
-	    		assertEquals("Name is NOT correct", calc.getName(), spreadSheetName );
+	    		assertEquals("Name is NOT correct", CALCSHEET_NAME, spreadSheetName );
 	    		assertEquals("The number of lines is NOT correct", calc.getLines().intValue(), spreadSheetLines );
 	    		assertEquals("The number of columns is NOT correct", calc.getColumns().intValue(), spreadSheetColumns );
 	            
@@ -290,6 +294,27 @@ public class LocalSystemTest {
 	    		}
 	    		assertEquals("non empty cells", counter, 1);
 	    		
+	    		 DeleteUserIntegrator service = new DeleteUserIntegrator(root_token, USERNAME);
+	    	        service.execute();
+
+	    	        new Verifications() {{ //verify the service was called
+	    				remoteID.removeUser(USERNAME); times = 1;
+	    			}};
+	    	        
+	    	        try {
+	    	        	GetUserInfo UserInfo4 = new GetUserInfo(USERNAME);
+	    	    		UserInfo4.execute();
+	    	        	fail("User should not exist");
+	    	        } catch (NotFoundException e) {
+	    	        	//cool
+	    	        } 
+	    	        
+	    	        try {
+	    	        	bd.getCalcSheetByName(CALCSHEET_NAME);
+	    	        	fail("Spreadsheet should not exist");
+	    	        } catch (NotFoundException e) {
+	    	        	//double cool
+	    	        }       
 	    		
 	    }
 	    	
