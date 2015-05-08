@@ -92,15 +92,15 @@ public class ResponseTest {
 	public void differentTypesOfResponsesDiffer(){
 		ArrayList<Response> rlist = new ArrayList<Response>();
 		
-		Response r1 = new Response(CONTENT); 
+		Response r1 = new Response(CONTENT, 1); 
 		rlist.add(r1);
-		Response r2 = new Response(GENERIC_EXCEPTION); 
+		Response r2 = new Response(GENERIC_EXCEPTION,2); 
 		rlist.add(r2);
-		Response r3 = new Response(IAVex); 
+		Response r3 = new Response(IAVex,3); 
 		rlist.add(r3);
-		Response r4 = new Response(DDNEex); 
+		Response r4 = new Response(DDNEex,4); 
 		rlist.add(r4);
-		Response r5 = new Response(UDNEex); 
+		Response r5 = new Response(UDNEex,5); 
 		rlist.add(r5);
 		
 		
@@ -121,8 +121,8 @@ public class ResponseTest {
 	
 	@Test
 	public void contentEquals(){
-		Response r1 = new Response(CONTENT);
-		Response r2 = new Response(CONTENT_COPY);
+		Response r1 = new Response(CONTENT,1);
+		Response r2 = new Response(CONTENT_COPY,2);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -130,8 +130,8 @@ public class ResponseTest {
 	
 	@Test
 	public void contentDiffers(){
-		Response r1 = new Response(CONTENT);
-		Response r2 = new Response(CONTENT_ALT);
+		Response r1 = new Response(CONTENT,1);
+		Response r2 = new Response(CONTENT_ALT,2);
 		
 		assertFalse(r1.equals(r2));
 	}
@@ -139,8 +139,8 @@ public class ResponseTest {
 	
 	@Test 
 	public void genericExceptionEquals(){
-		Response r1 = new Response(GENERIC_EXCEPTION);
-		Response r2 = new Response(GENERIC_EXCEPTION_COPY);
+		Response r1 = new Response(GENERIC_EXCEPTION,1);
+		Response r2 = new Response(GENERIC_EXCEPTION_COPY,2);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -148,7 +148,7 @@ public class ResponseTest {
 	
 	@Test (expected=Exception.class)
 	public void throwIAVException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = new Response(IAVex);
+		Response r = new Response(IAVex,1);
 		
 		r.getContent();
 	}
@@ -156,7 +156,7 @@ public class ResponseTest {
 	
 	@Test (expected=UserDoesNotExist_Exception.class)
 	public void throwUDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = new Response(UDNEex);
+		Response r = new Response(UDNEex,1);
 		
 		r.getContent();
 	}
@@ -164,7 +164,7 @@ public class ResponseTest {
 	
 	@Test (expected=DocDoesNotExist_Exception.class)
 	public void throwDDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = new Response(DDNEex);
+		Response r = new Response(DDNEex,1);
 		
 		r.getContent();
 	}
@@ -172,8 +172,8 @@ public class ResponseTest {
 	
 	@Test
 	public void genericExceptionDiffers(){
-		Response r1 = new Response(GENERIC_EXCEPTION);
-		Response r2 = new Response(GENERIC_EXCEPTION_ALT);
+		Response r1 = new Response(GENERIC_EXCEPTION,1);
+		Response r2 = new Response(GENERIC_EXCEPTION_ALT,2);
 		
 		assertFalse(r1.equals(r2));
 	}
@@ -181,8 +181,8 @@ public class ResponseTest {
 	
 	@Test
 	public void iavexEquals(){
-		Response r1 = new Response(IAVex);
-		Response r2 = new Response(IAVex_COPY);
+		Response r1 = new Response(IAVex,1);
+		Response r2 = new Response(IAVex_COPY,2);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -190,8 +190,8 @@ public class ResponseTest {
 	
 	@Test
 	public void iavExDiffers(){
-		Response r1 = new Response(IAVex);
-		Response r2 = new Response(IAVex_ALT);
+		Response r1 = new Response(IAVex,1);
+		Response r2 = new Response(IAVex_ALT,2);
 		
 		assertFalse(r1.equals(r2));
 	}
@@ -199,8 +199,8 @@ public class ResponseTest {
 	
 	@Test
 	public void ddneExEquals(){
-		Response r1 = new Response(DDNEex);
-		Response r2 = new Response(DDNEex_COPY);
+		Response r1 = new Response(DDNEex,1);
+		Response r2 = new Response(DDNEex_COPY,2);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -208,8 +208,8 @@ public class ResponseTest {
 	
 	@Test
 	public void ddneExDiffers(){
-		Response r1 = new Response(DDNEex);
-		Response r2 = new Response(DDNEex_ALT);
+		Response r1 = new Response(DDNEex,1);
+		Response r2 = new Response(DDNEex_ALT,2);
 		
 		assertFalse(r1.equals(r2));
 	}
@@ -217,8 +217,8 @@ public class ResponseTest {
 	
 	@Test
 	public void udneExEquals(){
-		Response r1 = new Response(UDNEex);
-		Response r2 = new Response(UDNEex_COPY);
+		Response r1 = new Response(UDNEex,1);
+		Response r2 = new Response(UDNEex_COPY,2);
 		
 		assertTrue(r1.equals(r2));
 	}
@@ -226,8 +226,8 @@ public class ResponseTest {
 	
 	@Test
 	public void udneExDiffers(){
-		Response r1 = new Response(UDNEex);
-		Response r2 = new Response(UDNEex_ALT);
+		Response r1 = new Response(UDNEex,1);
+		Response r2 = new Response(UDNEex_ALT,2);
 		
 		assertFalse(r1.equals(r2));
 	}

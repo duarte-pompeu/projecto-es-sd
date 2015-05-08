@@ -124,35 +124,35 @@ public class Quorum {
 		return _nVoters - _uniqueResponses.size();
 	}
 	
-	public void addResponse(byte[] content){
-		Response r = new Response(content);
+	public void addResponse(byte[] content, int ID){
+		Response r = new Response(content, ID);
 		addResponse(r);
 	}
 
-	public void addException(InvalidAttributeValueException e) {
-		Response r = new Response(e);
+	public void addException(InvalidAttributeValueException e, int ID) {
+		Response r = new Response(e, ID);
 		addResponse(r);
 	}
 
-	public void addException(DocDoesNotExist_Exception e) {
-		Response r = new Response(e);
-		addResponse(r);
-		
-	}
-
-	public void addException(UserDoesNotExist_Exception e) {
-		Response r = new Response(e);
-		addResponse(r);
-	}
-
-	public void addSuccess() {
-		Response r = new Response();
+	public void addException(DocDoesNotExist_Exception e, int ID) {
+		Response r = new Response(e, ID);
 		addResponse(r);
 		
 	}
 
-	public void addException(CapacityExceeded_Exception e) {
-		Response r = new Response(e);
+	public void addException(UserDoesNotExist_Exception e, int ID) {
+		Response r = new Response(e, ID);
+		addResponse(r);
+	}
+
+	public void addSuccess(int ID) {
+		Response r = new Response(ID);
+		addResponse(r);
+		
+	}
+
+	public void addException(CapacityExceeded_Exception e, int ID) {
+		Response r = new Response(e, ID);
 		addResponse(r);
 		
 	}

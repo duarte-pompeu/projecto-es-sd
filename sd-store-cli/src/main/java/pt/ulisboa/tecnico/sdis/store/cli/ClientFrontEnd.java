@@ -25,7 +25,7 @@ public class ClientFrontEnd {
 	
 	private static boolean VERBOSE = true;
 	
-	private static Collection<StoreClient> _clients = new ArrayList<StoreClient>();
+	private static ArrayList<StoreClient> _clients = new ArrayList<StoreClient>();
 	private String _uddiName = "SD-STORE";
 	private QuorumFactory qFact;
 	
@@ -38,7 +38,7 @@ public class ClientFrontEnd {
 	}
 	
 	public ClientFrontEnd(Collection<StoreClient> clients){
-		_clients = clients;
+		_clients = new ArrayList<StoreClient>(clients);
 		
 		int n_servers = _clients.size();
 		qFact = new QuorumFactory(n_servers);
@@ -116,20 +116,21 @@ public class ClientFrontEnd {
 	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
 		Quorum quorum = qFact.getNewWriteQuorum();
 		
-		for(StoreClient client : _clients){
+		for(int i = 0; i < _clients.size(); i++){
+			StoreClient client = _clients.get(i);
 			
 			try {
 				client.storeDoc(userID, docID, content);
-				quorum.addSuccess();
+				quorum.addSuccess(i);
 				
 			} catch (InvalidAttributeValueException e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			} catch (CapacityExceeded_Exception e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			} catch (DocDoesNotExist_Exception e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			} catch (UserDoesNotExist_Exception e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			}
 			catch (Exception e){
 				throw e;
@@ -144,18 +145,20 @@ public class ClientFrontEnd {
 		Quorum quorum = qFact.getNewReadQuorum();
 		
 		byte[] res;
-		for(StoreClient client : _clients){
+		for(int i = 0; i < _clients.size(); i++){
+			StoreClient client = _clients.get(i);
+			
 			try {
 				res = client.loadDoc(userID, docID);
-				quorum.addResponse(res);
+				quorum.addResponse(res,i);
 			} 
 			
 			catch (InvalidAttributeValueException e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			} catch (DocDoesNotExist_Exception e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			} catch (UserDoesNotExist_Exception e) {
-				quorum.addException(e);
+				quorum.addException(e,i);
 			}
 			catch (Exception e){
 				throw e;

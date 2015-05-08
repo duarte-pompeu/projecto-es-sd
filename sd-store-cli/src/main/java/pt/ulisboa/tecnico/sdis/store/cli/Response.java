@@ -23,45 +23,54 @@ public class Response {
 	private UserDoesNotExist_Exception udneEx = null;
 	private CapacityExceeded_Exception ceEx = null;
 	
+	public final int ID;
 	
-	public Response() {
+	public Response(int ID) {
 		TYPE = SUCCESS;
+		this.ID = ID;
 	}
 	
 	
-	public Response(byte[] content){
+	public Response(byte[] content, int ID){
 		TYPE = CONTENT;
 		docContent = content;
+		this.ID = ID;
+		
 	}
 	
 	
-	public Response(Exception e){
+	public Response(Exception e, int ID){
 		TYPE = GENERIC_EXCEPTION;
 		this.except = e;
+		this.ID = ID;
 	}
 	
 
-	public Response(InvalidAttributeValueException e) {
+	public Response(InvalidAttributeValueException e, int ID) {
 		TYPE = IAV_EXCEPTION;
 		this.iaevEx = e;
+		this.ID = ID;
 	}
 
 
-	public Response(DocDoesNotExist_Exception e) {
+	public Response(DocDoesNotExist_Exception e, int ID) {
 		TYPE = DDNE_EXCEPTION;
 		this.ddneEx = e;
+		this.ID = ID;
 	}
 
 
-	public Response(UserDoesNotExist_Exception e) {
+	public Response(UserDoesNotExist_Exception e, int ID) {
 		TYPE = UDNE_EXCEPTION;
 		this.udneEx = e;
+		this.ID = ID;
 	}
 
 
-	public Response(CapacityExceeded_Exception e){
+	public Response(CapacityExceeded_Exception e, int ID){
 		TYPE = CE_EXCEPTION;
 		this.ceEx = e;
+		this.ID = ID;
 	}
 
 	public boolean equals(Response r){

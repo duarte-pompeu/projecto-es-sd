@@ -39,9 +39,9 @@ public class QuorumTest extends SDStoreClientTest{
 		altbcontent1 = StoreClient.string2bytes(ALT_CONTENT1);
 		altbcontent2 = StoreClient.string2bytes(ALT_CONTENT2);
 		
-		QUORUM.addResponse(bcontent);
-		QUORUM.addResponse(bcontent);
-		QUORUM.addResponse(bcontent);
+		QUORUM.addResponse(bcontent,0);
+		QUORUM.addResponse(bcontent,1);
+		QUORUM.addResponse(bcontent,2);
 		
 		String message = "ERROR!";
 		UserDoesNotExist uddne = new UserDoesNotExist();
@@ -106,7 +106,7 @@ public class QuorumTest extends SDStoreClientTest{
 	@Test
 	public void singleQuorum() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(1);
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,0);
 		
 		assertEquals(new Integer(1), new Integer(quorum.countVotes()));
 		assertEquals(new Integer(1), new Integer(quorum.countResponses()));
@@ -120,7 +120,7 @@ public class QuorumTest extends SDStoreClientTest{
 	public void notEnoughVotes() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,0);
 		
 		assertNull(quorum.getVerdict());
 	}
@@ -130,9 +130,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void noConsensus() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addResponse(string2bytes("HEY"));
-		quorum.addResponse(string2bytes("HI"));
-		quorum.addResponse(string2bytes("HELLO"));
+		quorum.addResponse(string2bytes("HEY"),0);
+		quorum.addResponse(string2bytes("HI"),1);
+		quorum.addResponse(string2bytes("HELLO"),2);
 		
 		quorum.getVerdict();
 	}
@@ -142,8 +142,8 @@ public class QuorumTest extends SDStoreClientTest{
 	public void notAllVotesButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addResponse(bcontent);
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,0);
+		quorum.addResponse(bcontent,1);
 		
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -153,9 +153,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void notUnanimousButPass1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addResponse(altbcontent1);
-		quorum.addResponse(bcontent);
-		quorum.addResponse(bcontent);
+		quorum.addResponse(altbcontent1,0);
+		quorum.addResponse(bcontent,1);
+		quorum.addResponse(bcontent,2);
 		
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -165,9 +165,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void notUnanimousButPass2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addResponse(bcontent);
-		quorum.addResponse(altbcontent1);
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,0);
+		quorum.addResponse(altbcontent1,1);
+		quorum.addResponse(bcontent,2);
 		
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -177,9 +177,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void notUnanimousButPass3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addResponse(bcontent);
-		quorum.addResponse(bcontent);
-		quorum.addResponse(altbcontent1);
+		quorum.addResponse(bcontent,0);
+		quorum.addResponse(bcontent,1);
+		quorum.addResponse(altbcontent1,2);
 		
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -189,9 +189,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void oneExceptButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addException(UDNEex);
-		quorum.addResponse(bcontent);
-		quorum.addResponse(bcontent);
+		quorum.addException(UDNEex,0);
+		quorum.addResponse(bcontent,1);
+		quorum.addResponse(bcontent,2);
 			
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -201,9 +201,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void twoExceptionsFail1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addException(UDNEex);
-		quorum.addException(UDNEex);
-		quorum.addResponse(bcontent);
+		quorum.addException(UDNEex,0);
+		quorum.addException(UDNEex,1);
+		quorum.addResponse(bcontent,2);
 			
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -213,9 +213,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void twoExceptionsFail2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addException(DDNEex);
-		quorum.addException(DDNEex);
-		quorum.addResponse(bcontent);
+		quorum.addException(DDNEex,0);
+		quorum.addException(DDNEex,1);
+		quorum.addResponse(bcontent,2);
 			
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -225,9 +225,9 @@ public class QuorumTest extends SDStoreClientTest{
 	public void twoExceptionsFail3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
-		quorum.addException(IAVex);
-		quorum.addException(IAVex);
-		quorum.addResponse(bcontent);
+		quorum.addException(IAVex,0);
+		quorum.addException(IAVex,1);
+		quorum.addResponse(bcontent,2);
 			
 		assertEquals(bcontent, quorum.getVerdict());
 	}
@@ -238,7 +238,7 @@ public class QuorumTest extends SDStoreClientTest{
 		Quorum quorum = new Quorum(3,1);
 		assertNull(quorum.getVerdict());
 		
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,0);
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 	
@@ -248,13 +248,13 @@ public class QuorumTest extends SDStoreClientTest{
 		Quorum quorum = new Quorum(3,3);
 		assertNull(quorum.getVerdict());
 		
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,0);
 		assertNull(quorum.getVerdict());
 		
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,1);
 		assertNull(quorum.getVerdict());
 		
-		quorum.addResponse(bcontent);
+		quorum.addResponse(bcontent,2);
 		assertEquals(bcontent, quorum.getVerdict());
 	}
 }
