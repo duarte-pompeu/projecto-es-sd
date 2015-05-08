@@ -8,34 +8,28 @@ import static org.junit.Assert.assertNotEquals;
 
 import static org.junit.Assert.assertNull;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
+
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
+import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -44,6 +38,7 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.CalcSheetExporter;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Session;
@@ -51,12 +46,12 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
+import pt.tecnico.bubbledocs.integration.ExportDocumentIntegrator;
 import pt.tecnico.bubbledocs.integration.GetSpreadsheetContentIntegrator;
+import pt.tecnico.bubbledocs.integration.ImportDocumentIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
-import pt.tecnico.bubbledocs.service.AssignLiteralCell;
 import pt.tecnico.bubbledocs.service.AssignReferenceCell;
-import pt.tecnico.bubbledocs.service.GetSpreadsheetContentService;
 import pt.tecnico.bubbledocs.service.GetUserInfo;
 import pt.tecnico.bubbledocs.service.GetUsername4Token;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
@@ -226,7 +221,7 @@ public class LocalSystemTest {
 	    		User after_user = UserInfo2.getResult();
 	    		assertNull("password should be null",after_user.getPassword());
 	    		
-	    		
+	    		//get content
 	    		GetSpreadsheetContentIntegrator gscs = new GetSpreadsheetContentIntegrator(user_token, Integer.toString(CALCSHEET_ID));
 	    		gscs.execute();
 	    		String [][] content = gscs.getResult();
@@ -235,6 +230,67 @@ public class LocalSystemTest {
 	    		assertEquals(content.length, CALCSHEET_ROWS);
 	    		assertEquals("5", content[0][0]);
 	    		assertEquals(reference.toString(), content[1][1]);
+	    		
+	    		//
+	    		byte[] exported = new CalcSheetExporter().exportToXmlData(calc);
+	    		
+	    		new Expectations() {{
+	    			remoteSTORE.storeDocument(USERNAME, calc.getName(), exported); times = 1;
+	    		}};
+	    		
+	    		ExportDocumentIntegrator export = new ExportDocumentIntegrator(user_token, CALCSHEET_ID);
+	    		export.execute();
+	    		
+	    		
+	    		ImportDocumentIntegrator imported = new ImportDocumentIntegrator(user_token, CALCSHEET_ID);
+	    		imported.execute();
+	    		
+	    		//a local setup
+	    		SAXBuilder b=new SAXBuilder();
+	    		Document xmlDoc=b.build(new ByteArrayInputStream(imported.getDocXML()));
+	    		
+	            XPathFactory xFactory = XPathFactory.instance();
+
+	            XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
+	            List<Element> links = expr.evaluate(xmlDoc);
+	            Element sheetElement=links.get(0);
+	            List<Element> cellsList=sheetElement.getChildren();
+	            Element literalElement=null;
+	            for(Element cellElement: cellsList){
+	    			if(cellElement.getChild("literal")!=null){
+	    				literalElement=cellElement.getChild("literal");
+	    				break;
+	    			}
+	    		}
+	          
+	    		
+	            String nameReadFromDocument= sheetElement.getAttribute("creator").getValue();
+	            int spreadSheetId= sheetElement.getAttribute("id").getIntValue();
+	    		String spreadSheetDate= sheetElement.getAttribute("date").getValue();
+	            String spreadSheetName= sheetElement.getAttribute("name").getValue();
+	            int spreadSheetLines = sheetElement.getAttribute("lines").getIntValue();
+	            int spreadSheetColumns = sheetElement.getAttribute("columns").getIntValue();
+	    		
+	    		//asserting all the attribute values
+	    		assertEquals("Owner is NOT correct", USERNAME, nameReadFromDocument);
+	    		assertEquals("ID is NOT correct",calc.getId().intValue(), spreadSheetId );
+	    		assertEquals("Creation date is NOT correct", calc.getDate().toString(), spreadSheetDate );
+	    		assertEquals("Name is NOT correct", calc.getName(), spreadSheetName );
+	    		assertEquals("The number of lines is NOT correct", calc.getLines().intValue(), spreadSheetLines );
+	    		assertEquals("The number of columns is NOT correct", calc.getColumns().intValue(), spreadSheetColumns );
+	            
+	            //asserting the literal cell exists and has the correct value
+	    		assertEquals("literal cell is wrong", 5 ,literalElement.getAttribute("val").getIntValue());
+	    		
+	    		int counter=0;
+	    		//asserting that all the other cells have empty contents
+	    		for(Element cellElement: sheetElement.getChildren()){
+	    			if(cellElement.getContentSize()!=0)
+	    				counter++;
+	    		}
+	    		assertEquals("non empty cells", counter, 1);
+	    		
+	    		
 	    }
 	    	
 	
