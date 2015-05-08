@@ -25,7 +25,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 /**
  * Most of these tests require a connection with a server. Preferably one with a clean state - nothing stored in it.
  */
-public class WebServiceTest extends ClientTest {
+public class WebServiceRemoteTest extends SDStoreClientTest {
 	public static final String USER = "duarte";
 	public static final String DOC = "SD-notes";
 	public static final String CONTENT = "RPC, RMI and WS.";

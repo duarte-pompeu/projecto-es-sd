@@ -5,7 +5,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 /**
  * This superclass has some useful attributes and methods its subclasses can use without re-implementing.
  */
-public class ClientTest {
+public class SDStoreClientTest {
 	protected static SDStore _port;
 
 	
