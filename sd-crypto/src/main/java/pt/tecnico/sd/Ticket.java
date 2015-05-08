@@ -1,7 +1,10 @@
 package pt.tecnico.sd;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
+import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
@@ -40,26 +43,31 @@ public class Ticket {
 	
 	//Receives a base64 encoded blob and decrypts given the service key
 	public Ticket(String base64blob, SecretKey serviceKey) {
-		byte[] decryptedBlob;
-		byte[] encryptedBlob=parseBase64Binary(base64blob);
-		
-		Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
-		cipher.init(Cipher.DECRYPT_MODE, key);
-		decryptedBlob=cipher.doFinal(encryptedBlob);
-		
-		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service.getDocXML()));
-		
-        XPathFactory xFactory = XPathFactory.instance();
 
-        XPathExpression<Element> expr = xFactory.compile("/ticket", Filters.element());
-        List<Element> links = expr.evaluate(xmlDoc);
-        Element ticketElement=links.get(0);
-      		
-        username=ticketElement.getAttribute("username").getValue();
-        service=ticketElement.getAttribute("service").getValue();
-		since=DateTime.parse(ticketElement.getAttribute("since").getValue());
-		expire=DateTime.parse(ticketElement.getAttribute("expire").getValue());
+		byte[] encryptedBlob= parseBase64Binary(base64blob);
+		byte[] decryptedBlob = SdCrypto.decrypt(serviceKey, encryptedBlob);
+
+		SAXBuilder b= new SAXBuilder();
+		Document xmlDoc = null;
+		try {
+			xmlDoc = b.build(new ByteArrayInputStream(decryptedBlob));
+		} catch (JDOMException | IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		/*DEBUG
+		XMLOutputter xmlOut = new XMLOutputter(Format.getPrettyFormat());
+		System.out.println("Produced from import");
+		try {xmlOut.output(xmlDoc, System.out);} catch (Exception e) {}
+		*/
+		
+		Element ticketElement = xmlDoc.getRootElement();
+		
+		username = ticketElement.getChild("username").getValue();
+		service = ticketElement.getChild("service").getValue();
+		since = DateTime.parse(ticketElement.getChild("since").getValue());
+		expire = DateTime.parse(ticketElement.getChild("expire").getValue());
+		sessionKey = SdCrypto.generateKey(parseBase64Binary(ticketElement.getChild("sessionKey").getValue())); 
 	}
 	
 	/*
@@ -137,7 +145,7 @@ public class Ticket {
 		System.out.println("Hexadecimal: " + printHexBinary(serviceKey.getEncoded()));
 		System.out.println("Base64:      " + printBase64Binary(serviceKey.getEncoded()));
 		System.out.println();
-		
+	
 		//Let's create a ticket
 		Ticket ticket = new Ticket("alice", "SD-Store", SdCrypto.generateRandomKey());
 		String blob = ticket.getBlob(serviceKey);
@@ -145,6 +153,10 @@ public class Ticket {
 		System.out.println();
 		System.out.println("Encrypted - (alice can't decrypt this):");
 		System.out.println(blob);
+		
+		System.out.println();
+		Ticket recovered = new Ticket(blob, serviceKey);
+		recovered.getBlob(serviceKey);
 	}
 }
 
