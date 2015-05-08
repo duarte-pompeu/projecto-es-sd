@@ -8,6 +8,7 @@ import org.junit.Test;
 import pt.ulisboa.tecnico.sdis.store.cli.Quorum;
 import pt.ulisboa.tecnico.sdis.store.cli.QuorumFactory;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
+import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -15,7 +16,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 import static org.junit.Assert.*;
 
-public class QuorumTest {
+public class QuorumTest extends SDStoreClientTest{
 	static final int N_VOTERS = 3;
 	static final String CONTENT = "abcdefg";
 	static final String ALT_CONTENT1 = "abcdeff";
@@ -57,7 +58,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void populateSuccess() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void populateSuccess() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		assertEquals(new Integer(N_VOTERS), new Integer(QUORUM.countVotes()));
 		assertEquals(new Integer(N_VOTERS), new Integer(QUORUM.countResponses()));
 		assertEquals(new Integer(1), new Integer(QUORUM.countUniqueResponses()));
@@ -103,7 +104,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void singleQuorum() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void singleQuorum() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(1);
 		quorum.addResponse(bcontent);
 		
@@ -116,7 +117,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notEnoughVotes() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void notEnoughVotes() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -125,8 +126,20 @@ public class QuorumTest {
 	}
 	
 	
+	@Test (expected = NoConsensusException.class)
+	public void noConsensus() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		Quorum quorum = new Quorum(3);
+		
+		quorum.addResponse(string2bytes("HEY"));
+		quorum.addResponse(string2bytes("HI"));
+		quorum.addResponse(string2bytes("HELLO"));
+		
+		quorum.getVerdict();
+	}
+	
+	
 	@Test
-	public void notAllVotesButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void notAllVotesButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -137,7 +150,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notUnanimousButPass1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void notUnanimousButPass1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(altbcontent1);
@@ -149,7 +162,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notUnanimousButPass2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void notUnanimousButPass2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -161,7 +174,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void notUnanimousButPass3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void notUnanimousButPass3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addResponse(bcontent);
@@ -173,7 +186,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void oneExceptButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void oneExceptButPass() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addException(UDNEex);
@@ -185,7 +198,7 @@ public class QuorumTest {
 	
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
-	public void twoExceptionsFail1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void twoExceptionsFail1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addException(UDNEex);
@@ -197,7 +210,7 @@ public class QuorumTest {
 	
 	
 	@Test (expected = DocDoesNotExist_Exception.class)
-	public void twoExceptionsFail2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void twoExceptionsFail2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addException(DDNEex);
@@ -209,7 +222,7 @@ public class QuorumTest {
 	
 	
 	@Test (expected = InvalidAttributeValueException.class)
-	public void twoExceptionsFail3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void twoExceptionsFail3() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3);
 		
 		quorum.addException(IAVex);
@@ -221,7 +234,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void lowThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void lowThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3,1);
 		assertNull(quorum.getVerdict());
 		
@@ -231,7 +244,7 @@ public class QuorumTest {
 	
 	
 	@Test
-	public void HighThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public void HighThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3,3);
 		assertNull(quorum.getVerdict());
 		

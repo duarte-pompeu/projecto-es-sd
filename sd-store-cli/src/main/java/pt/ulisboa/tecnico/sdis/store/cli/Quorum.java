@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
+import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
@@ -56,12 +57,22 @@ public class Quorum {
 	}
 
 	
-	public byte[] getVerdict() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
+	public byte[] getVerdict() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
+		int highest_votes = 0;
 		
 		for(int i = 0; i < votes.size(); i++){
-			if(votes.get(i) >= _min4quorum){
+			int n_votes = votes.get(i);
+			
+			if(n_votes >= _min4quorum){
 				return _uniqueResponses.get(i).getContent();
 			}
+			
+			if(n_votes > highest_votes)
+				highest_votes = n_votes;
+		}
+		
+		if(getVotesLeft() + highest_votes < min4quorum()){
+			throw new NoConsensusException("Not enough votes 4 quorum.");
 		}
 		
 		return null;
@@ -107,6 +118,10 @@ public class Quorum {
 	
 	public int countUniqueResponses(){
 		return _uniqueResponses.size();
+	}
+	
+	public int getVotesLeft(){
+		return _nVoters - _uniqueResponses.size();
 	}
 	
 	public void addResponse(byte[] content){

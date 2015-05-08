@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.sdis.store.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.ClientFrontEnd;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
-import pt.ulisboa.tecnico.sdis.store.exceptions.NoVerdictException;
+import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -46,7 +46,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	
 	@Test
 	public void storeSuccess() 
-			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		
 		new Expectations() {{
 			mockCli1.storeDoc(USER, DOC, CONTENT);
@@ -60,7 +60,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void storeException() 
-			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		
 		String message = "ERROR!";
 		UserDoesNotExist uddne = new UserDoesNotExist();
@@ -88,7 +88,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	
 	@Test
 	public void loadSuccess() 
-			throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception, CapacityExceeded_Exception{
+			throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		
 		new Expectations() {{
 			mockCli1.loadDoc(USER, DOC);
@@ -104,7 +104,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	
 	@Test
 	public void loadWithQuorumVotes() 
-			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		
 		new Expectations() {{
 			mockCli1.loadDoc(USER, DOC);
@@ -127,7 +127,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void quorumWithDifferentExceptions() 
-			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+			throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		
 		String message = "ERROR!";
 		UserDoesNotExist udne = new UserDoesNotExist();
@@ -157,9 +157,9 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	}
 	
 	
-	@Test (expected = NoVerdictException.class)
-	public void noVerdict() 
-			throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception, CapacityExceeded_Exception{
+	@Test
+	public void noConsensus() 
+			throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		
 		new Expectations() {{
 			mockCli1.loadDoc(USER, DOC);
@@ -176,6 +176,6 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 			result = string2bytes("BYE");
 		}};
 		
-		assertEquals(bytes2string(CONTENT), bytes2string(_fe.loadDoc(USER, DOC)));
+		_fe.loadDoc(USER, DOC);
 	}
 }

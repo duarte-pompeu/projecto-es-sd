@@ -11,6 +11,7 @@ import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
+import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -112,7 +113,7 @@ public class ClientFrontEnd {
 		return docs;
 	}
 	
-	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
+	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
 		Quorum quorum = qFact.getNewWriteQuorum();
 		
 		for(StoreClient client : _clients){
@@ -130,13 +131,16 @@ public class ClientFrontEnd {
 			} catch (UserDoesNotExist_Exception e) {
 				quorum.addException(e);
 			}
+			catch (Exception e){
+				throw e;
+			}
 		}
 		
 		quorum.getVerdict();
 	}
 	
 
-	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = qFact.getNewReadQuorum();
 		
 		byte[] res;
@@ -152,6 +156,9 @@ public class ClientFrontEnd {
 				quorum.addException(e);
 			} catch (UserDoesNotExist_Exception e) {
 				quorum.addException(e);
+			}
+			catch (Exception e){
+				throw e;
 			}
 		}
 		

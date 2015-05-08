@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.ClientFrontEnd;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
+import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -51,7 +52,7 @@ public class FrontEndRemoteTest {
 	}
 	
 	@Test
-	public void storeAndLoad() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+	public void storeAndLoad() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception, NoConsensusException{
 		byte[] cont = StoreClient.string2bytes(CONTENT);
 		
 		frontEnd.storeDoc(USER, DOC_1, cont);
