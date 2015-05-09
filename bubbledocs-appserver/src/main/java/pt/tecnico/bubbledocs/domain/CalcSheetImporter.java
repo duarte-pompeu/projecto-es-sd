@@ -41,7 +41,6 @@ public class CalcSheetImporter {
 	}
 	
 	public CalcSheet importFromXml(Document document) {
-		this.sheet = new CalcSheet();
 		Element root = document.getRootElement();
 		
 		
@@ -57,11 +56,17 @@ public class CalcSheetImporter {
 		int lines = Integer.parseInt(root.getAttributeValue("lines"));
 		int columns = Integer.parseInt(root.getAttributeValue("columns"));
 		
+		this.sheet = new CalcSheet();
+		
 		//initialize sheet
 		this.sheet.init(name, lines, columns);
 		this.sheet.setId(id);
 		this.sheet.setCreator(creator);
+		this.sheet.addReadingUser(creator);
+		this.sheet.addWritingUser(creator);
 		this.sheet.setDate(date);
+		
+		BubbleDocs.getInstance().addCalcSheet(this.sheet);
 		
 		//import cells
 		
