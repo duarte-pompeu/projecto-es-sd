@@ -98,8 +98,29 @@ public class ClientFrontEnd {
 
 	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		
-		for(StoreClient client : _clients){
-			client.createDoc(userID, docID);
+		currentOp += 1;
+		Quorum quorum = qFact.getNewWriteQuorum();
+		
+		for(int serverID = 0; serverID < _clients.size(); serverID++){
+			
+			try {
+				createDocsInReplica(currentOp, userID, serverID, docID);
+				quorum.addSuccess(serverID);
+				
+			} catch (InvalidAttributeValueException e) {
+				quorum.addException(e, serverID);
+			} catch (UserDoesNotExist_Exception e) {
+				quorum.addException(e, serverID);
+			}
+			catch (Exception e){
+				throw e;
+			}
+		}
+		
+		try {
+			quorum.getVerdict();
+		} catch (UserDoesNotExist_Exception | DocDoesNotExist_Exception
+				| CapacityExceeded_Exception | NoConsensusException e) {
 		}
 	}
 	
