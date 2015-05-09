@@ -5,9 +5,6 @@
 		</handler>
 		<handler>
 			<handler-class>example.ws.handler.LoggingHandler</handler-class>
-		</handler>		
-		<handler>
-			<handler-class>pt.tecnico.sd.id.handler.CryptoHandler</handler-class>
 		</handler>
 	</handler-chain>
 </handler-chains>
