@@ -104,14 +104,50 @@ public class ClientFrontEnd {
 	}
 	
 	public Collection<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception {
-		ArrayList<String> docs = new ArrayList<String>();
+		currentOp += 1;
+		Quorum quorum = qFact.getNewReadQuorum();
+		ArrayList<Collection<String>> resultsList = new ArrayList<Collection<String>>();
 		
-		for(StoreClient client: _clients){
-			// FIXME: this loop is stupid
-			docs = new ArrayList<String>(client.listDocs(userID));
+		for(int i = 0; i < _clients.size(); i++){
+			resultsList.add(null);
 		}
 		
-		return docs;
+		Collection<String> res;
+		for(int serverID = 0; serverID < _clients.size(); serverID++){
+			
+			try {
+				res = listDocsInReplica(currentOp, userID, serverID);
+				quorum.addResponse(res,serverID);
+				resultsList.set(serverID, res);
+			} 
+			
+			catch (InvalidAttributeValueException e) {
+				quorum.addException(e,serverID);
+			} catch (UserDoesNotExist_Exception e) {
+				quorum.addException(e,serverID);
+			}
+			catch (Exception e){
+				throw e;
+			}
+		}
+		
+		Collection<String> result=null;
+		try {
+			result = quorum.getVerdict4Collection();
+		} catch (DocDoesNotExist_Exception | CapacityExceeded_Exception
+				| NoConsensusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		return result;
+		
+		
+	
+		
 	}
 	
 	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
@@ -197,5 +233,12 @@ public class ClientFrontEnd {
 	
 	public byte[] loadInReplica(int opID, int serverID, String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		return _clients.get(serverID).loadDoc(userID, docID);
+	}
+	
+	public Collection<String> listDocsInReplica(int opID, String userID,int serverID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
+		return _clients.get(serverID).listDocs(userID);
+	}
+		public void createDocsInReplica(int opID, String userID,int serverID,String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocAlreadyExists_Exception{
+			_clients.get(serverID).createDoc(userID, docID);
 	}
 }
