@@ -64,6 +64,8 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	private String U_EMAIL="email@email.com";
 	private String U_EMAIL2="email2@email.com";
 	
+	@Mocked
+	IDRemoteServices remote;
 	
 	//NEED TO CREATE CALC SHEETS AND EXPORT THEM SO THAT THEY CAN BE IMPORTED IN THE TESTS
 	@Override
@@ -150,6 +152,13 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		
 		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service2.execute();
+		
+		
+	//	new Verifications() {{ //verify the service was called		
+      //  	remote.loadDocument(U_USERNAME,CS_NAME);	times =  1;
+       // }};
+		
+		
 		
 		//a local setup
 		SAXBuilder b=new SAXBuilder();
