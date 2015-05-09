@@ -5,7 +5,10 @@ import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+
 import java.io.IOException;
+
+import org.jdom2.JDOMException;
 
 public class ImportDocumentService extends SessionService {
 	private byte[] docXML;
@@ -26,7 +29,7 @@ public class ImportDocumentService extends SessionService {
     }
 
     @Override
-    protected void dispatchAfterSuperService() throws BubbleDocsException, IOException {   	
+    protected void dispatchAfterSuperService() throws BubbleDocsException {   	
     	
     	User user= super.user;
     	String userName = super.user.getUserName();
@@ -42,6 +45,10 @@ public class ImportDocumentService extends SessionService {
     	StoreRemoteServices service=new StoreRemoteServices();
 		docXML = service.loadDocument(userName, sheetName);
 		
-		newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
+		try {
+			newDocId= BubbleDocs.getInstance().createNewDocument(docXML);
+		} catch (IOException | JDOMException e) {
+			System.out.println("Could not create the new document");
+		}
     }
 }

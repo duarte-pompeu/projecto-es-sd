@@ -1,5 +1,9 @@
 package pt.tecnico.bubbledocs.service;
 
+import java.io.IOException;
+
+import org.jdom2.JDOMException;
+
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
@@ -21,11 +25,17 @@ public abstract class SessionService extends BubbleDocsService {
 	 * 
 	 * Good reason to remove final from dispatch: another abstract service (such as permission checking after token checking).
 	 * Don't screw it up though, remember to always do super.confirmToken() or similar.
+	 * @throws BubbleDocsException 
 	 */
 	@Override
-	public final void dispatch(){
+	public final void dispatch() throws BubbleDocsException{
 		this.user = confirmToken(token);
-		this.dispatchAfterSuperService();
+		try {
+			this.dispatchAfterSuperService();
+		} catch (IOException | JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -41,5 +51,5 @@ public abstract class SessionService extends BubbleDocsService {
 	}
 	
 	
-	protected abstract void dispatchAfterSuperService() throws BubbleDocsException;
+	protected abstract void dispatchAfterSuperService() throws BubbleDocsException, IOException, JDOMException;
 }

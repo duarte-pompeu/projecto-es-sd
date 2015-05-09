@@ -2,11 +2,13 @@ package pt.tecnico.bubbledocs.integration.component;
 
 import mockit.Mock;
 import mockit.MockUp;
+import mockit.Mocked;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.ExportDocument;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 import java.io.ByteArrayInputStream;
