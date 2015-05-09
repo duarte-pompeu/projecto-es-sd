@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 
-public class StoreRemoteServicesTest {
+public class StoreRemoteServicesRemoteTest {
 	static StoreRemoteServices storeRemote;
 	
 	public String USER = "duarte";
