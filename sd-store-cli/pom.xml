@@ -23,6 +23,10 @@
     <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-rt</artifactId>
+<!--
+		original version: 2.2.10
+		kind of working on 1 server: 2.2.6-6
+-->
       <version>2.2.10</version>
     </dependency>
     
