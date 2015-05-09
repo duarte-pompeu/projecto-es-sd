@@ -1,6 +1,12 @@
 package pt.tecnico.bubbledocs.integration.system;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import java.io.ByteArrayInputStream;
+import java.util.List;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -8,8 +14,12 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
-import mockit.Verifications;
-
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +28,28 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
+import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
+import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
+import pt.tecnico.bubbledocs.integration.DeleteUserIntegrator;
+import pt.tecnico.bubbledocs.integration.ExportDocumentIntegrator;
+import pt.tecnico.bubbledocs.integration.GetSpreadsheetContentIntegrator;
+import pt.tecnico.bubbledocs.integration.ImportDocumentIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
-
+import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
+import pt.tecnico.bubbledocs.service.AssignReferenceCell;
+import pt.tecnico.bubbledocs.service.GetUserInfo;
+import pt.tecnico.bubbledocs.service.GetUsername4Token;
 public class RemoteSystemIT {
 
 	static BubbleDocs bd;
+	
+
 	
 	 private String root_token;
 	 private String user_token;
@@ -32,6 +57,12 @@ public class RemoteSystemIT {
 	 private Reference reference;
 	 private static final String ROOT_USERNAME = "root";
 	 private static final String ROOT_PASSWORD = "rootroot";
+	 private static final String USERNAME = "jakim";
+	 private static final String EMAIL = "joaquim@xirabaita.com";
+	 private static final String NAME = "Joaquim";
+	 private static final String CALCSHEET_NAME = "Sinonimos de Joaquim";
+	 private static final int CALCSHEET_ROWS = 50;
+	 private static final int CALCSHEET_COLUMNS = 50;
 	
 	 @Before
 	    public void setUp() throws Exception {
@@ -66,6 +97,175 @@ public class RemoteSystemIT {
 	    		assertEquals("Usernames don't match", ROOT_USERNAME, login_root.getUserName());
 	    		assertEquals("Password don't match", ROOT_PASSWORD, login_root.getPassword());
 	    		assertEquals("Token doesn't match", root_token, login_root.getSession().getToken());
+	    		
+	    		//creates an user
+	    		CreateUserIntegrator user = new CreateUserIntegrator(root_token,USERNAME,EMAIL,NAME);
+	    		user.execute();
+	    		
+	    		  GetUserInfo UserInfo = new GetUserInfo(USERNAME);
+	    		  UserInfo.execute();
+	    		  User check_user = UserInfo.getResult();
+	    		  
+	    		  assertEquals("Usernames don't match",USERNAME, check_user.getUserName());
+	    		  assertEquals("Usernames don't match",EMAIL, check_user.getEmail());
+	    		  assertEquals("Usernames don't match",NAME, check_user.getName());
+	    		
+	    		  
+	    			//the user starts a session on the app
+		    		LoginUserIntegrator loginUser = new LoginUserIntegrator(USERNAME,"some random password");
+		    		loginUser.execute();
+		    		user_token = loginUser.getResult();
+		    		
+		    		GetUsername4Token Username4token = new GetUsername4Token(user_token);
+		    		Username4token.execute();
+		    		String username4token = Username4token.getResult();
+		    		Session session = bd.getSessionFromToken(user_token);
+		 
+		    		GetUserInfo UserInfo3 = new GetUserInfo(USERNAME);
+		    		UserInfo3.execute();
+		    		User after_login = UserInfo3.getResult();
+		   
+		    	
+		    		assertEquals("Usernames don't match", USERNAME, username4token);
+		    		assertEquals("Password don't match", "some random password", after_login.getPassword());
+		    		assertEquals("Token doesn't match", user_token, session.getToken());
+		    		
+		    		//user creates empty calcsheet
+		    		CreateSpreadSheetIntegrator spread = new CreateSpreadSheetIntegrator(user_token,CALCSHEET_NAME,CALCSHEET_ROWS,CALCSHEET_COLUMNS);
+		    		spread.execute();
+		    		created_spread = spread.getResult();
+		    		int CALCSHEET_ID=created_spread.getId();
+		    		
+		    		CalcSheet calc = bd.getCalcSheetByName(created_spread.getName());
+		    		assertNotNull("calcsheet wasnt created", calc);
+		    		assertEquals("Invalid owner", USERNAME, calc.getCreator().getUserName());
+		    		assertEquals("Invalid calcsheet name", CALCSHEET_NAME, calc.getName());
+		    		assertEquals("Invalid calcsheet rows", CALCSHEET_COLUMNS, (int) calc.getColumns());
+		    		assertEquals("Invalid calcsheet lines", CALCSHEET_ROWS, (int) calc.getLines());
+		    				
+		    		//assert all the cells
+		    		for(int c = 1; c <= CALCSHEET_COLUMNS; c++){
+		    			for(int l = 1; l <= CALCSHEET_ROWS; l++){
+		    				Cell cell = calc.getCell(l,c);
+		    				assertEquals(new Integer(c), new Integer(cell.getColumn()));
+		    				assertEquals(new Integer(l), new Integer(cell.getLine()));
+		    			}
+		    		}
+		    		
+		    		//time 2 fill up my new calcsheet
+		    		
+		    		AssignLiteralCellIntegrator alc = new AssignLiteralCellIntegrator(user_token, CALCSHEET_ID, created_spread.getCell(1, 1).getId(), "5");
+		    		alc.execute();
+		    		String lit_result = alc.getResult();
+		    		String cell_id=created_spread.getCell(1, 1).getId();
+		    		
+		    		assertEquals("Value is NOT correct", 5, calc.getCell(cell_id).getContent().getValue());
+		    		assertEquals("Bad result",calc.getCell(cell_id).getContent().toString(),lit_result);
+		    		
+		    		
+		    		reference = new Reference(created_spread.getCell(1,1));
+		    		AssignReferenceCell arc = new AssignReferenceCell(user_token, CALCSHEET_ID, created_spread.getCell(2, 2).getId(), "1;1");
+		    		arc.execute();
+		    		String ref_result = arc.getResult();
+		    		String ref_id = calc.getCell(2, 2).getId();
+		    		Reference comp_ref = new Reference (calc.getCell(ref_id));
+		    		
+		    		assertEquals("Reference is NOT correct", ref_id, comp_ref.getPointedCell().getId());
+		    		assertEquals("Bad result", "=1;1", ref_result);
+		    		
+		    		
+		    		//time 2 renew my password
+		    		
+		    		RenewPasswordIntegrator renewPass = new RenewPasswordIntegrator(user_token);
+		    		renewPass.execute();
+		    		
+		    		GetUserInfo UserInfo2 = new GetUserInfo(USERNAME);
+		    		UserInfo2.execute();
+		    		User after_user = UserInfo2.getResult();
+		    		assertNull("password should be null",after_user.getPassword());
+		    		
+		    		//get content
+		    		GetSpreadsheetContentIntegrator gscs = new GetSpreadsheetContentIntegrator(user_token, Integer.toString(CALCSHEET_ID));
+		    		gscs.execute();
+		    		String [][] content = gscs.getResult();
+		    		
+		    		assertEquals(content[0].length, CALCSHEET_COLUMNS);
+		    		assertEquals(content.length, CALCSHEET_ROWS);
+		    		assertEquals("5", content[0][0]);
+		    		assertEquals(reference.toString(), content[1][1]);
+		    		
+		    		
+		    		
+		    		ExportDocumentIntegrator export = new ExportDocumentIntegrator(user_token, CALCSHEET_ID);
+		    		export.execute();
+		    		
+		    		
+		    		ImportDocumentIntegrator imported = new ImportDocumentIntegrator(user_token, CALCSHEET_ID);
+		    		imported.execute();
+		    		
+		    		//a local setup
+		    		SAXBuilder b=new SAXBuilder();
+		    		Document xmlDoc=b.build(new ByteArrayInputStream(imported.getDocXML()));
+		    		
+		            XPathFactory xFactory = XPathFactory.instance();
+
+		            XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
+		            List<Element> links = expr.evaluate(xmlDoc);
+		            Element sheetElement=links.get(0);
+		            List<Element> cellsList=sheetElement.getChildren();
+		            Element literalElement=null;
+		            for(Element cellElement: cellsList){
+		    			if(cellElement.getChild("literal")!=null){
+		    				literalElement=cellElement.getChild("literal");
+		    				break;
+		    			}
+		    		}
+		          
+		    		
+		            String nameReadFromDocument= sheetElement.getAttribute("creator").getValue();
+		            int spreadSheetId= sheetElement.getAttribute("id").getIntValue();
+		    		String spreadSheetDate= sheetElement.getAttribute("date").getValue();
+		            String spreadSheetName= sheetElement.getAttribute("name").getValue();
+		            int spreadSheetLines = sheetElement.getAttribute("lines").getIntValue();
+		            int spreadSheetColumns = sheetElement.getAttribute("columns").getIntValue();
+		    		
+		    		//asserting all the attribute values
+		    		assertEquals("Owner is NOT correct", USERNAME, nameReadFromDocument);
+		    		assertEquals("ID is NOT correct",calc.getId().intValue(), spreadSheetId );
+		    		assertEquals("Creation date is NOT correct", calc.getDate().toString(), spreadSheetDate );
+		    		assertEquals("Name is NOT correct", CALCSHEET_NAME, spreadSheetName );
+		    		assertEquals("The number of lines is NOT correct", calc.getLines().intValue(), spreadSheetLines );
+		    		assertEquals("The number of columns is NOT correct", calc.getColumns().intValue(), spreadSheetColumns );
+		            
+		            //asserting the literal cell exists and has the correct value
+		    		assertEquals("literal cell is wrong", 5 ,literalElement.getAttribute("val").getIntValue());
+		    		
+		    		int counter=0;
+		    		//asserting that all the other cells have empty contents
+		    		for(Element cellElement: sheetElement.getChildren()){
+		    			if(cellElement.getContentSize()!=0)
+		    				counter++;
+		    		}
+		    		assertEquals("non empty cells", counter, 1);
+		    		
+		    		 DeleteUserIntegrator service = new DeleteUserIntegrator(root_token, USERNAME);
+		    	        service.execute();
+
+		    	        
+		    	        try {
+		    	        	GetUserInfo UserInfo4 = new GetUserInfo(USERNAME);
+		    	    		UserInfo4.execute();
+		    	        	fail("User should not exist");
+		    	        } catch (NotFoundException e) {
+		    	        	//cool
+		    	        } 
+		    	        
+		    	        try {
+		    	        	bd.getCalcSheetByName(CALCSHEET_NAME);
+		    	        	fail("Spreadsheet should not exist");
+		    	        } catch (NotFoundException e) {
+		    	        	//double cool
+		    	        }   
 	
 	    }
 }
