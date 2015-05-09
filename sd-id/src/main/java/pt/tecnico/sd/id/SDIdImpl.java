@@ -97,11 +97,11 @@ public class SDIdImpl implements SDId {
 	}*/
 	
 	private void populateForTest(UserTable userTable) throws Exception {
-		userTable.addUser(userName1, email1, password1);
-		userTable.addUser(userName2, email2, password2);
-		userTable.addUser(userName3, email3, password3);
-		userTable.addUser(userName4, email4, password4);
-		userTable.addUser(userName5, email5, password5);
+		userTable.addUser(userName1, email1, SdCrypto.digestPassword(password1));
+		userTable.addUser(userName2, email2, SdCrypto.digestPassword(password2));
+		userTable.addUser(userName3, email3, SdCrypto.digestPassword(password3));
+		userTable.addUser(userName4, email4, SdCrypto.digestPassword(password4));
+		userTable.addUser(userName5, email5, SdCrypto.digestPassword(password5));
 	}
 	
 	
@@ -185,12 +185,15 @@ public class SDIdImpl implements SDId {
 		for (int i=0; i<sessionKeyData.length; ++i) {
 			credentials[i+4] = sessionKeyData[i];
 		}
-				
+		
+		SecretKey userKey = SdCrypto.generateKey(this.userTable.getPassword(userId));
+		byte[] encryptedCredentials = SdCrypto.encrypt(userKey, credentials);
+		
 		String ticketBlob = new Ticket(userId, "SD-Store", sessionKey).getBlob(serviceKey);
 		
 		context.put(TicketHandler.TICKET_PROPERTY, ticketBlob);	
 		
-		return credentials;		
+		return encryptedCredentials;
 	}
 	
 	private byte[] generateRandomPassword() {

@@ -198,10 +198,12 @@ public class SdIdLocalUnitTest {
 		};
 		
 		User alice = sdIdService.getUserByUsername(userName);
-		byte[] credentials = sdIdService.requestAuthentication(userName, "SD-Store:123456789".getBytes());
+		SecretKey userKey = SdCrypto.generateKey(alice.getPassword());
+		byte[] encryptedCredentials = sdIdService.requestAuthentication(userName, "SD-Store:123456789".getBytes());
+		byte[] decryptedCredentials = SdCrypto.decrypt(userKey, encryptedCredentials);
 		
 		//The last 4 bytes are the nonce, ignore them for the time being
-		credentials = Arrays.copyOf(credentials, credentials.length - 4);
+		byte[] credentials = Arrays.copyOf(decryptedCredentials, decryptedCredentials.length - 4);
 		
 		//The credentials are supposed to be a key, so this shouldn't explode
 		SdCrypto.generateKey(credentials);
