@@ -6,6 +6,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -32,7 +33,7 @@ public class SdCrypto {
 		System.out.println("Key:    " + printHexBinary(key.getEncoded()));
 		
 		//Plaintext
-		String plaintext = "attack at midnight";
+		String plaintext = "dinner at midnight";
 		System.out.println("Plaintext: " + plaintext);
 		
 		//Ciphertext
@@ -42,6 +43,21 @@ public class SdCrypto {
 		
 		
 		System.out.println("Deciphered: " + new String(decrypt(key, encrypted)));
+		
+		//Agora, vamos criar o resumo da password.
+		System.out.println();
+		
+		SecretKey sessionKey = SdCrypto.generateRandomKey();
+		SecretKey macKey = SdCrypto.generateMacKey(digest);
+		byte[] mac = SdCrypto.produceMac(sessionKey.getEncoded(), macKey);
+		System.out.println("Session key: " + printHexBinary(sessionKey.getEncoded()));
+		System.out.println("MAC key:     " + printHexBinary(macKey.getEncoded()));
+		System.out.println("MAC:         " + printHexBinary(mac));
+		System.out.println();
+		
+		//Vamos verificar.
+		System.out.println("Checks out: " + SdCrypto.verifyMac(sessionKey.getEncoded(), mac, macKey));
+		
 	}
 	
 	public static byte[] digestPassword(byte[] password) {
@@ -133,8 +149,22 @@ public class SdCrypto {
 		}
 	}
 	
-	public static boolean verifyMac(byte[] data, byte[] mac) {
-		//TODO
-		return false;
+	public static boolean verifyMac(byte[] data, byte[] mac, SecretKey key) {
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.update(data);
+			byte[] digest = messageDigest.digest();
+			
+			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+			
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			byte[] decryptedDigest = cipher.doFinal(mac);		
+			
+			return Arrays.equals(digest, decryptedDigest);
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| NoSuchPaddingException | IllegalBlockSizeException
+				| BadPaddingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
