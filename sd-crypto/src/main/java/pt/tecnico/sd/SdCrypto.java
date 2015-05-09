@@ -7,9 +7,13 @@ import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -92,4 +96,45 @@ public class SdCrypto {
 		}
 	}
 	
+	public static SecretKey generateRandomMacKey() {
+		try {
+			KeyGenerator keygen = KeyGenerator.getInstance("DES");
+			keygen.init(56);
+			return keygen.generateKey();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static SecretKey generateMacKey(byte[] macKey) {
+		try {
+			return new SecretKeySpec((new DESKeySpec(macKey).getKey()), "DES");
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static byte[] produceMac(byte[] data, SecretKey key) {
+
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("MD5"); 
+			messageDigest.update(data);
+			byte[] digest = messageDigest.digest();
+
+			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			return cipher.doFinal(digest);
+			
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| NoSuchPaddingException | IllegalBlockSizeException
+				| BadPaddingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static boolean verifyMac(byte[] data, byte[] mac) {
+		//TODO
+		return false;
+	}
 }
