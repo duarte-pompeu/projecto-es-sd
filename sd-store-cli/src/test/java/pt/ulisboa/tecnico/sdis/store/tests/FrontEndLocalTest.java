@@ -192,6 +192,17 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 			result = lol;
 		}};
 		
+		
+		new Expectations() {{
+			mockCli2.loadDoc(USER, DOC);
+			result = lol;
+		}};	
+		
+		new Expectations() {{
+			mockCli3.loadDoc(USER, DOC);
+			result = lol;
+		}};
+		
 		assertArrayEquals(lol.toArray(), (_fe.listDocs(USER).toArray()));	
 	}
 	
