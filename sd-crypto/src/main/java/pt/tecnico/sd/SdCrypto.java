@@ -69,8 +69,7 @@ public class SdCrypto {
 			return digest.digest();
 			
 		} catch (NoSuchAlgorithmException e) {
-			// This should never happen
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 	
@@ -80,7 +79,7 @@ public class SdCrypto {
 			keygen.init(168);
 			return keygen.generateKey();
 		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 	
@@ -88,7 +87,7 @@ public class SdCrypto {
 		try {
 			return new SecretKeySpec((new DESedeKeySpec(digest).getKey()), "DESede");
 		} catch (InvalidKeyException e) {
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 	
@@ -97,19 +96,25 @@ public class SdCrypto {
 			Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 			return cipher.doFinal(plaintext);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| NoSuchPaddingException | IllegalBlockSizeException
+				| BadPaddingException e) {
+			throw new SdCryptoException(e);
 		}
 	}
 	
-	public static byte[] decrypt(SecretKey key, byte[] encrypted) {
-		try {
-			Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
-			cipher.init(Cipher.DECRYPT_MODE, key);
-			return cipher.doFinal(encrypted);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public static byte[] decrypt(SecretKey key, byte[] encrypted) throws SdCryptoException {
+
+			try {
+				Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+				cipher.init(Cipher.DECRYPT_MODE, key);
+				return cipher.doFinal(encrypted);
+			} catch (InvalidKeyException | NoSuchAlgorithmException
+					| NoSuchPaddingException | IllegalBlockSizeException
+					| BadPaddingException e) {
+				throw new SdCryptoException(e);
+			}
+
 	}
 	
 	public static SecretKey generateRandomMacKey() {
@@ -118,7 +123,7 @@ public class SdCrypto {
 			keygen.init(56);
 			return keygen.generateKey();
 		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 	
@@ -126,7 +131,7 @@ public class SdCrypto {
 		try {
 			return new SecretKeySpec((new DESKeySpec(macKey).getKey()), "DES");
 		} catch (InvalidKeyException e) {
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 	
@@ -145,7 +150,7 @@ public class SdCrypto {
 		} catch (InvalidKeyException | NoSuchAlgorithmException
 				| NoSuchPaddingException | IllegalBlockSizeException
 				| BadPaddingException e) {
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 	
@@ -164,7 +169,7 @@ public class SdCrypto {
 		} catch (InvalidKeyException | NoSuchAlgorithmException
 				| NoSuchPaddingException | IllegalBlockSizeException
 				| BadPaddingException e) {
-			throw new RuntimeException(e);
+			throw new SdCryptoException(e);
 		}
 	}
 }
