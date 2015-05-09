@@ -2,7 +2,9 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 
+import javax.xml.registry.JAXRException;
 import javax.xml.ws.Endpoint;
 
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
@@ -12,7 +14,7 @@ public class SDStoreMain{
 	private static Storage storage;
 	// debug mode makes server more verbose, outputting status on calls
 	public static final boolean DEBUG_MODE = true;
-	public static UDDINaming UDDI_NAMING = null;
+	public static UDDINaming UDDI_NAMING;
 	
 	
 	
@@ -35,18 +37,29 @@ public class SDStoreMain{
 			uddiURL = args[0];
 		}
 		
+		UDDINaming listUddiNames;
+		try {
+			listUddiNames = new UDDINaming(uddiURL);
+		} catch (JAXRException e1) {
+			e1.printStackTrace();
+			System.out.println((e1));
+			System.out.println("ERROR: cant create UDDINaming.");
+			return;
+		}
+		
 		if(args.length >= 2){
 			name = args[1];
 		}
 		
 		ArrayList<String> endPoints = new ArrayList<String>();
 		
+		
 		if(args.length >= 5){
 			String host = args[2];
 			int port = Integer.valueOf(args[3]);
 			String path = args[4];
 			int nReplicas = Integer.valueOf(args[5]);
-			
+					
 			for(int i = 0; i < nReplicas; i++){
 				
 				String newEndpoint = new String( host + (port-i) + path);
@@ -55,12 +68,27 @@ public class SDStoreMain{
 			}
 		}
 		
+		Collection<String> uddiNames = new ArrayList<String>();
+		try {
+			uddiNames = listUddiNames.list(name + "-%");
+		} catch (JAXRException e1) {
+			e1.printStackTrace();
+			System.out.println((e1));
+			System.out.println("ERROR: cant list UDDI names");
+		}
+		
 		// cant publish? endpoint address already taken? no worries, here's a pack of alternative endpoint addresses for 9.99$ only.
 		for (int i = 0; i < endPoints.size(); i++){
 			String altEP = endPoints.get(i);
 			
 			try{
-				publish(altEP, uddiURL,name + "-" + (i+1));
+				String replica_name = name + "-" + (i+1);
+				
+				if(uddiNames.contains(altEP)){
+					continue;
+				}
+				
+				publish(altEP, uddiURL,replica_name);
 				break;
 			}
 			catch(com.sun.xml.ws.server.ServerRtException e){
@@ -75,8 +103,6 @@ public class SDStoreMain{
 			System.out.println("UDDI error: either (1) multiple servers are publishing to UDDI at the same time"
 					+ " or (2) you've exhausted your number of allowed replicas (see sd-store pom.xml <ws.nReplicas>)");
 		}
-		
-		
 	}
 	
 	
