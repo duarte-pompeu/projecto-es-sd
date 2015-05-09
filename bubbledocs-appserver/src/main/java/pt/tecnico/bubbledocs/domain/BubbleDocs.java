@@ -445,11 +445,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	
-	//Fix me: implement
+	
 	public int createNewDocument(byte [] xmlDoc) throws IOException, JDOMException { 
 		CalcSheetImporter importer=new CalcSheetImporter();
-		return importer.importFromXml(xmlDoc).getId();	
-		
+		CalcSheet newCalcSheet = importer.importFromXml(xmlDoc);
+		newCalcSheet.setId(this.getUniqueId());
+		return newCalcSheet.getId();
 	}
 
 	public void deleteBubbleDocs(){
