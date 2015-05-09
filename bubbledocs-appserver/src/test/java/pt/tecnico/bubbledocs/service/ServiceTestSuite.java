@@ -24,7 +24,7 @@ import pt.tecnico.bubbledocs.integration.component.RenewPasswordIntegratorTest;
 @SuiteClasses({ 
 	AssignLiteralCellTest.class, 
 	AssignReferenceCellTest.class,
-	AssignBianryToCell.class,
+	AssignBinaryToCell.class,
 	CreateCalcSheetTest.class,
 	CreateUserIntegratorTest.class,
 	DeleteUserIntegratorTest.class,
