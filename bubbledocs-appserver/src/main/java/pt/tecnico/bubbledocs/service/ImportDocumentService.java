@@ -5,6 +5,7 @@ import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 // add needed import declarations
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
+import java.io.IOException;
 
 public class ImportDocumentService extends SessionService {
 	private byte[] docXML;
@@ -25,7 +26,7 @@ public class ImportDocumentService extends SessionService {
     }
 
     @Override
-    protected void dispatchAfterSuperService() throws BubbleDocsException {   	
+    protected void dispatchAfterSuperService() throws BubbleDocsException, IOException {   	
     	
     	User user= super.user;
     	String userName = super.user.getUserName();
