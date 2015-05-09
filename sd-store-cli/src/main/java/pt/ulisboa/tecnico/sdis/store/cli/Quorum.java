@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
@@ -86,6 +87,35 @@ public class Quorum {
 		
 	}
 	
+	
+	public Collection<String> getVerdict4Collection() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
+		int highest_votes = 0;
+		
+		for(int i = 0; i < votes.size(); i++){
+			int n_votes = votes.get(i);
+			
+			if(n_votes >= _min4quorum){
+				
+				if(n_votes == _responses.size()){
+					totalConsensus = true;
+				}
+				
+				return _uniqueResponses.get(i).getDocNames();
+			}
+			
+			if(n_votes > highest_votes)
+				highest_votes = n_votes;
+		}
+		
+		if(getVotesLeft() + highest_votes < min4quorum()){
+			throw new NoConsensusException("Not enough votes 4 quorum.");
+		}
+		
+		return null;
+		
+	}
+	
+	
 	public boolean isUnique(Response r0){
 		for(Response r1: _uniqueResponses){
 			
@@ -132,6 +162,11 @@ public class Quorum {
 	}
 	
 	public void addResponse(byte[] content, int ID){
+		Response r = new Response(content, ID);
+		addResponse(r);
+	}
+	
+	public void addResponse(Collection<String> content, int ID){
 		Response r = new Response(content, ID);
 		addResponse(r);
 	}

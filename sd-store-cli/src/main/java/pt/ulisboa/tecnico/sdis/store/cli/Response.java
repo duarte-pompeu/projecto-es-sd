@@ -1,5 +1,8 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.naming.directory.InvalidAttributeValueException;
 
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
@@ -9,6 +12,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 public class Response {
 	private static final int SUCCESS = 0;
 	private static final int CONTENT = 100;
+	private static final int NAME_CONTENT = 101;
 	private static final int GENERIC_EXCEPTION = 200;
 	private static final int IAV_EXCEPTION = 201;
 	private static final int DDNE_EXCEPTION = 202;
@@ -17,6 +21,7 @@ public class Response {
 	
 	public final int TYPE;
 	private byte[] docContent = null;
+	private Collection<String> docNameCollection = null;
 	private Exception except = null;
 	private InvalidAttributeValueException iaevEx = null;
 	private DocDoesNotExist_Exception ddneEx = null;
@@ -72,6 +77,12 @@ public class Response {
 		this.ceEx = e;
 		this.ID = ID;
 	}
+	
+	public Response(Collection<String> docNames, int ID){
+		TYPE = NAME_CONTENT;
+		docNameCollection = docNames;
+		this.ID = ID;
+	}
 
 	public boolean equals(Response r){
 		return this.TYPE == r.TYPE 
@@ -95,6 +106,26 @@ public class Response {
 		
 		for(int i = 0; i < ba1.length; i++){
 			if(ba1[i] != ba2[i]){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	
+	public static boolean rEquals(Collection<String> ba1, Collection<String> ba2){
+		if(ba1 == null || ba2 == null){
+			return (ba1 == null && ba2 == null);
+		}
+		
+		if(ba1.size() != ba2.size()){
+			return false;
+		}
+		Iterator<String> it1=ba1.iterator();
+		Iterator<String> it2=ba2.iterator();
+		for(int i = 0; i < ba1.size();i++, it1.next(), it2.next()){
+			if(!it1.equals(it2)){
 				return false;
 			}
 		}
@@ -170,5 +201,46 @@ public class Response {
 		
 		
 		return docContent;
+	}
+	
+	public Collection<String> getDocNames() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
+int type = this.TYPE;
+		
+		switch(type){
+//		case GENERIC_EXCEPTION:
+//			if(except == null)
+//				return null;
+//			
+//			throw except;
+			
+		case IAV_EXCEPTION:
+			if(iaevEx == null)
+				return null;
+			
+			throw iaevEx;
+		
+		case DDNE_EXCEPTION:
+			if(ddneEx == null)
+				return null;
+		
+			throw ddneEx;
+		
+		case UDNE_EXCEPTION:
+			if(udneEx == null)
+				return null;
+			
+			throw udneEx;
+			
+		case CE_EXCEPTION:
+			if(ceEx == null)
+				return null;
+			
+			throw ceEx;
+		}
+		
+		
+		
+		return docNameCollection;
+	
 	}
 }

@@ -105,7 +105,7 @@ public class ClientFrontEnd {
 	
 	public Collection<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception {
 		ArrayList<String> docs = new ArrayList<String>();
-		//testing
+		
 		for(StoreClient client: _clients){
 			// FIXME: this loop is stupid
 			docs = new ArrayList<String>(client.listDocs(userID));
