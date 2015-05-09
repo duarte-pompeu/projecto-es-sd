@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.sdis.store.tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
@@ -28,6 +29,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	static String USER = "Manuel";
 	static String DOC = "documento";
 	static byte[] CONTENT = string2bytes("TEST");
+	static Collection<String> lol;
 	
 	@Mocked
 	StoreClient mockCli1, mockCli2, mockCli3;
@@ -35,7 +37,8 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	@Before
 	public void beforeTest(){
 		_clients = new ArrayList<StoreClient>();
-		
+		lol= new ArrayList<String>();
+		lol.add(DOC);
 		_clients.add(mockCli1);
 		_clients.add(mockCli2);
 		_clients.add(mockCli3);
@@ -177,6 +180,19 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 		}};
 		
 		_fe.loadDoc(USER, DOC);
+	}
+	
+	
+	@Test
+	public void listDocument() 
+			throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		
+		new Expectations() {{
+			mockCli1.listDocs(USER);
+			result = lol;
+		}};
+		
+		assertArrayEquals(lol.toArray(), (_fe.listDocs(USER).toArray()));	
 	}
 	
 	@Test
