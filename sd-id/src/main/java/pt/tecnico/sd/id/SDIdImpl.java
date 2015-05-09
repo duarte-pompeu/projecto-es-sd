@@ -39,6 +39,13 @@ import pt.ulisboa.tecnico.sdis.id.ws.UserDoesNotExist_Exception;
 @HandlerChain(file="/handler-chain.xml")
 public class SDIdImpl implements SDId {
 
+	//The reason for this inner class is to test requestAuthentication.
+	class SdIdWebServiceContext {
+		public void put(String key, String value) {
+			SDIdImpl.this.webServiceContext.getMessageContext().put(key, value);
+		}
+	}
+	
 	private final String userName1 = "alice";
 	private final String userName2 = "bruno";
 	private final String userName3 = "carla";
@@ -58,6 +65,7 @@ public class SDIdImpl implements SDId {
 	private UserTable userTable;
 	private SecureRandom rng;
 	private SecretKey serviceKey = null; //This is the secret key shared between SD-ID and SD-STORE
+	private SdIdWebServiceContext context = new SdIdWebServiceContext();
 	
 	@Resource
 	private WebServiceContext webServiceContext;
@@ -180,7 +188,7 @@ public class SDIdImpl implements SDId {
 				
 		String ticketBlob = new Ticket(userId, "SD-Store", sessionKey).getBlob(serviceKey);
 		
-		webServiceContext.getMessageContext().put(TicketHandler.TICKET_PROPERTY, ticketBlob);	
+		context.put(TicketHandler.TICKET_PROPERTY, ticketBlob);	
 		
 		return credentials;		
 	}

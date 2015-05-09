@@ -16,6 +16,7 @@ import javax.xml.registry.JAXRException;
 import mockit.Mock;
 import mockit.MockUp;
 import pt.tecnico.sd.SdCrypto;
+import pt.tecnico.sd.id.handler.TicketHandler;
 import pt.ulisboa.tecnico.sdis.id.ws.*;
 import example.ws.uddi.*;
 /**
@@ -45,19 +46,6 @@ public class SdIdLocalUnitTest {
 	private final String email2 = "b@t";
 	private final String repeatedEmail = "carla@tecnico.pt";
 	private final String invalidEmail = "invalidemail";
-
-	//Mock class simulating a failing behaviour at the uddi naming service
-	public static class MockUDDINamingFails extends MockUp<UDDINaming>
-	{
-		   @Mock
-		   public void $init() {}
-
-		   @Mock
-		   public void rebind(String name, String url) throws JAXRException
-		   {
-		      throw new JAXRException();
-		   }
-		}
 		
 	
 	@BeforeClass
@@ -202,7 +190,13 @@ public class SdIdLocalUnitTest {
 	
 	@Test
 	public void testRequestAuthentication() throws AuthReqFailed_Exception {
-
+		new MockUp<SDIdImpl.SdIdWebServiceContext>() {
+			@Mock
+			public void put(String key, String value) {
+				assertEquals(key, TicketHandler.TICKET_PROPERTY);
+			}
+		};
+		
 		User alice = sdIdService.getUserByUsername(userName);
 		byte[] credentials = sdIdService.requestAuthentication(userName, "SD-Store:123456789".getBytes());
 		
