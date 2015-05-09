@@ -2,6 +2,8 @@ package pt.tecnico.sd.id.cli;
 
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.WebServiceException;
+
+import pt.tecnico.sd.ClientTicket;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
@@ -65,9 +67,10 @@ public class SdIdClient {
 		}
 	}
 
-	public byte[] requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception, SdIdRemoteException {
+	public ClientTicket requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception, SdIdRemoteException {
 		try {
-			return port.requestAuthentication( userId,reserved);
+			//return port.requestAuthentication(userId,reserved);
+			return null;
 		} catch (WebServiceException e) {
 			throw new SdIdRemoteException(e);
 		}

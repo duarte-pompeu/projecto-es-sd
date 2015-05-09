@@ -11,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.tecnico.sd.ClientTicket;
 import pt.tecnico.sd.id.cli.SdIdClient;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
@@ -216,8 +217,7 @@ public class SdIdRemoteComponentTest {
 	@Test
 	public void testRequestAuthentication() throws Exception {
 		SdIdClient client = CLIENT;
-		byte[] result = client.requestAuthentication(existingUsernames[4], password);
-		assertArrayEquals("wrong password", "1".getBytes(), result);
+		ClientTicket result = client.requestAuthentication(existingUsernames[4], password);
 
 	}
 

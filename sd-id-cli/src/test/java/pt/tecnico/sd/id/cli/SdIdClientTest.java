@@ -9,6 +9,7 @@ import javax.xml.ws.WebServiceException;
 
 import org.junit.Test;
 
+import pt.tecnico.sd.ClientTicket;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId;
 import mockit.*;
 
@@ -104,9 +105,7 @@ public class SdIdClientTest {
 			result = "1".getBytes();
 		}};
 		
-		byte result[] = createSdIdClient().requestAuthentication("billy", "hunter2".getBytes());
-		
-		assertTrue(Arrays.equals(result, "1".getBytes()));
+		ClientTicket result = createSdIdClient().requestAuthentication("billy", "hunter2".getBytes());
 	}
 	
 	@Test(expected=SdIdRemoteException.class)
