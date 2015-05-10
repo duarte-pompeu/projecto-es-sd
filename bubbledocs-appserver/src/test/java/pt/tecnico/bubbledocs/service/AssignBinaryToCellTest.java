@@ -113,5 +113,14 @@ public class AssignBinaryToCellTest extends BubbleDocsServiceTest {
 		AssignBinaryToCell service = new AssignBinaryToCell( CELL_ID0, bad_string, CS_ID, u_token);
 		service.execute();
 	}
+	
+	@Test
+	public void invalidReference() {
+		String invalidReference = "=ADD(2,1;3)";
+		AssignBinaryToCell service = new AssignBinaryToCell(CELL_ID0, invalidReference, CS_ID, u_token);
+		service.execute();
+		
+		assertEquals("This didn't return #VALUE", service.getResult(), "#VALUE");
+	}
 
 }
