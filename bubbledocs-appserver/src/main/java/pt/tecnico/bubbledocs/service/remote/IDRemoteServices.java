@@ -41,8 +41,9 @@ public class IDRemoteServices {
 	
 	public void loginUser(String username, String password)
 			throws LoginException, RemoteInvocationException {
+		//TODO
+		/*
 		try {
-			
 			SdIdClient idRemote = getRemote();
 			byte[] result = idRemote.requestAuthentication(username, password.getBytes());
 			if (!Arrays.equals(result, "1".getBytes())) {
@@ -54,6 +55,7 @@ public class IDRemoteServices {
 		} catch (AuthReqFailed_Exception e) {
 			throw new LoginException(e);
 		}
+		*/
 	}
 	
 	public void removeUser(String username)
