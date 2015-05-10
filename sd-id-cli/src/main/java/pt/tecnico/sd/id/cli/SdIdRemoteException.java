@@ -1,8 +1,7 @@
 package pt.tecnico.sd.id.cli;
 
+@SuppressWarnings("serial")
 public class SdIdRemoteException extends Exception {
-
-	private static final long serialVersionUID = -5818599358259141878L;
 
 	public SdIdRemoteException() {		
 	}

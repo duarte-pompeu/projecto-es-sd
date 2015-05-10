@@ -9,6 +9,7 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
+//Server ticket handler
 public class TicketHandler implements SOAPHandler<SOAPMessageContext> {
 
 	public static final String TICKET_NAMESPACE = "urn:pt:tecnico:sd";

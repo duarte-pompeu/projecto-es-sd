@@ -1,9 +1,17 @@
 package pt.tecnico.sd.id.cli;
 
+import java.util.Arrays;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
 import javax.xml.registry.JAXRException;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
 import pt.tecnico.sd.ClientTicket;
+import pt.tecnico.sd.SdCrypto;
+import pt.tecnico.sd.SdCryptoException;
+import pt.tecnico.sd.id.cli.handler.TicketHandler;
 import pt.ulisboa.tecnico.sdis.id.ws.AuthReqFailed_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.EmailAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.id.ws.InvalidEmail_Exception;
@@ -67,12 +75,22 @@ public class SdIdClient {
 		}
 	}
 
-	public ClientTicket requestAuthentication(String userId, byte[] reserved) throws AuthReqFailed_Exception, SdIdRemoteException {
+	public ClientTicket requestAuthentication(String userId, byte[] password) throws AuthenticationException, SdIdRemoteException {
 		try {
-			//return port.requestAuthentication(userId,reserved);
-			return null;
+			SecretKey key = SdCrypto.generateKey(SdCrypto.digestPassword(password));
+			String reserved = "SD-Store:123456789";
+			byte[] encrypted = port.requestAuthentication(userId, reserved.getBytes());			
+			byte[] credentials = SdCrypto.decrypt(key, encrypted);
+			byte[] authenticator = Arrays.copyOfRange(credentials, 4, credentials.length);
+			
+			Map<String, Object> context = connector.getResponseContext();
+			String ticketBlob = (String) context.get(TicketHandler.TICKET_PROPERTY);
+			return new ClientTicket(ticketBlob, authenticator);
+
 		} catch (WebServiceException e) {
 			throw new SdIdRemoteException(e);
+		} catch (AuthReqFailed_Exception | SdCryptoException e) {
+			throw new AuthenticationException("Failed authentication");
 		}
 	}
 }

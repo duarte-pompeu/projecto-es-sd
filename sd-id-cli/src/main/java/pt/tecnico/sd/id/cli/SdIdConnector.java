@@ -15,6 +15,7 @@ import pt.ulisboa.tecnico.sdis.id.ws.SDId_Service;
 
 public class SdIdConnector {
 	SDId port = null;
+	BindingProvider provider = null;
 	
 	public void connect(String uddiUrl, String wsName) throws WebServiceException, JAXRException, SdIdRemoteException {
 		Logger logger = Logger.getLogger("pt.tecnico.ulisboa.essd.sd-id-cli");
@@ -36,12 +37,16 @@ public class SdIdConnector {
 		this.port = service.getSDIdImplPort();
 
 		logger.info("Setting endpoint address ...");
-		BindingProvider bindingProvider = (BindingProvider) this.port;
-		Map<String, Object> requestContext = bindingProvider.getRequestContext();
+		this.provider = (BindingProvider) this.port;
+		Map<String, Object> requestContext = provider.getRequestContext();
 		requestContext.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);		
 	}
 	
 	public SDId getPort() {
 		return port;
+	}
+
+	public Map<String, Object> getResponseContext() {
+		return provider.getResponseContext();
 	}
 }
