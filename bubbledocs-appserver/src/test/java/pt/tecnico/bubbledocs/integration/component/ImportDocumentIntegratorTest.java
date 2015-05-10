@@ -1,5 +1,6 @@
 package pt.tecnico.bubbledocs.integration.component;
 
+import mockit.Expectations;
 import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
@@ -15,7 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -27,8 +28,11 @@ import org.jdom2.xpath.XPathFactory;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.Add;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
+import pt.tecnico.bubbledocs.domain.CalcSheetExporter;
 import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Content;
 import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.LiteralArgument;
 import pt.tecnico.bubbledocs.domain.Reference;
@@ -53,23 +57,27 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	private String no_permission_token;
 	private User USER;
 	private CalcSheet CS_EMPTY;
+	private CalcSheet CS_ONE;
+	private CalcSheet CS_MULTIPLE;
 	private int CS_ID;
 	private int CS_ID2;
 	private int CS_ID3;
 	private String CS_NAME = "cs";
+	private String CS_NAME2 = "name2";
+	private String CS_NAME3 = "name3";
 	private final int CS_ROWS = 3;
 	private final int CS_LINES = 3;
 	
 	private String CELL_ID0;
 	private String CELL_ID1;
 	private String CELL_ID2;
+	private String CELL_ID3;
 	private String U_EMAIL="email@email.com";
 	private String U_EMAIL2="email2@email.com";
 	
 	@Mocked
-	IDRemoteServices remote;
+	StoreRemoteServices remote;
 	
-	//NEED TO CREATE CALC SHEETS AND EXPORT THEM SO THAT THEY CAN BE IMPORTED IN THE TESTS
 	@Override
 	public void populate4Test(){
 		USER = createUser(U_USERNAME, U_PASS, U_NAME, U_EMAIL);
@@ -78,231 +86,135 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		createUser(U_USERNAME2, U_PASS, U_NAME, U_EMAIL2);
 		no_permission_token = addUserToSession(U_USERNAME2);
 		
+		
+		//Empty spreadsheet
 		CS_EMPTY = createSpreadSheet(USER, CS_NAME, CS_ROWS, CS_LINES);
 		CS_ID = CS_EMPTY.getId();
-
 		
-		//the document must first be exported
-		ExportDocument service1 = new ExportDocument(U_TOKEN, CS_ID);
-		service1.execute();
+		//Spreadsheet with one cell
+		CS_ONE = createSpreadSheet(USER, CS_NAME2, CS_ROWS, CS_LINES);
+		CS_ID2 = CS_ONE.getId();
+		CELL_ID0 = this.getSpreadSheet(CS_NAME2).getCell(1, 1).getId();
+		this.getSpreadSheet(CS_NAME2).getCell(CELL_ID0).setContent(new Literal(7));
 		
-		CS_NAME="nome2";
-		CS_EMPTY = createSpreadSheet(USER, "nome2", CS_ROWS, CS_LINES);
-		CS_ID2 = CS_EMPTY.getId();
-		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
-		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
-		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
-		Cell c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
-		c.setContent(new Literal(7));
+		//Spreadsheet with multiple cells
+		CS_MULTIPLE = createSpreadSheet(USER, CS_NAME3, CS_ROWS, CS_LINES);
+		CS_ID3 = CS_MULTIPLE.getId();
+		CELL_ID1 = this.getSpreadSheet(CS_NAME3).getCell(1, 1).getId();
+		CELL_ID2 = this.getSpreadSheet(CS_NAME3).getCell(1, 2).getId();
+		CELL_ID3 = this.getSpreadSheet(CS_NAME3).getCell(2, 1).getId();
 		
-		service1 = new ExportDocument(U_TOKEN, CS_ID2);
-		service1.execute();
-		
-		CS_NAME="nome3";
-		CS_EMPTY = createSpreadSheet(USER, "nome3", CS_ROWS, CS_LINES);
-		CS_ID3 = CS_EMPTY.getId();
-		CELL_ID0 = this.getSpreadSheet(CS_NAME).getCell(1, 1).getId();
-		CELL_ID1 = this.getSpreadSheet(CS_NAME).getCell(1, 2).getId();
-		CELL_ID2 = this.getSpreadSheet(CS_NAME).getCell(2, 1).getId();
-		c=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
-		c.setContent(new Literal(7));
-		
-		Cell c1=this.getSpreadSheet(CS_NAME).getCell(CELL_ID0);
+		Cell c1 = this.getSpreadSheet(CS_NAME3).getCell(CELL_ID1);
 		c1.setContent(new Literal(7));
-		Cell c2=this.getSpreadSheet(CS_NAME).getCell(CELL_ID1);
-		c2.setContent(new Reference(c1));
-		Cell c3=this.getSpreadSheet(CS_NAME).getCell(CELL_ID2);
-		c3.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
 		
-		service1 = new ExportDocument(U_TOKEN, CS_ID3);
-		service1.execute();
+		this.getSpreadSheet(CS_NAME3).getCell(CELL_ID2)
+			.setContent(new Reference(c1));
 		
-	}
+		this.getSpreadSheet(CS_NAME3).getCell(CELL_ID3)
+			.setContent(new Add(new ReferenceArgument(c1), new LiteralArgument(5)));
 	
-	
-	
-	//Mock class simulating an unavailable SD-STORE service
-	public static class MockSDStoreUnavailableContext extends MockUp<StoreRemoteServices>
-	{
-	   @Mock
-	   public void $init() {}
-
-	   @Mock
-	   public byte[] loadDocument(String username, String docName) throws RemoteInvocationException
-	   {
-	      throw new RemoteInvocationException();
-	   }
-	}
-	
-
-	//Mock class simulating a context where SD-STORE cannot store a specific document
-	public static class MockSDStoreCannotImportDocumentContext extends MockUp<StoreRemoteServices>
-	{
-	   @Mock
-	   public void $init() {}
-
-	   @Mock
-	   public byte[] loadDocument(String username, String docName) throws RemoteInvocationException
-	   {
-	      throw new RemoteInvocationException();
-	   }
 	}
 	
 	@Test
 	public void emptyCalcSheet() throws JDOMException, IOException{
-	
+		byte[] exported = new CalcSheetExporter().exportToXmlData(CS_EMPTY);
 		
-		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
-		service2.execute();
+		new Expectations() {{
+			remote.loadDocument(U_USERNAME, CS_NAME);
+			result = exported;
+		}};		
 		
+		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
+		service.execute();
 		
-	//	new Verifications() {{ //verify the service was called		
-      //  	remote.loadDocument(U_USERNAME,CS_NAME);	times =  1;
-       // }};
+		assertNotEquals("old id and new id are the same", service.getOldDocId(), service.getNewDocId());
 		
+		CalcSheet oldSheet = CS_EMPTY;
 		
+		//O novo CalcSheet tem de existir.
+		CalcSheet newSheet = BubbleDocs.getInstance().getCalcSheetById(service.getNewDocId());
 		
-		//a local setup
-		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service2.getDocXML()));
+		assertEquals("creators are different", oldSheet.getCreator().getUserName(), newSheet.getCreator().getUserName());
+		assertEquals("names are different", oldSheet.getName(), newSheet.getName());
+		assertEquals("dates are different", oldSheet.getDate(), newSheet.getDate());
+		assertEquals("lines are different", oldSheet.getLines(), newSheet.getLines());
+		assertEquals("columns are different", oldSheet.getColumns(), newSheet.getLines());
 		
-        XPathFactory xFactory = XPathFactory.instance();
-
-        XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
-        List<Element> links = expr.evaluate(xmlDoc);
-        Element sheetElement=links.get(0);
-      		
-		String nameReadFromDocument= sheetElement.getAttribute("creator").getValue();
-        int spreadSheetId= sheetElement.getAttribute("id").getIntValue();
-		String spreadSheetDate= sheetElement.getAttribute("date").getValue();
-        String spreadSheetName= sheetElement.getAttribute("name").getValue();
-        int spreadSheetLines = sheetElement.getAttribute("lines").getIntValue();
-        int spreadSheetColumns = sheetElement.getAttribute("columns").getIntValue();
-		
-		//asserting all the attribute values
-		assertEquals("Owner is NOT correct", U_USERNAME, nameReadFromDocument);
-		assertEquals("ID is NOT correct", this.getSpreadSheet(CS_NAME).getId().intValue(), spreadSheetId );
-		assertEquals("Creation date is NOT correct", 
-				this.getSpreadSheet(CS_NAME).getDate().toString(), spreadSheetDate );
-		assertEquals("Name is NOT correct", this.getSpreadSheet(CS_NAME).getName(), spreadSheetName );
-		assertEquals("The number of lines is NOT correct", 
-				this.getSpreadSheet(CS_NAME).getLines().intValue(), spreadSheetLines );
-		assertEquals("The number of columns is NOT correct", 
-				this.getSpreadSheet(CS_NAME).getColumns().intValue(), spreadSheetColumns );
-		
-		//asserting the correct number of cells
-		assertEquals("The number of cells is correct", 0, sheetElement.getChildren().size());
-		
-		
-		//asserting that all the cells have null contents
-		for(Element cellElement: sheetElement.getChildren()){
-			//FIXME: we have 0 cells, so this loop doesn't execute
-			assertEquals("empty cell", 0 ,cellElement.getContentSize());	
+		for (Cell oldCell : oldSheet.getCellSet()) {
+			Cell newCell = newSheet.getCell(oldCell.getId());
+			assertNull(oldCell.getContent());
+			assertNull(newCell.getContent());
 		}
-		
 	}
 	
 
 	
 	@Test
 	public void calcSheetWithOneCell() throws JDOMException, IOException{
-	
-		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID2);
-		service2.execute();
+		byte[] exported = new CalcSheetExporter().exportToXmlData(CS_ONE);
 		
-		//a local setup
-		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service2.getDocXML()));
+		new Expectations() {{
+			remote.loadDocument(U_USERNAME, CS_NAME2);
+			result = exported;
+		}};	
 		
-        XPathFactory xFactory = XPathFactory.instance();
+		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID2);
+		service.execute();
 
-        XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
-        List<Element> links = expr.evaluate(xmlDoc);
-        Element sheetElement=links.get(0);
-        List<Element> cellsList=sheetElement.getChildren();
-        Element literalElement=null;
-        for(Element cellElement: cellsList){
-			if(cellElement.getChild("literal")!=null){
-				literalElement=cellElement.getChild("literal");
-				break;
-			}
-		}
-      
+		assertNotEquals("old id and new id are the same", service.getOldDocId(), service.getNewDocId());
 		
-        //asserting the literal cell exists and has the correct value
-		assertEquals("literal cell is wrong", 7 ,literalElement.getAttribute("val").getIntValue());
+		CalcSheet oldSheet = CS_ONE;
 		
-		int counter=0;
-		//asserting that all the other cells have empty contents
-		for(Element cellElement: sheetElement.getChildren()){
-			if(cellElement.getContentSize()!=0)
-				counter++;
-		}
-		assertEquals("non empty cells", counter, 1);
+		//O novo CalcSheet tem de existir.
+		CalcSheet newSheet = BubbleDocs.getInstance().getCalcSheetById(service.getNewDocId());
 		
+		assertEquals("creators are different", oldSheet.getCreator().getUserName(), newSheet.getCreator().getUserName());
+		assertEquals("names are different", oldSheet.getName(), newSheet.getName());
+		assertEquals("dates are different", oldSheet.getDate(), newSheet.getDate());
+		assertEquals("lines are different", oldSheet.getLines(), newSheet.getLines());
+		assertEquals("columns are different", oldSheet.getColumns(), newSheet.getLines());
+		
+		Content newContent = newSheet.getCell(CELL_ID0).getContent();
+		assertTrue("it's not a Literal", newContent instanceof Literal);
+		assertEquals("value is not a literal 7", 7, newContent.getValue());
 	}
 	
 	@Test
 	public void calcSheetWithMultipleCells() throws JDOMException, IOException{
+		byte[] exported = new CalcSheetExporter().exportToXmlData(CS_MULTIPLE);
 		
-		ImportDocumentIntegrator service2 = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
-		service2.execute();
+		new Expectations() {{
+			remote.loadDocument(U_USERNAME, CS_NAME3);
+			result = exported;
+		}};			
 		
-		//a local setup
-		SAXBuilder b=new SAXBuilder();
-		Document xmlDoc=b.build(new ByteArrayInputStream(service2.getDocXML()));
-		
-        XPathFactory xFactory = XPathFactory.instance();
+		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID3);
+		service.execute();
 
-        XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
-        List<Element> links = expr.evaluate(xmlDoc);
-        Element sheetElement=links.get(0);
-        List<Element> cellsList=sheetElement.getChildren();
-        Element literalElement=null;
-        Element referenceElement=null;
-        Element addElement=null;
-        for(Element cellElement: cellsList){
-        	if(cellElement.getChild("literal")!=null){
-				literalElement=cellElement.getChild("literal");
-				break;
-			}
-        }
-        for(Element cellElement: cellsList){
-        	if(cellElement.getChild("reference")!=null){
-				referenceElement=cellElement.getChild("reference");
-				break;
-			}
-        }
-        for(Element cellElement: cellsList){
-        	if(cellElement.getChild("add")!=null){
-				addElement=cellElement.getChild("add");
-				break;
-			}
-        }
-        
-        Element pointedLiteralElement=referenceElement.getChild("cell").getChild("literal");
-        Element arg1Element=addElement.getChild("referenceArgument");
-        Element pointedLiteralElement2=arg1Element.getChild("cell").getChild("literal");
-        Element arg2Element=addElement.getChild("literalArgument");
+		assertNotEquals("old id and new id are the same", service.getOldDocId(), service.getNewDocId());
 		
-        //asserting the literal cell exists and has the correct value
-		assertEquals("literal cell is wrong", 7 ,literalElement.getAttribute("val").getIntValue());
-		//asserting the reference is pointing to the literal
-		assertEquals("reference DOES NOT point to the literal", 7, 
-				pointedLiteralElement.getAttribute("val").getIntValue());
-		assertEquals("add element DOES NOT HAVE the correct reference and literal", 12, 
-				pointedLiteralElement2.getAttribute("val").getIntValue()+arg2Element.getAttribute("val").getIntValue());
+		CalcSheet oldSheet = CS_MULTIPLE;
 		
+		//O novo CalcSheet tem de existir.
+		CalcSheet newSheet = BubbleDocs.getInstance().getCalcSheetById(service.getNewDocId());
 		
-		int counter=0;
+		assertEquals("creators are different", oldSheet.getCreator().getUserName(), newSheet.getCreator().getUserName());
+		assertEquals("names are different", oldSheet.getName(), newSheet.getName());
+		assertEquals("dates are different", oldSheet.getDate(), newSheet.getDate());
+		assertEquals("lines are different", oldSheet.getLines(), newSheet.getLines());
+		assertEquals("columns are different", oldSheet.getColumns(), newSheet.getLines());
 		
-		for(Element cellElement: sheetElement.getChildren()){
-			if(cellElement.getContentSize()!=0)
-				counter++;
-		}
-		//asserting that all the other cells have empty contents
-		assertEquals("non empty cells", counter, 3);
+		Content newContent1 = newSheet.getCell(CELL_ID1).getContent();
+		assertTrue("it's not a Literal", newContent1 instanceof Literal);
+		assertEquals("value is not a literal 7", 7, newContent1.getValue());
 		
+		Content newContent2 = newSheet.getCell(CELL_ID2).getContent();
+		assertTrue("it's not a reference", newContent2 instanceof Reference);
+		assertEquals("the reference has the wrong value", 7, newContent2.getValue());
+		
+		Content newContent3 = newSheet.getCell(CELL_ID3).getContent();
+		assertTrue("it's not and add function", newContent3 instanceof Add);
+		assertEquals("add has the wrong value", 12, newContent3.getValue());
 	}
 	
 
@@ -311,31 +223,39 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	//Testing the case of trying to import an existing spread sheet and SD-STORE being unavailable
 	@Test(expected = UnavailableServiceException.class)
 	public void storeServiceUnavailable(){
-		new MockSDStoreUnavailableContext();
+		new Expectations() {{
+			remote.loadDocument(U_USERNAME, CS_NAME);
+			result = new RemoteInvocationException();
+		}};
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
-		}
+	}
 	
 	//Testing the case of trying to import an existing spread sheet and SD-STORE being unable to load it
 	@Test(expected = CannotLoadDocumentException.class)
 	public void storeServiceCantLoad(){
-		new  MockSDStoreCannotImportDocumentContext();
+		new Expectations() {{
+			remote.loadDocument(U_USERNAME, CS_NAME);
+			result = new CannotLoadDocumentException();
+		}};
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();
-		}
+	}
 		
 
 	//Testing the case of trying to import an existing spread sheet with a user without permission (not the owner)
 	@Test(expected = PermissionException.class)
-		public void noPermission(){
-			ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
-			service.execute();
-			}
-	
-	
-
-	
+	public void noPermission(){
+		new Expectations() {{
+			remote.loadDocument(anyString, anyString);
+			times = 0;
+		}};
+		
+		ImportDocumentIntegrator service = new ImportDocumentIntegrator(no_permission_token, CS_ID);
+		service.execute();
 	}
+
+}
 
 
 
