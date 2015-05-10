@@ -1,6 +1,9 @@
 package pt.ulisboa.tecnico.sdis.store.cli.service;
 
+import java.util.Map;
+
 import javax.crypto.SecretKey;
+import javax.xml.ws.BindingProvider;
 
 import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
@@ -21,6 +24,13 @@ public abstract class ClientService {
 		byte[] macBytes;
 		macBytes = SdCrypto.produceMac(content, macKey);
 		
+		addMACtoSOAP(macBytes);
+		
+	}
+	
+	public final void addMACtoSOAP(byte[] MAC){
 		//TODO: add mac to SOAP message, somehow
+		BindingProvider bindingProvider = (BindingProvider) port;
+        Map<String, Object> requestContext = bindingProvider.getRequestContext();
 	}
 }

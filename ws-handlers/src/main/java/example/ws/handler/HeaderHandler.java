@@ -30,6 +30,7 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
     public static final String CONTEXT_PROPERTY = "my.property";
+    public static final String STORE_CONTENT_MAC = "store.content.mac";
 
     //
     // Handler interface methods
