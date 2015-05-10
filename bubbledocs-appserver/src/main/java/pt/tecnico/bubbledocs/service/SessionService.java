@@ -42,11 +42,6 @@ public abstract class SessionService extends BubbleDocsService {
 	private User confirmToken(String token){
 		BubbleDocs bd = BubbleDocs.getInstance();
 		Session session = bd.getSessionFromToken(token);
-		
-		if(session == null){
-			throw new LoginException();
-		}
-		
 		return session.getUser();
 	}
 	
