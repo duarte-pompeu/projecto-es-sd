@@ -194,12 +194,12 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 		
 		
 		new Expectations() {{
-			mockCli2.loadDoc(USER, DOC);
+			mockCli2.listDocs(USER);
 			result = lol;
 		}};	
 		
 		new Expectations() {{
-			mockCli3.loadDoc(USER, DOC);
+			mockCli3.listDocs(USER);
 			result = lol;
 		}};
 		
