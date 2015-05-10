@@ -12,7 +12,6 @@ import pt.ulisboa.tecnico.sdis.store.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.service.ListDocsService;
 import pt.ulisboa.tecnico.sdis.store.service.LoadService;
 import pt.ulisboa.tecnico.sdis.store.service.StoreService;
-import pt.ulisboa.tecnico.sdis.store.ws.handler.StoreHeaderHandler;
 
 @WebService(
 	endpointInterface="pt.ulisboa.tecnico.sdis.store.ws.SDStore",
