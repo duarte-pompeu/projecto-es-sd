@@ -32,7 +32,6 @@ public class AssignBinaryToCell extends SessionService {
 	private String cellId;
 	private String FunctionExp;
 	private String Result = "";
-	private CalcSheet sheet;
 
 
 	public AssignBinaryToCell(String CellId, String Function, int CsId, String UserToken) {
@@ -54,71 +53,21 @@ public class AssignBinaryToCell extends SessionService {
 	
 	@Override
 	public void dispatchAfterSuperService() throws BubbleDocsException 	{
-		this.sheet = BubbleDocs.getInstance().getCalcSheetById(docId);			
+		CalcSheet sheet = BubbleDocs.getInstance().getCalcSheetById(docId);	
 		
-		BinaryFunction functionPrototype = parse();		
-		this.sheet.setContent(super.user, functionPrototype, cellId);		
+		ParseBinaryFunction parse = new ParseBinaryFunction(sheet, FunctionExp);
+		parse.execute();
+		
+		BinaryFunction function = parse.getResult();
+				
+		sheet.setContent(super.user, function, cellId);		
+		
 		try {
-			Result = Integer.toString(functionPrototype.getValue());
+			Result = Integer.toString(function.getValue());
 		} catch (NullContentException e) {
 			Result = "#VALUE";
 		}
 		
-	}
-
-	private BinaryFunction parse() {
-		//Lets check the expression
-
-		Pattern p = Pattern.compile(EXPRESSION);
-		Matcher m = p.matcher(FunctionExp);
-
-		if ( !m.matches() ) {
-			throw new InvalidFormatException();
-		}		
-
-		String[] tokens = FunctionExp.split("[=\\(\\),]");
-		
-		// 0:"" = 1:"ADD" ( 2:"5" , 3:"1;2" )
-		String functionName = tokens[1];
-		String argument1 = tokens[2];
-		String argument2 = tokens[3];
-
-		BinaryFunction functionPrototype = parseNameToBin(functionName);
-		
-		FunctionArgument arg1 = parseFunctionArgument(argument1);
-		FunctionArgument arg2 = parseFunctionArgument(argument2);
-		
-		functionPrototype.setArgument1(arg1);
-		functionPrototype.setArgument2(arg2);
-		return functionPrototype;
-	}
-		
-	//The argument happens to have the same expression as the reference
-	private static final String REFERENCE_ARG = REFERENCE;
-	
-	private FunctionArgument parseFunctionArgument(String argument) {
-		//Is this a reference?
-		if (Pattern.compile(REFERENCE_ARG).matcher(argument).matches()) {
-			return new ReferenceArgument(this.sheet.getCell(argument));
-		//Welp, maybe a measly Literal.
-		} else {
-			try {
-				int val = Integer.parseInt(argument);
-				return new LiteralArgument(val);
-			} catch (NumberFormatException e) {
-				throw new InvalidFormatException();
-			}
-		}
-	}	
-	
-	 private BinaryFunction parseNameToBin(String name) {
-		switch(name){
-			case "ADD": return new Add();
-			case "SUB": return new Sub();
-			case "MUL": return new Mul();
-			case "DIV": return new Div();
-			default: return null;
-		}	
 	}
 
 	public final String getResult() {
