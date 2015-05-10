@@ -33,9 +33,32 @@ public class SDStoreMain{
         String name = "SD-STORE";
 		
 		// replace default values if passed to program
+        
+        // to kill all registered replicas:
+        // mvn exec:java -Dexec.args="kill"
 		if(args.length >= 1){
-			uddiURL = args[0];
+			String param = args[0];
+			
+			if(param.equals("kill")){
+				// try to kill all names registered to uddi
+				try {
+					System.out.println("Search and destroy!");
+					searchAndDestroyAllUDDIs("http://localhost:8081");
+				} catch (JAXRException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				finally{
+					return;
+				}
+				
+				
+			}
+			
+			uddiURL = param;
 		}
+		
+		
 		
 		UDDINaming listUddiNames;
 		try {
@@ -106,6 +129,16 @@ public class SDStoreMain{
 	}
 	
 	
+	private static void searchAndDestroyAllUDDIs(String uddiURL) throws JAXRException {
+			UDDINaming uddi = new UDDINaming(uddiURL);
+			//Collection<String> registeredEndPoints = uddi.list("%");
+			
+			uddi.unbind("SD-STORE-1");
+			uddi.unbind("SD-STORE-2");
+			uddi.unbind("SD-STORE-3");
+	}
+
+
 	public static void publish(String endpointURL, String uddiURL, String uddiName) throws Exception{
 		Endpoint endpoint = null;
 		try{
