@@ -50,11 +50,19 @@ public class AssignBinaryToCell extends SessionService {
 	
 	@Override
 	public void dispatchAfterSuperService() throws BubbleDocsException 	{
-		// token in session
-		BubbleDocs bd = BubbleDocs.getInstance();
-
-		this.sheet = bd.getCalcSheetById(docId);		
+		this.sheet = BubbleDocs.getInstance().getCalcSheetById(docId);			
 		
+		BinaryFunction functionPrototype = parse();		
+		this.sheet.setContent(super.user, functionPrototype, cellId);		
+		try {
+			Result = Integer.toString(functionPrototype.getValue());
+		} catch (NullContentException e) {
+			Result = "#VALUE";
+		}
+		
+	}
+
+	private BinaryFunction parse() {
 		//Lets check the expression
 
 		Pattern p = Pattern.compile(EXPRESSION);
@@ -71,30 +79,22 @@ public class AssignBinaryToCell extends SessionService {
 		String argument1 = tokens[2];
 		String argument2 = tokens[3];
 
-		BinaryFunction functionPrototype = bd.parseNameToBin(functionName);
+		BinaryFunction functionPrototype = BubbleDocs.getInstance().parseNameToBin(functionName);
 		
 		FunctionArgument arg1 = parseFunctionArgument(argument1);
 		FunctionArgument arg2 = parseFunctionArgument(argument2);
 		
 		functionPrototype.setArgument1(arg1);
 		functionPrototype.setArgument2(arg2);
-		
-		this.sheet.setContent(super.user, functionPrototype, cellId);
-		
-		try {
-			Result = Integer.toString(functionPrototype.getValue());
-		} catch (NullContentException e) {
-			Result = "#VALUE";
-		}
-		
+		return functionPrototype;
 	}
-	
-	private static final Pattern posNumberPattern = Pattern.compile("[1-9](\\d)*");
-	private static final Pattern refArgPattern = Pattern.compile(posNumberPattern + ";" + posNumberPattern);
+		
+	//The argument happens to have the same expression as the reference
+	private static final String REFERENCE_ARG = REFERENCE;
 	
 	private FunctionArgument parseFunctionArgument(String argument) {
 		//Is this a reference?
-		if (refArgPattern.matcher(argument).matches()) {
+		if (Pattern.compile(REFERENCE_ARG).matcher(argument).matches()) {
 			return new ReferenceArgument(this.sheet.getCell(argument));
 		//Welp, maybe a measly Literal.
 		} else {
@@ -105,7 +105,7 @@ public class AssignBinaryToCell extends SessionService {
 				throw new InvalidFormatException();
 			}
 		}
-	}
+	}	
 
 	public final String getResult() {
 		return Result;
