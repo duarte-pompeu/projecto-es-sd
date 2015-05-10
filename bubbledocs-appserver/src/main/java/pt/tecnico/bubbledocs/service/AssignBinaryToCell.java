@@ -1,12 +1,16 @@
 package pt.tecnico.bubbledocs.service;
 //imports
+import pt.tecnico.bubbledocs.domain.Add;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Div;
 import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.LiteralArgument;
+import pt.tecnico.bubbledocs.domain.Mul;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.ReferenceArgument;
+import pt.tecnico.bubbledocs.domain.Sub;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.domain.BinaryFunction;
 import pt.tecnico.bubbledocs.domain.FunctionArgument;
@@ -79,7 +83,7 @@ public class AssignBinaryToCell extends SessionService {
 		String argument1 = tokens[2];
 		String argument2 = tokens[3];
 
-		BinaryFunction functionPrototype = BubbleDocs.getInstance().parseNameToBin(functionName);
+		BinaryFunction functionPrototype = parseNameToBin(functionName);
 		
 		FunctionArgument arg1 = parseFunctionArgument(argument1);
 		FunctionArgument arg2 = parseFunctionArgument(argument2);
@@ -106,6 +110,16 @@ public class AssignBinaryToCell extends SessionService {
 			}
 		}
 	}	
+	
+	 private BinaryFunction parseNameToBin(String name) {
+		switch(name){
+			case "ADD": return new Add();
+			case "SUB": return new Sub();
+			case "MUL": return new Mul();
+			case "DIV": return new Div();
+			default: return null;
+		}	
+	}
 
 	public final String getResult() {
 		return Result;

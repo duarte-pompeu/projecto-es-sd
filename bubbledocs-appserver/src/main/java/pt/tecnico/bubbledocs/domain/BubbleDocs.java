@@ -159,19 +159,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return id;
 	}
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	 public static BinaryFunction parseNameToBin(String name) {
-		switch(name){
-			case "ADD": return new Add();
-			case "SUB": return new Sub();
-			case "MUL": return new Mul();
-			case "DIV": return new Div();
-			default: return null;
-		}	
-	}
+
 	 
 	 
 	public static Content parseName(String name){
