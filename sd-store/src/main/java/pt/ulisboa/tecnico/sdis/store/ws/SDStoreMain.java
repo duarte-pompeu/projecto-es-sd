@@ -45,7 +45,6 @@ public class SDStoreMain{
 					System.out.println("Search and destroy!");
 					searchAndDestroyAllUDDIs("http://localhost:8081");
 				} catch (JAXRException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				finally{
