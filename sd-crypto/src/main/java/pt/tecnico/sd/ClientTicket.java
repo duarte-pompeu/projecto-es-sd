@@ -7,8 +7,6 @@ import org.joda.time.DateTime;
 public class ClientTicket {
 	private String ticketBlob;
 	private SecretKey sessionKey;
-	private DateTime timestamp;
-	
 	
 	public ClientTicket(String ticketBlob, byte[] authenticator) {
 		this.ticketBlob = ticketBlob;
@@ -27,8 +25,5 @@ public class ClientTicket {
 	public SecretKey getSessionKey() {
 		return sessionKey;
 	}
-	
-	public DateTime getTimestamp() {
-		return timestamp;
-	}
+
 }
