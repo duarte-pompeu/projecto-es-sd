@@ -4,7 +4,7 @@
 			<handler-class>example.ws.handler.LoggingHandler</handler-class>
 		</handler>
 		<handler>
-			<handler-class>example.ws.handler.HeaderHandler</handler-class>
+			<handler-class> pt.ulisboa.tecnico.sdis.store.cli.ClientHeaderHandler</handler-class>
 		</handler>
 	</handler-chain>
 </handler-chains>   
