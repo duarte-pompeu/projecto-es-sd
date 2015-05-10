@@ -2,20 +2,33 @@ package pt.tecnico.sd;
 
 import javax.crypto.SecretKey;
 
+import org.joda.time.DateTime;
+
 public class ClientTicket {
-	String ticketBlob;
-	SecretKey sessionKey;
+	private String ticketBlob;
+	private SecretKey sessionKey;
+	private DateTime timestamp;
+	
 	
 	public ClientTicket(String ticketBlob, byte[] authenticator) {
 		this.ticketBlob = ticketBlob;
 		this.sessionKey = SdCrypto.generateKey(authenticator);
+		this.timestamp = DateTime.now();
 	}
 	
 	public String getTicketBlob() {
 		return ticketBlob;
 	}
 	
+	public Ticket getTicket(SecretKey serviceKey) {
+		return new Ticket(ticketBlob, serviceKey);
+	}
+	
 	public SecretKey getSessionKey() {
 		return sessionKey;
+	}
+	
+	public DateTime getTimestamp() {
+		return timestamp;
 	}
 }
