@@ -11,7 +11,7 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 public class TicketHandler implements SOAPHandler<SOAPMessageContext> {
 
-	public static final String TICKET_NAMESPACE = "https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project";
+	public static final String TICKET_NAMESPACE = "urn:pt:tecnico:sd";
 	public static final String TICKET_PROPERTY = "ticket";
 	public static final String TICKET_HEADER = "ticketHeader";
 	
@@ -41,6 +41,7 @@ public class TicketHandler implements SOAPHandler<SOAPMessageContext> {
 			} catch (SOAPException e) {
 				System.err.println("Failed to add SOAPHEADER");
 				e.printStackTrace();
+				return false;
 			}
 		}
 		
