@@ -1,10 +1,5 @@
 package pt.tecnico.bubbledocs.domain;
 
-import java.util.List;
-
-import org.jdom2.Element;
-
-
 
 /**
  * @author pc-w
@@ -68,29 +63,5 @@ public abstract class BinaryFunction extends BinaryFunction_Base {
 	
 	public void accept(CalcSheetExporter exporter) {
 		exporter.exportBinaryFunction(this);
-	}
-	
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Function#importFromXML(org.jdom2.Element)
-	 */
-	@Override
-	public void importFromXML(Element element) {	
-    	List<Element> addElement = element.getChildren();
-    	Element c=addElement.get(0);
-    	String name=c.getName();
-    	FunctionArgument arg1=BubbleDocs.parseArgumentName(name);
-    	try{
-    		arg1.importFromXML(c);
-    		this.setArgument1(arg1);
-    	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
-    	
-    	c=addElement.get(1);
-    	name=c.getName();
-    	FunctionArgument arg2=BubbleDocs.parseArgumentName(name);
-    	try{
-    		arg2.importFromXML(c);
-    		this.setArgument2(arg2);
-    	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
-    	
 	}
 }

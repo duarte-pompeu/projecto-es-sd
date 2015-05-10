@@ -33,11 +33,5 @@ public class LiteralArgument extends LiteralArgument_Base {
   	public void accept(CalcSheetExporter exporter) {
   		exporter.exportLiteralArgument(this);
   	}
-
-	@Override
-	public void importFromXML(Element literalElement) {
-		int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
-    	init(value);
-	}
     
 }

@@ -28,7 +28,6 @@ public abstract class FunctionArgument extends FunctionArgument_Base {
 	 * @see pt.tecnico.bubbledocs.dml.Content#importFromXML(org.jdom2.Element)
 	 */
 
-	public abstract void importFromXML(Element c);
 	
 	public abstract void accept(CalcSheetExporter exporter);
     

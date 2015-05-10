@@ -91,41 +91,4 @@ public class Range extends Range_Base implements Iterable<Cell>{
 		return a.iterator();
 	}
 	
-	/**
-	 * @param element
-	 */
-	public void importFromXML(Element element){
-		
-		
-		List<Element> cells = element.getChildren();
-    	
-    	Element cell1=cells.get(0);
-    	Cell cell;
-    	String id= cell1.getAttributeValue("id");
-    	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
-    		this.setLeftUpCell(cell);
-    	}
-    	
-    	else{
-    		cell=new Cell();
-    		cell.importFromXML(cell1);
-    		this.setLeftUpCell(cell);
-    	}
-    	
-
-    	Element cell2=cells.get(1);
-    	
-    	id= cell2.getAttributeValue("id");
-    	if((cell=BubbleDocs.currentSheet.getCell(id))!=null){
-    		this.setRightDownCell(cell);
-    	}
-    	
-    	else{
-    		cell=new Cell();
-    		cell.importFromXML(cell2);
-    		this.setRightDownCell(cell);
-    	}
-    	
-	}
-	
 }

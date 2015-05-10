@@ -1,7 +1,5 @@
 package pt.tecnico.bubbledocs.domain;
 
-import org.jdom2.Element;
-
 
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
@@ -24,10 +22,6 @@ public abstract class Content extends Content_Base {
 	 * @throws NullContentException
 	 */
 	public abstract int getValue() throws NullContentException;
-	/**
-	 * @param c
-	 */
-	public abstract void importFromXML(Element c);
 	
 	public abstract void accept(CalcSheetExporter exporter);
 

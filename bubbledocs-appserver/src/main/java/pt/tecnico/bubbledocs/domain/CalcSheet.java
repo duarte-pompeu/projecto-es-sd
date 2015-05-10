@@ -255,45 +255,6 @@ public class CalcSheet extends CalcSheet_Base {
     	deleteDomainObject();
     }
     
-    
-    public void importFromXML(Element calcSheetElement) {
-    	Iterator<User> it=BubbleDocs.getInstance().getUserSet().iterator();
-    	User u;
-    	do{
-    		u= it.next();
-    		if(u.getUserName().compareTo(calcSheetElement.getAttribute("creator").getValue())==0)
-    			break;
-    	}while(it.hasNext());
-    	if(u!=null)
-    		this.setCreator(u);
-    	this.setDate(new LocalDate(calcSheetElement.getAttribute("date").getValue()));
-    	this.setId(new Integer(calcSheetElement.getAttribute("id").getValue()));
-    	this.setName(new String(calcSheetElement.getAttribute("name").getValue()));
-    	this.setLines(new Integer(calcSheetElement.getAttribute("lines").getValue()));
-    	this.setColumns(new Integer(calcSheetElement.getAttribute("columns").getValue()));
-    	
-    	//to aid in the importation of references and ranges
-    	BubbleDocs.currentSheet=this;
-    	
-    	List<Element> cells = calcSheetElement.getChildren();
-    	HashMap<String, Boolean> map=new HashMap<String, Boolean>();
-    	
-    	for (Element cell : cells) {
-    	    Cell c = new Cell();
-    	    c.importFromXML(cell);
-    	    addCell(c);
-    	    map.put(c.getId(), true);
-    	}
-    	for (int i=1; i<=this.getLines(); ++i) {
-    		for (int j=1; j<=this.getColumns(); ++j) {
-    			if(!map.containsKey(String.valueOf(i)+";"+String.valueOf(j)))
-    				this.addCell(new Cell(i, j));
-    		}
-    	} 
-    	
-    	this.setBubbleDocs(BubbleDocs.getInstance());
-    }
-    
 
     protected String[][] getCellsMatrix(){
     	String [][] matrix = new String[this.getLines()][this.getColumns()];

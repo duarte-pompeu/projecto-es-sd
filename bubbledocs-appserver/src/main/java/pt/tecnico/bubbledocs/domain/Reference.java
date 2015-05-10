@@ -72,33 +72,6 @@ public class Reference extends Reference_Base {
 	public void accept(CalcSheetExporter exporter) {
 		exporter.exportReference(this);
 	}
-	
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)
-	 */
-	public void importFromXML(Element element){
-		
-		List<Element> cellsElement = element.getChildren();
-    	Element cellElement=cellsElement.get(0);
-    	Cell cell;
-    	
-    	if(cellElement==null)
-    		return;
-    	
-    	int line= Integer.parseInt(cellElement.getAttributeValue("line"));
-    	int column= Integer.parseInt(cellElement.getAttributeValue("column"));
-    	
-    	try {
-    		cell=BubbleDocs.currentSheet.getCell(line, column);
-    		this.setPointedCell(cell);
-    	}
-    	catch(RuntimeException e){
-    	
-    		cell=new Cell();
-    		cell.importFromXML(cellElement);
-    		this.setPointedCell(cell);
-    	}
-	}
 }
     
 

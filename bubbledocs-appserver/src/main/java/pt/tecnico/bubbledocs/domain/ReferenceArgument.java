@@ -1,10 +1,5 @@
 package pt.tecnico.bubbledocs.domain;
 
-import java.util.List;
-
-import org.jdom2.Element;
-
-
 import pt.tecnico.bubbledocs.exceptions.NullContentException;
 
 public class ReferenceArgument extends ReferenceArgument_Base {
@@ -60,32 +55,5 @@ public class ReferenceArgument extends ReferenceArgument_Base {
 	@Override
 	public void accept(CalcSheetExporter exporter) {
 		exporter.exportReferenceArgument(this);
-	}
-	
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)
-	 */
-	public void importFromXML(Element element){
-		
-		List<Element> cellsElement = element.getChildren();
-    	Element cellElement=cellsElement.get(0);
-    	Cell cell;
-    	
-    	if(cellElement==null)
-    		return;
-    	
-    	int line= Integer.parseInt(cellElement.getAttributeValue("line"));
-    	int column= Integer.parseInt(cellElement.getAttributeValue("column"));
-    	
-    	try {
-    		cell=BubbleDocs.currentSheet.getCell(line, column);
-    		this.setPointedCell(cell);
-    	}
-    	catch(RuntimeException e){
-    	
-    		cell=new Cell();
-    		cell.importFromXML(cellElement);
-    		this.setPointedCell(cell);
-    	}
 	}
 }

@@ -67,46 +67,21 @@ public class Cell extends Cell_Base {
 		
 	}
 	
-	  public void delete() {
-		  if(this.getContent()!=null)
-		    	this.getContent().delete();
-		  for (Reference ref : this.getReferenceSet() ) {
-	    		ref.delete();
-	    		}
-		  for (ReferenceArgument ref : this.getReferenceArgumentSet() ) {
-	    		ref.delete();
-	    		}
-	    	this.setLine(null);
-	    	this.setColumn(null);
-	    	setCalcSheet(null);
-	    	deleteDomainObject();
-	        }
+	public void delete() {
+		if(this.getContent()!=null)
+			this.getContent().delete();
+		for (Reference ref : this.getReferenceSet() ) {
+			ref.delete();
+		}
+		for (ReferenceArgument ref : this.getReferenceArgumentSet() ) {
+			ref.delete();
+		}
+		this.setLine(null);
+		this.setColumn(null);
+		setCalcSheet(null);
+		deleteDomainObject();
+	}
     
-    /**
-     * @param cellElement
-     */
-    public void importFromXML(Element cellElement) {
-    	this.setId(new String(cellElement.getAttribute("id").getValue()));
-    	this.setLine(new Integer(cellElement.getAttribute("line").getValue()));
-    	this.setColumn(new Integer(cellElement.getAttribute("column").getValue()));
-    	this.setProtect(new Boolean(cellElement.getAttribute("protect").getValue()));
-    	
-    	List<Element> contentElement = cellElement.getChildren();
-    	
-    	if(contentElement.isEmpty())
-    		return;
-    	
-    	Element c=contentElement.get(0);
-    	String name=c.getName();
-    		
-    	Content content=BubbleDocs.parseName(name);
-    	try{
-    		content.importFromXML(c);
-    	}catch(NullPointerException e){ System.out.println(String.format("Unknown content type %s", name));}
-    	
-    	this.setContent(content);
-    
-    }
     
     public String contentString(){
     	

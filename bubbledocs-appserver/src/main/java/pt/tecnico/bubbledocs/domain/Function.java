@@ -26,15 +26,6 @@ public abstract class Function extends Function_Base {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	/* (non-Javadoc)
-	 * @see pt.tecnico.bubbledocs.dml.Content#importFromXML(org.jdom2.Element)
-	 */
-	@Override
-	public void importFromXML(Element c) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public abstract String getName();
     

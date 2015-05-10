@@ -56,15 +56,7 @@ public class Literal extends Literal_Base {
 	public void accept(CalcSheetExporter exporter) {
 		exporter.exportLiteral(this);
 	}
-
-    /* (non-Javadoc)
-     * @see pt.tecnico.bubbledocs.dml.FunctionArgument#importFromXML(org.jdom2.Element)
-     */
-    public void importFromXML(Element literalElement) {
-    	int value = Integer.parseInt(literalElement.getAttribute("val").getValue());
-    	init(value);
-    }
-    
+	
     /* (non-Javadoc)
      * @see pt.ist.fenixframework.backend.jvstmojb.pstm.AbstractDomainObject#toString()
      */
