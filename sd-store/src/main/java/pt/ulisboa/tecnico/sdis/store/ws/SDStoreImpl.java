@@ -22,7 +22,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.handler.StoreHeaderHandler;
 	targetNamespace="urn:pt:ulisboa:tecnico:sdis:store:ws",
 	serviceName="SDStore"
 )
-//@HandlerChain(file="/handler-chain.xml")
+@HandlerChain(file="/handler-chain.xml")
 public class SDStoreImpl implements SDStore{
 //	@Resource
 //    private WebServiceContext webServiceContext;
