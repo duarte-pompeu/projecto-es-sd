@@ -11,7 +11,6 @@ public class ClientTicket {
 	public ClientTicket(String ticketBlob, byte[] authenticator) {
 		this.ticketBlob = ticketBlob;
 		this.sessionKey = SdCrypto.generateKey(authenticator);
-		this.timestamp = DateTime.now();
 	}
 	
 	public String getTicketBlob() {
