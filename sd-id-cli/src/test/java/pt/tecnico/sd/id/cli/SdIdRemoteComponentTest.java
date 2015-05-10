@@ -218,32 +218,35 @@ public class SdIdRemoteComponentTest {
 	public void testRequestAuthentication() throws Exception {
 		SdIdClient client = CLIENT;
 		ClientTicket result = client.requestAuthentication(existingUsernames[4], password);
-
+		
+		assertNotNull("result is null", result);
+		assertNotNull("ticketBlob is null", result.getTicketBlob());
+		assertNotNull("session key is null", result.getSessionKey());
 	}
 
 	//trying to authenticate a user with an invalid user name
-	@Test(expected=AuthReqFailed_Exception.class)
+	@Test(expected=AuthenticationException.class)
 	public void testRequestAuthenticationUserInexistent() throws Exception {
 		SdIdClient client = CLIENT;
 		client.requestAuthentication(invalidUserName, anyPassword);
 	}
 
 	//trying to authenticate a user with an invalid user name
-	@Test(expected=AuthReqFailed_Exception.class)
+	@Test(expected=AuthenticationException.class)
 	public void testRequestAuthenticationUserInvalidUserName1() throws Exception {
 		SdIdClient client = CLIENT;
 		client.requestAuthentication(null, anyPassword);
 	}
 
 	//trying to authenticate a user with an invalid user name
-	@Test(expected=AuthReqFailed_Exception.class)
+	@Test(expected=AuthenticationException.class)
 	public void testRequestAuthenticationUserInvalidUserName2() throws Exception {
 		SdIdClient client = CLIENT;
 		client.requestAuthentication("", anyPassword);
 	}
 
 	//trying to authenticate a user with an invalid password
-	@Test(expected=AuthReqFailed_Exception.class)
+	@Test(expected=AuthenticationException.class)
 	public void testRequestAuthenticationUserInvalidPassword() throws Exception {
 		SdIdClient client = CLIENT;
 		client.requestAuthentication(existingUsernames[4], anyPassword);

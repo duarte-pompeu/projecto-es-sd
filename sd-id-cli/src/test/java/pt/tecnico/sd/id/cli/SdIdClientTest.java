@@ -159,6 +159,18 @@ public class SdIdClientTest {
 		createSdIdClient().requestAuthentication("billy", "hunter2".getBytes());
 	}
 	
+	public void testRequestAuthenticationInvalid() throws Exception {
+		AuthReqFailed fault = new AuthReqFailed();
+		fault.setReserved("boom".getBytes());
+		
+		new Expectations() {{
+			sdid.requestAuthentication("euNãoExisto", "SD-Store:123456789".getBytes()); 
+			result = new AuthReqFailed_Exception("boom", fault);	
+		}};	
+		
+		createSdIdClient().requestAuthentication("euNãoExisto", "hunter2".getBytes());
+	}
+	
 	@Test(expected=AuthenticationException.class) 
 	public void testRequestAuthenticationEmpty() throws Exception {
 		AuthReqFailed fault = new AuthReqFailed();
