@@ -13,6 +13,7 @@ import pt.tecnico.bubbledocs.domain.FunctionArgument;
 import pt.tecnico.bubbledocs.domain.Content;
 import pt.tecnico.bubbledocs.exceptions.BubbleDocsException;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.exceptions.NullContentException;
 import pt.tecnico.bubbledocs.exceptions.UserNotInSessionException;
 import pt.tecnico.bubbledocs.exceptions.InvalidFormatException;
 import pt.tecnico.bubbledocs.exceptions.PermissionException;
@@ -20,7 +21,7 @@ import pt.tecnico.bubbledocs.exceptions.PermissionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AssignBinaryToCell extends BubbleDocsService {
+public class AssignBinaryToCell extends SessionService {
 	private Content result;
 	private String accessToken;
 	private int docId;
@@ -31,8 +32,7 @@ public class AssignBinaryToCell extends BubbleDocsService {
 
 
 	public AssignBinaryToCell(String CellId, String Function, int CsId, String UserToken) {
-
-		this.accessToken = UserToken;
+		super(UserToken);
 		this.docId = CsId;
 		this.cellId = CellId;
 		this.FunctionExp = Function;
@@ -40,16 +40,9 @@ public class AssignBinaryToCell extends BubbleDocsService {
 	}
 
 	@Override
-	public void dispatch() throws BubbleDocsException 	{
+	public void dispatchAfterSuperService() throws BubbleDocsException 	{
 		// token in session
 		BubbleDocs bd = BubbleDocs.getInstance();
-		User user;
-		try{
-			user = getSessionFromToken(accessToken).getUser(); //throws UserNotInSessionException
-		}
-		catch(UserNotInSessionException e){
-			throw e;
-		}
 
 		this.sheet = bd.getCalcSheetById(docId);		
 		
@@ -64,7 +57,7 @@ public class AssignBinaryToCell extends BubbleDocsService {
 
 		String[] tokens = FunctionExp.split("[=\\(\\),]");
 		
-		// 0"" = 1"ADD" ( 2"5" , 3"1;2" )
+		// 0:"" = 1:"ADD" ( 2:"5" , 3:"1;2" )
 		String functionName = tokens[1];
 		String argument1 = tokens[2];
 		String argument2 = tokens[3];
@@ -77,11 +70,11 @@ public class AssignBinaryToCell extends BubbleDocsService {
 		functionPrototype.setArgument1(arg1);
 		functionPrototype.setArgument2(arg2);
 		
-		this.sheet.setContent(user, functionPrototype, cellId);
+		this.sheet.setContent(super.user, functionPrototype, cellId);
 		
 		try {
 			Result = Integer.toString(functionPrototype.getValue());
-		} catch (NullPointerException e) {
+		} catch (NullContentException e) {
 			Result = "#VALUE";
 		}
 		
