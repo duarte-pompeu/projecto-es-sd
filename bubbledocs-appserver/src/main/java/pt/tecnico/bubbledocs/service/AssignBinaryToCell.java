@@ -39,6 +39,15 @@ public class AssignBinaryToCell extends SessionService {
 
 	}
 
+	private static final String OPERATION = "(ADD|SUB|MUL|DIV)";
+	private static final String POSITIVE_NUM = "([1-9][0-9]*)";
+	private static final String LITERAL = "(0|([+-]?[1-9][0-9]*))";
+	private static final String REFERENCE = "(" + POSITIVE_NUM + ";" + POSITIVE_NUM + ")";
+	private static final String ARGUMENT = "(" + LITERAL + "|" + REFERENCE + ")";
+	private static final String EXPRESSION = "=" + OPERATION + "\\(" + ARGUMENT + "," + ARGUMENT + "\\)";
+	
+	
+	
 	@Override
 	public void dispatchAfterSuperService() throws BubbleDocsException 	{
 		// token in session
@@ -48,7 +57,7 @@ public class AssignBinaryToCell extends SessionService {
 		
 		//Lets check the expression
 
-		Pattern p = Pattern.compile("=(ADD|SUB|MUL|DIV)\\(([1-9]+[0-9]*,[1-9]+[0-9]*|[1-9]+[0-9]*);([1-9]+[0-9]*,[1-9]+[0-9]*|[1-9]+[0-9]*)\\)");
+		Pattern p = Pattern.compile(EXPRESSION);
 		Matcher m = p.matcher(FunctionExp);
 
 		if ( !m.matches() ) {
