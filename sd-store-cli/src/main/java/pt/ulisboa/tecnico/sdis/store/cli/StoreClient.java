@@ -32,6 +32,8 @@ public class StoreClient{
 	public static final boolean VERBOSE = true;
 	public static boolean ENCRYPTION = true;
 	
+	public static byte[] MAC;
+	
 	// default values
 	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
 	public static final String DEFAULT_UDDI_NAME = "SD-STORE";

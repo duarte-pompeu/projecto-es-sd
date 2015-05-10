@@ -29,7 +29,12 @@ public abstract class ClientService {
 		
 		// FIXME: this produces a runtime error on local tests
 		//addMACtoSOAP(macBytes);
+		StoreClient.MAC = macBytes;
 		
+	}
+	
+	public void afterDispatch(){
+		StoreClient.MAC = null;
 	}
 	
 	public final void addMACtoSOAP(byte[] MAC){

@@ -15,6 +15,8 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.MessageContext.Scope;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
+import static javax.xml.bind.DatatypeConverter.printBase64Binary;
 
 public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
@@ -52,14 +54,18 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 SOAPHeader sh = se.getHeader();
                 if (sh == null)
                     sh = se.addHeader();
+                
+                if(StoreClient.MAC == null){
+                	return true;
+                }
 
                 // add header element (name, namespace prefix, namespace)
                 Name name = se.createName(STORE_NAME, STORE_PREFIX, STORE_NAMESPACE);
                 SOAPHeaderElement element = sh.addHeaderElement(name);
 
                 // add header element value
-                int value = 22;
-                String valueString = Integer.toString(value);
+                String valueString = printBase64Binary(StoreClient.MAC);
+                System.out.println("VALUE: " + valueString);
                 element.addTextNode(valueString);
 
             } else {

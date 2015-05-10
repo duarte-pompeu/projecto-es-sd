@@ -32,6 +32,17 @@ public class StoreDocService extends ClientService{
 		dup.setUserId(userID);
 		dup.setDocumentId(docID);
 		
-		port.store(dup, content);
+		try {
+			port.store(dup, content);
+		} catch (CapacityExceeded_Exception e) {
+			throw e;
+		} catch (DocDoesNotExist_Exception e) {
+			throw e;
+		} catch (UserDoesNotExist_Exception e) {
+			throw e;
+		}
+		finally{
+			super.afterDispatch();
+		}
 	}
 }
