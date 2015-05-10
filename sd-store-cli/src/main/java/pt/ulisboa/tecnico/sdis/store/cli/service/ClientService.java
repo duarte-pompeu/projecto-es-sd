@@ -27,23 +27,10 @@ public abstract class ClientService {
 		byte[] macBytes;
 		macBytes = SdCrypto.produceMac(content, macKey);
 		
-		// FIXME: this produces a runtime error on local tests
-		//addMACtoSOAP(macBytes);
 		StoreClient.MAC = macBytes;
-		
 	}
 	
 	public void afterDispatch(){
 		StoreClient.MAC = null;
-	}
-	
-	public final void addMACtoSOAP(byte[] MAC){
-		//TODO: add mac to SOAP message, somehow
-		BindingProvider bindingProvider = (BindingProvider) port;
-        Map<String, Object> requestContext = bindingProvider.getRequestContext();
-        
-        String initialValue = StoreClient.bytes2string(MAC);
-        System.out.printf("%s put token '%s' on request context%n", CLASS_NAME, initialValue);
-        requestContext.put(ClientHeaderHandler.STORE_CONTENT_MAC, initialValue);
 	}
 }

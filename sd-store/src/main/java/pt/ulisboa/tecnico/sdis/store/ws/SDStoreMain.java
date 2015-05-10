@@ -15,6 +15,7 @@ public class SDStoreMain{
 	// debug mode makes server more verbose, outputting status on calls
 	public static final boolean DEBUG_MODE = true;
 	public static UDDINaming UDDI_NAMING;
+	public static String RECEIVED_MAC_STR = null;
 	
 	
 	

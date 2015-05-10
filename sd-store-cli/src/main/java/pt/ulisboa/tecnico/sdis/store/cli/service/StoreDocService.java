@@ -18,6 +18,8 @@ public class StoreDocService extends ClientService{
 		this.userID = userID;
 		this.docID = docID;
 		this.content = content;
+		
+		super.addMacDigest(this.content);
 	}
 	
 	public void dispatch() throws CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception, InvalidAttributeValueException{
@@ -25,8 +27,6 @@ public class StoreDocService extends ClientService{
 		if(port == null ){
 			throw new InvalidAttributeValueException("Port is null");
 		}
-		
-		super.addMacDigest(this.content);
 		
 		DocUserPair dup = new DocUserPair();
 		dup.setUserId(userID);

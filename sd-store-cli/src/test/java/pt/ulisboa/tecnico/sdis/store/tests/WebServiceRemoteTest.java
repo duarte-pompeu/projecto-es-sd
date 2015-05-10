@@ -18,9 +18,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
+import pt.ulisboa.tecnico.sdis.store.cli.service.StoreDocService;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 /**
  * Most of these tests require a connection with a server. Preferably one with a clean state - nothing stored in it.
@@ -148,5 +150,17 @@ public class WebServiceRemoteTest extends SDStoreClientTest {
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void storeInBadDoc() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		client.storeDoc(USER, "the doc doesnt exist but I'm gonna stuff content there anyway", string2bytes(CONTENT));
+	}
+	
+	//FIXME the server throws a really stupid exception when MAC keys are invalid
+	@Test (expected = UserDoesNotExist_Exception.class)
+	public void badMAC() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+		SDStore port = client.getPort();
+		StoreDocService service = new StoreDocService(USER, DOC, string2bytes(CONTENT), port);
+		
+		byte [] badContent = string2bytes("FAAAAAAAAKE");
+		service.addMacDigest(badContent);
+		
+		service.dispatch();
 	}
 }

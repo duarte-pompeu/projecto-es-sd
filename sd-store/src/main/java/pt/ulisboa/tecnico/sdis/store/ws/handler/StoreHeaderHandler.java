@@ -1,18 +1,13 @@
-package pt.ulisboa.tecnico.sdis.store.cli;
-
-import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
-import static javax.xml.bind.DatatypeConverter.printBase64Binary;
+package pt.ulisboa.tecnico.sdis.store.ws.handler;
 
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.crypto.SecretKey;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPHeaderElement;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import javax.xml.ws.handler.MessageContext;
@@ -20,9 +15,9 @@ import javax.xml.ws.handler.MessageContext.Scope;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import pt.tecnico.sd.SdCrypto;
+import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 
-public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
+public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
     public static final String CONTEXT_PROPERTY = "my.property";
     public static final String STORE_CONTENT_MAC = "store.content.mac";
@@ -47,30 +42,7 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
         try {
             if (outboundElement.booleanValue()) {
-                System.out.println("Writing header in outbound SOAP message...");
-
-                // get SOAP envelope
-                SOAPMessage msg = smc.getMessage();
-                SOAPPart sp = msg.getSOAPPart();
-                SOAPEnvelope se = sp.getEnvelope();
-
-                // add header
-                SOAPHeader sh = se.getHeader();
-                if (sh == null)
-                    sh = se.addHeader();
                 
-                if(StoreClient.MAC == null){
-                	return true;
-                }
-
-                // add header element (name, namespace prefix, namespace)
-                Name name = se.createName(STORE_NAME, STORE_PREFIX, STORE_NAMESPACE);
-                SOAPHeaderElement element = sh.addHeaderElement(name);
-
-                // add header element value
-                String valueString = printBase64Binary(StoreClient.MAC);
-                System.out.println("VALUE: " + valueString);
-                element.addTextNode(valueString);
 
             } else {
                 System.out.println("Reading header in inbound SOAP message...");
@@ -99,17 +71,17 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
                 // get header element value
                 String valueString = element.getValue();
-                int value = Integer.parseInt(valueString);
+                //int value = Integer.parseInt(valueString);
 
                 // print received header
-                System.out.println("Header value is " + value);
-                
+//                System.out.println("Header value is " + value);
+                SDStoreMain.RECEIVED_MAC_STR = valueString;
                 
 
                 // put header in a property context
-                smc.put(CONTEXT_PROPERTY, value);
+                smc.put(STORE_CONTENT_MAC, valueString);
                 // set property scope to application client/server class can access it
-                smc.setScope(CONTEXT_PROPERTY, Scope.APPLICATION);
+                smc.setScope(STORE_CONTENT_MAC, Scope.APPLICATION);
 
             }
         } catch (Exception e) {
@@ -129,3 +101,4 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public void close(MessageContext messageContext) {
     }
 }
+
