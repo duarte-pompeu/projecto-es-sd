@@ -121,7 +121,7 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		
 		new Expectations() {{
 			remote.loadDocument(U_USERNAME, CS_NAME);
-			result = exported;
+			result = exported; times =1;
 		}};		
 		
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
@@ -155,7 +155,7 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		
 		new Expectations() {{
 			remote.loadDocument(U_USERNAME, CS_NAME2);
-			result = exported;
+			result = exported; times =1;
 		}};	
 		
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID2);
@@ -185,7 +185,7 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		
 		new Expectations() {{
 			remote.loadDocument(U_USERNAME, CS_NAME3);
-			result = exported;
+			result = exported; times =1;
 		}};			
 		
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID3);
@@ -236,7 +236,7 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	public void storeServiceCantLoad(){
 		new Expectations() {{
 			remote.loadDocument(U_USERNAME, CS_NAME);
-			result = new CannotLoadDocumentException();
+			result = new CannotLoadDocumentException(); 
 		}};
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(U_TOKEN, CS_ID);
 		service.execute();

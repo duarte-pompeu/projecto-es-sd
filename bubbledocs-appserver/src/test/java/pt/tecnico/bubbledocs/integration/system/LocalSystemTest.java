@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotEquals;
 
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
@@ -36,12 +37,15 @@ import org.junit.Test;
 
 
 
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
 import pt.tecnico.bubbledocs.domain.CalcSheetExporter;
 import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Content;
+import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
@@ -245,54 +249,35 @@ public class LocalSystemTest {
 	    		ExportDocumentIntegrator export = new ExportDocumentIntegrator(user_token, CALCSHEET_ID);
 	    		export.execute();
 	    		
+	    		byte[] exportedd = new CalcSheetExporter().exportToXmlData(calc);
+	    		
+	    		
+	    		new Expectations() {{
+	    			remoteSTORE.loadDocument(USERNAME, calc.getName());times = 1;
+	    			result = exportedd;
+	    		}};	
 	    		
 	    		ImportDocumentIntegrator imported = new ImportDocumentIntegrator(user_token, CALCSHEET_ID);
 	    		imported.execute();
 	    		
-	    		//a local setup
-	    		SAXBuilder b=new SAXBuilder();
-	    		Document xmlDoc=b.build(new ByteArrayInputStream(imported.getDocXML()));
-	    		
-	            XPathFactory xFactory = XPathFactory.instance();
 
-	            XPathExpression<Element> expr = xFactory.compile("/calcSheet", Filters.element());
-	            List<Element> links = expr.evaluate(xmlDoc);
-	            Element sheetElement=links.get(0);
-	            List<Element> cellsList=sheetElement.getChildren();
-	            Element literalElement=null;
-	            for(Element cellElement: cellsList){
-	    			if(cellElement.getChild("literal")!=null){
-	    				literalElement=cellElement.getChild("literal");
-	    				break;
-	    			}
-	    		}
-	          
+	    		assertNotEquals("old id and new id are the same", imported.getOldDocId(), imported.getNewDocId());
 	    		
-	            String nameReadFromDocument= sheetElement.getAttribute("creator").getValue();
-	            int spreadSheetId= sheetElement.getAttribute("id").getIntValue();
-	    		String spreadSheetDate= sheetElement.getAttribute("date").getValue();
-	            String spreadSheetName= sheetElement.getAttribute("name").getValue();
-	            int spreadSheetLines = sheetElement.getAttribute("lines").getIntValue();
-	            int spreadSheetColumns = sheetElement.getAttribute("columns").getIntValue();
+	    		CalcSheet oldSheet = calc;
 	    		
-	    		//asserting all the attribute values
-	    		assertEquals("Owner is NOT correct", USERNAME, nameReadFromDocument);
-	    		assertEquals("ID is NOT correct",calc.getId().intValue(), spreadSheetId );
-	    		assertEquals("Creation date is NOT correct", calc.getDate().toString(), spreadSheetDate );
-	    		assertEquals("Name is NOT correct", CALCSHEET_NAME, spreadSheetName );
-	    		assertEquals("The number of lines is NOT correct", calc.getLines().intValue(), spreadSheetLines );
-	    		assertEquals("The number of columns is NOT correct", calc.getColumns().intValue(), spreadSheetColumns );
-	            
-	            //asserting the literal cell exists and has the correct value
-	    		assertEquals("literal cell is wrong", 5 ,literalElement.getAttribute("val").getIntValue());
+	    		//O novo CalcSheet tem de existir.
+	    		CalcSheet newSheet = BubbleDocs.getInstance().getCalcSheetById(imported.getNewDocId());
 	    		
-	    		int counter=0;
-	    		//asserting that all the other cells have empty contents
-	    		for(Element cellElement: sheetElement.getChildren()){
-	    			if(cellElement.getContentSize()!=0)
-	    				counter++;
-	    		}
-	    		assertEquals("non empty cells", counter, 1);
+	    		assertEquals("creators are different", oldSheet.getCreator().getUserName(), newSheet.getCreator().getUserName());
+	    		assertEquals("names are different", oldSheet.getName(), newSheet.getName());
+	    		assertEquals("dates are different", oldSheet.getDate(), newSheet.getDate());
+	    		assertEquals("lines are different", oldSheet.getLines(), newSheet.getLines());
+	    		assertEquals("columns are different", oldSheet.getColumns(), newSheet.getLines());
+	    		
+	    		Content newContent = newSheet.getCell(cell_id).getContent();
+	    		assertTrue("it's not a Literal", newContent instanceof Literal);
+	    		assertEquals("value is not a literal 5", 5, newContent.getValue());
+	    		
 	    		
 	    		 DeleteUserIntegrator service = new DeleteUserIntegrator(root_token, USERNAME);
 	    	        service.execute();
