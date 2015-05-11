@@ -2,12 +2,11 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 
 public class Document {
 	private String name;
-	private String tag;
 	private byte[] content;
+	private int version;
 	
 	public Document(String name) {
-		super();
-		this.name = name;
+		this(name, null);
 	}
 	
 	
@@ -15,15 +14,12 @@ public class Document {
 		super();
 		this.name = name;
 		this.content = content;
+		this.version = 0;
 	}
 
 
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
+	public int getVersion() {
+		return version;
 	}
 
 	public byte[] getContent() {
@@ -31,6 +27,7 @@ public class Document {
 	}
 
 	public void setContent(byte[] content) {
+		version += 1;
 		this.content = content;
 	}
 }

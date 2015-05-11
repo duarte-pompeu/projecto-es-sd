@@ -77,7 +77,14 @@ public class UserRepository {
 		// if we haven't returned or thrown an exception, it means all is good and the new content should be stored.
 		// reminder: update the used capacity
 		usedCapacity += new_size - old_size;
-		docs.put(docID, new Document(docID, newContent));
+		
+		Document doc = this.getDoc(docID);
+		
+		if(doc == null){
+			docs.put(docID, new Document(docID, newContent));
+		}
+		
+		else doc.setContent(newContent);
 	}
 	
 	

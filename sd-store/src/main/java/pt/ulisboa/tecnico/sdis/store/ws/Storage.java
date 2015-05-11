@@ -19,6 +19,7 @@ public class Storage {
 	
 	
 	public void init(){
+		userCount = 0;
 		collections = new TreeMap<String, UserRepository>();
 	}
 	

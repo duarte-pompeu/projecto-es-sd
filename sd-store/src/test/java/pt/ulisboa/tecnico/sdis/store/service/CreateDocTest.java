@@ -87,4 +87,17 @@ public class CreateDocTest extends ServerTest {
 		
 		new CreateDocService(user, doc).dispatch();
 	}
+	
+	
+	@Test
+	public void assertUserIDs(){
+		storage.createCollection("jubi");
+		storage.createCollection("grupo1");
+		storage.createCollection("grupo2");
+		
+		
+		assertEquals(0, storage.getCollection("jubi").getOwnerID());
+		assertEquals(1, storage.getCollection("grupo1").getOwnerID());
+		assertEquals(2, storage.getCollection("grupo2").getOwnerID());
+	}
 }

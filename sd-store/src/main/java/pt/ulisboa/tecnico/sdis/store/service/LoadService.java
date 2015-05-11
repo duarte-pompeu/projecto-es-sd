@@ -11,7 +11,7 @@ public class LoadService extends SDStoreService{
 	String userID;
 	String docID;
 	private byte[] result;
-	private String tag;
+	private int version;
 	
 	
 	public LoadService(String userID, String docID){
@@ -38,7 +38,7 @@ public class LoadService extends SDStoreService{
 		
 		Document doc = collection.getDoc(docID);
 		result = doc.getContent();
-		tag = doc.getTag();
+		version = doc.getVersion();
 	}
 	
 	public byte[] getResult(){
@@ -47,6 +47,7 @@ public class LoadService extends SDStoreService{
 
 	
 	public String getTag() {
-		return this.tag;
+		//TODO
+		return null;
 	}
 }
