@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
@@ -17,6 +18,7 @@ import pt.ulisboa.tecnico.sdis.store.cli.ClientFrontEnd;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
@@ -28,6 +30,7 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 	
 	static String USER = "Manuel";
 	static String DOC = "documento";
+	static String DOC2 = "document";
 	static byte[] CONTENT = string2bytes("TEST");
 	static Collection<String> lol;
 	
@@ -204,6 +207,28 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 		}};
 		
 		assertArrayEquals(lol.toArray(), (_fe.listDocs(USER).toArray()));	
+	}
+	
+	
+	@Test
+	public void createDocument() 
+			throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException, DocAlreadyExists_Exception{
+		
+		new Expectations() {{
+			mockCli1.createDoc(USER, DOC2);
+		}};
+		
+		
+		new Expectations() {{
+			mockCli2.createDoc(USER, DOC2);
+		}};	
+		
+		new Expectations() {{
+			mockCli3.createDoc(USER, DOC2);
+		}};
+		
+		_fe.createDoc(USER, DOC2);
+		
 	}
 	
 	@Test
