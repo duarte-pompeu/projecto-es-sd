@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.store.tests;
+package pt.ulisboa.tecnico.sdis.store.localtests;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;

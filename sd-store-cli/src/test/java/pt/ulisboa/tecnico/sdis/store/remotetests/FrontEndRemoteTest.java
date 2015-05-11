@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.store.tests;
+package pt.ulisboa.tecnico.sdis.store.remotetests;
 
 import static org.junit.Assert.*;
 

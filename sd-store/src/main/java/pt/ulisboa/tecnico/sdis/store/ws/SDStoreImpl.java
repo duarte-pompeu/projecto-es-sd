@@ -43,14 +43,15 @@ public class SDStoreImpl implements SDStore{
 		
 		String userID = docUserPair.getUserId();
 		String docID = docUserPair.getDocumentId();
+		String clientID = SDStoreMain.RECEIVED_CLIENT_ID;
 		
-		CreateDocService service = 	new CreateDocService(userID, docID);
+		CreateDocService service = 	new CreateDocService(userID, docID, clientID);
 		service.dispatch();
 		
 		if(DEBUG){
 			System.out.printf("User '%s' created doc '%s'.\n", userID, docID);
 			System.out.printf("SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
-			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
+			System.out.println("USER_ID: " + clientID);
 		}
 	}
 
@@ -60,6 +61,8 @@ public class SDStoreImpl implements SDStore{
 			throws UserDoesNotExist_Exception {
 	
 		ListDocsService service = new ListDocsService(userID);
+		String clientID = SDStoreMain.RECEIVED_CLIENT_ID;
+		
 		service.dispatch();
 		
 		List<String> result = service.getResult();
@@ -70,8 +73,8 @@ public class SDStoreImpl implements SDStore{
 			for(String doc: result){
 				System.out.println("   * " + doc);
 			}
-			System.out.printf("REPO_SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
-			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
+			System.out.printf("TAG: SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ACCESS: " + clientID);
 		}
 		
 		return result;
@@ -85,14 +88,15 @@ public class SDStoreImpl implements SDStore{
 		
 		String userID = docUserPair.getUserId();
 		String docID = docUserPair.getDocumentId();
+		String clientID = SDStoreMain.RECEIVED_CLIENT_ID;
 		
-		StoreService service = new StoreService(userID, docID, contents);
+		StoreService service = new StoreService(userID, docID, contents, clientID);
 		service.dispatch();
 		
 		if(DEBUG){
 			System.out.printf("User '%s' stored '%d' bytes in doc '%s'.\n", userID, contents.length, docID);
-			System.out.printf("SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
-			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
+			System.out.printf("TAG: SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ACCESS: " + clientID);
 		}
 	}
 
@@ -102,6 +106,7 @@ public class SDStoreImpl implements SDStore{
 		
 		String userID = docUserPair.getUserId();
 		String docID = docUserPair.getDocumentId();
+		String clientID = SDStoreMain.RECEIVED_CLIENT_ID;
 		
 		LoadService service = new LoadService(userID, docID);
 		service.dispatch();
@@ -109,8 +114,8 @@ public class SDStoreImpl implements SDStore{
 		
 		if(DEBUG){
 			System.out.printf("User '%s' loaded '%d' bytes from doc '%s'.\n", userID, result.length, docID);
-			System.out.printf("SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
-			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
+			System.out.printf("TAG: SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ACCESS: " + clientID);
 		}
 		
 //		MessageContext messageContext = webServiceContext.getMessageContext();

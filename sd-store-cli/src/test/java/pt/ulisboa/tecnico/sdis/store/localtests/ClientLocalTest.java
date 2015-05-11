@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.store.tests;
+package pt.ulisboa.tecnico.sdis.store.localtests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

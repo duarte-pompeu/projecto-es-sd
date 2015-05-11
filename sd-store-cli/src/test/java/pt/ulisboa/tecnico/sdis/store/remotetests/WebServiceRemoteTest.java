@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.store.tests;
+package pt.ulisboa.tecnico.sdis.store.remotetests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.cli.service.StoreDocService;
+import pt.ulisboa.tecnico.sdis.store.localtests.SDStoreClientTest;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;

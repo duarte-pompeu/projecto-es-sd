@@ -7,6 +7,10 @@ import java.io.UnsupportedEncodingException;
 import javax.crypto.SecretKey;
 
 import pt.tecnico.sd.SdCrypto;
+import pt.ulisboa.tecnico.sdis.store.ws.Document;
+import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
+import pt.ulisboa.tecnico.sdis.store.ws.Storage;
+import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
 public class SDStoreService{
 	private int seq = -1;
@@ -14,6 +18,41 @@ public class SDStoreService{
 	
 	private int userNumber = -1;
 	private static int lastUserNumber = -1;
+	
+	protected String lastUserWrite;
+	
+	public void touch(String docID, String userID){
+		Storage storage = SDStoreMain.getStorage();
+		
+		UserRepository repo = storage.getCollection(userID);
+		repo.setLastUserWrite(lastUserWrite);
+		
+		Document doc = repo.getDoc(docID);
+		doc.setLastUserWrite(lastUserWrite);
+		
+		setSeq(doc.getVersion());
+		setUserNumber(Integer.valueOf(lastUserWrite));
+		setLastUser(doc.getLastUserWrite());
+	}
+	
+	public void inspectDocTouch(String docID, String userID){
+		Storage storage = SDStoreMain.getStorage();
+		
+		UserRepository repo = storage.getCollection(userID);
+		Document doc = repo.getDoc(docID);
+		setSeq(doc.getVersion());
+		setUserNumber(Integer.valueOf(doc.getLastUserWrite()));
+		setLastUser(doc.getLastUserWrite());
+	}
+	
+	public void inspectRepoTouch(String userID){
+		Storage storage = SDStoreMain.getStorage();
+		
+		UserRepository repo = storage.getCollection(userID);
+		setSeq(repo.getWriteCount());
+		setUserNumber(Integer.valueOf(repo.getLastUserWrite()));
+		setLastUser(repo.getLastUserWrite());
+	}
 	
 	
 	public boolean checkMAC(String macString, byte[] content){
@@ -93,5 +132,9 @@ public class SDStoreService{
 	
 	public int getUserNumber(){
 		return this.userNumber;
+	}
+
+	public void setLastUser(String clientID) {
+		this.lastUserWrite = clientID;
 	}
 }

@@ -4,6 +4,7 @@ public class Document {
 	private String name;
 	private byte[] content;
 	private int version;
+	private String lastUserWrite;
 	
 	public Document(String name) {
 		this(name, null);
@@ -29,5 +30,13 @@ public class Document {
 	public void setContent(byte[] content) {
 		version += 1;
 		this.content = content;
+	}
+
+	public void setLastUserWrite(String clientID) {
+		this.lastUserWrite = clientID;	
+	}
+	
+	public String getLastUserWrite(){
+		return this.lastUserWrite;
 	}
 }

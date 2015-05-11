@@ -70,9 +70,8 @@ public class ClientFrontEnd {
 			}
 		}
 		
-		double randomNumber = Math.random();
-		byte[] seed = SdCrypto.digestPassword(StoreClient.string2bytes(Double.toString(randomNumber)));
-		String id = printBase64Binary(seed).substring(0, 6);
+		int randomInt = (int) (Math.random()*100);
+		String id = String.valueOf(randomInt);
 		
 		for(StoreClient client: _clients){
 			client.setID(id);

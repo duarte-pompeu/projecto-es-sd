@@ -15,10 +15,16 @@ public class StoreService extends SDStoreService{
 	byte[] content;
 	
 	public StoreService(String userID, String docID, byte[] content){
+		this(userID, docID, content, "anonymous");
+	}
+	
+	public StoreService(String userID, String docID, byte[] content, String clientID){
 		this.userID = userID;
 		this.docID = docID;
 		this.content = content;
+		this.lastUserWrite = clientID;
 	}
+	
 	
 	public void dispatch() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
 		boolean MACisValid = checkMAC(SDStoreMain.RECEIVED_MAC_STR, this.content);
@@ -53,8 +59,7 @@ public class StoreService extends SDStoreService{
 		
 		try{
 			collection.setContent(docID, content);
-			super.setSeq(collection.getDoc(docID).getVersion());
-			super.setUserNumber(collection.getOwnerID());
+			super.touch(docID, userID);
 			
 		} catch (CapacityExceeded_Exception e){ throw e; }
 	}

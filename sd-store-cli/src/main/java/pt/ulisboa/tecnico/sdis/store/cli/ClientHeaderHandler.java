@@ -77,7 +77,11 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 String propertyValue = (String) smc.get(STORE_CONTENT_MAC);
                 String valueString = propertyValue;
                 debug("VALUE: " + valueString);
-                element.addTextNode(valueString);
+                
+                if(valueString != null){
+                	element.addTextNode(valueString);
+                }
+                
                 
                 
                 //add id
@@ -133,6 +137,7 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
         } catch (Exception e) {
             System.out.print("Caught exception in handleMessage: ");
             System.out.println(e);
+            e.printStackTrace();
             System.out.println("Continue normal processing...");
         }
 

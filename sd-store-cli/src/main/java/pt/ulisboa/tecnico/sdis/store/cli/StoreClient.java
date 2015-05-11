@@ -40,7 +40,7 @@ public class StoreClient{
 	public String uddiURL;
 	public String uddiName;
 	private SDStore _port = null;
-	private String ID = new String("Placeholder");
+	private String ID = new String("0");
 	
 	
 	public StoreClient() throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{

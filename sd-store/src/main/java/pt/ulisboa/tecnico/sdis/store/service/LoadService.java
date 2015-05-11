@@ -14,6 +14,10 @@ public class LoadService extends SDStoreService{
 	
 	
 	public LoadService(String userID, String docID){
+		this(userID, docID, "anonymous");
+	}
+	
+	public LoadService(String userID, String docID, String clientID){
 		this.userID = userID;
 		this.docID = docID;
 	}
@@ -38,8 +42,7 @@ public class LoadService extends SDStoreService{
 		Document doc = collection.getDoc(docID);
 		result = doc.getContent();
 		
-		super.setSeq(doc.getVersion());
-		super.setUserNumber(collection.getOwnerID());
+		super.inspectDocTouch(docID, userID);
 	}
 	
 	public byte[] getResult(){

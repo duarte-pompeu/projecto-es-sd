@@ -16,6 +16,7 @@ public class UserRepository {
 	private int usedCapacity;
 	
 	private int writeCount = 0;
+	private String lastUserWrite;
 	
 	
 	
@@ -117,5 +118,14 @@ public class UserRepository {
 
 	public int getWriteCount() {
 		return writeCount;
+	}
+
+
+	public void setLastUserWrite(String lastUserWrite) {
+		this.lastUserWrite = lastUserWrite;
+	}
+	
+	public String getLastUserWrite() {
+		return this.lastUserWrite;
 	}
 }
