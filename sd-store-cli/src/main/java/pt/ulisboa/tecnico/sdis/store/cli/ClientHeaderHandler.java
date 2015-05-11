@@ -21,6 +21,7 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 	public static final String CONTEXT_PROPERTY = "my.property";
     public static final String STORE_CONTENT_MAC = "store.content.mac";
     public static final String STORE_CONTENT_TAG = "store.content.tag";
+    public static final String STORE_CLIENT_ID = "store.content.id";
     
     //used for MAC integrity verification
     public static final String STORE_NAME = "mac";
@@ -31,7 +32,12 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public static final String STORE_NAME2 = "tag";
     public static final String STORE_PREFIX2 = "sd-store";
     public static final String STORE_NAMESPACE2 = "http://www.example.com";
-
+    
+    //used for ids
+    public static final String STORE_NAME3 = "id";
+    public static final String STORE_PREFIX3 = "sd-store-client";
+    public static final String STORE_NAMESPACE3 = "http://www.example.com";
+    
     public static final boolean DEBUG = false;
     
     public void debug(String s){
@@ -72,6 +78,19 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 String valueString = propertyValue;
                 debug("VALUE: " + valueString);
                 element.addTextNode(valueString);
+                
+                
+                //add id
+                if(smc.get(STORE_CLIENT_ID) == null){
+                	return true;
+                }
+                
+                String propertyValue2 = (String) smc.get(STORE_CLIENT_ID);
+                Name name2 = se.createName(STORE_NAME3, STORE_PREFIX3, STORE_NAMESPACE3);
+                SOAPHeaderElement element2 = sh.addHeaderElement(name2);
+                String valueString2 = propertyValue2;
+                debug("VALUE: " + valueString2);
+                element2.addTextNode(valueString2);
 
             } else {
             	debug("Reading header in inbound SOAP message...");

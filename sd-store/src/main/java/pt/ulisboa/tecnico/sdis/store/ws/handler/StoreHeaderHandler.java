@@ -21,8 +21,10 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 
 public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
-    public static final String CONTEXT_PROPERTY = "my.property";
+	public static final String CONTEXT_PROPERTY = "my.property";
     public static final String STORE_CONTENT_MAC = "store.content.mac";
+    public static final String STORE_CONTENT_TAG = "store.content.tag";
+    public static final String STORE_CLIENT_ID = "store.content.id";
     
     //used for MAC integrity verification
     public static final String STORE_NAME = "mac";
@@ -33,6 +35,11 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public static final String STORE_NAME2 = "tag";
     public static final String STORE_PREFIX2 = "sd-store";
     public static final String STORE_NAMESPACE2 = "http://www.example.com";
+    
+    //used for ids
+    public static final String STORE_NAME3 = "id";
+    public static final String STORE_PREFIX3 = "sd-store-client";
+    public static final String STORE_NAMESPACE3 = "http://www.example.com";
     
     
     public static final boolean DEBUG = false;
@@ -114,6 +121,34 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 smc.put(STORE_CONTENT_MAC, valueString);
                 // set property scope to application client/server class can access it
                 smc.setScope(STORE_CONTENT_MAC, Scope.APPLICATION);
+                
+                // get ID
+                Name name2 = se.createName(STORE_NAME3, STORE_PREFIX3, STORE_NAMESPACE3);
+                Iterator it2 = sh.getChildElements(name2);
+                
+                // check header element
+                if (!it2.hasNext()) {
+                	debug("Header element not found.");
+                    return true;
+                }
+                SOAPElement element2 = (SOAPElement) it2.next();
+
+                // get header element value
+                String valueString2 = element2.getValue();
+
+                // print received header
+                debug("Header value is " + valueString2);
+                SDStoreMain.RECEIVED_CLIENT_ID = valueString2;
+                
+                // put header in a property context
+                smc.put(STORE_CLIENT_ID, valueString);
+                // set property scope to application client/server class can access it
+                smc.setScope(STORE_CLIENT_ID, Scope.APPLICATION);
+                
+                
+                
+                
+                
 
             }
         } catch (Exception e) {

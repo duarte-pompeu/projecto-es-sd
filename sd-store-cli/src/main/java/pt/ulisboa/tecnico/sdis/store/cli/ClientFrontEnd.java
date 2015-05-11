@@ -9,7 +9,8 @@ import java.util.Map;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
-
+import static javax.xml.bind.DatatypeConverter.printBase64Binary;
+import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
@@ -67,6 +68,14 @@ public class ClientFrontEnd {
 			if(VERBOSE){
 				System.out.println("   * " + endpointAddress);
 			}
+		}
+		
+		double randomNumber = Math.random();
+		byte[] seed = SdCrypto.digestPassword(StoreClient.string2bytes(Double.toString(randomNumber)));
+		String id = printBase64Binary(seed).substring(0, 6);
+		
+		for(StoreClient client: _clients){
+			client.setID(id);
 		}
 	}
 	

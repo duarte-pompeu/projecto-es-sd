@@ -17,6 +17,7 @@ public class SDStoreMain{
 	public static final boolean DEBUG_MODE = true;
 	public static UDDINaming UDDI_NAMING;
 	public static String RECEIVED_MAC_STR = null;
+	public static String RECEIVED_CLIENT_ID = null;
 	
 	
 	

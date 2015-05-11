@@ -40,6 +40,7 @@ public class StoreClient{
 	public String uddiURL;
 	public String uddiName;
 	private SDStore _port = null;
+	private String ID = new String("Placeholder");
 	
 	
 	public StoreClient() throws JAXRException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
@@ -62,6 +63,10 @@ public class StoreClient{
 	
 	public void setEncryption(boolean value){
 		ENCRYPTION = value;
+	}
+	
+	public void setID(String s){
+		ID = s;
 	}
 	
 	
@@ -116,6 +121,7 @@ public class StoreClient{
 	
 	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
+		setSOAPclientID(this.ID);
 		service.dispatch();
 		String tag = getSOAPtag();
 		
@@ -125,6 +131,7 @@ public class StoreClient{
 	
 	public List<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
 		ListDocsService service = new ListDocsService(userID, _port);
+		setSOAPclientID(this.ID);
 		service.dispatch();
 		String tag = getSOAPtag();
 		
@@ -136,6 +143,7 @@ public class StoreClient{
 	
 	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
+		setSOAPclientID(this.ID);
 		service.dispatch();
 		String tag = getSOAPtag();
 		
@@ -180,6 +188,7 @@ public class StoreClient{
 		
 		String macstr = printBase64Binary(service.getMAC());
 		setSOAPmac(macstr);
+		setSOAPclientID(this.ID);
 		
 		service.dispatch();
 		
@@ -224,5 +233,11 @@ public class StoreClient{
 		BindingProvider bindingProvider = (BindingProvider) _port;
 		Map<String, Object> requestContext = bindingProvider.getRequestContext();
 		requestContext.put(ClientHeaderHandler.STORE_CONTENT_MAC, MAC);
+	}
+	
+	public void setSOAPclientID(String id){
+		BindingProvider bindingProvider = (BindingProvider) _port;
+		Map<String, Object> requestContext = bindingProvider.getRequestContext();
+		requestContext.put(ClientHeaderHandler.STORE_CLIENT_ID, id);
 	}
 }

@@ -50,6 +50,7 @@ public class SDStoreImpl implements SDStore{
 		if(DEBUG){
 			System.out.printf("User '%s' created doc '%s'.\n", userID, docID);
 			System.out.printf("SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
 		}
 	}
 
@@ -70,6 +71,7 @@ public class SDStoreImpl implements SDStore{
 				System.out.println("   * " + doc);
 			}
 			System.out.printf("REPO_SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
 		}
 		
 		return result;
@@ -90,6 +92,7 @@ public class SDStoreImpl implements SDStore{
 		if(DEBUG){
 			System.out.printf("User '%s' stored '%d' bytes in doc '%s'.\n", userID, contents.length, docID);
 			System.out.printf("SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
 		}
 	}
 
@@ -107,6 +110,7 @@ public class SDStoreImpl implements SDStore{
 		if(DEBUG){
 			System.out.printf("User '%s' loaded '%d' bytes from doc '%s'.\n", userID, result.length, docID);
 			System.out.printf("SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.println("USER_ID: " + SDStoreMain.RECEIVED_CLIENT_ID);
 		}
 		
 //		MessageContext messageContext = webServiceContext.getMessageContext();
