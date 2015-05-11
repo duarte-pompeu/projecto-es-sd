@@ -9,7 +9,8 @@ import javax.crypto.SecretKey;
 import pt.tecnico.sd.SdCrypto;
 
 public class SDStoreService{
-	
+	protected int seq = -1;
+	protected int userNumber = -1;
 	
 	public boolean checkMAC(String macString, byte[] content){
 		if(macString == null){

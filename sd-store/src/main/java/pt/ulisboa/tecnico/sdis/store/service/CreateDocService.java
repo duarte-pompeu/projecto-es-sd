@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.sdis.store.service;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
+import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
 public class CreateDocService extends SDStoreService{
 	String userID;
@@ -20,7 +21,12 @@ public class CreateDocService extends SDStoreService{
 		
 		try{
 			storage.addDoc(userID, docID);
+			
+			UserRepository collection = storage.getCollection(userID);
+			super.seq = collection.getDoc(docID).getVersion();
+			super.userNumber = collection.getOwnerID();
 		}
+		
 		catch(DocAlreadyExists_Exception daeExcept){
 			throw daeExcept;
 		}

@@ -15,6 +15,8 @@ public class UserRepository {
 	private int maxCapacity;
 	private int usedCapacity;
 	
+	private int writeCount = 0;
+	
 	
 	
 	public UserRepository(String owner, int ownerID, int capacity){
@@ -39,6 +41,7 @@ public class UserRepository {
 	
 	public void addDoc(String docID){
 		docs.put(docID, new Document(docID));
+		writeCount++;
 	}
 	
 	
@@ -80,6 +83,7 @@ public class UserRepository {
 		
 		Document doc = this.getDoc(docID);
 		
+		writeCount++;
 		if(doc == null){
 			docs.put(docID, new Document(docID, newContent));
 		}
@@ -108,5 +112,10 @@ public class UserRepository {
 
 	public Document getDoc(String docID) {
 		return docs.get(docID);
+	}
+
+
+	public int getWriteCount() {
+		return writeCount;
 	}
 }

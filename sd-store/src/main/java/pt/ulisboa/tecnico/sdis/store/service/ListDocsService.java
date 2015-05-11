@@ -6,6 +6,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
 public class ListDocsService extends SDStoreService{
 	private String userID;
@@ -29,6 +30,11 @@ public class ListDocsService extends SDStoreService{
 		}
 		
 		this.result = docsList;
+		
+		UserRepository collection = storage.getCollection(userID);
+		super.userNumber = collection.getOwnerID();
+		
+		super.seq = collection.getWriteCount();
 	}
 	
 	

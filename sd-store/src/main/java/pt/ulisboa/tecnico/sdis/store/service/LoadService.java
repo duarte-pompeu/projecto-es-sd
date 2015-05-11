@@ -11,7 +11,6 @@ public class LoadService extends SDStoreService{
 	String userID;
 	String docID;
 	private byte[] result;
-	private int version;
 	
 	
 	public LoadService(String userID, String docID){
@@ -38,16 +37,12 @@ public class LoadService extends SDStoreService{
 		
 		Document doc = collection.getDoc(docID);
 		result = doc.getContent();
-		version = doc.getVersion();
+		
+		super.seq = doc.getVersion();
+		super.userNumber = collection.getOwnerID();
 	}
 	
 	public byte[] getResult(){
 		return this.result;
-	}
-
-	
-	public String getTag() {
-		//TODO
-		return null;
 	}
 }

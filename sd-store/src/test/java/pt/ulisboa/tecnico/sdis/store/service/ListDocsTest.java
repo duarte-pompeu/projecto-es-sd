@@ -8,7 +8,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
+import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
@@ -104,5 +106,23 @@ public class ListDocsTest extends ServerTest{
 		// U3 - 1 document
 		assertEquals(1, services.get(2).getResult().size());
 		assertEquals(U3D1, services.get(2).getResult().get(0));
+	}
+	
+	@Test
+	public void testSeq() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+		//created 1 doc - seq for repo is 1
+		assertEquals(1, storage.getCollection(U1).getWriteCount());
+		//created 2 doc - seq for repo is 1
+		assertEquals(2, storage.getCollection(U2).getWriteCount());
+		//created 1 doc - seq for repo is 1
+		assertEquals(1, storage.getCollection(U3).getWriteCount());
+		
+		StoreService store = new StoreService(U2, U2D1, string2bytes("teste"));
+		store.dispatch();
+		
+		//doc version should be 1
+		assertEquals(1,store.seq);
+		//repo version should be initial + 1 = 2 + 1 = 3
+		assertEquals(3, storage.getCollection(U2).getWriteCount());
 	}
 }
