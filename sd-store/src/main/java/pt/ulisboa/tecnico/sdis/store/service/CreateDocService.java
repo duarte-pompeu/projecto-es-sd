@@ -19,14 +19,13 @@ public class CreateDocService extends SDStoreService{
 		Storage storage = SDStoreMain.getStorage();
 		
 		//FIXME business requirement change
-		if(storage.hasUser(userID)){
-			try{
-				storage.addDoc(userID, docID);
-			}
-			
-			catch(DocAlreadyExists_Exception daeExcept){
-				throw daeExcept;
-			}
+		// add doc to repo even if user does not exist
+		try{
+			storage.addDoc(userID, docID);
+		}
+		
+		catch(DocAlreadyExists_Exception daeExcept){
+			throw daeExcept;
 		}
 	}
 }

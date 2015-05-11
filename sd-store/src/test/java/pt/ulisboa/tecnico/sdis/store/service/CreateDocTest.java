@@ -79,4 +79,12 @@ public class CreateDocTest extends ServerTest {
 		CreateDocService service2 = new CreateDocService("jubi", "emails");
 		service2.dispatch();
 	}
+	
+	@Test
+	public void createDocWithoutUser() throws DocAlreadyExists_Exception{
+		String user = "unknown user, has no repo, doesnt even exist";
+		String doc = "email";
+		
+		new CreateDocService(user, doc).dispatch();
+	}
 }
