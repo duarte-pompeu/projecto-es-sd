@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
+import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
+import static javax.xml.bind.DatatypeConverter.printBase64Binary;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -154,7 +156,7 @@ public class StoreClient{
 
 		
 		if(VERBOSE){
-			System.out.println("ENCRYPTED: " + bytes2string(ciphered));
+			System.out.println("ENCRYPTED: " + printBase64Binary(ciphered));
 			System.out.println("DECRYPTED: " + bytes2string(plainBytes));
 			System.out.println("RECEIVED TAG: " + TAG);
 		}
