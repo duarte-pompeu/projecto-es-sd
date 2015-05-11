@@ -18,12 +18,9 @@ public class CreateDocService extends SDStoreService{
 	public void dispatch()throws DocAlreadyExists_Exception{
 		Storage storage = SDStoreMain.getStorage();
 		
-		//FIXME business requirement change
-		// add doc to repo even if user does not exist
 		try{
 			storage.addDoc(userID, docID);
 		}
-		
 		catch(DocAlreadyExists_Exception daeExcept){
 			throw daeExcept;
 		}

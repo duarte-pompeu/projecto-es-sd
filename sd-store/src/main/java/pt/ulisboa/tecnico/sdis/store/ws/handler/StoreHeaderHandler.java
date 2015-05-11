@@ -26,16 +26,21 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public static final String STORE_PREFIX = "sd-store-cli";
     public static final String STORE_NAMESPACE = "http://www.example.com";
     
+    public static final boolean DEBUG = false;
+    
 
-    //
-    // Handler interface methods
-    //
     public Set<QName> getHeaders() {
         return null;
     }
+    
+    public void debug(String s){
+    	if(DEBUG){
+    		System.out.println(s);
+    	}
+    }
 
     public boolean handleMessage(SOAPMessageContext smc) {
-        System.out.println("AddHeaderHandler: Handling message.");
+        debug("AddHeaderHandler: Handling message.");
 
         Boolean outboundElement = (Boolean) smc
                 .get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -45,7 +50,7 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 
 
             } else {
-                System.out.println("Reading header in inbound SOAP message...");
+            	debug("Reading header in inbound SOAP message...");
 
                 // get SOAP envelope header
                 SOAPMessage msg = smc.getMessage();
@@ -64,20 +69,18 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 Iterator it = sh.getChildElements(name);
                 // check header element
                 if (!it.hasNext()) {
-                    System.out.println("Header element not found.");
+                	debug("Header element not found.");
                     return true;
                 }
                 SOAPElement element = (SOAPElement) it.next();
 
                 // get header element value
                 String valueString = element.getValue();
-                //int value = Integer.parseInt(valueString);
 
                 // print received header
-//                System.out.println("Header value is " + value);
+                debug("Header value is " + valueString);
                 SDStoreMain.RECEIVED_MAC_STR = valueString;
                 
-
                 // put header in a property context
                 smc.put(STORE_CONTENT_MAC, valueString);
                 // set property scope to application client/server class can access it
@@ -94,7 +97,7 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     public boolean handleFault(SOAPMessageContext smc) {
-        System.out.println("Ignoring fault message...");
+    	debug("Ignoring fault message...");
         return true;
     }
 

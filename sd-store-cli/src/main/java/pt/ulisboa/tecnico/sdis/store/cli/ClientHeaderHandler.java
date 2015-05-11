@@ -1,12 +1,10 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
-import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
 
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.crypto.SecretKey;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
@@ -20,8 +18,6 @@ import javax.xml.ws.handler.MessageContext.Scope;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import pt.tecnico.sd.SdCrypto;
-
 public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
     public static final String CONTEXT_PROPERTY = "my.property";
@@ -30,24 +26,27 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public static final String STORE_NAME = "mac";
     public static final String STORE_PREFIX = "sd-store-cli";
     public static final String STORE_NAMESPACE = "http://www.example.com";
-    
 
-    //
-    // Handler interface methods
-    //
+    public static final boolean DEBUG = false;
+    
+    public void debug(String s){
+    	if(DEBUG){
+    		System.out.println(s);
+    	}
+    }
+
     public Set<QName> getHeaders() {
         return null;
     }
 
     public boolean handleMessage(SOAPMessageContext smc) {
-        System.out.println("AddHeaderHandler: Handling message.");
-
+        debug("AddHeaderHandler: Handling message.");
         Boolean outboundElement = (Boolean) smc
                 .get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
         try {
             if (outboundElement.booleanValue()) {
-                System.out.println("Writing header in outbound SOAP message...");
+            	debug("Writing header in outbound SOAP message...");
 
                 // get SOAP envelope
                 SOAPMessage msg = smc.getMessage();
@@ -69,48 +68,11 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
                 // add header element value
                 String valueString = printBase64Binary(StoreClient.MAC);
-                System.out.println("VALUE: " + valueString);
+                debug("VALUE: " + valueString);
                 element.addTextNode(valueString);
 
             } else {
-                System.out.println("Reading header in inbound SOAP message...");
-
-                // get SOAP envelope header
-                SOAPMessage msg = smc.getMessage();
-                SOAPPart sp = msg.getSOAPPart();
-                SOAPEnvelope se = sp.getEnvelope();
-                SOAPHeader sh = se.getHeader();
-
-                // check header
-                if (sh == null) {
-                    System.out.println("Header not found.");
-                    return true;
-                }
-
-                // get first header element
-                Name name = se.createName(STORE_NAME, STORE_PREFIX, STORE_NAMESPACE);
-                Iterator it = sh.getChildElements(name);
-                // check header element
-                if (!it.hasNext()) {
-                    System.out.println("Header element not found.");
-                    return true;
-                }
-                SOAPElement element = (SOAPElement) it.next();
-
-                // get header element value
-                String valueString = element.getValue();
-                int value = Integer.parseInt(valueString);
-
-                // print received header
-                System.out.println("Header value is " + value);
                 
-                
-
-                // put header in a property context
-                smc.put(CONTEXT_PROPERTY, value);
-                // set property scope to application client/server class can access it
-                smc.setScope(CONTEXT_PROPERTY, Scope.APPLICATION);
-
             }
         } catch (Exception e) {
             System.out.print("Caught exception in handleMessage: ");
@@ -122,7 +84,7 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     public boolean handleFault(SOAPMessageContext smc) {
-        System.out.println("Ignoring fault message...");
+        debug("Ignoring fault message...");
         return true;
     }
 

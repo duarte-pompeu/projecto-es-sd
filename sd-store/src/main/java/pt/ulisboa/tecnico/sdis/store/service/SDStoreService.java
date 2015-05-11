@@ -20,7 +20,7 @@ public class SDStoreService{
 		SecretKey macKey = SdCrypto.generateMacKey(bytes4mac);
 		byte[] mac =  parseBase64Binary(macString);
 		
-		System.out.println("\n\n ############################################ \n\n");
+		System.out.println("\n\n############################################");
 		
 		boolean result = SdCrypto.verifyMac(content, mac, macKey);
 		if(result){
@@ -30,7 +30,7 @@ public class SDStoreService{
 			System.out.println("MAC: NO :(");
 		}
 		
-		System.out.println("\n\n ############################################ \n\n");
+		System.out.println("############################################\n\n");
 		
 		return result;
     }
