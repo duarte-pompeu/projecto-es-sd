@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 public class UserRepository {
 	
+	private final static boolean DISABLE_MAX_CAP = true;
+	
 	private TreeMap<String, Document> docs;
 	private String owner;
 	private int maxCapacity;
@@ -53,7 +55,7 @@ public class UserRepository {
 		 * Reminder: capacity refers to the whole collection, not to a single doc.
 		 */
 		int new_capacity = this.usedCapacity + new_size - old_size;
-		if(new_capacity > maxCapacity){
+		if(!DISABLE_MAX_CAP && new_capacity > maxCapacity){
 			CapacityExceeded cap = new CapacityExceeded();
 			cap.setCurrentSize(new_capacity);
 			cap.setAllowedCapacity(maxCapacity);
