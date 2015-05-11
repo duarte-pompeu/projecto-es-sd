@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 public class Storage {
 	private final int STORAGE_CAP;
+	private int userCount = 0;
 	private TreeMap<String, UserRepository> collections;
 
 	
@@ -24,6 +25,15 @@ public class Storage {
 	
 	public UserRepository getCollection(String userID){
 		return collections.get(userID);
+	}
+	
+	
+	public int getUserID(String user){
+		if(! hasUser(user)){
+			return -1;
+		}
+		
+		else return getCollection(user).getOwnerID();
 	}
 	
 	
@@ -68,7 +78,7 @@ public class Storage {
 	
 	
 	public UserRepository createCollection(String userID){
-		UserRepository col = new UserRepository(userID, STORAGE_CAP);
+		UserRepository col = new UserRepository(userID, userCount++, STORAGE_CAP);
 		this.collections.put(userID, col);
 		
 		return col;

@@ -10,16 +10,25 @@ public class UserRepository {
 	
 	private TreeMap<String, Document> docs;
 	private String owner;
+	private int ownerID;
+
 	private int maxCapacity;
 	private int usedCapacity;
 	
 	
 	
-	public UserRepository(String owner, int capacity){
+	public UserRepository(String owner, int ownerID, int capacity){
 		this.owner = owner;
+		this.ownerID = ownerID;
+		
 		docs = new TreeMap<String, Document>();
 		usedCapacity = 0;
 		maxCapacity = capacity;
+	}
+	
+	
+	public int getOwnerID() {
+		return ownerID;
 	}
 	
 	
