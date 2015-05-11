@@ -14,7 +14,7 @@ public class LoadService extends SDStoreService{
 	
 	
 	public LoadService(String userID, String docID){
-		this(userID, docID, "anonymous");
+		this(userID, docID, NO_FRONT_END);
 	}
 	
 	public LoadService(String userID, String docID, String clientID){

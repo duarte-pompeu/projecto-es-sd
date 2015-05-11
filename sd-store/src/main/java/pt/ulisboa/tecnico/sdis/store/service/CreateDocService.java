@@ -1,10 +1,8 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
-import pt.ulisboa.tecnico.sdis.store.ws.Document;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
-import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
 public class CreateDocService extends SDStoreService{
 	String userID;
@@ -12,7 +10,7 @@ public class CreateDocService extends SDStoreService{
 	
 	
 	public CreateDocService(String userID, String docID){
-		this(userID, docID, "anonymous");
+		this(userID, docID, NO_FRONT_END);
 	}
 	
 	

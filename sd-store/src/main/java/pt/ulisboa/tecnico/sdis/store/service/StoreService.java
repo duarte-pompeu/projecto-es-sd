@@ -15,7 +15,7 @@ public class StoreService extends SDStoreService{
 	byte[] content;
 	
 	public StoreService(String userID, String docID, byte[] content){
-		this(userID, docID, content, "anonymous");
+		this(userID, docID, content, NO_FRONT_END);
 	}
 	
 	public StoreService(String userID, String docID, byte[] content, String clientID){

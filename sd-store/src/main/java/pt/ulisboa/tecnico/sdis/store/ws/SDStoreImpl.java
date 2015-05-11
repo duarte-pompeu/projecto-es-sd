@@ -2,11 +2,8 @@ package pt.ulisboa.tecnico.sdis.store.ws;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 
 import pt.ulisboa.tecnico.sdis.store.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.service.ListDocsService;
@@ -73,7 +70,7 @@ public class SDStoreImpl implements SDStore{
 			for(String doc: result){
 				System.out.println("   * " + doc);
 			}
-			System.out.printf("TAG: SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
+			System.out.printf("TAG: REPO_SEQ: %d , USER: %d\n", service.getSeq(), service.getUserNumber());
 			System.out.println("USER_ACCESS: " + clientID);
 		}
 		

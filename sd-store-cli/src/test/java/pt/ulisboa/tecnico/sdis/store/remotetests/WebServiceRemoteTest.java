@@ -119,6 +119,12 @@ public class WebServiceRemoteTest extends SDStoreClientTest {
 		client.storeDoc(USER, "the doc doesnt exist but I'm gonna stuff content there anyway", string2bytes(CONTENT));
 	}
 	
+	///////////////////
+	//               //
+	//  2ª ENTREGA   //
+	//               //
+	///////////////////
+	
 	//FIXME the server throws a really stupid exception when MAC keys are invalid
 	@Test (expected = UserDoesNotExist_Exception.class)
 	public void badMAC() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
@@ -129,5 +135,15 @@ public class WebServiceRemoteTest extends SDStoreClientTest {
 		service.addMacDigest(badContent);
 		
 		service.dispatch();
+	}
+	
+	@Test
+	public void testSeq() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
+		SDStore port = client.getPort();
+		
+		for(int i = 0; i < 10; i++){
+			StoreDocService service = new StoreDocService(USER, DOC, string2bytes(CONTENT), port);
+			service.dispatch();
+		}
 	}
 }

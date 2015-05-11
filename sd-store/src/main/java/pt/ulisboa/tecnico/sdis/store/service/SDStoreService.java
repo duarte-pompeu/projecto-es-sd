@@ -21,6 +21,8 @@ public class SDStoreService{
 	
 	protected String lastUserWrite;
 	
+	protected static final String NO_FRONT_END = "-1";
+	
 	public void touch(String docID, String userID){
 		Storage storage = SDStoreMain.getStorage();
 		
