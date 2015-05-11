@@ -38,8 +38,8 @@ public class LoadService extends SDStoreService{
 		Document doc = collection.getDoc(docID);
 		result = doc.getContent();
 		
-		super.seq = doc.getVersion();
-		super.userNumber = collection.getOwnerID();
+		super.setSeq(doc.getVersion());
+		super.setUserNumber(collection.getOwnerID());
 	}
 	
 	public byte[] getResult(){

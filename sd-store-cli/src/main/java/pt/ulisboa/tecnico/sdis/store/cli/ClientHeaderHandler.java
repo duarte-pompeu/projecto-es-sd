@@ -20,12 +20,19 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
-    public static final String CONTEXT_PROPERTY = "my.property";
+	public static final String CONTEXT_PROPERTY = "my.property";
     public static final String STORE_CONTENT_MAC = "store.content.mac";
+    public static final String STORE_CONTENT_TAG = "store.content.tag";
     
+    //used for MAC integrity verification
     public static final String STORE_NAME = "mac";
     public static final String STORE_PREFIX = "sd-store-cli";
     public static final String STORE_NAMESPACE = "http://www.example.com";
+    
+    //used for tags in quorums
+    public static final String STORE_NAME2 = "tag";
+    public static final String STORE_PREFIX2 = "sd-store";
+    public static final String STORE_NAMESPACE2 = "http://www.example.com";
 
     public static final boolean DEBUG = false;
     
@@ -72,7 +79,43 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 element.addTextNode(valueString);
 
             } else {
+            	debug("Reading header in inbound SOAP message...");
+
+                // get SOAP envelope header
+                SOAPMessage msg = smc.getMessage();
+                SOAPPart sp = msg.getSOAPPart();
+                SOAPEnvelope se = sp.getEnvelope();
+                SOAPHeader sh = se.getHeader();
+
+                // check header
+                if (sh == null) {
+                    System.out.println("Header not found.");
+                    return true;
+                }
+
+                // get first header element
+                Name name = se.createName(STORE_NAME2, STORE_PREFIX2, STORE_NAMESPACE2);
+               
+                Iterator it = sh.getChildElements(name);
                 
+                // check header element
+                if (!it.hasNext()) {
+                	debug("Header element not found.");
+                    return true;
+                }
+                SOAPElement element = (SOAPElement) it.next();
+
+                // get header element value
+                String valueString = element.getValue();
+
+                // print received header
+                debug("Header value is " + valueString);
+                StoreClient.TAG = valueString;
+                
+                // put header in a property context
+                smc.put(STORE_CONTENT_MAC, valueString);
+                // set property scope to application client/server class can access it
+                smc.setScope(STORE_CONTENT_MAC, Scope.APPLICATION);
             }
         } catch (Exception e) {
             System.out.print("Caught exception in handleMessage: ");

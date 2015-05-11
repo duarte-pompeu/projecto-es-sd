@@ -23,8 +23,8 @@ public class CreateDocService extends SDStoreService{
 			storage.addDoc(userID, docID);
 			
 			UserRepository collection = storage.getCollection(userID);
-			super.seq = collection.getDoc(docID).getVersion();
-			super.userNumber = collection.getOwnerID();
+			super.setSeq(collection.getDoc(docID).getVersion());
+			super.setUserNumber(collection.getOwnerID());
 		}
 		
 		catch(DocAlreadyExists_Exception daeExcept){

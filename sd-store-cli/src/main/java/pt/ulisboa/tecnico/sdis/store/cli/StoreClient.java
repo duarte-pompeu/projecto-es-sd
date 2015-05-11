@@ -33,6 +33,7 @@ public class StoreClient{
 	public static boolean ENCRYPTION = true;
 	
 	public static byte[] MAC;
+	public static String TAG;
 	
 	// default values
 	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
@@ -118,12 +119,17 @@ public class StoreClient{
 	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
 		service.dispatch();
+		
+		System.out.println("RECEIVED TAG: " + TAG);
 	}
 	
 	
 	public List<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
 		ListDocsService service = new ListDocsService(userID, _port);
 		service.dispatch();
+		
+		System.out.println("RECEIVED TAG: " + TAG);
+		
 		return service.getResult();
 	}
 	
@@ -131,9 +137,7 @@ public class StoreClient{
 	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
 		service.dispatch();
-		
-		
-		
+
 		if(!ENCRYPTION){
 			return service.getResult();
 		}
@@ -152,6 +156,7 @@ public class StoreClient{
 		if(VERBOSE){
 			System.out.println("ENCRYPTED: " + bytes2string(ciphered));
 			System.out.println("DECRYPTED: " + bytes2string(plainBytes));
+			System.out.println("RECEIVED TAG: " + TAG);
 		}
 		
 		return plainBytes;
@@ -174,6 +179,8 @@ public class StoreClient{
 		
 		StoreDocService service = new StoreDocService(userID, docID, bytes2upload, _port);
 		service.dispatch();
+		
+		System.out.println("RECEIVED TAG: " + TAG);
 	}
 
 	

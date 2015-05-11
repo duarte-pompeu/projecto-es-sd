@@ -53,8 +53,9 @@ public class StoreService extends SDStoreService{
 		
 		try{
 			collection.setContent(docID, content);
-			super.seq = collection.getDoc(docID).getVersion();
-			super.userNumber = collection.getOwnerID();
+			super.setSeq(collection.getDoc(docID).getVersion());
+			super.setUserNumber(collection.getOwnerID());
+			
 		} catch (CapacityExceeded_Exception e){ throw e; }
 	}
 }

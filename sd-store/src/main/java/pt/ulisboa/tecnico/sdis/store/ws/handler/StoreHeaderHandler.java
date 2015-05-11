@@ -8,6 +8,7 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPHeaderElement;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import javax.xml.ws.handler.MessageContext;
@@ -15,6 +16,7 @@ import javax.xml.ws.handler.MessageContext.Scope;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
+import pt.ulisboa.tecnico.sdis.store.service.SDStoreService;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 
 public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
@@ -22,9 +24,16 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public static final String CONTEXT_PROPERTY = "my.property";
     public static final String STORE_CONTENT_MAC = "store.content.mac";
     
+    //used for MAC integrity verification
     public static final String STORE_NAME = "mac";
     public static final String STORE_PREFIX = "sd-store-cli";
     public static final String STORE_NAMESPACE = "http://www.example.com";
+    
+    //used for tags in quorums
+    public static final String STORE_NAME2 = "tag";
+    public static final String STORE_PREFIX2 = "sd-store";
+    public static final String STORE_NAMESPACE2 = "http://www.example.com";
+    
     
     public static final boolean DEBUG = false;
     
@@ -47,7 +56,26 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
         try {
             if (outboundElement.booleanValue()) {
-                
+            	debug("Writing header in outbound SOAP message...");
+
+                // get SOAP envelope
+                SOAPMessage msg = smc.getMessage();
+                SOAPPart sp = msg.getSOAPPart();
+                SOAPEnvelope se = sp.getEnvelope();
+
+                // add header
+                SOAPHeader sh = se.getHeader();
+                if (sh == null)
+                    sh = se.addHeader();
+
+                // add header element (name, namespace prefix, namespace)
+                Name name = se.createName(STORE_NAME2, STORE_PREFIX2, STORE_NAMESPACE2);
+                SOAPHeaderElement element = sh.addHeaderElement(name);
+
+                // add header element value
+                String valueString = new String(SDStoreService.lastSeq() + ";" + SDStoreService.lastUserNumber());
+                debug("VALUE: " + valueString);
+                element.addTextNode(valueString);  
 
             } else {
             	debug("Reading header in inbound SOAP message...");
@@ -67,6 +95,7 @@ public class StoreHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 // get first header element
                 Name name = se.createName(STORE_NAME, STORE_PREFIX, STORE_NAMESPACE);
                 Iterator it = sh.getChildElements(name);
+                
                 // check header element
                 if (!it.hasNext()) {
                 	debug("Header element not found.");

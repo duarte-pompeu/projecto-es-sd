@@ -121,7 +121,7 @@ public class ListDocsTest extends ServerTest{
 		store.dispatch();
 		
 		//doc version should be 1
-		assertEquals(1,store.seq);
+		assertEquals(1,store.getSeq());
 		//repo version should be initial + 1 = 2 + 1 = 3
 		assertEquals(3, storage.getCollection(U2).getWriteCount());
 	}

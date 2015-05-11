@@ -9,17 +9,12 @@ import javax.crypto.SecretKey;
 import pt.tecnico.sd.SdCrypto;
 
 public class SDStoreService{
-	protected int seq = -1;
-	protected int userNumber = -1;
+	private int seq = -1;
+	private static int lastSeq = -1;
 	
+	private int userNumber = -1;
+	private static int lastUserNumber = -1;
 	
-	public int getSeq(){
-		return this.seq;
-	}
-	
-	public int getUserNumber(){
-		return this.userNumber;
-	}
 	
 	public boolean checkMAC(String macString, byte[] content){
 		if(macString == null){
@@ -70,5 +65,33 @@ public class SDStoreService{
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
+	}
+	
+	
+	public void setSeq(int seq){
+		this.seq = seq;
+		lastSeq = seq;
+	}
+	
+	public void setUserNumber(int userNumber){
+		this.userNumber = userNumber;
+		lastUserNumber = userNumber;
+	}
+	
+	public static int lastSeq(){
+		return lastSeq;
+	}
+	
+	public static int lastUserNumber(){
+		return lastUserNumber;
+	}
+	
+	
+	public int getSeq(){
+		return this.seq;
+	}
+	
+	public int getUserNumber(){
+		return this.userNumber;
 	}
 }
