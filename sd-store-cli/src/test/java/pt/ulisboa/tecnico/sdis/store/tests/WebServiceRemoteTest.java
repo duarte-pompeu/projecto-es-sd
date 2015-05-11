@@ -113,40 +113,6 @@ public class WebServiceRemoteTest extends SDStoreClientTest {
 	}
 	
 	
-	@Test (expected = CapacityExceeded_Exception.class)
-	public void aboveCapacity() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception, InvalidAttributeValueException{
-		// encryption changes the doc size
-		// since we wanna test this, let's turn it off for a while
-		// please don't try to decrypt unencrypted docs later
-		client.setEncryption(false);
-		
-		String content = "";
-		String tmpUser = "alice";
-		String tempDoc = "lista de compras";
-		int size = DEFAULT_MAX_CAP + 1;
-		
-		for(int i = 0; i < size; i++){
-			content += "d";
-		}
-		
-		byte [] bytes = string2bytes(content);
-		assertEquals(size, bytes.length);
-		client.listDocs(tmpUser);
-		
-		try {
-			client.createDoc(tmpUser, tempDoc);
-			
-		} catch ( DocAlreadyExists_Exception e) {
-			//continue, its ok if doc already exists
-		}
-		
-		
-		client.storeDoc(tmpUser, tempDoc, string2bytes(content));
-		
-		client.setEncryption(true);
-	}
-	
-	
 	@Test (expected = DocDoesNotExist_Exception.class)
 	public void storeInBadDoc() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		client.storeDoc(USER, "the doc doesnt exist but I'm gonna stuff content there anyway", string2bytes(CONTENT));
