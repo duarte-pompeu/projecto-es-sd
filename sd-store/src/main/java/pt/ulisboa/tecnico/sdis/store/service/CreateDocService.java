@@ -4,9 +4,10 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 
-public class CreateDocService {
+public class CreateDocService extends SDStoreService{
 	String userID;
 	String docID;
+	
 	
 	public CreateDocService(String userID, String docID){
 		this.userID = userID;
@@ -15,9 +16,9 @@ public class CreateDocService {
 	
 	
 	public void dispatch()throws DocAlreadyExists_Exception{
-		
 		Storage storage = SDStoreMain.getStorage();
 		
+		//FIXME business requirement change
 		if(storage.hasUser(userID)){
 			try{
 				storage.addDoc(userID, docID);

@@ -7,17 +7,18 @@ import pt.ulisboa.tecnico.sdis.store.ws.Storage;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class ListDocsService {
+public class ListDocsService extends SDStoreService{
 	private String userID;
 	private List<String> result;
+	
 	
 	public ListDocsService(String userID){
 		this.userID = userID;
 	}
 	
+	
 	public void dispatch() throws UserDoesNotExist_Exception{
 		Storage storage = SDStoreMain.getStorage();
-		
 		List<String> docsList = storage.getUserDocs(userID);
 		
 		if(docsList == null){
@@ -29,6 +30,7 @@ public class ListDocsService {
 		
 		this.result = docsList;
 	}
+	
 	
 	public List<String> getResult(){
 		return this.result;

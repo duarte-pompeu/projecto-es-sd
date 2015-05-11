@@ -7,16 +7,18 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
-public class LoadService {
+public class LoadService extends SDStoreService{
 	String userID;
 	String docID;
 	private byte[] result;
 	private String tag;
 	
+	
 	public LoadService(String userID, String docID){
 		this.userID = userID;
 		this.docID = docID;
 	}
+	
 	
 	public void dispatch() throws UserDoesNotExist_Exception {
 		Storage storage = SDStoreMain.getStorage();
@@ -40,12 +42,11 @@ public class LoadService {
 	}
 	
 	public byte[] getResult(){
-		
 		return this.result;
 	}
 
+	
 	public String getTag() {
-		
 		return this.tag;
 	}
 }

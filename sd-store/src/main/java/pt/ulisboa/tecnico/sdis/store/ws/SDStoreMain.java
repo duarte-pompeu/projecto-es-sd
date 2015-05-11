@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
 
-import java.io.UnsupportedEncodingException;
+import static pt.ulisboa.tecnico.sdis.store.service.SDStoreService.string2bytes;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -39,23 +40,14 @@ public class SDStoreMain{
         // mvn exec:java -Dexec.args="kill"
 		if(args.length >= 1){
 			String param = args[0];
+			uddiURL = param;
 			
 			if(param.equals("kill")){
 				// try to kill all names registered to uddi
-				try {
-					System.out.println("Search and destroy!");
-					searchAndDestroyAllUDDIs("http://localhost:8081");
-				} catch (JAXRException e) {
-					e.printStackTrace();
-				}
-				finally{
-					return;
-				}
-				
-				
+				System.out.println("Search and destroy!");
+				searchAndDestroyAllUDDIs("http://localhost:8081");
+				return;
 			}
-			
-			uddiURL = param;
 		}
 		
 		
@@ -129,13 +121,22 @@ public class SDStoreMain{
 	}
 	
 	
-	private static void searchAndDestroyAllUDDIs(String uddiURL) throws JAXRException {
-			UDDINaming uddi = new UDDINaming(uddiURL);
-			//Collection<String> registeredEndPoints = uddi.list("%");
-			
-			uddi.unbind("SD-STORE-1");
-			uddi.unbind("SD-STORE-2");
-			uddi.unbind("SD-STORE-3");
+	private static void searchAndDestroyAllUDDIs(String uddiURL) {
+			UDDINaming uddi;
+			try {
+				uddi = new UDDINaming(uddiURL);
+				for(int i = 1; i <= 3; i++){
+					try {
+						uddi.unbind("SD-STORE-" + i);
+					} catch (JAXRException e) {
+
+						System.out.println(e);
+					}
+				}
+			} catch (JAXRException e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}	
 	}
 
 
@@ -225,36 +226,7 @@ public class SDStoreMain{
 			storage.getCollection("bruno").getDoc("b1").setContent(string2bytes("BBBBBBBBBBBBBBBBBBBB"));
 			
 		} catch (DocAlreadyExists_Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-	
-	
-	/**
-	 * Wraps how a string is converted to a byte array.
-	 * This leads to simpler code: other classes won't have to try and catch exceptions.
-	 * Which is good, because this exception is NEVER actually raised.
-	 */
-	public static byte[] string2bytes(String s){
-		try {
-			return s.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
-	
-	
-	/**
-	 * Wraps how a byte array is converted to a String.
-	 * This leads to simpler code: other classes won't have to try and catch exceptions.
-	 * Which is good, because this exception is NEVER actually raised.
-	 */
-	public static String bytes2string(byte[] bytes){
-		try {
-			return new String(bytes, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
 		}
 	}
 }

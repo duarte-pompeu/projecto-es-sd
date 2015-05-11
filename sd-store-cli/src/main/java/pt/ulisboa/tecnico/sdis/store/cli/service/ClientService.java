@@ -1,12 +1,8 @@
 package pt.ulisboa.tecnico.sdis.store.cli.service;
 
-import java.util.Map;
-
 import javax.crypto.SecretKey;
-import javax.xml.ws.BindingProvider;
 
 import pt.tecnico.sd.SdCrypto;
-import pt.ulisboa.tecnico.sdis.store.cli.ClientHeaderHandler;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStore;
 

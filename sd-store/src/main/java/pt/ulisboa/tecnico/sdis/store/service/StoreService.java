@@ -1,10 +1,5 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
-import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
-
-import javax.crypto.SecretKey;
-
-import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
@@ -14,7 +9,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserRepository;
 
-public class StoreService {
+public class StoreService extends SDStoreService{
 	String userID;
 	String docID;
 	byte[] content;
@@ -26,7 +21,7 @@ public class StoreService {
 	}
 	
 	public void dispatch() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
-		boolean MACisValid = checkMAC(SDStoreMain.RECEIVED_MAC_STR);
+		boolean MACisValid = checkMAC(SDStoreMain.RECEIVED_MAC_STR, this.content);
 		
 		if( !MACisValid){
 			//FIXME do not throw an exception that doesnt make any sense
@@ -60,24 +55,4 @@ public class StoreService {
 			collection.setContent(docID, content);
 		} catch (CapacityExceeded_Exception e){ throw e; }
 	}
-	
-	public boolean checkMAC(String macString){
-    	byte[] bytes4mac = SDStoreMain.string2bytes("TESTEMAC");
-		SecretKey macKey = SdCrypto.generateMacKey(bytes4mac);
-		byte[] mac =  parseBase64Binary(macString);
-		
-		System.out.println("\n\n ############################################ \n\n");
-		
-		boolean result = SdCrypto.verifyMac(content, mac, macKey);
-		if(result){
-			System.out.println("MAC: YES!!!");
-		}
-		else{
-			System.out.println("MAC: NO :(");
-		}
-		
-		System.out.println("\n\n ############################################ \n\n");
-		
-		return result;
-    }
 }
