@@ -24,6 +24,7 @@ public class FrontEndRemoteTest {
 	public static final String USER = "duarte";
 	public static final String DOC_1 = "SD for dummies";
 	public static final String DOC_2 = "Top UDDI names for 2015";
+	public static final String DOC_3 = "SD THUG LIFE";
 	public static final String CONTENT = "Em SD, o importante é distribuir o jogo.";
 	
 	@BeforeClass
@@ -61,5 +62,18 @@ public class FrontEndRemoteTest {
 		String resultsr = StoreClient.bytes2string(result);
 		
 		assertEquals(CONTENT, resultsr);
+	}
+	
+	public void createAndList() throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception, NoConsensusException, DocAlreadyExists_Exception{
+		
+		
+		Collection<String> before_result = frontEnd.listDocs(USER);
+		frontEnd.createDoc(USER, DOC_3);
+		
+		Collection<String> result = frontEnd.listDocs(USER);
+		
+		
+		assertEquals(result.size(), before_result.size()+1);
+		assertTrue(result.contains(DOC_3));
 	}
 }
