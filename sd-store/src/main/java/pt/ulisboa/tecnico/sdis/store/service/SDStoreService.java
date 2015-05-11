@@ -12,6 +12,15 @@ public class SDStoreService{
 	protected int seq = -1;
 	protected int userNumber = -1;
 	
+	
+	public int getSeq(){
+		return this.seq;
+	}
+	
+	public int getUserNumber(){
+		return this.userNumber;
+	}
+	
 	public boolean checkMAC(String macString, byte[] content){
 		if(macString == null){
 			return true;
