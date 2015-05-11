@@ -208,20 +208,26 @@ public class StoreAndLoadTest extends ServerTest {
 	}
 	
 	@Test
-	public void assertVersions() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
+	public void assertVersions() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception, DocAlreadyExists_Exception{
+		String doc = "temp";
+		
 		String[] email_edits = { "ola", "oi", "boas", "boa tarde", "não sei como começar o email, vou guardar como rascunho" };
+		
+		CreateDocService create = new CreateDocService(U1, doc);
+		create.dispatch();
+		
+		int version = storage.getCollection(U1).getDoc(doc).getVersion();
+		assertEquals(0, version);
 		
 		StoreService store;
 		String s;
 		for(int i = 0; i < email_edits.length; i++){
 			s = email_edits[i];
-			store = new StoreService(U1, U1D1, string2bytes(s));
+			store = new StoreService(U1, doc, string2bytes(s));
 			store.dispatch();
 			
-			int version = storage.getCollection(U1).getDoc(U1D1).getVersion();
-			
+			version = storage.getCollection(U1).getDoc(doc).getVersion();
 			assertEquals(i+1, version);
 		}
-		
 	}
 }
