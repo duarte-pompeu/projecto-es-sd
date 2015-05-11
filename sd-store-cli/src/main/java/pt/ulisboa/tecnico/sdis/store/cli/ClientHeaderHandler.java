@@ -1,7 +1,5 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
-import static javax.xml.bind.DatatypeConverter.printBase64Binary;
-
 import java.util.Iterator;
 import java.util.Set;
 
@@ -64,17 +62,14 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 SOAPHeader sh = se.getHeader();
                 if (sh == null)
                     sh = se.addHeader();
-                
-                if(StoreClient.MAC == null){
-                	return true;
-                }
 
                 // add header element (name, namespace prefix, namespace)
                 Name name = se.createName(STORE_NAME, STORE_PREFIX, STORE_NAMESPACE);
                 SOAPHeaderElement element = sh.addHeaderElement(name);
 
                 // add header element value
-                String valueString = printBase64Binary(StoreClient.MAC);
+                String propertyValue = (String) smc.get(STORE_CONTENT_MAC);
+                String valueString = propertyValue;
                 debug("VALUE: " + valueString);
                 element.addTextNode(valueString);
 
@@ -110,12 +105,11 @@ public class ClientHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
                 // print received header
                 debug("Header value is " + valueString);
-                StoreClient.TAG = valueString;
                 
                 // put header in a property context
-                smc.put(STORE_CONTENT_MAC, valueString);
+                smc.put(STORE_CONTENT_TAG, valueString);
                 // set property scope to application client/server class can access it
-                smc.setScope(STORE_CONTENT_MAC, Scope.APPLICATION);
+                smc.setScope(STORE_CONTENT_TAG, Scope.APPLICATION);
             }
         } catch (Exception e) {
             System.out.print("Caught exception in handleMessage: ");

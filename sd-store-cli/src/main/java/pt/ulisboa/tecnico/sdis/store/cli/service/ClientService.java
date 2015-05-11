@@ -10,9 +10,14 @@ public abstract class ClientService {
 	public static final String CLASS_NAME = StoreClient.class.getSimpleName();
 	
 	protected SDStore port;
+	protected byte[] MAC;
 	
 	public ClientService(SDStore port){
 		this.port = port;
+	}
+	
+	public byte[] getMAC(){
+		return MAC;
 	}
 	
 	
@@ -23,10 +28,10 @@ public abstract class ClientService {
 		byte[] macBytes;
 		macBytes = SdCrypto.produceMac(content, macKey);
 		
-		StoreClient.MAC = macBytes;
+		MAC = macBytes;
 	}
 	
 	public void afterDispatch(){
-		StoreClient.MAC = null;
+		//StoreClient.MAC = null;
 	}
 }

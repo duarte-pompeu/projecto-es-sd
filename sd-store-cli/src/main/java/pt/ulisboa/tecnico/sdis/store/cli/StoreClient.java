@@ -1,8 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.cli;
 
-import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
-import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
+import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -33,9 +32,6 @@ public class StoreClient{
 	
 	public static final boolean VERBOSE = true;
 	public static boolean ENCRYPTION = true;
-	
-	public static byte[] MAC;
-	public static String TAG;
 	
 	// default values
 	public static final String DEFAULT_UDDI_URL = "http://localhost:8081";
@@ -121,16 +117,18 @@ public class StoreClient{
 	public void createDoc(String userID, String docID) throws InvalidAttributeValueException, DocAlreadyExists_Exception{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
 		service.dispatch();
+		String tag = getSOAPtag();
 		
-		System.out.println("RECEIVED TAG: " + TAG);
+		System.out.println("RECEIVED TAG: " + tag);
 	}
 	
 	
 	public List<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
 		ListDocsService service = new ListDocsService(userID, _port);
 		service.dispatch();
+		String tag = getSOAPtag();
 		
-		System.out.println("RECEIVED TAG: " + TAG);
+		System.out.println("RECEIVED TAG: " + tag);
 		
 		return service.getResult();
 	}
@@ -139,7 +137,9 @@ public class StoreClient{
 	public byte[] loadDoc(String userID, String docID) throws InvalidAttributeValueException, DocDoesNotExist_Exception, UserDoesNotExist_Exception{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
 		service.dispatch();
-
+		String tag = getSOAPtag();
+		
+		
 		if(!ENCRYPTION){
 			return service.getResult();
 		}
@@ -152,13 +152,11 @@ public class StoreClient{
 		
 		key = SdCrypto.generateKey(getDigest(userID));
 		plainBytes = SdCrypto.decrypt(key, ciphered);
-
-
 		
 		if(VERBOSE){
 			System.out.println("ENCRYPTED: " + printBase64Binary(ciphered));
 			System.out.println("DECRYPTED: " + bytes2string(plainBytes));
-			System.out.println("RECEIVED TAG: " + TAG);
+			System.out.println("RECEIVED TAG: " + tag);
 		}
 		
 		return plainBytes;
@@ -176,13 +174,18 @@ public class StoreClient{
 
 			key = SdCrypto.generateKey(getDigest(userID));
 			bytes2upload = SdCrypto.encrypt(key, content);
-
 		}
 		
 		StoreDocService service = new StoreDocService(userID, docID, bytes2upload, _port);
+		
+		String macstr = printBase64Binary(service.getMAC());
+		setSOAPmac(macstr);
+		
 		service.dispatch();
 		
-		System.out.println("RECEIVED TAG: " + TAG);
+		String tag = getSOAPtag();
+		
+		System.out.println("RECEIVED TAG: " + tag);
 	}
 
 	
@@ -207,5 +210,19 @@ public class StoreClient{
 	public byte[] getDigest(String userID){
 		//FIXME: doesnt actually use digest
 		 return SdCrypto.digestPassword(StoreClient.string2bytes(userID));
+	}
+	
+	public String getSOAPtag(){
+		BindingProvider bindingProvider = (BindingProvider) _port;
+		Map<String, Object> responseContext = bindingProvider.getResponseContext();
+		String tag = (String) responseContext.get(ClientHeaderHandler.STORE_CONTENT_TAG);
+		
+		return tag;
+	}
+	
+	public void setSOAPmac(String MAC){
+		BindingProvider bindingProvider = (BindingProvider) _port;
+		Map<String, Object> requestContext = bindingProvider.getRequestContext();
+		requestContext.put(ClientHeaderHandler.STORE_CONTENT_MAC, MAC);
 	}
 }
