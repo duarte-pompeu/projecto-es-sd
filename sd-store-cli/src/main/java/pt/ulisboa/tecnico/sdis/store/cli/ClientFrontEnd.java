@@ -9,8 +9,7 @@ import java.util.Map;
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
-import static javax.xml.bind.DatatypeConverter.printBase64Binary;
-import pt.tecnico.sd.SdCrypto;
+
 import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
@@ -31,6 +30,7 @@ public class ClientFrontEnd {
 	private QuorumFactory qFact;
 	private int currentOp = 0;
 	
+	
 	public ClientFrontEnd(String uddiName) throws JAXRException{
 		this._uddiName = uddiName;
 		init();
@@ -39,6 +39,7 @@ public class ClientFrontEnd {
 		qFact = new QuorumFactory(n_servers);
 	}
 	
+	
 	public ClientFrontEnd(Collection<StoreClient> clients){
 		_clients = new ArrayList<StoreClient>(clients);
 		
@@ -46,9 +47,11 @@ public class ClientFrontEnd {
 		qFact = new QuorumFactory(n_servers);
 	}
 	
+	
 	public ClientFrontEnd() throws JAXRException{
 		this(DEFAULT_UDDI_NAME);
 	}
+	
 	
 	public void setThresholds(int rt, int wt){
 		
@@ -126,11 +129,13 @@ public class ClientFrontEnd {
 		}
 		
 		try {
-			quorum.getVerdict();
-		} catch (UserDoesNotExist_Exception | DocDoesNotExist_Exception
+			quorum.getVerdict4content();
+		} 
+		catch (UserDoesNotExist_Exception | DocDoesNotExist_Exception
 				| CapacityExceeded_Exception | NoConsensusException e) {
 		}
 	}
+	
 	
 	public Collection<String> listDocs(String userID) throws InvalidAttributeValueException, UserDoesNotExist_Exception {
 		currentOp += 1;
@@ -168,16 +173,10 @@ public class ClientFrontEnd {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
 		return result;
-		
-		
-	
-		
 	}
+	
 	
 	public void storeDoc(String userID, String docID, byte[] content) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
 		currentOp += 1;
@@ -203,7 +202,7 @@ public class ClientFrontEnd {
 			}
 		}
 		
-		quorum.getVerdict();
+		quorum.getVerdict4content();
 	}
 	
 
@@ -218,26 +217,36 @@ public class ClientFrontEnd {
 		
 		byte[] res;
 		for(int serverID = 0; serverID < _clients.size(); serverID++){
+			Response r = null;
 			
 			try {
 				res = loadInReplica(currentOp, serverID, userID, docID);
-				quorum.addResponse(res,serverID);
+				r = new Response(res, serverID);
+				
 				resultsList.set(serverID, res);
 			} 
 			
 			catch (InvalidAttributeValueException e) {
-				quorum.addException(e,serverID);
+				r = new Response(e,serverID);
 			} catch (DocDoesNotExist_Exception e) {
-				quorum.addException(e,serverID);
+				r = new Response(e,serverID);
 			} catch (UserDoesNotExist_Exception e) {
-				quorum.addException(e,serverID);
+				r = new Response(e,serverID);
 			}
 			catch (Exception e){
 				throw e;
 			}
+			finally{
+				Tag tag = _clients.get(serverID).getSOAPtag();
+				
+				if(r != null && tag != null && quorum != null){
+					r.setTag(tag);
+					quorum.addResponse(r);
+				}
+			}
 		}
 		
-		byte[] result = quorum.getVerdict();
+		byte[] result = quorum.getVerdict4content();
 		
 		for(int server = 0; server < resultsList.size(); server++){
 			if(! Response.rEquals(result, resultsList.get(server))){
@@ -267,7 +276,7 @@ public class ClientFrontEnd {
 	public Collection<String> listDocsInReplica(int opID, String userID,int serverID) throws InvalidAttributeValueException, UserDoesNotExist_Exception{
 		return _clients.get(serverID).listDocs(userID);
 	}
-		public void createDocsInReplica(int opID, String userID,int serverID,String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocAlreadyExists_Exception{
+	public void createDocsInReplica(int opID, String userID,int serverID,String docID) throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocAlreadyExists_Exception{
 			_clients.get(serverID).createDoc(userID, docID);
 	}
 }

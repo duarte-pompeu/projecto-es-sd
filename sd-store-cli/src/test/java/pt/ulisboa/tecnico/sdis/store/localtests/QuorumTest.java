@@ -63,7 +63,7 @@ public class QuorumTest extends SDStoreClientTest{
 		assertEquals(new Integer(N_VOTERS), new Integer(QUORUM.countResponses()));
 		assertEquals(new Integer(1), new Integer(QUORUM.countUniqueResponses()));
 		
-		assertEquals(bcontent, QUORUM.getVerdict());
+		assertEquals(bcontent, QUORUM.getVerdict4content());
 	}
 	
 	
@@ -112,7 +112,7 @@ public class QuorumTest extends SDStoreClientTest{
 		assertEquals(new Integer(1), new Integer(quorum.countResponses()));
 		assertEquals(new Integer(1), new Integer(quorum.countUniqueResponses()));
 		
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -122,7 +122,7 @@ public class QuorumTest extends SDStoreClientTest{
 		
 		quorum.addResponse(bcontent,0);
 		
-		assertNull(quorum.getVerdict());
+		assertNull(quorum.getVerdict4content());
 	}
 	
 	
@@ -134,7 +134,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addResponse(string2bytes("HI"),1);
 		quorum.addResponse(string2bytes("HELLO"),2);
 		
-		quorum.getVerdict();
+		quorum.getVerdict4content();
 	}
 	
 	
@@ -145,7 +145,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addResponse(bcontent,0);
 		quorum.addResponse(bcontent,1);
 		
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -157,7 +157,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addResponse(bcontent,1);
 		quorum.addResponse(bcontent,2);
 		
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -169,7 +169,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addResponse(altbcontent1,1);
 		quorum.addResponse(bcontent,2);
 		
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -181,7 +181,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addResponse(bcontent,1);
 		quorum.addResponse(altbcontent1,2);
 		
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -193,7 +193,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addResponse(bcontent,1);
 		quorum.addResponse(bcontent,2);
 			
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -205,7 +205,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addException(UDNEex,1);
 		quorum.addResponse(bcontent,2);
 			
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -217,7 +217,7 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addException(DDNEex,1);
 		quorum.addResponse(bcontent,2);
 			
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
@@ -229,32 +229,32 @@ public class QuorumTest extends SDStoreClientTest{
 		quorum.addException(IAVex,1);
 		quorum.addResponse(bcontent,2);
 			
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
 	@Test
 	public void lowThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3,1);
-		assertNull(quorum.getVerdict());
+		assertNull(quorum.getVerdict4content());
 		
 		quorum.addResponse(bcontent,0);
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 	
 	
 	@Test
 	public void HighThreshold() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
 		Quorum quorum = new Quorum(3,3);
-		assertNull(quorum.getVerdict());
+		assertNull(quorum.getVerdict4content());
 		
 		quorum.addResponse(bcontent,0);
-		assertNull(quorum.getVerdict());
+		assertNull(quorum.getVerdict4content());
 		
 		quorum.addResponse(bcontent,1);
-		assertNull(quorum.getVerdict());
+		assertNull(quorum.getVerdict4content());
 		
 		quorum.addResponse(bcontent,2);
-		assertEquals(bcontent, quorum.getVerdict());
+		assertEquals(bcontent, quorum.getVerdict4content());
 	}
 }

@@ -59,8 +59,7 @@ public class Quorum {
 		}
 	}
 
-	
-	public byte[] getVerdict() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
+	private Response getVerdict() throws NoConsensusException{
 		int highest_votes = 0;
 		
 		for(int i = 0; i < votes.size(); i++){
@@ -72,7 +71,7 @@ public class Quorum {
 					totalConsensus = true;
 				}
 				
-				return _uniqueResponses.get(i).getContent();
+				return _uniqueResponses.get(i);
 			}
 			
 			if(n_votes > highest_votes)
@@ -84,35 +83,34 @@ public class Quorum {
 		}
 		
 		return null;
+	}
+	
+	
+	public byte[] getVerdict4content() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
+		Response r = getVerdict();
 		
+		if(r == null){
+			return null;
+		}
+		
+		return r.getContent();
 	}
 	
 	
 	public Collection<String> getVerdict4Collection() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException {
-		int highest_votes = 0;
+		Response r = getVerdict();
 		
-		for(int i = 0; i < votes.size(); i++){
-			int n_votes = votes.get(i);
-			
-			if(n_votes >= _min4quorum){
-				
-				if(n_votes == _responses.size()){
-					totalConsensus = true;
-				}
-				
-				return _uniqueResponses.get(i).getDocNames();
-			}
-			
-			if(n_votes > highest_votes)
-				highest_votes = n_votes;
+		if(r == null){
+			return null;
 		}
 		
-		if(getVotesLeft() + highest_votes < min4quorum()){
-			throw new NoConsensusException("Not enough votes 4 quorum.");
-		}
+		return r.getDocNames();
+	}
+	
+	
+	public byte[] getSeqVerdict(){
 		
 		return null;
-		
 	}
 	
 	

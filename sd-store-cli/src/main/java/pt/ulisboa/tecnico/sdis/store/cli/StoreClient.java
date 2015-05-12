@@ -123,7 +123,7 @@ public class StoreClient{
 		CreateDocService service = new CreateDocService(userID, docID, _port);
 		setSOAPclientID(this.ID);
 		service.dispatch();
-		String tag = getSOAPtag();
+		Tag tag = getSOAPtag();
 		
 		System.out.println("RECEIVED TAG: " + tag);
 	}
@@ -133,7 +133,7 @@ public class StoreClient{
 		ListDocsService service = new ListDocsService(userID, _port);
 		setSOAPclientID(this.ID);
 		service.dispatch();
-		String tag = getSOAPtag();
+		Tag tag = getSOAPtag();
 		
 		System.out.println("RECEIVED TAG: " + tag);
 		
@@ -145,7 +145,7 @@ public class StoreClient{
 		LoadDocService service = new LoadDocService(userID, docID, _port);
 		setSOAPclientID(this.ID);
 		service.dispatch();
-		String tag = getSOAPtag();
+		Tag tag = getSOAPtag();
 		
 		
 		if(!ENCRYPTION){
@@ -192,7 +192,7 @@ public class StoreClient{
 		
 		service.dispatch();
 		
-		String tag = getSOAPtag();
+		Tag tag = getSOAPtag();
 		
 		System.out.println("RECEIVED TAG: " + tag);
 	}
@@ -221,10 +221,23 @@ public class StoreClient{
 		 return SdCrypto.digestPassword(StoreClient.string2bytes(userID));
 	}
 	
-	public String getSOAPtag(){
+	public Tag getSOAPtag(){
 		BindingProvider bindingProvider = (BindingProvider) _port;
 		Map<String, Object> responseContext = bindingProvider.getResponseContext();
-		String tag = (String) responseContext.get(ClientHeaderHandler.STORE_CONTENT_TAG);
+		String soaptag = (String) responseContext.get(ClientHeaderHandler.STORE_CONTENT_TAG);
+		
+		Tag tag;
+		String[] fields = new String[2];
+		
+		try{
+			fields[0] = soaptag.split(";")[0];
+			fields[1] = soaptag.split(";")[1];
+			
+			tag = new Tag(Integer.valueOf(fields[0]), Integer.valueOf(fields[1]));
+		}
+		catch(Exception e){
+			tag = new Tag(-1,-1);
+		}
 		
 		return tag;
 	}

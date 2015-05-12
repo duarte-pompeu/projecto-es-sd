@@ -20,6 +20,8 @@ public class Response {
 	private static final int CE_EXCEPTION = 204;
 	
 	public final int TYPE;
+	private Tag tag;
+	
 	private byte[] docContent = null;
 	private Collection<String> docNameCollection = null;
 	private Exception except = null;
@@ -27,6 +29,7 @@ public class Response {
 	private DocDoesNotExist_Exception ddneEx = null;
 	private UserDoesNotExist_Exception udneEx = null;
 	private CapacityExceeded_Exception ceEx = null;
+	
 	
 	public final int ID;
 	
@@ -238,9 +241,12 @@ int type = this.TYPE;
 			throw ceEx;
 		}
 		
-		
-		
 		return docNameCollection;
 	
+	}
+
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
 	}
 }
