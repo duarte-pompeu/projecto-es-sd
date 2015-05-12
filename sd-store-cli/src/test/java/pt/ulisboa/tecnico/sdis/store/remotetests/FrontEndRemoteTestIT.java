@@ -18,7 +18,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class FrontEndRemoteTest {
+public class FrontEndRemoteTestIT {
 	static ClientFrontEnd frontEnd;
 	
 	public static final String USER = "duarte";

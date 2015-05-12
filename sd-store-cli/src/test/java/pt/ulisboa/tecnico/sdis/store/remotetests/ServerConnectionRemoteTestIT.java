@@ -24,7 +24,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
-public class ServerConnectionRemoteTest  extends SDStoreClientTest{
+public class ServerConnectionRemoteTestIT  extends SDStoreClientTest{
 	private final String USER = "duarte";
 	private final String DOC_STORED = "my first novel";
 	private final String DOC_NOT_STORED = "my second novel";
