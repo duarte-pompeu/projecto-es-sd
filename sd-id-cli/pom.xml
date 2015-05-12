@@ -33,13 +33,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   </build>
 
   <dependencies>
-    <!-- SD-ID -->
-    <!-- This is imported because of the wsdl code -->
-    <dependency>
-      <groupId>pt.tecnico.ulisboa.essd</groupId>
-      <artifactId>sd-id</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
     <dependency>
     	<groupId>pt.tecnico.ulisboa.essd</groupId>
     	<artifactId>sd-crypto</artifactId>
@@ -50,6 +43,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     	<artifactId>ws-handlers</artifactId>
     	<version>1.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+    	<groupId>pt.tecnico.ulisboa.essd</groupId>
+    	<artifactId>sd-juddi</artifactId>
+    	<version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
+  <properties>
+  	<wsdl.directory>${basedir}/../sd-id/src/main/resources/</wsdl.directory>
+  </properties>
 </project>

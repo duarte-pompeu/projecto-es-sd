@@ -9,9 +9,10 @@ import javax.xml.registry.JAXRException;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
-import example.ws.uddi.UDDINaming;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId;
 import pt.ulisboa.tecnico.sdis.id.ws.SDId_Service;
+import pt.ulisboa.tecnico.sdis.juddi.UDDINaming;
+
 
 public class SdIdConnector {
 	SDId port = null;

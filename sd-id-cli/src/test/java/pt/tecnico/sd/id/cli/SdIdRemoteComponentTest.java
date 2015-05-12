@@ -167,7 +167,7 @@ public class SdIdRemoteComponentTest {
 		client.renewPassword(existingUsernames[0]);
 	}
 
-	@Test(expected=AuthReqFailed_Exception.class)
+	@Test(expected=AuthenticationException.class)
 	public void testRenewPasswordAndAuthenticateWithOldPass() throws Exception {
 		SdIdClient client = CLIENT;
 		client.renewPassword(existingUsernames[1]);
