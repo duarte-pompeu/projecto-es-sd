@@ -210,9 +210,11 @@ public class ClientFrontEnd {
 		currentOp += 1;
 		Quorum quorum = qFact.getNewReadQuorum();
 		ArrayList<byte[]> resultsList = new ArrayList<byte[]>();
+		ArrayList<Response> responseList = new ArrayList<Response>();
 		
 		for(int i = 0; i < _clients.size(); i++){
 			resultsList.add(null);
+			responseList.add(null);
 		}
 		
 		byte[] res;
@@ -224,6 +226,7 @@ public class ClientFrontEnd {
 				r = new Response(res, serverID);
 				
 				resultsList.set(serverID, res);
+				responseList.set(serverID, r);
 			} 
 			
 			catch (InvalidAttributeValueException e) {
@@ -248,13 +251,42 @@ public class ClientFrontEnd {
 		
 		// FIXME: REFACTOR FINAL POINT
 		//byte[] result = quorum.getVerdict4content();
-		byte[] result = quorum.getSeqVerdict4content();
+		//byte[] result = quorum.getSeqVerdict4content();
 		
-		for(int server = 0; server < resultsList.size(); server++){
-			if(! Response.rEquals(result, resultsList.get(server))){
+		Response verdictResponse = quorum.getSeqVerdict();
+		
+		if(verdictResponse == null){
+			return null;
+		}
+		
+		Tag verdictTag = verdictResponse.getTag();
+		byte[] verdictResult = verdictResponse.getContent();
+		
+		
+		// WRITE BACK WITH VOTES
+//		for(int server = 0; server < resultsList.size(); server++){
+//			if(! Response.rEquals(result, resultsList.get(server))){
+//				try {
+//					storeInReplica(currentOp, server, userID, docID, result);
+//				} catch (InvalidAttributeValueException
+//						| CapacityExceeded_Exception
+//						| DocDoesNotExist_Exception
+//						| UserDoesNotExist_Exception e) {
+//					
+//					// writeback failed, too bad
+//				}
+//			}
+//		}
+		
+		// WRITE BACK WITH SEQ
+		for(int serverID = 0; serverID < responseList.size(); serverID++){
+			Tag tmpTag = responseList.get(serverID).getTag();
+			
+			if( verdictTag.compareTo(tmpTag) > 0 ){
 				try {
-					storeInReplica(currentOp, server, userID, docID, result);
-				} catch (InvalidAttributeValueException
+					storeInReplica(currentOp, serverID, userID, docID, verdictResult);
+				} 
+				catch (InvalidAttributeValueException
 						| CapacityExceeded_Exception
 						| DocDoesNotExist_Exception
 						| UserDoesNotExist_Exception e) {
@@ -264,7 +296,7 @@ public class ClientFrontEnd {
 			}
 		}
 		
-		return result;
+		return verdictResult;
 	}
 	
 	public void storeInReplica(int opID, int serverID, String userID, String docID, byte[] content) throws InvalidAttributeValueException, CapacityExceeded_Exception, DocDoesNotExist_Exception, UserDoesNotExist_Exception{

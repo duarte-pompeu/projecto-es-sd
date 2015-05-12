@@ -108,7 +108,7 @@ public class Quorum {
 	}
 	
 	
-	private Response getSeqVerdict(){
+	public Response getSeqVerdict(){
 		int min4quor = min4quorum();
 		
 		if(_responses.size() < min4quor){

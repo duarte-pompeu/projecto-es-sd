@@ -347,4 +347,42 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 		
 		assertArrayEquals(expected, _fe.loadDoc(USER, DOC2));
 	}
+	
+	@Test
+	public void writeBackSeq1() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		final byte [] expected = string2bytes("ABC");
+		final byte [] outdated = string2bytes("XYZ");
+		
+		new Expectations() {{
+			mockCli1.loadDoc(USER, DOC2);
+			result = expected;
+		}};
+		
+		new Expectations() {{
+			mockCli1.getSOAPtag();
+			result = new Tag(5,1);
+		}};
+		
+		
+		new Expectations() {{
+			mockCli2.loadDoc(USER, DOC2);
+			result = outdated;
+		}};
+		
+		new Expectations() {{
+			mockCli2.getSOAPtag();
+			result = new Tag(4,1);
+		}};
+		
+		new Expectations() {{
+			mockCli2.storeDoc(USER, DOC2, expected);
+		}};
+		
+		new Expectations() {{
+			mockCli3.storeDoc(USER, DOC2, expected);
+		}};
+		
+		
+		assertArrayEquals(expected, _fe.loadDoc(USER, DOC2));
+	}
 }
