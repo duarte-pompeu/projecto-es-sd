@@ -108,7 +108,7 @@ public class Quorum {
 	}
 	
 	
-	public Response getSeqVerdict(){
+	public Response getTagVerdict(){
 		int min4quor = min4quorum();
 		
 		if(_responses.size() < min4quor){
@@ -133,8 +133,8 @@ public class Quorum {
 	}
 	
 	
-	public byte[] getSeqVerdict4content() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = getSeqVerdict();
+	public byte[] getTagVerdict4content() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Response r = getTagVerdict();
 		
 		if(r == null){
 			return null;

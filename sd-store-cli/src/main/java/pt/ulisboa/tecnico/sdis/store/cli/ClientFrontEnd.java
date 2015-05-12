@@ -253,7 +253,7 @@ public class ClientFrontEnd {
 		//byte[] result = quorum.getVerdict4content();
 		//byte[] result = quorum.getSeqVerdict4content();
 		
-		Response verdictResponse = quorum.getSeqVerdict();
+		Response verdictResponse = quorum.getTagVerdict();
 		
 		if(verdictResponse == null){
 			return null;
