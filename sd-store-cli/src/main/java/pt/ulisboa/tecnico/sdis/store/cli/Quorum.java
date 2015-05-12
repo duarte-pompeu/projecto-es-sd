@@ -108,9 +108,39 @@ public class Quorum {
 	}
 	
 	
-	public byte[] getSeqVerdict(){
+	private Response getSeqVerdict(){
+		int min4quor = min4quorum();
 		
-		return null;
+		if(_responses.size() < min4quor){
+			return null;
+		}
+		
+		Tag lastTag = new Tag(-1,-1);
+		Response result = null;
+		
+		for(int i = 0; i < min4quor; i++){
+			Response tmpRes = _responses.get(i);
+			Tag tmpTag = tmpRes.getTag();
+			
+			if(tmpTag.compareTo(lastTag) > 0){
+				lastTag = tmpTag;
+				result = tmpRes;
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	
+	public byte[] getSeqVerdict4content() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Response r = getSeqVerdict();
+		
+		if(r == null){
+			return null;
+		}
+		
+		return r.getContent();
 	}
 	
 	

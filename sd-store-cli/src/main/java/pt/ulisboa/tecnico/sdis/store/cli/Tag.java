@@ -29,4 +29,16 @@ public class Tag {
 	public String toString(){
 		return seq + ";" + frontendID;
 	}
+
+	public int compareTo(Tag otherTag) {
+		if(otherTag == null){
+			return 1;
+		}
+		
+		if(this.seq == otherTag.seq){
+			return this.frontendID - otherTag.frontendID;
+		}
+		
+		else return this.seq - otherTag.seq;
+	}
 }

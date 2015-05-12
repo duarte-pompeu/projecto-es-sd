@@ -249,4 +249,8 @@ int type = this.TYPE;
 	public void setTag(Tag tag) {
 		this.tag = tag;
 	}
+	
+	public Tag getTag(){
+		return this.tag;
+	}
 }

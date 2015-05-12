@@ -246,7 +246,9 @@ public class ClientFrontEnd {
 			}
 		}
 		
-		byte[] result = quorum.getVerdict4content();
+		// FIXME: REFACTOR FINAL POINT
+		//byte[] result = quorum.getVerdict4content();
+		byte[] result = quorum.getSeqVerdict4content();
 		
 		for(int server = 0; server < resultsList.size(); server++){
 			if(! Response.rEquals(result, resultsList.get(server))){
