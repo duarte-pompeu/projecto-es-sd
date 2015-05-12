@@ -10,6 +10,7 @@ import pt.tecnico.bubbledocs.exceptions.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exceptions.LoginException;
 import pt.tecnico.bubbledocs.exceptions.RemoteInvocationException;
 import pt.ulisboa.tecnico.sdis.id.ws.*;
+import pt.tecnico.sd.ClientTicket;
 import pt.tecnico.sd.id.cli.*;
 
 
@@ -39,7 +40,7 @@ public class IDRemoteServices {
 		
 	}
 	
-	public void loginUser(String username, String password)
+	public ClientTicket loginUser(String username, String password)
 			throws LoginException, RemoteInvocationException {
 		//TODO
 		/*
@@ -56,6 +57,8 @@ public class IDRemoteServices {
 			throw new LoginException(e);
 		}
 		*/
+		
+		return null;
 	}
 	
 	public void removeUser(String username)
