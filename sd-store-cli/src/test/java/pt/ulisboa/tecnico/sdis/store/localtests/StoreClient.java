@@ -38,7 +38,7 @@ import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
  * So, Verifications() and withCapture() are used to capture the argument 
  * and check its attributes or use its methods to infer state.
  */
-public class ClientLocalTest extends SDStoreClientTest {
+public class StoreClient extends SDStoreClientTest {
 	public static final String USER = "duarte";
 	public static final String DOC = "SD-notes";
 	public static final String CONTENT = "RPC, RMI and WS.";

@@ -9,6 +9,17 @@ import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
+/**
+ * Como tinhamos uma ideia errada do Quorum Consensus, a classe Response ficou mais complexa do que necessário.
+ * Esta classe tinha (ainda tem, mas não são usados):
+ * 	- vários mecanismos de wrapping à volta de respostas do servidor
+ *  - vários mecanismos para se comparar com outras respostas
+ *  
+ *  
+ *  Na versão final do projecto, o uso da classe é mais simples.
+ *  Usam-se os mecanismos de wrapping mas não os de comparação.
+ *  A comparação é efectuada pela classe Tag.
+ */
 public class Response {
 	private static final int SUCCESS = 0;
 	private static final int CONTENT = 100;
@@ -47,6 +58,97 @@ public class Response {
 	}
 	
 	
+	public Response(Collection<String> docNames, int ID){
+		TYPE = NAME_CONTENT;
+		docNameCollection = docNames;
+		this.ID = ID;
+	}
+	
+	
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+	
+	
+	public Tag getTag(){
+		return this.tag;
+	}
+	
+	
+	public byte[] getContent() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
+		int type = this.TYPE;
+		
+		switch(type){
+			
+		case IAV_EXCEPTION:
+			if(iaevEx == null)
+				return null;
+			
+			throw iaevEx;
+		
+		case DDNE_EXCEPTION:
+			if(ddneEx == null)
+				return null;
+		
+			throw ddneEx;
+		
+		case UDNE_EXCEPTION:
+			if(udneEx == null)
+				return null;
+			
+			throw udneEx;
+			
+		case CE_EXCEPTION:
+			if(ceEx == null)
+				return null;
+			
+			throw ceEx;
+		}
+
+		return docContent;
+	}
+	
+	
+	public Collection<String> getDocNames() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
+		int type = this.TYPE;
+		
+		switch(type){
+			
+		case IAV_EXCEPTION:
+			if(iaevEx == null)
+				return null;
+			
+			throw iaevEx;
+		
+		case DDNE_EXCEPTION:
+			if(ddneEx == null)
+				return null;
+		
+			throw ddneEx;
+		
+		case UDNE_EXCEPTION:
+			if(udneEx == null)
+				return null;
+			
+			throw udneEx;
+			
+		case CE_EXCEPTION:
+			if(ceEx == null)
+				return null;
+			
+			throw ceEx;
+		}
+		
+		return docNameCollection;
+	
+	}
+	
+	
+	
+	/////////////////////////////////////
+	//     Métodos depecrecados        //
+	/////////////////////////////////////
+	
 	public Response(Exception e, int ID){
 		TYPE = GENERIC_EXCEPTION;
 		this.except = e;
@@ -78,12 +180,6 @@ public class Response {
 	public Response(CapacityExceeded_Exception e, int ID){
 		TYPE = CE_EXCEPTION;
 		this.ceEx = e;
-		this.ID = ID;
-	}
-	
-	public Response(Collection<String> docNames, int ID){
-		TYPE = NAME_CONTENT;
-		docNameCollection = docNames;
 		this.ID = ID;
 	}
 
@@ -163,94 +259,5 @@ public class Response {
 		
 		return e1.getMessage().equals(e2.getMessage())
 				&& e1.getFaultInfo().getDocId().equals(e2.getFaultInfo().getDocId());
-	}
-
-
-	public byte[] getContent() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
-		int type = this.TYPE;
-		
-		switch(type){
-//		case GENERIC_EXCEPTION:
-//			if(except == null)
-//				return null;
-//			
-//			throw except;
-			
-		case IAV_EXCEPTION:
-			if(iaevEx == null)
-				return null;
-			
-			throw iaevEx;
-		
-		case DDNE_EXCEPTION:
-			if(ddneEx == null)
-				return null;
-		
-			throw ddneEx;
-		
-		case UDNE_EXCEPTION:
-			if(udneEx == null)
-				return null;
-			
-			throw udneEx;
-			
-		case CE_EXCEPTION:
-			if(ceEx == null)
-				return null;
-			
-			throw ceEx;
-		}
-		
-		
-		
-		return docContent;
-	}
-	
-	public Collection<String> getDocNames() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception {
-int type = this.TYPE;
-		
-		switch(type){
-//		case GENERIC_EXCEPTION:
-//			if(except == null)
-//				return null;
-//			
-//			throw except;
-			
-		case IAV_EXCEPTION:
-			if(iaevEx == null)
-				return null;
-			
-			throw iaevEx;
-		
-		case DDNE_EXCEPTION:
-			if(ddneEx == null)
-				return null;
-		
-			throw ddneEx;
-		
-		case UDNE_EXCEPTION:
-			if(udneEx == null)
-				return null;
-			
-			throw udneEx;
-			
-		case CE_EXCEPTION:
-			if(ceEx == null)
-				return null;
-			
-			throw ceEx;
-		}
-		
-		return docNameCollection;
-	
-	}
-
-
-	public void setTag(Tag tag) {
-		this.tag = tag;
-	}
-	
-	public Tag getTag(){
-		return this.tag;
 	}
 }

@@ -1,9 +1,8 @@
 package pt.ulisboa.tecnico.sdis.store.localtests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
@@ -18,6 +17,12 @@ import pt.ulisboa.tecnico.sdis.store.ws.DocDoesNotExist_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist;
 import pt.ulisboa.tecnico.sdis.store.ws.UserDoesNotExist_Exception;
 
+/**
+ * Esta classe testava exaustivamente o antigo comportamento da classe Response.
+ * 
+ * Com a simplicação do uso de Response, o nº de testes foi reduzido.
+ * Os testes antigos estão comentados, para referência.
+ */
 public class ResponseTest {
 	static byte[] CONTENT;
 	static byte[] CONTENT_COPY;
@@ -89,6 +94,62 @@ public class ResponseTest {
 	
 	
 	@Test
+	public void content() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Response r1 = new Response(CONTENT,1);
+		Response r2 = new Response(CONTENT_COPY,2);
+		Response r3 = new Response(CONTENT_ALT,3);
+		
+		
+		assertEquals(CONTENT, r1.getContent());
+		assertEquals(CONTENT_COPY, r2.getContent());
+		assertEquals(CONTENT_ALT, r3.getContent());
+	}
+	
+	
+	@Test (expected=Exception.class)
+	public void throwIAVException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Response r = new Response(IAVex,1);
+		
+		r.getContent();
+	}
+	
+	
+	@Test (expected=UserDoesNotExist_Exception.class)
+	public void throwUDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Response r = new Response(UDNEex,1);
+		
+		r.getContent();
+	}
+	
+	
+	@Test (expected=DocDoesNotExist_Exception.class)
+	public void throwDDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
+		Response r = new Response(DDNEex,1);
+		
+		r.getContent();
+	}
+	
+	
+	@Test
+	public void contentEquals(){
+		Response r1 = new Response(CONTENT,1);
+		Response r2 = new Response(CONTENT_COPY,2);
+		
+		assertTrue(r1.equals(r2));
+	}
+	
+	
+	@Test
+	public void contentDiffers(){
+		Response r1 = new Response(CONTENT,1);
+		Response r2 = new Response(CONTENT_ALT,2);
+		
+		assertFalse(r1.equals(r2));
+	}
+	
+	
+	/*
+	@Test
 	public void differentTypesOfResponsesDiffer(){
 		ArrayList<Response> rlist = new ArrayList<Response>();
 		
@@ -119,54 +180,12 @@ public class ResponseTest {
 	}
 	
 	
-	@Test
-	public void contentEquals(){
-		Response r1 = new Response(CONTENT,1);
-		Response r2 = new Response(CONTENT_COPY,2);
-		
-		assertTrue(r1.equals(r2));
-	}
-	
-	
-	@Test
-	public void contentDiffers(){
-		Response r1 = new Response(CONTENT,1);
-		Response r2 = new Response(CONTENT_ALT,2);
-		
-		assertFalse(r1.equals(r2));
-	}
-	
-	
 	@Test 
 	public void genericExceptionEquals(){
 		Response r1 = new Response(GENERIC_EXCEPTION,1);
 		Response r2 = new Response(GENERIC_EXCEPTION_COPY,2);
 		
 		assertTrue(r1.equals(r2));
-	}
-	
-	
-	@Test (expected=Exception.class)
-	public void throwIAVException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = new Response(IAVex,1);
-		
-		r.getContent();
-	}
-	
-	
-	@Test (expected=UserDoesNotExist_Exception.class)
-	public void throwUDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = new Response(UDNEex,1);
-		
-		r.getContent();
-	}
-	
-	
-	@Test (expected=DocDoesNotExist_Exception.class)
-	public void throwDDNEException() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception{
-		Response r = new Response(DDNEex,1);
-		
-		r.getContent();
 	}
 	
 	
@@ -231,5 +250,5 @@ public class ResponseTest {
 		
 		assertFalse(r1.equals(r2));
 	}
-	
+	*/
 }
