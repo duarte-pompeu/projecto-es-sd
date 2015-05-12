@@ -104,6 +104,8 @@ public class BubbleApplication {
 		
 		new AssignLiteralCell(pf_token, sheet_id, "3;4", "5").execute();
 		new AssignReferenceCell(pf_token, sheet_id, "1;1", "5;6").execute();
+		new AssignBinaryToCell("5;6", "=ADD(2,3;4)", sheet_id, pf_token);
+		new AssignBinaryToCell("2;2", "=DIV(1;1,3;4)", sheet_id, pf_token);
 	}
 
 }
