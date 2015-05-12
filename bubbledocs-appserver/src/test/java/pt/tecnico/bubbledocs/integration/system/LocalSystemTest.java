@@ -1,7 +1,6 @@
 package pt.tecnico.bubbledocs.integration.system;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotEquals;
 
@@ -9,9 +8,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.io.ByteArrayInputStream;
-import java.util.List;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
@@ -23,12 +19,6 @@ import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -7,23 +7,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
-
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
-import mockit.Expectations;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +21,6 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.CalcSheet;
-import pt.tecnico.bubbledocs.domain.CalcSheetExporter;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Content;
 import pt.tecnico.bubbledocs.domain.Literal;
