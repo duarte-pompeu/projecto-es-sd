@@ -38,6 +38,9 @@ import org.junit.Test;
 
 
 
+
+
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
@@ -50,6 +53,7 @@ import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Session;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exceptions.NotFoundException;
+import pt.tecnico.bubbledocs.integration.AssignBinaryToCellIntegrator;
 import pt.tecnico.bubbledocs.integration.AssignLiteralCellIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.integration.CreateUserIntegrator;
@@ -59,6 +63,7 @@ import pt.tecnico.bubbledocs.integration.GetSpreadsheetContentIntegrator;
 import pt.tecnico.bubbledocs.integration.ImportDocumentIntegrator;
 import pt.tecnico.bubbledocs.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.integration.RenewPasswordIntegrator;
+import pt.tecnico.bubbledocs.service.AssignBinaryToCell;
 import pt.tecnico.bubbledocs.service.AssignReferenceCell;
 import pt.tecnico.bubbledocs.service.GetUserInfo;
 import pt.tecnico.bubbledocs.service.GetUsername4Token;
@@ -85,6 +90,8 @@ public class LocalSystemTest {
 		 private static final String CALCSHEET_NAME = "Sinonimos de Joaquim";
 		 private static final int CALCSHEET_ROWS = 50;
 		 private static final int CALCSHEET_COLUMNS = 50;
+		 private static final String add_Expression =  "=ADD(2,1;1)";
+		 private static final String div_Expression =  "=DIV(1;1,2;2)";
 		
 		 
 		
@@ -198,20 +205,36 @@ public class LocalSystemTest {
 	    		alc.execute();
 	    		String lit_result = alc.getResult();
 	    		String cell_id=created_spread.getCell(1, 1).getId();
+	    		String cell_id2=created_spread.getCell(2, 2).getId();
+	    		String cell_id3=created_spread.getCell(4, 4).getId();
 	    		
 	    		assertEquals("Value is NOT correct", 5, calc.getCell(cell_id).getContent().getValue());
 	    		assertEquals("Bad result",calc.getCell(cell_id).getContent().toString(),lit_result);
 	    		
 	    		
 	    		reference = new Reference(created_spread.getCell(1,1));
-	    		AssignReferenceCell arc = new AssignReferenceCell(user_token, CALCSHEET_ID, created_spread.getCell(2, 2).getId(), "1;1");
+	    		AssignReferenceCell arc = new AssignReferenceCell(user_token, CALCSHEET_ID, created_spread.getCell(3, 3).getId(), "1;1");
 	    		arc.execute();
 	    		String ref_result = arc.getResult();
-	    		String ref_id = calc.getCell(2, 2).getId();
+	    		String ref_id = calc.getCell(3, 3).getId();
 	    		Reference comp_ref = new Reference (calc.getCell(ref_id));
 	    		
 	    		assertEquals("Reference is NOT correct", ref_id, comp_ref.getPointedCell().getId());
 	    		assertEquals("Bad result", "=1;1", ref_result);
+	    		
+	    		
+	    		
+	    		AssignBinaryToCellIntegrator add = new AssignBinaryToCellIntegrator( cell_id2, add_Expression ,CALCSHEET_ID, user_token);
+	    		add.execute();
+
+	    		assertEquals("Content value is incorrect", add.getResult(), "7");
+	    		
+	    		
+	    		AssignBinaryToCellIntegrator div = new AssignBinaryToCellIntegrator( cell_id3, div_Expression ,CALCSHEET_ID, user_token);
+	    		div.execute();
+
+	    		assertEquals("Content value is incorrect", div.getResult(), "0");
+	    		
 	    		
 	    		
 	    		//time 2 renew my password
@@ -237,7 +260,7 @@ public class LocalSystemTest {
 	    		assertEquals(content[0].length, CALCSHEET_COLUMNS);
 	    		assertEquals(content.length, CALCSHEET_ROWS);
 	    		assertEquals("5", content[0][0]);
-	    		assertEquals(reference.toString(), content[1][1]);
+	    		assertEquals(reference.toString(), content[2][2]);
 	    		
 	    		//
 	    		byte[] exported = new CalcSheetExporter().exportToXmlData(calc);
