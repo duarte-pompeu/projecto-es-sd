@@ -40,25 +40,17 @@ public class IDRemoteServices {
 		
 	}
 	
-	public ClientTicket loginUser(String username, String password)
+	public void loginUser(String username, String password)
 			throws LoginException, RemoteInvocationException {
-		//TODO
-		/*
 		try {
 			SdIdClient idRemote = getRemote();
-			byte[] result = idRemote.requestAuthentication(username, password.getBytes());
-			if (!Arrays.equals(result, "1".getBytes())) {
-				throw new LoginException();
-			}
-			
+			idRemote.requestAuthentication(username, password.getBytes());
+			//ticket is not used here - for now.
 		} catch (SdIdRemoteException e) {
 			throw new RemoteInvocationException(e);
-		} catch (AuthReqFailed_Exception e) {
+		} catch (AuthenticationException e) {
 			throw new LoginException(e);
 		}
-		*/
-		
-		return null;
 	}
 	
 	public void removeUser(String username)
