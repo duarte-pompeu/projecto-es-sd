@@ -1,14 +1,22 @@
 package pt.ulisboa.tecnico.sdis.store.ws;
+import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.crypto.SecretKey;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
+import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.store.service.CreateDocService;
 import pt.ulisboa.tecnico.sdis.store.service.ListDocsService;
 import pt.ulisboa.tecnico.sdis.store.service.LoadService;
+import pt.ulisboa.tecnico.sdis.store.service.SDStoreService;
 import pt.ulisboa.tecnico.sdis.store.service.StoreService;
+import pt.ulisboa.tecnico.sdis.store.ws.handler.StoreHeaderHandler;
 
 @WebService(
 	endpointInterface="pt.ulisboa.tecnico.sdis.store.ws.SDStore",
@@ -20,8 +28,9 @@ import pt.ulisboa.tecnico.sdis.store.service.StoreService;
 )
 @HandlerChain(file="/handler-chain.xml")
 public class SDStoreImpl implements SDStore{
-//	@Resource
-//    private WebServiceContext webServiceContext;
+
+	@Resource
+    private WebServiceContext webServiceContext;
 	
 	public final boolean DEBUG;
 	
@@ -83,6 +92,31 @@ public class SDStoreImpl implements SDStore{
 			throws CapacityExceeded_Exception, DocDoesNotExist_Exception,
 			UserDoesNotExist_Exception {
 		
+		String MACfromSOAP = getSOAPmac();
+		
+		if(MACfromSOAP == null || MACfromSOAP.equals("")){
+			System.out.println("###############\nNO MAC\n###############");
+		}
+		
+		byte[] mac = parseBase64Binary(MACfromSOAP);
+		byte[] bytes4mac = SDStoreService.string2bytes("TESTEMAC");
+		SecretKey macKey = SdCrypto.generateMacKey(bytes4mac);
+		
+		boolean isGoodMAC = SdCrypto.verifyMac(contents, mac, macKey);
+		
+		if(! isGoodMAC){
+			System.out.println("###############\nBAD MAC\n###############");
+			UserDoesNotExist udne = new UserDoesNotExist();
+			udne.setUserId("MITM");
+			
+			throw new UserDoesNotExist_Exception("ERROR: BAD MAC", udne);
+		}
+		
+		else{
+			System.out.println("###############\nGOOD MAC\n###############");
+		}
+		
+		
 		String userID = docUserPair.getUserId();
 		String docID = docUserPair.getDocumentId();
 		String clientID = SDStoreMain.RECEIVED_CLIENT_ID;
@@ -115,8 +149,13 @@ public class SDStoreImpl implements SDStore{
 			System.out.println("USER_ACCESS: " + clientID);
 		}
 		
-//		MessageContext messageContext = webServiceContext.getMessageContext();
-//		messageContext.put(StoreHeaderHandler.CONTEXT_PROPERTY, "test");//service.getTag());
 		return result;
+	}
+	
+	public String getSOAPmac(){
+		MessageContext messageContext = webServiceContext.getMessageContext();
+		String soapMac = (String) messageContext.get(StoreHeaderHandler.STORE_CONTENT_MAC);
+		
+		return soapMac;
 	}
 }

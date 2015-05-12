@@ -27,19 +27,6 @@ public class StoreService extends SDStoreService{
 	
 	
 	public void dispatch() throws UserDoesNotExist_Exception, CapacityExceeded_Exception, DocDoesNotExist_Exception{
-		boolean MACisValid = checkMAC(SDStoreMain.RECEIVED_MAC_STR, this.content);
-		
-		if( !MACisValid){
-			//FIXME do not throw an exception that doesnt make any sense
-			
-			UserDoesNotExist udneM = new UserDoesNotExist();
-			udneM.setUserId(userID);
-			
-			throw new UserDoesNotExist_Exception("BAD MAC", udneM);
-		}
-		SDStoreMain.RECEIVED_MAC_STR = null;
-		
-		
 		Storage storage = SDStoreMain.getStorage();
 		
 		UserRepository collection = storage.getCollection(userID);

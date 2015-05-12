@@ -31,10 +31,7 @@ public class ListDocsService extends SDStoreService{
 		
 		this.result = docsList;
 		
-		UserRepository collection = storage.getCollection(userID);
-		super.setUserNumber(collection.getOwnerID());
-		
-		super.setSeq(collection.getWriteCount());
+		super.inspectRepoTouch(userID);
 	}
 	
 	

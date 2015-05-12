@@ -1,12 +1,7 @@
 package pt.ulisboa.tecnico.sdis.store.service;
 
-import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
-
 import java.io.UnsupportedEncodingException;
 
-import javax.crypto.SecretKey;
-
-import pt.tecnico.sd.SdCrypto;
 import pt.ulisboa.tecnico.sdis.store.ws.Document;
 import pt.ulisboa.tecnico.sdis.store.ws.SDStoreMain;
 import pt.ulisboa.tecnico.sdis.store.ws.Storage;
@@ -56,7 +51,7 @@ public class SDStoreService{
 		setLastUser(repo.getLastUserWrite());
 	}
 	
-	
+	/*
 	public boolean checkMAC(String macString, byte[] content){
 		if(macString == null){
 			return true;
@@ -80,6 +75,7 @@ public class SDStoreService{
 		
 		return result;
     }
+    */
 	
 	/**
 	 * Wraps how a string is converted to a byte array.
