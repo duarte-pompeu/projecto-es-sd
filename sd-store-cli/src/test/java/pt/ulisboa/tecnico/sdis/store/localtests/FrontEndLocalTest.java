@@ -1,10 +1,10 @@
 package pt.ulisboa.tecnico.sdis.store.localtests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.sdis.store.cli.ClientFrontEnd;
 import pt.ulisboa.tecnico.sdis.store.cli.StoreClient;
+import pt.ulisboa.tecnico.sdis.store.cli.Tag;
 import pt.ulisboa.tecnico.sdis.store.exceptions.NoConsensusException;
 import pt.ulisboa.tecnico.sdis.store.ws.CapacityExceeded_Exception;
 import pt.ulisboa.tecnico.sdis.store.ws.DocAlreadyExists_Exception;
@@ -285,5 +286,65 @@ public class FrontEndLocalTest extends SDStoreClientTest {
 		
 		byte[] result = _fe.loadDoc(USER, DOC);
 		assertEquals(result, CONTENT);
+	}
+	
+	
+	@Test
+	public void testSeq1() throws InvalidAttributeValueException, DocAlreadyExists_Exception, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		final byte [] expectedContent = string2bytes("AAA");
+		final byte [] outdated = string2bytes("BBB");
+		
+		new Expectations() {{
+			mockCli1.loadDoc(USER, DOC2);
+			result = expectedContent;
+		}};
+		
+		new Expectations() {{
+			mockCli1.getSOAPtag();
+			result = new Tag(5,1);
+		}};
+		new Expectations() {{
+			mockCli2.loadDoc(USER, DOC2);
+			result = outdated;
+		}};
+		
+		new Expectations() {{
+			mockCli1.getSOAPtag();
+			result = new Tag(4,1);
+		}};
+		
+		
+		assertArrayEquals(expectedContent, _fe.loadDoc(USER, DOC2));
+	}
+	
+	
+	@Test
+	public void testSeq2() throws InvalidAttributeValueException, UserDoesNotExist_Exception, DocDoesNotExist_Exception, CapacityExceeded_Exception, NoConsensusException{
+		final byte [] expected = string2bytes("ABC");
+		final byte [] outdated = string2bytes("XYZ");
+		
+		new Expectations() {{
+			mockCli1.loadDoc(USER, DOC2);
+			result = outdated;
+		}};
+		
+		new Expectations() {{
+			mockCli1.getSOAPtag();
+			result = new Tag(4,1);
+		}};
+		
+		
+		new Expectations() {{
+			mockCli2.loadDoc(USER, DOC2);
+			result = expected;
+		}};
+		
+		new Expectations() {{
+			mockCli1.getSOAPtag();
+			result = new Tag(5,1);
+		}};
+		
+		
+		assertArrayEquals(expected, _fe.loadDoc(USER, DOC2));
 	}
 }
