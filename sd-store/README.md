@@ -2,7 +2,7 @@
 
 # Projecto de Sistemas Distribuídos #
 
-## Primeira entrega ##
+## Segunda entrega ##
 
 Grupo de SD 44
 
