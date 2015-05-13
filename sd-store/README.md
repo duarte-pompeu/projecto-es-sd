@@ -1,6 +1,6 @@
 # Bubble Docs SD-STORE
 
-# Projecto de Sistemas DistribuÃ­dos #
+# Projecto de Sistemas Distribuídos #
 
 ## Primeira entrega ##
 
@@ -8,14 +8,9 @@ Grupo de SD 44
 
 Duarte Pompeu 73008 pnt12@live.com.pt
 
-... ... ...
-
-... ... ...
-*(preencher com nome, nÃºmero e email de membro do grupo)*
-
 
 Repositorio:
-[tecnico-softeng-distsys-2015/A_31_33_44-project](https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project/)
+[duarte-pompeu/A_31_33_44-project](https://github.com/duarte-pompeu/A_31_33_44-project)
 
 
 -------------------------------------------------------------------------------
@@ -39,26 +34,23 @@ JUDDI:
 
 > cd
 
-> mkdir avaliacao-sd
 
 [3] Obter versao entregue
 
-> git clone https://github.com/tecnico-softeng-distsys-2015/A_31_33_44-project.git sd-proj
+> git clone https://github.com/duarte-pompeu/A_31_33_44-project.git sd-proj-aval2
 
-> cd sd-proj
+> cd sd-proj-aval2
 
-> git checkout tags/SD-STORE_R_1
+> git checkout tags/SD-STORE_R_2
 
 
 [4] Construir e executar **servidor**
 
-> cd sd-store/evaluation
+> cd sd-store/evaluation2
 
 > chmod +x *.sh
 
 > ./install.sh
-
-> ./run_server.sh
 
 
 [5] Construir **cliente**
@@ -76,13 +68,20 @@ JUDDI:
 
 [1] Executar **cliente de testes** ...
 
-> ./run_client.sh
+> ./run_client.sh local
 
 
 [2] Executar ...
 
+> ./run_server.sh
+(1x por cada servidor desejado, em terminais diferentes)
 
-...
+> ./run_client local_test
+
+> ./run_client ws_test
+
+> ./run_client fe_test
+
 
 
 -------------------------------------------------------------------------------
